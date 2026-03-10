@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useAuth } from "./AuthContext";
+import { useAuth, AuthProvider } from "./AuthContext";
 import { users as usersApi, subscriptions as subscriptionsApi, courses as coursesApi, chat as chatApi, payouts as payoutsApi } from "./api";
 import { LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
@@ -3605,7 +3605,7 @@ function SupportPage(props) {
 // ═════════════════════════════════════════
 // MAIN APP
 // ═════════════════════════════════════════
-export default function TutoriiApp() {
+function TutoriiApp() {
   var _page = useState("landing");
   var page = _page[0]; var setPage = _page[1];
   var _refCode = useState(""); var refCode = _refCode[0]; var setRefCode = _refCode[1];
@@ -3637,5 +3637,13 @@ export default function TutoriiApp() {
       {page === "contact" && <ContactPage go={go} />}
       {page === "support" && <SupportPage go={go} />}
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <TutoriiApp />
+    </AuthProvider>
   );
 }
