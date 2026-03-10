@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import { useAuth } from "./AuthContext";
+import { users as usersApi, subscriptions as subscriptionsApi, courses as coursesApi, chat as chatApi, payouts as payoutsApi } from "./api";
 import { LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 const PRICE = 95;
@@ -1132,10 +1134,27 @@ function UserLogin(props) {
   var _err = useState("");
   var error = _err[0]; var setError = _err[1];
 
-  function handleLogin() {
+  //function handleLogin() {
+  //  if (!email || !pass) { setError("Please enter your email and password"); return; }
+  //  if (email === "1" && pass === "1") { go("userPortal"); return; }
+  //  setError("Invalid credentials. Use username: 1 / password: 1");
+  //}
+
+  var { login } = useAuth();
+  var _loading = useState(false);
+  var loading = _loading[0]; var setLoading = _loading[1];
+
+  async function handleLogin() {
     if (!email || !pass) { setError("Please enter your email and password"); return; }
-    if (email === "1" && pass === "1") { go("userPortal"); return; }
-    setError("Invalid credentials. Use username: 1 / password: 1");
+    setLoading(true); setError("");
+    try {
+      await login(email, pass);
+      go("userPortal");
+    } catch(e) {
+      setError(e.message || "Invalid credentials");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -1158,10 +1177,8 @@ function UserLogin(props) {
             <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Password</label>
             <input type="password" value={pass} onChange={function(e){setPass(e.target.value);setError("")}} placeholder="********" style={{ width:"100%", padding:"12px 16px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" }} />
           </div>
-          <Btn onClick={handleLogin} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12 }}>Log In</Btn>
-          <div style={{ textAlign:"center", padding:"8px 12px", borderRadius:8, background:"rgba(200,180,140,0.06)", fontSize:12, color:"rgb(200,180,140)", marginBottom:16 }}>
-            {"Demo: username "}<strong>1</strong>{" / password "}<strong>1</strong>
-          </div>
+          <Btn onClick={handleLogin} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12, opacity:loading?0.6:1 }}>{loading ? "Logging in..." : "Log In"}</Btn>          
+          
           <div style={{ textAlign:"center", fontSize:13, color:"#71717a" }}>
             {"No account? "}<span onClick={function(){go("subscribe")}} style={{ color:"rgb(200,180,140)", fontWeight:600, cursor:"pointer" }}>Subscribe now</span>
           </div>
@@ -1585,31 +1602,14 @@ function UserPortal(props) {
 
     var apiMsgs = newMsgs.map(function(m){return {role:m.role,content:m.content}});
 
-    var controller = new AbortController();
-    var timeout = setTimeout(function(){ controller.abort(); }, 30000);
-    fetch("https://api.anthropic.com/v1/messages", {
-      signal: controller.signal,
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: apiMsgs
-      })
-    })
-    .then(function(res){return res.json()})
+    chatApi.send(chatInput, null, null)
     .then(function(data){
-      var reply = "Sorry, I couldn't process that. Please try again.";
-      if (data.content) {
-        var textBlocks = data.content.filter(function(b){return b.type==="text"});
-        if (textBlocks.length > 0) reply = textBlocks.map(function(b){return b.text}).join("\n");
-      }
+      var reply = data.response || "Sorry, I couldn't process that. Please try again.";
       setChatMsgs(function(prev){return prev.concat([{role:"assistant",content:reply}])});
       setChatLoading(false);
     })
     .catch(function(){
-      setChatMsgs(function(prev){return prev.concat([{role:"assistant",content:"I'm having trouble connecting right now. You can try again in a moment, or email support@tutorii.com for help. If urgent, submit a ticket at the Support page."}])});
+      setChatMsgs(function(prev){return prev.concat([{role:"assistant",content:"I'm having trouble connecting right now. Please try again or email support@tutorii.com."}])});
       setChatLoading(false);
     });
   }
@@ -1641,7 +1641,7 @@ function UserPortal(props) {
             <div style={{ width:32, height:32, borderRadius:"50%", background:"rgb(200,180,140)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:"#0a0a0c" }}>{u.avatar}</div>
             <div><div style={{ fontSize:12, fontWeight:600, color:"#fff" }}>{u.name}</div><div style={{ fontSize:10, color:"#52525b" }}>{u.email}</div></div>
           </div>
-          <button onClick={function(){go("landing")}} style={{ width:"100%", padding:"8px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Log Out</button>
+          <button onClick={function(){ var {logout} = useAuth(); logout(); go("landing"); }} style={{ width:"100%", padding:"8px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Log Out</button>
         </div>
       </div>}
       {mob && <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"12px 16px", background:"#111113", borderBottom:"1px solid rgba(255,255,255,0.06)", position:"sticky", top:0, zIndex:50 }}>
@@ -2462,12 +2462,9 @@ function UserPortal(props) {
                       "Today: " + new Date().toLocaleDateString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric"}) + "\n" +
                       "Cite specific numbers. Be concise and helpful.";
 
-                    fetch("https://api.anthropic.com/v1/messages", {
-                      method:"POST", headers:{"Content-Type":"application/json"},
-                      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:sp,messages:newMsgs.map(function(m){return{role:m.role,content:m.content}})})
-                    }).then(function(r){return r.json()}).then(function(data){
-                      var reply = "Sorry, something went wrong.";
-                      if(data.content){var t=data.content.filter(function(b){return b.type==="text"});if(t.length>0)reply=t.map(function(b){return b.text}).join("\n")}
+                    chatApi.send(q, null, null)
+                    .then(function(data){
+                      var reply = data.response || "Sorry, something went wrong.";
                       setChatMsgs(function(p){return p.concat([{role:"assistant",content:reply}])});
                       setChatLoading(false);
                     }).catch(function(){
