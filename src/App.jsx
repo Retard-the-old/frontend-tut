@@ -1199,12 +1199,13 @@ function Subscribe(props) {
   var mob = useIsMobile();
   var _step = useState(1);
   var step = _step[0]; var setStep = _step[1];
-  var _form = useState({ name:"", email:"", phone:"", language:"English", ref: props.refCode || "" });
-  var form = _form[0]; var setForm = _form[1];
+var _form = useState({ name:"", email:"", password:"", phone:"", language:"English", ref: props.refCode || "" });  var form = _form[0]; var setForm = _form[1];
   var _proc = useState(false);
   var processing = _proc[0]; var setProcessing = _proc[1];
   var _err = useState({}); var errors = _err[0]; var setErrors = _err[1];
-  var _terms = useState(false); var termsAgreed = _terms[0]; var setTermsAgreed = _terms[1];
+  var _terms = useState(false); var termsAgreed = _terms[0]; 
+  var setTermsAgreed = _terms[1];
+  var { register } = useAuth();
 
   function set(k, v) { setForm(function(p) { var n = Object.assign({}, p); n[k] = v; return n; }); setErrors(function(p){ var n=Object.assign({},p); delete n[k]; return n; }); }
   function validateStep1() {
@@ -1219,7 +1220,20 @@ function Subscribe(props) {
     setErrors(e);
     return Object.keys(e).length === 0;
   }
-  function handlePay() { setProcessing(true); setTimeout(function(){ setProcessing(false); setStep(3); }, 2000); }
+  async function handlePay() {
+  if (!termsAgreed) return;
+  setProcessing(true);
+  try {
+    await register(form.name, form.email, form.password, form.ref || null);
+    const sub = await subscriptionsApi.create();
+    if (sub.payment_link) window.open(sub.payment_link, "_blank");
+    setStep(3);
+  } catch(e) {
+    setErrors({ api: e.message || "Something went wrong. Please try again." });
+  } finally {
+    setProcessing(false);
+  }
+}
 
   return (
     <div style={{ minHeight:"100vh", display:"flex", flexDirection:mob?"column":"row", background:"#0a0a0c" }}>
@@ -1243,7 +1257,7 @@ function Subscribe(props) {
 
           {step === 1 && <div>
             <h3 style={{ fontSize:22, fontWeight:700, color:"#d4d4d8", margin:"0 0 24px" }}>Create your account</h3>
-            {[["Full Name","name","text"],["Email","email","email"],["Phone","phone","tel"]].map(function(f){ return (
+            {[["Full Name","name","text"],["Email","email","email"],["Password","password","password"],["Phone","phone","tel"]].map(function(f){ return (
               <div key={f[1]} style={{ marginBottom:18 }}>
                 <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:5 }}>{f[0]} *</label>
                 <input type={f[2]} value={form[f[1]]} onChange={function(e){set(f[1],e.target.value)}} style={{ width:"100%", padding:"11px 14px", borderRadius:10, border:"1px solid "+(errors[f[1]]?"rgba(248,113,113,0.5)":"rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" }} />
