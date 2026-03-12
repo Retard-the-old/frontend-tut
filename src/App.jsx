@@ -3,7 +3,7 @@ import { useAuth, AuthProvider } from "./AuthContext";
 import { users as usersApi, subscriptions as subscriptionsApi, courses as coursesApi, chat as chatApi, payouts as payoutsApi } from "./api";
 import { LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
-const PRICE = 95;
+const PRICE = 73;
 const L1_RATE = 0.40;
 const L2_RATE = 0.05;
 
