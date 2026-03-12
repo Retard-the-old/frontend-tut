@@ -1711,7 +1711,15 @@ function UserPortal(props) {
     l1: referralStats && referralStats.level1 ? referralStats.level1.map(function(r){ return { name:r.full_name||r.email, status:r.subscription_status||"active", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
     l2: referralStats && referralStats.level2 ? referralStats.level2.map(function(r){ return { name:r.full_name||r.email, from:r.referred_by_name||"", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
     payouts: myPayouts.map(function(p){ return { date: p.created_at ? new Date(p.created_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", amount: p.amount_aed||0, status: p.status||"pending", ref: p.id||"" }; }),
-  } : USER;
+  } : {
+    name: authUser ? (authUser.full_name || authUser.email) : "Loading...",
+    email: authUser ? authUser.email : "",
+    phone: "", code: "", avatar: authUser ? (authUser.full_name||"U").split(" ").map(function(n){return n[0]}).join("").slice(0,2).toUpperCase() : "?",
+    status: "inactive", plan: "Tutorii Monthly", paymentMethod: "MamoPay",
+    joined: "", lastLogin: "", nextBilling: "N/A", referredBy: "Direct",
+    iban: "", ibanName: "", billing: [], earn: { total:"0.00", month:"0.00", pending:"0.00", paid:"0.00" },
+    l1: [], l2: [], payouts: [],
+  };
 
   var mob = useIsMobile();
 
@@ -3285,23 +3293,7 @@ function AdminPanel(props) {
 
   function clearActionPanel() { setActionPanel(null); setActionResult(null); setTempPass(""); setNewEmail(""); setNewRefCode(""); setNewIban(""); setNewIbanName(""); setExtendDays("7"); }
 
-  // Demo audit log entries
-  var DEMO_AUDIT = [
-    {id:1,action:"reset_password",admin_email:"david@tutorii.com",target_user_id:"u2",detail:"Password force-reset for aisha@example.com",created_at:"2026-03-10T14:22:00Z"},
-    {id:2,action:"change_email",admin_email:"david@tutorii.com",target_user_id:"u5",detail:"Email changed: old@example.com → fatima@example.com",created_at:"2026-03-10T11:05:00Z"},
-    {id:3,action:"deactivate_user",admin_email:"david@tutorii.com",target_user_id:"u5",detail:"Account fatima@example.com deactivated",created_at:"2026-03-09T16:30:00Z"},
-    {id:4,action:"activate_user",admin_email:"david@tutorii.com",target_user_id:"u5",detail:"Account fatima@example.com reactivated",created_at:"2026-03-09T17:01:00Z"},
-    {id:5,action:"reassign_referrer",admin_email:"david@tutorii.com",target_user_id:"u3",detail:"Referrer changed for carlos@example.com: null → David Chen",created_at:"2026-03-08T09:15:00Z"},
-    {id:6,action:"extend_subscription",admin_email:"david@tutorii.com",target_user_id:"u2",detail:"Extended by 7 days for aisha@example.com",created_at:"2026-03-07T12:44:00Z"},
-    {id:7,action:"manual_payout_complete",admin_email:"david@tutorii.com",target_user_id:"u2",detail:"Manually completed: AED 456.00, ref: BANK-TXN-8812",created_at:"2026-03-06T10:20:00Z"},
-    {id:8,action:"retry_payout",admin_email:"david@tutorii.com",target_user_id:"u3",detail:"Payout retried successfully: AED 304.00",created_at:"2026-03-05T15:33:00Z"},
-    {id:9,action:"update_payout_info",admin_email:"david@tutorii.com",target_user_id:"u4",detail:"IBAN changed: ...3456 → ...9012",created_at:"2026-03-04T08:55:00Z"},
-    {id:10,action:"cancel_subscription",admin_email:"david@tutorii.com",target_user_id:"u5",detail:"Subscription cancelled by admin for fatima@example.com",created_at:"2026-03-03T13:10:00Z"},
-    {id:11,action:"activate_subscription",admin_email:"david@tutorii.com",target_user_id:"u6",detail:"New subscription created and activated for maria@example.com",created_at:"2026-03-02T11:28:00Z"},
-    {id:12,action:"trigger_payouts",admin_email:"david@tutorii.com",target_user_id:null,detail:"Manual payout run triggered",created_at:"2026-03-01T09:00:00Z"},
-    {id:13,action:"mark_lesson_complete",admin_email:"david@tutorii.com",target_user_id:"u2",detail:"Lesson 'Understanding UAE Culture' marked complete",created_at:"2026-02-28T14:50:00Z"},
-    {id:14,action:"reset_password",admin_email:"david@tutorii.com",target_user_id:"u4",detail:"Password force-reset for priya@example.com",created_at:"2026-02-27T16:12:00Z"},
-  ];
+  var DEMO_AUDIT = [];
 
   var admSide = [["dash","chart","Dashboard"],["users","users","Users"],["tickets","chat","Tickets"],["courses","book","Courses"],["payouts","dollar","Payouts"],["audit","shield","Audit Log"],["api","gear","API Config"]];
 
@@ -3913,14 +3905,7 @@ function AdminPanel(props) {
         </div>}
 
         {tab === "tickets" && (function(){
-          var DEMO_TICKETS = [
-            { id:"T1", ref:"TK-8291", user:"Aisha Khan", email:"aisha@example.com", subject:"Payout not received for February", category:"billing", status:"in_progress", priority:"high", created:"Feb 26", updated:"Mar 2", messages:3, assignedTo:"David Chen" },
-            { id:"T2", ref:"TK-8315", user:"Carlos Reyes", email:"carlos@example.com", subject:"Cannot access module 3 lessons", category:"courses", status:"open", priority:"normal", created:"Mar 1", updated:"Mar 1", messages:1, assignedTo:null },
-            { id:"T3", ref:"TK-8320", user:"Priya Sharma", email:"priya@example.com", subject:"Referral code not working for friend", category:"referrals", status:"open", priority:"normal", created:"Mar 3", updated:"Mar 3", messages:2, assignedTo:null },
-            { id:"T4", ref:"TK-8340", user:"Aisha Khan", email:"aisha@example.com", subject:"Course video not loading on mobile", category:"technical", status:"resolved", priority:"normal", created:"Mar 5", updated:"Mar 7", messages:4, assignedTo:"David Chen" },
-            { id:"T5", ref:"TK-8402", user:"Maria Lopez", email:"maria@example.com", subject:"Need to change my registered email", category:"account", status:"open", priority:"high", created:"Mar 8", updated:"Mar 8", messages:1, assignedTo:null },
-            { id:"T6", ref:"TK-8410", user:"Carlos Reyes", email:"carlos@example.com", subject:"Commission missing for February referral", category:"referrals", status:"closed", priority:"normal", created:"Mar 9", updated:"Mar 10", messages:6, assignedTo:"David Chen" },
-          ];
+          var DEMO_TICKETS = [];
           var _tFilter = useState(""); var tFilter = _tFilter[0]; var setTFilter = _tFilter[1];
           var _tCatFilter = useState(""); var tCatFilter = _tCatFilter[0]; var setTCatFilter = _tCatFilter[1];
           var _tSelected = useState(null); var tSelected = _tSelected[0]; var setTSelected = _tSelected[1];
@@ -4725,7 +4710,9 @@ function TutoriiApp() {
   var courses = _courses[0]; var setCourses = _courses[1];
   var _chatOpen = useState(false); var chatOpen = _chatOpen[0]; var setChatOpen = _chatOpen[1];
   var _chatMinimized = useState(false); var chatMinimized = _chatMinimized[0]; var setChatMinimized = _chatMinimized[1];
-  var _chatMsgs = useState([{role:"assistant",content:"Hi "+USER.name.split(" ")[0]+"! I'm your Tutorii support assistant. I have access to your account details, referrals, earnings, and course progress. How can I help you today?"}]);
+  var { user: authUser } = useAuth();
+  var firstName = authUser && authUser.full_name ? authUser.full_name.split(" ")[0] : "there";
+  var _chatMsgs = useState([{role:"assistant",content:"Hi "+firstName+"! I'm your Tutorii support assistant. I have access to your account details, referrals, earnings, and course progress. How can I help you today?"}]);
   var chatMsgs = _chatMsgs[0]; var setChatMsgs = _chatMsgs[1];
   var _chatInput = useState(""); var chatInput = _chatInput[0]; var setChatInput = _chatInput[1];
   var _chatLoading = useState(false); var chatLoading = _chatLoading[0]; var setChatLoading = _chatLoading[1];
