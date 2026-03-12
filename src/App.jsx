@@ -3158,7 +3158,7 @@ function AdminPanel(props) {
   var _actionResult = useState(null); var actionResult = _actionResult[0]; var setActionResult = _actionResult[1];
   var _auditEntries = useState([]); var auditEntries = _auditEntries[0]; var setAuditEntries = _auditEntries[1];
   var _auditFilter = useState(""); var auditFilter = _auditFilter[0]; var setAuditFilter = _auditFilter[1];
-  var _adminUsers = useState(adminUsers); var adminUsers = _adminUsers[0]; var setAdminUsers = _adminUsers[1];
+  var _adminUsers = useState([]); var adminUsers = _adminUsers[0]; var setAdminUsers = _adminUsers[1];
   var _adminStats = useState(null); var adminStats = _adminStats[0]; var setAdminStats = _adminStats[1];
   var _adminLoading = useState(true); var adminLoading = _adminLoading[0]; var setAdminLoading = _adminLoading[1];
 
