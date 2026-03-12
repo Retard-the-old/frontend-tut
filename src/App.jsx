@@ -1703,10 +1703,10 @@ function UserPortal(props) {
     ibanName: realUser.payout_name || "",
     billing: [],
     earn: {
-      total: myCommissions.reduce(function(s,c){return s+(c.amount_aed||0)},0).toFixed(2),
-      month: myCommissions.filter(function(c){ var d=new Date(c.created_at); var n=new Date(); return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear(); }).reduce(function(s,c){return s+(c.amount_aed||0)},0).toFixed(2),
-      pending: myCommissions.filter(function(c){return c.status==="pending"}).reduce(function(s,c){return s+(c.amount_aed||0)},0).toFixed(2),
-      paid: myPayouts.filter(function(p){return p.status==="completed"}).reduce(function(s,p){return s+(p.amount_aed||0)},0).toFixed(2),
+      total: parseFloat(myCommissions.reduce(function(s,c){return s+(c.amount_aed||0)},0).toFixed(2)),
+      month: parseFloat(myCommissions.filter(function(c){ var d=new Date(c.created_at); var n=new Date(); return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear(); }).reduce(function(s,c){return s+(c.amount_aed||0)},0).toFixed(2)),
+      pending: parseFloat(myCommissions.filter(function(c){return c.status==="pending"}).reduce(function(s,c){return s+(c.amount_aed||0)},0).toFixed(2)),
+      paid: parseFloat(myPayouts.filter(function(p){return p.status==="completed"}).reduce(function(s,p){return s+(p.amount_aed||0)},0).toFixed(2)),
     },
     l1: referralStats && referralStats.level1 ? referralStats.level1.map(function(r){ return { name:r.full_name||r.email, status:r.subscription_status||"active", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
     l2: referralStats && referralStats.level2 ? referralStats.level2.map(function(r){ return { name:r.full_name||r.email, from:r.referred_by_name||"", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
@@ -1717,7 +1717,7 @@ function UserPortal(props) {
     phone: "", code: "", avatar: authUser ? (authUser.full_name||"U").split(" ").map(function(n){return n[0]}).join("").slice(0,2).toUpperCase() : "?",
     status: "inactive", plan: "Tutorii Monthly", paymentMethod: "MamoPay",
     joined: "", lastLogin: "", nextBilling: "N/A", referredBy: "Direct",
-    iban: "", ibanName: "", billing: [], earn: { total:"0.00", month:"0.00", pending:"0.00", paid:"0.00" },
+    iban: "", ibanName: "", billing: [], earn: { total:0, month:0, pending:0, paid:0 },
     l1: [], l2: [], payouts: [],
   };
 
