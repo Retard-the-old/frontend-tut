@@ -129,6 +129,7 @@ export const support = {
 
 // ── Admin ──
 export const admin = {
-  users: () => api.get("/admin/users"),
-  stats: () => api.get("/admin/stats"),
+  users: (limit=200) => api.get("/admin/users?limit="+limit),
+  dashboard: () => api.get("/admin/dashboard"),
+  updateRole: (userId, role) => api.patch("/admin/users/"+userId+"/role", { role }),
 };

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth, AuthProvider } from "./AuthContext";
-import { users as usersApi, subscriptions as subscriptionsApi, courses as coursesApi, chat as chatApi, payouts as payoutsApi } from "./api";
+import { users as usersApi, subscriptions as subscriptionsApi, courses as coursesApi, chat as chatApi, payouts as payoutsApi, admin as adminApi } from "./api";
 import { LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 const PRICE = 95;
@@ -3076,9 +3076,7 @@ function AdminLogin(props) {
     setLoading(true); setError("");
     try {
       await login(email, pass);
-      // Check role after login
-      var stored = localStorage.getItem("tutorii_access_token");
-      // Role will be checked on next render via user object
+      // Role will be checked on next render via user object in useEffect
     } catch(e) {
       setError(e.message || "Invalid credentials");
       setLoading(false);
@@ -3163,11 +3161,9 @@ function AdminPanel(props) {
   var _adminLoading = useState(true); var adminLoading = _adminLoading[0]; var setAdminLoading = _adminLoading[1];
 
   useEffect(function(){
-    var token = localStorage.getItem("tutorii_access_token");
-    var API = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
     Promise.allSettled([
-      fetch(API + "/admin/users?limit=200", { headers:{ "Authorization":"Bearer "+token } }).then(function(r){return r.json()}),
-      fetch(API + "/admin/dashboard", { headers:{ "Authorization":"Bearer "+token } }).then(function(r){return r.json()}),
+      adminApi.users(),
+      adminApi.dashboard(),
     ]).then(function(results){
       if(results[0].status==="fulfilled" && Array.isArray(results[0].value)){
         setAdminUsers(results[0].value.map(function(u){
@@ -4336,22 +4332,10 @@ function AdminPanel(props) {
                 if (!cae.trim()) { setCaResult({ok:false, msg:"Enter an email address"}); return; }
                 setCaLoading(true); setCaResult(null);
                 try {
-                  // Find user by email first
-                  const API = import.meta.env.VITE_API_URL || "/api/v1";
-                  const token = localStorage.getItem("tutorii_access_token");
-                  const usersRes = await fetch(API + "/admin/users?limit=200", {
-                    headers: { "Authorization": "Bearer " + token }
-                  });
-                  const users = await usersRes.json();
+                  const users = await adminApi.users();
                   const found = users.find(function(u){ return u.email.toLowerCase() === cae.toLowerCase().trim(); });
                   if (!found) { setCaResult({ok:false, msg:"No account found with that email. They must register first."}); setCaLoading(false); return; }
-                  // Promote to admin
-                  const roleRes = await fetch(API + "/admin/users/" + found.id + "/role", {
-                    method: "PATCH",
-                    headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
-                    body: JSON.stringify({ role: "admin" })
-                  });
-                  if (!roleRes.ok) throw new Error("Failed to update role");
+                  await adminApi.updateRole(found.id, "admin");
                   setCaResult({ok:true, msg:"✓ " + found.full_name + " (" + found.email + ") is now an admin."});
                   setCae(""); setCap("");
                 } catch(e) {
