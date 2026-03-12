@@ -3014,12 +3014,31 @@ function AdminLogin(props) {
   var _e = useState(""); var email = _e[0]; var setEmail = _e[1];
   var _p = useState(""); var pass = _p[0]; var setPass = _p[1];
   var _er = useState(""); var error = _er[0]; var setError = _er[1];
+  var _loading = useState(false); var loading = _loading[0]; var setLoading = _loading[1];
+  var { login, user } = useAuth();
 
-  function handleLogin() {
+  async function handleLogin() {
     if (!email || !pass) { setError("Enter admin credentials"); return; }
-    if (email === "2" && pass === "2") { go("adminPanel"); return; }
-    setError("Invalid credentials. Use username: 2 / password: 2");
+    setLoading(true); setError("");
+    try {
+      await login(email, pass);
+      // Check role after login
+      var stored = localStorage.getItem("tutorii_access_token");
+      // Role will be checked on next render via user object
+    } catch(e) {
+      setError(e.message || "Invalid credentials");
+      setLoading(false);
+      return;
+    }
+    setLoading(false);
   }
+
+  // Redirect if logged in as admin
+  useEffect(function() {
+    if (user && user.role === "admin") { go("adminPanel"); return; }
+    if (user && user.role !== "admin") { setError("This account does not have admin access."); }
+  }, [user]);
+
 
   return (
     <div style={{ minHeight:"100vh", background:"#0a0a0c", display:"flex", alignItems:"center", justifyContent:"center" }}>
@@ -3037,10 +3056,7 @@ function AdminLogin(props) {
           <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#52525b", marginBottom:5 }}>Password</label>
           <input type="password" value={pass} onChange={function(e){setPass(e.target.value);setError("")}} placeholder="********" style={{ width:"100%", padding:"12px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#fff", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" }} />
         </div>
-        <button onClick={handleLogin} style={{ width:"100%", padding:"13px", borderRadius:12, border:"none", background:"rgb(200,180,140)", color:"#fff", fontSize:15, fontWeight:600, cursor:"pointer", marginBottom:12, color:"#fff" }}>Log In to Admin</button>
-        <div style={{ textAlign:"center", padding:"8px 12px", borderRadius:8, background:"rgba(200,180,140,0.12)", fontSize:12, color:"rgb(200,180,140)", marginBottom:16 }}>
-
-        </div>
+        <button onClick={handleLogin} disabled={loading} style={{ width:"100%", padding:"13px", borderRadius:12, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:15, fontWeight:600, cursor:"pointer", marginBottom:12, opacity:loading?0.6:1 }}>{loading ? "Logging in..." : "Log In to Admin"}</button>
         <div style={{ textAlign:"center", marginTop:12 }}>
           <span onClick={function(){go("landing")}} style={{ fontSize:12, color:"#71717a", cursor:"pointer" }}>Back to site</span>
         </div>
@@ -4224,7 +4240,63 @@ function AdminPanel(props) {
         </div>}
 
         {tab === "api" && <div style={{ maxWidth:"100%", overflow:"hidden" }}>
-          <h2 style={{ fontSize:22, fontWeight:700, margin:"0 0 20px", color:"#d4d4d8" }}>MamoPay API Config</h2>
+          <h2 style={{ fontSize:22, fontWeight:700, margin:"0 0 20px", color:"#d4d4d8" }}>Admin Management</h2>
+
+          {/* Create Admin */}
+          <div style={{ background:"#131315", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:20 }}>
+            <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 6px", color:"#d4d4d8" }}>Create New Admin</h3>
+            <p style={{ fontSize:12, color:"#52525b", marginBottom:16 }}>The user must already have a registered account. This will promote their role to admin.</p>
+            {(function(){
+              var _cae = useState(""); var cae = _cae[0]; var setCae = _cae[1];
+              var _cap = useState(""); var cap = _cap[0]; var setCap = _cap[1];
+              var _caLoading = useState(false); var caLoading = _caLoading[0]; var setCaLoading = _caLoading[1];
+              var _caResult = useState(null); var caResult = _caResult[0]; var setCaResult = _caResult[1];
+
+              async function handleCreateAdmin() {
+                if (!cae.trim()) { setCaResult({ok:false, msg:"Enter an email address"}); return; }
+                setCaLoading(true); setCaResult(null);
+                try {
+                  // Find user by email first
+                  const API = import.meta.env.VITE_API_URL || "/api/v1";
+                  const token = localStorage.getItem("tutorii_access_token");
+                  const usersRes = await fetch(API + "/admin/users?limit=200", {
+                    headers: { "Authorization": "Bearer " + token }
+                  });
+                  const users = await usersRes.json();
+                  const found = users.find(function(u){ return u.email.toLowerCase() === cae.toLowerCase().trim(); });
+                  if (!found) { setCaResult({ok:false, msg:"No account found with that email. They must register first."}); setCaLoading(false); return; }
+                  // Promote to admin
+                  const roleRes = await fetch(API + "/admin/users/" + found.id + "/role", {
+                    method: "PATCH",
+                    headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+                    body: JSON.stringify({ role: "admin" })
+                  });
+                  if (!roleRes.ok) throw new Error("Failed to update role");
+                  setCaResult({ok:true, msg:"✓ " + found.full_name + " (" + found.email + ") is now an admin."});
+                  setCae(""); setCap("");
+                } catch(e) {
+                  setCaResult({ok:false, msg: e.message || "Something went wrong"});
+                } finally {
+                  setCaLoading(false);
+                }
+              }
+
+              return (
+                <div>
+                  {caResult && <div style={{ padding:"10px 14px", borderRadius:8, background:caResult.ok?"rgba(16,185,129,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(caResult.ok?"rgba(16,185,129,0.2)":"rgba(248,113,113,0.2)"), color:caResult.ok?"#10b981":"#f87171", fontSize:13, fontWeight:600, marginBottom:14 }}>{caResult.msg}</div>}
+                  <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr", gap:12, maxWidth:420 }}>
+                    <div>
+                      <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#71717a", marginBottom:5 }}>EMAIL OF USER TO PROMOTE</label>
+                      <input type="email" value={cae} onChange={function(e){setCae(e.target.value);setCaResult(null)}} placeholder="user@example.com" style={{ width:"100%", padding:"11px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", boxSizing:"border-box" }} />
+                    </div>
+                    <button onClick={handleCreateAdmin} disabled={caLoading} style={{ padding:"11px 24px", borderRadius:8, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:13, fontWeight:700, cursor:"pointer", opacity:caLoading?0.6:1, alignSelf:"flex-end" }}>{caLoading ? "Promoting..." : "Promote to Admin"}</button>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+
+          <h2 style={{ fontSize:18, fontWeight:700, margin:"24px 0 16px", color:"#d4d4d8" }}>MamoPay API Config</h2>
           <div style={{ background:"#131315", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:20, boxSizing:"border-box" }}>
             <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 16px", color:"#d4d4d8" }}>Connection</h3>
             <div style={{ display:"grid", gap:16, maxWidth:mob?"100%":480 }}>
