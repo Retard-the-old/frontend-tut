@@ -729,7 +729,7 @@ function CtaBanner(props) {
         <p style={{ fontStyle:"italic", fontSize:14, color:"#71717a", marginBottom:16 }}>Reach out anytime</p>
         <h2 style={{ fontSize:mob?28:42, fontWeight:600, color:"#d4d4d8", margin:"0 0 12px", lineHeight:1.15, letterSpacing:"-1px" }}>{t}</h2>
         <p style={{ fontSize:15, color:"#71717a", marginBottom:40, lineHeight:1.7 }}>{s}</p>
-        <Btn onClick={function(){go("subscribe")}}>{"Subscribe · $"+PRICE+"/month"}</Btn>
+        <Btn onClick={function(){go("subscribe")}}>{"Subscribe · AED "+PRICE+"/month"}</Btn>
         <div style={{ marginTop:14, fontSize:13, color:"#52525b" }}>Cancel anytime · No hidden fees</div>
       </div></FadeIn>
     </section>
@@ -933,7 +933,7 @@ function HowItWorksPage(props) {
       <section style={{ padding:"40px 48px 120px" }}>
         <div style={{ maxWidth:760, margin:"0 auto", position:"relative" }}>
           <StepConnector />
-          {[{n:"01",i:"phone",t:"Subscribe and get immediate access",d:"Pay $"+PRICE+"/month via MamoPay (Visa, Mastercard, Apple Pay, Google Pay). Unlock every course, every lesson, and your referral dashboard instantly."},{n:"02",i:"book",t:"Learn skills that matter",d:INIT_COURSES.length+" modules, "+tl+" lessons covering UAE culture, legal rights, career development, financial literacy, and entrepreneurship."},{n:"03",i:"link",t:"Share your personal referral link",d:"Every subscriber gets a unique link. Share through WhatsApp, SMS, email, or social media. When someone subscribes, they are permanently connected to you."},{n:"04",i:"dollar",t:"Earn recurring commissions weekly",d:"40% ($"+(PRICE*L1_RATE).toFixed(2)+") per direct referral per month. 5% ($"+(PRICE*L2_RATE).toFixed(2)+") on their referrals. Paid every Tuesday to your bank."}].map(function(s,si){return (
+          {[{n:"01",i:"phone",t:"Subscribe and get immediate access",d:"Pay AED "+PRICE+"/month via MamoPay (Visa, Mastercard, Apple Pay, Google Pay). Unlock every course, every lesson, and your referral dashboard instantly."},{n:"02",i:"book",t:"Learn skills that matter",d:INIT_COURSES.length+" modules, "+tl+" lessons covering UAE culture, legal rights, career development, financial literacy, and entrepreneurship."},{n:"03",i:"link",t:"Share your personal referral link",d:"Every subscriber gets a unique link. Share through WhatsApp, SMS, email, or social media. When someone subscribes, they are permanently connected to you."},{n:"04",i:"dollar",t:"Earn recurring commissions weekly",d:"40% ($"+(PRICE*L1_RATE).toFixed(2)+") per direct referral per month. 5% ($"+(PRICE*L2_RATE).toFixed(2)+") on their referrals. Paid every Tuesday to your bank."}].map(function(s,si){return (
             <FadeIn key={s.n} delay={si*0.15}><div style={{ display:"flex", gap:24, marginBottom:48, position:"relative", zIndex:1 }}>
               <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))", border:"1px solid rgba(255,255,255,0.08)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, boxShadow:"0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)", lineHeight:0 }}><Ico name={s.i} size={24} color="rgb(200,180,140)" /></div>
               <div><div style={{ fontSize:12, fontWeight:500, color:"#52525b", letterSpacing:"1px", marginBottom:6 }}>{"STEP "+s.n}</div><h3 style={{ fontSize:18, fontWeight:600, color:"#d4d4d8", margin:"0 0 8px" }}>{s.t}</h3><p style={{ fontSize:14, color:"#71717a", lineHeight:1.8, margin:0 }}>{s.d}</p></div>
@@ -1115,7 +1115,7 @@ function FaqPage(props) {
           </div>
         </div>
       </section>
-      <CtaBanner go={go} title="Ready to See What Tutorii Can Do?" sub={"Courses, referral tools, and weekly payouts for $"+PRICE+"/month"} />
+      <CtaBanner go={go} title="Ready to See What Tutorii Can Do?" sub={"Courses, referral tools, and weekly payouts for AED "+PRICE+"/month"} />
       <SiteFooter go={go} />
     </div>
   );
@@ -1186,7 +1186,7 @@ function UserLogin(props) {
           </div>
           <Btn onClick={handleLogin} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12, opacity:loading?0.6:1 }}>{loading ? "Logging in..." : "Log In"}</Btn>
           <div style={{ textAlign:"center", padding:"8px 12px", borderRadius:8, background:"rgba(200,180,140,0.08)", fontSize:12, color:"rgb(200,180,140)", marginBottom:16 }}>
-            {"Demo: username "}<strong>1</strong>{" / password "}<strong>1</strong>
+
           </div>
           <div style={{ textAlign:"center", fontSize:13, color:"#71717a" }}>
             {"No account? "}<span onClick={function(){go("subscribe")}} style={{ color:"rgb(200,180,140)", fontWeight:600, cursor:"pointer" }}>Subscribe now</span>
@@ -1588,7 +1588,7 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
               </label>
             </div>
             <Btn onClick={function(){if(termsAgreed)handlePay()}} full style={{ padding:"13px", fontSize:15, borderRadius:12, opacity:termsAgreed?1:0.4, cursor:termsAgreed?"pointer":"not-allowed" }}>
-              {processing ? "Processing..." : "Pay $"+PRICE+" - Subscribe"}
+              {processing ? "Processing..." : "Pay AED "+PRICE+" - Subscribe"}
             </Btn>
             {!termsAgreed && <div style={{ textAlign:"center", fontSize:11, color:"#52525b", marginTop:8 }}>You must accept the terms to continue</div>}
             <div style={{ textAlign:"center", marginTop:12 }}>
@@ -1703,15 +1703,15 @@ function UserPortal(props) {
       "Next Billing Date: " + u.nextBilling + "\n" +
       "Billing History:\n" +
       u.billing.map(function(b){return "- " + b.date + ": $" + b.amount.toFixed(2) + " (" + b.status + ") via " + b.method}).join("\n") + "\n" +
-      "Total Spent on Subscription: $" + (u.billing.length * PRICE).toFixed(2) + " (" + u.billing.length + " payments)\n\n" +
+      "Total Spent on Subscription: AED " + (u.billing.length * PRICE).toFixed(2) + " (" + u.billing.length + " payments)\n\n" +
 
       "=== EARNINGS SUMMARY ===\n" +
-      "Total Earned (all time): $" + u.earn.total + "\n" +
-      "Earned This Month: $" + u.earn.month + "\n" +
-      "Pending Payout: $" + u.earn.pending + " (will be paid next Tuesday if above AED 50 minimum)\n" +
-      "Already Paid Out: $" + u.earn.paid + "\n" +
-      "Monthly L1 Income: $" + monthlyL1.toFixed(2) + " (" + l1active.length + " active L1 referrals x $" + (PRICE*L1_RATE).toFixed(2) + " each)\n" +
-      "Monthly L2 Income: $" + monthlyL2.toFixed(2) + " (" + u.l2.length + " L2 referrals x $" + (PRICE*L2_RATE).toFixed(2) + " each)\n" +
+      "Total Earned (all time): AED " + u.earn.total + "\n" +
+      "Earned This Month: AED " + u.earn.month + "\n" +
+      "Pending Payout: AED " + u.earn.pending + " (will be paid next Tuesday if above AED 50 minimum)\n" +
+      "Already Paid Out: AED " + u.earn.paid + "\n" +
+      "Monthly L1 Income: AED " + monthlyL1.toFixed(2) + " (" + l1active.length + " active L1 referrals x $" + (PRICE*L1_RATE).toFixed(2) + " each)\n" +
+      "Monthly L2 Income: AED " + monthlyL2.toFixed(2) + " (" + u.l2.length + " L2 referrals x $" + (PRICE*L2_RATE).toFixed(2) + " each)\n" +
       "Total Monthly Gross: $" + (monthlyL1 + monthlyL2).toFixed(2) + "\n" +
       "Monthly Subscription Cost: -$" + PRICE + "\n" +
       "Net Monthly Profit: $" + (monthlyL1 + monthlyL2 - PRICE).toFixed(2) + "\n" +
@@ -3039,7 +3039,7 @@ function AdminLogin(props) {
         </div>
         <button onClick={handleLogin} style={{ width:"100%", padding:"13px", borderRadius:12, border:"none", background:"rgb(200,180,140)", color:"#fff", fontSize:15, fontWeight:600, cursor:"pointer", marginBottom:12, color:"#fff" }}>Log In to Admin</button>
         <div style={{ textAlign:"center", padding:"8px 12px", borderRadius:8, background:"rgba(200,180,140,0.12)", fontSize:12, color:"rgb(200,180,140)", marginBottom:16 }}>
-          {"Demo: username "}<strong>2</strong>{" / password "}<strong>2</strong>
+
         </div>
         <div style={{ textAlign:"center", marginTop:12 }}>
           <span onClick={function(){go("landing")}} style={{ fontSize:12, color:"#71717a", cursor:"pointer" }}>Back to site</span>
