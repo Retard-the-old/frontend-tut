@@ -3129,6 +3129,102 @@ function AdminLogin(props) {
 }
 
 // ═════════════════════════════════════════
+// CREATE ADMIN FORM
+// ═════════════════════════════════════════
+function CreateAdminForm(props) {
+  var mob = props.mob;
+  var _cae = useState(""); var cae = _cae[0]; var setCae = _cae[1];
+  var _caLoading = useState(false); var caLoading = _caLoading[0]; var setCaLoading = _caLoading[1];
+  var _caResult = useState(null); var caResult = _caResult[0]; var setCaResult = _caResult[1];
+
+  async function handleCreateAdmin() {
+    if (!cae.trim()) { setCaResult({ok:false, msg:"Enter an email address"}); return; }
+    setCaLoading(true); setCaResult(null);
+    try {
+      const users = await adminApi.users();
+      const found = users.find(function(u){ return u.email.toLowerCase() === cae.toLowerCase().trim(); });
+      if (!found) { setCaResult({ok:false, msg:"No account found with that email. They must register first."}); setCaLoading(false); return; }
+      await adminApi.updateRole(found.id, "admin");
+      setCaResult({ok:true, msg:"\u2713 " + (found.full_name||found.email) + " is now an admin."});
+      setCae("");
+    } catch(e) {
+      setCaResult({ok:false, msg: e.message || "Something went wrong"});
+    } finally {
+      setCaLoading(false);
+    }
+  }
+
+  return (
+    <div>
+      {caResult && <div style={{ padding:"10px 14px", borderRadius:8, background:caResult.ok?"rgba(16,185,129,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(caResult.ok?"rgba(16,185,129,0.2)":"rgba(248,113,113,0.2)"), color:caResult.ok?"#10b981":"#f87171", fontSize:13, fontWeight:600, marginBottom:14 }}>{caResult.msg}</div>}
+      <div style={{ display:"grid", gap:12, maxWidth:420 }}>
+        <div>
+          <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#71717a", marginBottom:5 }}>EMAIL OF USER TO PROMOTE</label>
+          <input type="email" value={cae} onChange={function(e){setCae(e.target.value);setCaResult(null)}} placeholder="user@example.com" style={{ width:"100%", padding:"11px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", boxSizing:"border-box" }} />
+        </div>
+        <button onClick={handleCreateAdmin} disabled={caLoading} style={{ padding:"11px 24px", borderRadius:8, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:13, fontWeight:700, cursor:"pointer", opacity:caLoading?0.6:1 }}>{caLoading ? "Promoting..." : "Promote to Admin"}</button>
+      </div>
+    </div>
+  );
+}
+
+// ═════════════════════════════════════════
+// ADMIN TICKETS TAB
+// ═════════════════════════════════════════
+function AdminTicketsTab(props) {
+  var mob = props.mob;
+  var flash = props.flash;
+  var _tFilter = useState(""); var tFilter = _tFilter[0]; var setTFilter = _tFilter[1];
+  var _tCatFilter = useState(""); var tCatFilter = _tCatFilter[0]; var setTCatFilter = _tCatFilter[1];
+  var _tSelected = useState(null); var tSelected = _tSelected[0]; var setTSelected = _tSelected[1];
+  var _tReply = useState(""); var tReply = _tReply[0]; var setTReply = _tReply[1];
+
+  var DEMO_TICKETS = [];
+  var filtered = DEMO_TICKETS.filter(function(t){
+    if(tFilter && t.status !== tFilter) return false;
+    if(tCatFilter && t.category !== tCatFilter) return false;
+    return true;
+  });
+  var openCount = DEMO_TICKETS.filter(function(t){return t.status==="open"}).length;
+  var ipCount = DEMO_TICKETS.filter(function(t){return t.status==="in_progress"}).length;
+
+  return (
+    <div style={{ maxWidth:"100%", overflow:"hidden" }}>
+      <div style={{ display:"flex", flexDirection:mob?"column":"row", justifyContent:"space-between", alignItems:mob?"flex-start":"center", gap:mob?10:0, marginBottom:20 }}>
+        <div>
+          <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>Support Tickets</h2>
+          <p style={{ fontSize:13, color:"#71717a", marginTop:4 }}>{openCount+" open, "+ipCount+" in progress"}</p>
+        </div>
+      </div>
+      {DEMO_TICKETS.length === 0 ? (
+        <div style={{ padding:"48px 24px", textAlign:"center", background:"#111113", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)" }}>
+          <div style={{ fontSize:14, color:"#52525b" }}>No support tickets yet</div>
+          <div style={{ fontSize:12, color:"#3f3f46", marginTop:8 }}>Tickets submitted by users will appear here</div>
+        </div>
+      ) : (
+        <div style={{ background:"#111113", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden" }}>
+          <table style={{ width:"100%", borderCollapse:"collapse" }}>
+            <thead><tr style={{ borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
+              {["Ref","User","Subject","Status","Priority","Updated"].map(function(h){return <th key={h} style={{ padding:"10px 12px", fontSize:11, fontWeight:700, color:"#52525b", textAlign:"left", letterSpacing:1 }}>{h}</th>})}
+            </tr></thead>
+            <tbody>{filtered.map(function(t){ return (
+              <tr key={t.id} onClick={function(){setTSelected(tSelected && tSelected.id===t.id ? null : t)}} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)", cursor:"pointer" }}>
+                <td style={{ padding:"10px 12px", fontSize:12, color:"#52525b", fontFamily:"monospace" }}>{t.ref}</td>
+                <td style={{ padding:"10px 12px", fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{t.user}</td>
+                <td style={{ padding:"10px 12px", fontSize:13, color:"#a1a1aa", maxWidth:200 }}>{t.subject}</td>
+                <td style={{ padding:"10px 12px" }}><Badge s={t.status}/></td>
+                <td style={{ padding:"10px 12px" }}><Badge s={t.priority}/></td>
+                <td style={{ padding:"10px 12px", fontSize:12, color:"#52525b" }}>{t.updated}</td>
+              </tr>
+            )})}</tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═════════════════════════════════════════
 // ADMIN PANEL
 // ═════════════════════════════════════════
 function AdminPanel(props) {
@@ -3906,144 +4002,7 @@ function AdminPanel(props) {
           )}
         </div>}
 
-        {tab === "tickets" && (function(){
-          var DEMO_TICKETS = [];
-          var _tFilter = useState(""); var tFilter = _tFilter[0]; var setTFilter = _tFilter[1];
-          var _tCatFilter = useState(""); var tCatFilter = _tCatFilter[0]; var setTCatFilter = _tCatFilter[1];
-          var _tSelected = useState(null); var tSelected = _tSelected[0]; var setTSelected = _tSelected[1];
-          var _tReply = useState(""); var tReply = _tReply[0]; var setTReply = _tReply[1];
-
-          var filtered = DEMO_TICKETS.filter(function(t){
-            if(tFilter && t.status !== tFilter) return false;
-            if(tCatFilter && t.category !== tCatFilter) return false;
-            return true;
-          });
-
-          var openCount = DEMO_TICKETS.filter(function(t){return t.status==="open"}).length;
-          var ipCount = DEMO_TICKETS.filter(function(t){return t.status==="in_progress"}).length;
-
-          return <div style={{ maxWidth:"100%", overflow:"hidden" }}>
-            <div style={{ display:"flex", flexDirection:mob?"column":"row", justifyContent:"space-between", alignItems:mob?"flex-start":"center", gap:mob?10:0, marginBottom:20 }}>
-              <div>
-                <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>Support Tickets</h2>
-                <p style={{ fontSize:13, color:"#71717a", marginTop:4 }}>{openCount+" open, "+ipCount+" in progress"}</p>
-              </div>
-              <div style={{ display:"flex", gap:8 }}>
-                <select value={tFilter} onChange={function(e){setTFilter(e.target.value)}} style={{ padding:"8px 12px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:12, outline:"none", cursor:"pointer" }}>
-                  <option value="">All status</option>
-                  <option value="open">Open</option>
-                  <option value="in_progress">In Progress</option>
-                  <option value="resolved">Resolved</option>
-                  <option value="closed">Closed</option>
-                </select>
-                <select value={tCatFilter} onChange={function(e){setTCatFilter(e.target.value)}} style={{ padding:"8px 12px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:12, outline:"none", cursor:"pointer" }}>
-                  <option value="">All categories</option>
-                  <option value="billing">Billing</option>
-                  <option value="referrals">Referrals</option>
-                  <option value="courses">Courses</option>
-                  <option value="technical">Technical</option>
-                  <option value="account">Account</option>
-                  <option value="general">General</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Stats row */}
-            <div style={{ display:"grid", gridTemplateColumns:mob?"repeat(2,1fr)":"repeat(4,1fr)", gap:10, marginBottom:16 }}>
-              {[["Open",openCount,"#f59e0b"],["In Progress",ipCount,"#3b82f6"],["Resolved",DEMO_TICKETS.filter(function(t){return t.status==="resolved"}).length,"#10b981"],["Closed",DEMO_TICKETS.filter(function(t){return t.status==="closed"}).length,"#71717a"]].map(function(s){return (
-                <div key={s[0]} onClick={function(){setTFilter(tFilter===s[0].toLowerCase().replace(" ","_")?"":s[0].toLowerCase().replace(" ","_"))}} style={{ background:"#131315", borderRadius:10, padding:"12px 14px", border:"1px solid "+(tFilter===s[0].toLowerCase().replace(" ","_")?"rgba(200,180,140,0.2)":"rgba(255,255,255,0.06)"), cursor:"pointer", textAlign:"center" }}>
-                  <div style={{ fontSize:20, fontWeight:600, color:s[2] }}>{s[1]}</div>
-                  <div style={{ fontSize:10, color:"#52525b", fontWeight:600 }}>{s[0]}</div>
-                </div>
-              )})}
-            </div>
-
-            {/* Ticket table */}
-            <div style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden" }}>
-              <div style={{ overflowX:"auto", WebkitOverflowScrolling:"touch" }}>
-                <table style={{ width:"100%", borderCollapse:"collapse", minWidth:mob?700:"auto" }}>
-                  <thead><tr>{["Ref","User","Subject","Category","Status","Priority","Assigned","Messages"].map(function(h){return <th key={h} style={{ padding:"10px 12px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#71717a", textAlign:"left", verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)", whiteSpace:"nowrap" }}>{h}</th>})}</tr></thead>
-                  <tbody>{filtered.length === 0 ? (
-                    <tr><td colSpan={8} style={{ padding:40, textAlign:"center", color:"#3f3f46", fontSize:13 }}>No tickets match this filter</td></tr>
-                  ) : filtered.map(function(t){
-                    var prioColors = { low:"#71717a", normal:"#d4d4d8", high:"#f59e0b", urgent:"#ef4444" };
-                    return (
-                      <tr key={t.id} onClick={function(){setTSelected(tSelected && tSelected.id===t.id ? null : t)}} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)", cursor:"pointer", background:tSelected && tSelected.id===t.id ? "rgba(200,180,140,0.06)" : "transparent" }}>
-                        <td style={{ padding:"10px 12px", verticalAlign:"middle" }}><code style={{ fontSize:10, color:"#52525b", background:"#0a0a0c", padding:"2px 6px", borderRadius:3 }}>{t.ref}</code></td>
-                        <td style={{ padding:"10px 12px", verticalAlign:"middle" }}><div style={{ fontSize:12, fontWeight:600, color:"#d4d4d8" }}>{t.user}</div><div style={{ fontSize:10, color:"#52525b" }}>{t.email}</div></td>
-                        <td style={{ padding:"10px 12px", fontSize:12, color:"#d4d4d8", verticalAlign:"middle", maxWidth:200 }}><div style={{ overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{t.subject}</div></td>
-                        <td style={{ padding:"10px 12px", verticalAlign:"middle" }}><span style={{ fontSize:10, padding:"3px 8px", borderRadius:4, background:"rgba(255,255,255,0.04)", color:"#71717a", fontWeight:600 }}>{t.category}</span></td>
-                        <td style={{ padding:"10px 12px", verticalAlign:"middle" }}><Badge s={t.status.replace("_"," ")}/></td>
-                        <td style={{ padding:"10px 12px", verticalAlign:"middle" }}><span style={{ fontSize:11, fontWeight:600, color:prioColors[t.priority]||"#71717a" }}>{t.priority}</span></td>
-                        <td style={{ padding:"10px 12px", fontSize:11, color:t.assignedTo?"#d4d4d8":"#3f3f46", verticalAlign:"middle" }}>{t.assignedTo||"\u2014"}</td>
-                        <td style={{ padding:"10px 12px", verticalAlign:"middle" }}><div style={{ display:"flex", alignItems:"center", gap:4 }}><Ico name="chat" size={12} color="#52525b" /><span style={{ fontSize:11, color:"#52525b" }}>{t.messages}</span></div></td>
-                      </tr>
-                    );
-                  })}</tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Selected ticket detail */}
-            {tSelected && (
-              <div style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(200,180,140,0.15)", marginTop:14, overflow:"hidden", animation:"scaleIn 0.3s ease-out" }}>
-                <div style={{ padding:mob?"14px":"20px 24px", borderBottom:"1px solid rgba(255,255,255,0.06)", display:"flex", justifyContent:"space-between", alignItems:mob?"flex-start":"center", flexDirection:mob?"column":"row", gap:mob?8:0 }}>
-                  <div>
-                    <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:4 }}>
-                      <code style={{ fontSize:10, color:"#52525b", background:"#0a0a0c", padding:"2px 8px", borderRadius:4 }}>{tSelected.ref}</code>
-                      <Badge s={tSelected.status.replace("_"," ")} />
-                      <span style={{ fontSize:10, fontWeight:600, color:({low:"#71717a",normal:"#d4d4d8",high:"#f59e0b",urgent:"#ef4444"})[tSelected.priority] }}>{tSelected.priority}</span>
-                    </div>
-                    <h3 style={{ fontSize:mob?15:17, fontWeight:700, color:"#d4d4d8", margin:0 }}>{tSelected.subject}</h3>
-                    <div style={{ fontSize:11, color:"#52525b", marginTop:4 }}>{tSelected.user+" \u00B7 "+tSelected.email+" \u00B7 "+tSelected.created}</div>
-                  </div>
-                  <div style={{ display:"flex", gap:6 }}>
-                    <select defaultValue={tSelected.status} onChange={function(e){flash("Status changed to "+e.target.value)}} style={{ padding:"6px 10px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:11, outline:"none", cursor:"pointer" }}>
-                      <option value="open">Open</option>
-                      <option value="in_progress">In Progress</option>
-                      <option value="resolved">Resolved</option>
-                      <option value="closed">Closed</option>
-                    </select>
-                    <button onClick={function(){flash("Assigned to you")}} style={{ padding:"6px 12px", borderRadius:6, border:"1px solid rgba(200,180,140,0.2)", background:"rgba(200,180,140,0.06)", fontSize:11, fontWeight:600, color:"rgb(200,180,140)", cursor:"pointer" }}>Assign to Me</button>
-                    <button onClick={function(){setTSelected(null)}} style={{ width:28, height:28, borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-                  </div>
-                </div>
-
-                {/* Conversation thread */}
-                <div style={{ padding:mob?"14px":"20px 24px" }}>
-                  {[
-                    { sender:tSelected.user, role:"user", content:"Hi, I need help with: "+tSelected.subject, time:tSelected.created+", 10:15 AM" },
-                    tSelected.messages > 1 ? { sender:"Support Team", role:"admin", content:"Hi "+tSelected.user.split(" ")[0]+", thanks for reaching out. We're looking into this for you.", time:tSelected.created+", 2:30 PM" } : null,
-                    tSelected.messages > 2 ? { sender:tSelected.user, role:"user", content:"Any updates on this? It's been a few days.", time:tSelected.updated+", 9:00 AM" } : null,
-                  ].filter(Boolean).map(function(msg, i){
-                    var isUser = msg.role === "user";
-                    return (
-                      <div key={i} style={{ display:"flex", gap:12, marginBottom:14 }}>
-                        <div style={{ width:28, height:28, borderRadius:"50%", background:isUser?"rgba(200,180,140,0.15)":"rgba(59,130,246,0.15)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:9, fontWeight:700, color:isUser?"rgb(200,180,140)":"#3b82f6", flexShrink:0 }}>{isUser?tSelected.user.split(" ").map(function(n){return n[0]}).join(""):"DC"}</div>
-                        <div style={{ flex:1 }}>
-                          <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:2 }}>
-                            <span style={{ fontSize:12, fontWeight:600, color:isUser?"#d4d4d8":"#3b82f6" }}>{msg.sender}</span>
-                            <span style={{ fontSize:10, color:"#3f3f46" }}>{msg.time}</span>
-                          </div>
-                          <div style={{ fontSize:13, color:"#a1a1aa", lineHeight:1.7 }}>{msg.content}</div>
-                        </div>
-                      </div>
-                    );
-                  })}
-
-                  {tSelected.status !== "closed" && (
-                    <div style={{ display:"flex", gap:8, marginTop:8, paddingTop:12, borderTop:"1px solid rgba(255,255,255,0.04)" }}>
-                      <input value={tReply} onChange={function(e){setTReply(e.target.value)}} placeholder="Type admin reply..." style={{ flex:1, padding:"11px 16px", borderRadius:10, border:"1px solid rgba(255,255,255,0.08)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", fontFamily:"'Plus Jakarta Sans',sans-serif" }} />
-                      <button onClick={function(){if(tReply.trim()){flash("Reply sent to "+tSelected.user);setTReply("")}}} style={{ padding:"11px 20px", borderRadius:10, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:13, fontWeight:600, cursor:"pointer" }}>Reply</button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            <div style={{ marginTop:12, fontSize:11, color:"#3f3f46", textAlign:"right" }}>{"Showing "+filtered.length+" of "+DEMO_TICKETS.length+" tickets"}</div>
-          </div>;
-        })()}
+        {tab === "tickets" && <AdminTicketsTab mob={mob} flash={flash} adminUsers={adminUsers} />}
 
         {tab === "courses" && <div style={{ maxWidth:"100%", overflow:"hidden" }}>
           <div style={{ display:"flex", flexDirection:mob?"column":"row", justifyContent:"space-between", alignItems:mob?"flex-start":"center", gap:mob?10:0, marginBottom:20 }}>
@@ -4312,42 +4271,7 @@ function AdminPanel(props) {
           <div style={{ background:"#131315", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:20 }}>
             <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 6px", color:"#d4d4d8" }}>Create New Admin</h3>
             <p style={{ fontSize:12, color:"#52525b", marginBottom:16 }}>The user must already have a registered account. This will promote their role to admin.</p>
-            {(function(){
-              var _cae = useState(""); var cae = _cae[0]; var setCae = _cae[1];
-              var _cap = useState(""); var cap = _cap[0]; var setCap = _cap[1];
-              var _caLoading = useState(false); var caLoading = _caLoading[0]; var setCaLoading = _caLoading[1];
-              var _caResult = useState(null); var caResult = _caResult[0]; var setCaResult = _caResult[1];
-
-              async function handleCreateAdmin() {
-                if (!cae.trim()) { setCaResult({ok:false, msg:"Enter an email address"}); return; }
-                setCaLoading(true); setCaResult(null);
-                try {
-                  const users = await adminApi.users();
-                  const found = users.find(function(u){ return u.email.toLowerCase() === cae.toLowerCase().trim(); });
-                  if (!found) { setCaResult({ok:false, msg:"No account found with that email. They must register first."}); setCaLoading(false); return; }
-                  await adminApi.updateRole(found.id, "admin");
-                  setCaResult({ok:true, msg:"✓ " + found.full_name + " (" + found.email + ") is now an admin."});
-                  setCae(""); setCap("");
-                } catch(e) {
-                  setCaResult({ok:false, msg: e.message || "Something went wrong"});
-                } finally {
-                  setCaLoading(false);
-                }
-              }
-
-              return (
-                <div>
-                  {caResult && <div style={{ padding:"10px 14px", borderRadius:8, background:caResult.ok?"rgba(16,185,129,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(caResult.ok?"rgba(16,185,129,0.2)":"rgba(248,113,113,0.2)"), color:caResult.ok?"#10b981":"#f87171", fontSize:13, fontWeight:600, marginBottom:14 }}>{caResult.msg}</div>}
-                  <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr", gap:12, maxWidth:420 }}>
-                    <div>
-                      <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#71717a", marginBottom:5 }}>EMAIL OF USER TO PROMOTE</label>
-                      <input type="email" value={cae} onChange={function(e){setCae(e.target.value);setCaResult(null)}} placeholder="user@example.com" style={{ width:"100%", padding:"11px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", boxSizing:"border-box" }} />
-                    </div>
-                    <button onClick={handleCreateAdmin} disabled={caLoading} style={{ padding:"11px 24px", borderRadius:8, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:13, fontWeight:700, cursor:"pointer", opacity:caLoading?0.6:1, alignSelf:"flex-end" }}>{caLoading ? "Promoting..." : "Promote to Admin"}</button>
-                  </div>
-                </div>
-              );
-            })()}
+            <CreateAdminForm mob={mob} adminApi={adminApi} />
           </div>
 
           <h2 style={{ fontSize:18, fontWeight:700, margin:"24px 0 16px", color:"#d4d4d8" }}>MamoPay API Config</h2>
