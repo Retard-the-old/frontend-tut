@@ -3069,27 +3069,30 @@ function AdminLogin(props) {
   var _p = useState(""); var pass = _p[0]; var setPass = _p[1];
   var _er = useState(""); var error = _er[0]; var setError = _er[1];
   var _loading = useState(false); var loading = _loading[0]; var setLoading = _loading[1];
-  var { login, user } = useAuth();
+  var { login, logout } = useAuth();
+
+  // Always log out any existing session when admin login page loads
+  useEffect(function() {
+    logout();
+  }, []);
 
   async function handleLogin() {
     if (!email || !pass) { setError("Enter admin credentials"); return; }
     setLoading(true); setError("");
     try {
-      await login(email, pass);
-      // Role will be checked on next render via user object in useEffect
+      var me = await login(email, pass);
+      if (me.role !== "admin") {
+        logout();
+        setError("This account does not have admin access.");
+        setLoading(false);
+        return;
+      }
+      go("adminPanel");
     } catch(e) {
       setError(e.message || "Invalid credentials");
-      setLoading(false);
-      return;
     }
     setLoading(false);
   }
-
-  // Redirect if logged in as admin
-  useEffect(function() {
-    if (user && user.role === "admin") { go("adminPanel"); return; }
-    if (user && user.role !== "admin") { setError("This account does not have admin access."); }
-  }, [user]);
 
 
   return (
