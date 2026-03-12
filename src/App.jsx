@@ -708,7 +708,7 @@ function SiteFooter(props) {
       </div>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", maxWidth:1100, margin:"0 auto" }}>
         <div style={{ fontSize:13, color:"#3f3f46", lineHeight:1 }}>© 2026 Tutorii.com</div>
-        <span onClick={function(){go("adminLogin")}} style={{ fontSize:12, color:"#3f3f46", cursor:"pointer" }}>Admin</span>
+        <span onClick={function(){ var {user} = useAuth(); if(user && user.role==="admin") go("adminPanel"); else go("adminLogin"); }} style={{ fontSize:12, color:"#3f3f46", cursor:"pointer" }}>Admin</span>
       </div>
     </footer>
   );
