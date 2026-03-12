@@ -104,7 +104,7 @@ const USER = {
   ],
 };
 
-const ADMIN_USERS = [
+const adminUsers = [
   { name: "David Chen", email: "david@tutorii.com", code: "DAVID2026", l1: 12, l2: 34, earned: 4056, pending: 749, status: "active", joined: "Oct 2, 2025", referrer: null, l1Names: ["Aisha Khan","Carlos Reyes","Priya Sharma","Maria Lopez","James Tan","Ravi Patel","Nina Gomez","Sara Al-M.","Tom Nguyen","Leo Park","Hana Ito","Yuki Sato"], l2Names: [{ref:"Aisha Khan",subs:["Fatima Al-R.","Omar Hassan","Lina Choi","Yara Farouk","Sam Rivera","Dana Malik","Noor Abbas","Khalid Zain","Reem Haddad","Layla Youssef","Tariq Nasser","Sami Khoury","Huda Salem","Jamal Othman","Rania Bishara"]},{ref:"Carlos Reyes",subs:["Pedro Santos","Ana Diaz","Luis Moreno","Marta Silva","Diego Ruiz","Rosa Vega","Ivan Cruz","Elena Rojas"]},{ref:"Maria Lopez",subs:["Sofia Herrera","Pablo Mendez","Carmen Torres","Lucia Flores","Marco Paz","Isla Reyes"]}] },
   { name: "Aisha Khan", email: "aisha@example.com", code: "AISHA22", l1: 8, l2: 15, earned: 2508, pending: 456, status: "active", joined: "Oct 14, 2025", referrer: "David Chen", l1Names: ["Fatima Al-R.","Omar Hassan","Lina Choi","Yara Farouk","Sam Rivera","Dana Malik","Noor Abbas","Khalid Zain"], l2Names: [{ref:"Omar Hassan",subs:["Ali Mansoor","Zara Begum","Imran Shah"]},{ref:"Lina Choi",subs:["Jin Park","Hye Kim","Soo Lee"]},{ref:"Yara Farouk",subs:["Mona Saleh","Dina Aziz","Rami Hanna","Fadi Issa","Nadia Karam","Tala Bishara"]},{ref:"Dana Malik",subs:["Samir Jaber","Leen Awad","Rasha Nasr"]}] },
   { name: "Carlos Reyes", email: "carlos@example.com", code: "CARLOS01", l1: 5, l2: 8, earned: 1430, pending: 304, status: "active", joined: "Nov 3, 2025", referrer: "David Chen", l1Names: ["Pedro Santos","Ana Diaz","Luis Moreno","Marta Silva","Diego Ruiz"], l2Names: [{ref:"Pedro Santos",subs:["Bruno Costa","Clara Lima"]},{ref:"Ana Diaz",subs:["Victor Paz","Gloria Herrera","Oscar Mendez"]},{ref:"Luis Moreno",subs:["Andres Vega","Camila Cruz","Felipe Rojas"]}] },
@@ -708,7 +708,7 @@ function SiteFooter(props) {
       </div>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", maxWidth:1100, margin:"0 auto" }}>
         <div style={{ fontSize:13, color:"#3f3f46", lineHeight:1 }}>© 2026 Tutorii.com</div>
-        <span onClick={function(){ go("adminLogin"); }} style={{ fontSize:12, color:"#3f3f46", cursor:"pointer" }}>Admin</span>
+        <span onClick={function(){go("adminLogin")}} style={{ fontSize:12, color:"#3f3f46", cursor:"pointer" }}>Admin</span>
       </div>
     </footer>
   );
@@ -1657,8 +1657,62 @@ function UserPortal(props) {
   var _ticketReply = useState(""); var ticketReply = _ticketReply[0]; var setTicketReply = _ticketReply[1];
   var _ticketMsgs = useState([]);  var ticketMsgs = _ticketMsgs[0]; var setTicketMsgs = _ticketMsgs[1];
   var contentRef = useRef(null);
-  useEffect(function(){ var t = setTimeout(function(){ setDashLoading(false); }, 900); return function(){clearTimeout(t)}; }, []);
-  var u = USER;
+  var { user: authUser } = useAuth();
+  var _realUser = useState(null); var realUser = _realUser[0]; var setRealUser = _realUser[1];
+  var _referralStats = useState(null); var referralStats = _referralStats[0]; var setReferralStats = _referralStats[1];
+  var _myCommissions = useState([]); var myCommissions = _myCommissions[0]; var setMyCommissions = _myCommissions[1];
+  var _myPayouts = useState([]); var myPayouts = _myPayouts[0]; var setMyPayouts = _myPayouts[1];
+  var _mySub = useState(null); var mySub = _mySub[0]; var setMySub = _mySub[1];
+
+  useEffect(function(){
+    Promise.allSettled([
+      usersApi.me(),
+      usersApi.referrals(),
+      payoutsApi.commissions(),
+      payoutsApi.mine(),
+      subscriptionsApi.me(),
+      coursesApi.list(),
+    ]).then(function(results){
+      if(results[0].status==="fulfilled") setRealUser(results[0].value);
+      if(results[1].status==="fulfilled") setReferralStats(results[1].value);
+      if(results[2].status==="fulfilled") setMyCommissions(results[2].value || []);
+      if(results[3].status==="fulfilled") setMyPayouts(results[3].value || []);
+      if(results[4].status==="fulfilled") setMySub(results[4].value);
+      if(results[5].status==="fulfilled" && results[5].value && results[5].value.length > 0) {
+        setCourses(results[5].value.map(function(c){ return { id:c.id, module:c.title, icon:c.icon||"book", lessons: (c.lessons||[]).map(function(l){ return { id:l.id, title:l.title, dur:l.duration_minutes?(l.duration_minutes+" min"):"10 min", done:l.completed||false }; }) }; }));
+      }
+      setDashLoading(false);
+    });
+  }, []);
+
+  // Build u object from real data, falling back to USER mock for missing fields
+  var u = realUser ? {
+    name: realUser.full_name || "User",
+    email: realUser.email || "",
+    phone: realUser.phone || "",
+    code: realUser.referral_code || "",
+    avatar: (realUser.full_name||"U").split(" ").map(function(n){return n[0]}).join("").slice(0,2).toUpperCase(),
+    status: mySub ? mySub.status : "inactive",
+    plan: "Tutorii Monthly",
+    paymentMethod: "MamoPay",
+    joined: realUser.created_at ? new Date(realUser.created_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "",
+    lastLogin: "Today",
+    nextBilling: mySub && mySub.current_period_end ? new Date(mySub.current_period_end).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "N/A",
+    referredBy: referralStats && referralStats.referred_by ? referralStats.referred_by : "Direct",
+    iban: realUser.payout_iban || "",
+    ibanName: realUser.payout_name || "",
+    billing: [],
+    earn: {
+      total: myCommissions.reduce(function(s,c){return s+(c.amount_aed||0)},0).toFixed(2),
+      month: myCommissions.filter(function(c){ var d=new Date(c.created_at); var n=new Date(); return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear(); }).reduce(function(s,c){return s+(c.amount_aed||0)},0).toFixed(2),
+      pending: myCommissions.filter(function(c){return c.status==="pending"}).reduce(function(s,c){return s+(c.amount_aed||0)},0).toFixed(2),
+      paid: myPayouts.filter(function(p){return p.status==="completed"}).reduce(function(s,p){return s+(p.amount_aed||0)},0).toFixed(2),
+    },
+    l1: referralStats && referralStats.level1 ? referralStats.level1.map(function(r){ return { name:r.full_name||r.email, status:r.subscription_status||"active", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
+    l2: referralStats && referralStats.level2 ? referralStats.level2.map(function(r){ return { name:r.full_name||r.email, from:r.referred_by_name||"", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
+    payouts: myPayouts.map(function(p){ return { date: p.created_at ? new Date(p.created_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", amount: p.amount_aed||0, status: p.status||"pending", ref: p.id||"" }; }),
+  } : USER;
+
   var mob = useIsMobile();
 
   var totalL = courses.reduce(function(s,c){return s+c.lessons.length},0);
@@ -3104,9 +3158,35 @@ function AdminPanel(props) {
   var _actionResult = useState(null); var actionResult = _actionResult[0]; var setActionResult = _actionResult[1];
   var _auditEntries = useState([]); var auditEntries = _auditEntries[0]; var setAuditEntries = _auditEntries[1];
   var _auditFilter = useState(""); var auditFilter = _auditFilter[0]; var setAuditFilter = _auditFilter[1];
+  var _adminUsers = useState(adminUsers); var adminUsers = _adminUsers[0]; var setAdminUsers = _adminUsers[1];
+  var _adminStats = useState(null); var adminStats = _adminStats[0]; var setAdminStats = _adminStats[1];
+  var _adminLoading = useState(true); var adminLoading = _adminLoading[0]; var setAdminLoading = _adminLoading[1];
 
-  var active = ADMIN_USERS.filter(function(u){return u.status==="active"}).length;
-  var mrr = active * PRICE;
+  useEffect(function(){
+    var token = localStorage.getItem("tutorii_access_token");
+    var API = (typeof import !== "undefined" && import.meta && import.meta.env && import.meta.env.VITE_API_URL) || "https://backend-tut-production.up.railway.app/api/v1";
+    Promise.allSettled([
+      fetch(API + "/admin/users?limit=200", { headers:{ "Authorization":"Bearer "+token } }).then(function(r){return r.json()}),
+      fetch(API + "/admin/dashboard", { headers:{ "Authorization":"Bearer "+token } }).then(function(r){return r.json()}),
+    ]).then(function(results){
+      if(results[0].status==="fulfilled" && Array.isArray(results[0].value)){
+        setAdminUsers(results[0].value.map(function(u){
+          return {
+            name: u.full_name||u.email, email: u.email, code: u.referral_code||"",
+            l1: u.referral_count||0, l2: 0, earned: u.total_earned||0, pending: u.pending_payout||0,
+            status: u.subscription_status||"inactive", joined: u.created_at ? new Date(u.created_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "",
+            referrer: u.referred_by_name||null, l1Names:[], l2Names:[], id: u.id, role: u.role,
+            iban: u.payout_iban||"", ibanName: u.payout_name||"",
+          };
+        }));
+      }
+      if(results[1].status==="fulfilled") setAdminStats(results[1].value);
+      setAdminLoading(false);
+    });
+  }, []);
+
+  var active = adminUsers.filter(function(u){return u.status==="active"}).length;
+  var mrr = adminStats ? adminStats.total_revenue_aed : active * PRICE;
   var totalLessons = courses.reduce(function(s,c){return s+c.lessons.length},0);
 
   function flash(msg) { setToast(msg); setTimeout(function(){setToast(null)},3000); }
@@ -3491,7 +3571,7 @@ function AdminPanel(props) {
 
         {tab === "users" && <div style={{ maxWidth:"100%", overflow:"hidden" }}>
           <div style={{ display:"flex", flexDirection:mob?"column":"row", justifyContent:"space-between", alignItems:mob?"flex-start":"center", gap:mob?10:0, marginBottom:20 }}>
-            <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>{"Users ("+ADMIN_USERS.length+")"}</h2>
+            <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>{"Users ("+adminUsers.length+")"}</h2>
             <div style={{ position:"relative", width:mob?"100%":"auto" }}>
               <div style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", lineHeight:0, pointerEvents:"none" }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#52525b" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
               <input value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="Search name, email, or code..." style={{ padding:"9px 14px 9px 34px", borderRadius:8, border:"1px solid "+(search ? "rgba(200,180,140,0.2)" : "rgba(255,255,255,0.06)"), background:search ? "rgba(200,180,140,0.04)" : "#0a0a0c", color:"#fff", fontSize:13, width:mob?"100%":340, outline:"none", boxSizing:"border-box", transition:"border-color 0.2s, background 0.2s" }} />
@@ -3500,7 +3580,7 @@ function AdminPanel(props) {
           </div>
           {(function(){
             var q = search.toLowerCase().trim();
-            var filtered = ADMIN_USERS.filter(function(u){
+            var filtered = adminUsers.filter(function(u){
               if (!q) return true;
               return u.name.toLowerCase().includes(q) ||
                      u.email.toLowerCase().includes(q) ||
@@ -3509,7 +3589,7 @@ function AdminPanel(props) {
             });
             return (
               <div>
-                {search && <div style={{ fontSize:11, color:"#52525b", marginBottom:10 }}>{"Showing "+filtered.length+" of "+ADMIN_USERS.length+" users"+(filtered.length===0 ? " — try a different search" : "")}</div>}
+                {search && <div style={{ fontSize:11, color:"#52525b", marginBottom:10 }}>{"Showing "+filtered.length+" of "+adminUsers.length+" users"+(filtered.length===0 ? " — try a different search" : "")}</div>}
                 <div style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden" }}>
                   <div style={{ overflowX:"auto", WebkitOverflowScrolling:"touch" }}><table style={{ width:"100%", borderCollapse:"collapse", minWidth:mob?700:"auto" }}>
                     <thead><tr>{["User","Code","Level 1","Level 2","Earned","Status","Actions"].map(function(h){return <th key={h} style={{ padding:"12px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#71717a", textAlign:"left", verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>{h}</th>})}</tr></thead>
@@ -4212,7 +4292,7 @@ function AdminPanel(props) {
                     var timeStr = d.toLocaleDateString("en-GB",{day:"numeric",month:"short"}) + " " + d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
                     var targetName = "";
                     if(entry.target_user_id){
-                      var found = ADMIN_USERS.find(function(u){return "u"+ADMIN_USERS.indexOf(u) === entry.target_user_id || u.email === (entry.detail||"").match(/for (\S+@\S+)/)?.[1]});
+                      var found = adminUsers.find(function(u){return "u"+adminUsers.indexOf(u) === entry.target_user_id || u.email === (entry.detail||"").match(/for (\S+@\S+)/)?.[1]});
                       targetName = found ? found.name : (entry.detail||"").match(/for (.+?)(?:\.|$)/)?.[1] || entry.target_user_id;
                     }
                     return (
