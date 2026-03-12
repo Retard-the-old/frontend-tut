@@ -1657,7 +1657,7 @@ function UserPortal(props) {
   var _ticketReply = useState(""); var ticketReply = _ticketReply[0]; var setTicketReply = _ticketReply[1];
   var _ticketMsgs = useState([]);  var ticketMsgs = _ticketMsgs[0]; var setTicketMsgs = _ticketMsgs[1];
   var contentRef = useRef(null);
-  var { user: authUser } = useAuth();
+  var { user: authUser, logout } = useAuth();
   var _realUser = useState(null); var realUser = _realUser[0]; var setRealUser = _realUser[1];
   var _referralStats = useState(null); var referralStats = _referralStats[0]; var setReferralStats = _referralStats[1];
   var _myCommissions = useState([]); var myCommissions = _myCommissions[0]; var setMyCommissions = _myCommissions[1];
@@ -1708,8 +1708,8 @@ function UserPortal(props) {
       pending: parseFloat(myCommissions.filter(function(c){return c.status==="pending"}).reduce(function(s,c){return s+(c.amount_aed||0)},0).toFixed(2)),
       paid: parseFloat(myPayouts.filter(function(p){return p.status==="completed"}).reduce(function(s,p){return s+(p.amount_aed||0)},0).toFixed(2)),
     },
-    l1: referralStats && referralStats.level1 ? referralStats.level1.map(function(r){ return { name:r.full_name||r.email, status:r.subscription_status||"active", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
-    l2: referralStats && referralStats.level2 ? referralStats.level2.map(function(r){ return { name:r.full_name||r.email, from:r.referred_by_name||"", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
+    l1: referralStats && Array.isArray(referralStats.level1) ? referralStats.level1.map(function(r){ return { name:r.full_name||r.email, status:r.subscription_status||"active", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
+    l2: referralStats && Array.isArray(referralStats.level2) ? referralStats.level2.map(function(r){ return { name:r.full_name||r.email, from:r.referred_by_name||"", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
     payouts: myPayouts.map(function(p){ return { date: p.created_at ? new Date(p.created_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", amount: p.amount_aed||0, status: p.status||"pending", ref: p.id||"" }; }),
   } : {
     name: authUser ? (authUser.full_name || authUser.email) : "Loading...",
@@ -1726,7 +1726,7 @@ function UserPortal(props) {
   var totalL = courses.reduce(function(s,c){return s+c.lessons.length},0);
   var doneL = courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return l.done}).length},0);
   var pct = totalL > 0 ? Math.round((doneL/totalL)*100) : 0;
-  var activeL1 = u.l1.filter(function(r){return r.status==="active"}).length;
+  var activeL1 = (u.l1||[]).filter(function(r){return r.status==="active"}).length;
 
   function copyLink() { setCopied(true); setTimeout(function(){setCopied(false)},2000); }
   function markDone(cid,lid) { setCourses(function(p){return p.map(function(c){return c.id===cid?Object.assign({},c,{lessons:c.lessons.map(function(l){return l.id===lid?Object.assign({},l,{done:true}):l})}):c})}); }
@@ -1739,10 +1739,10 @@ function UserPortal(props) {
     setChatMsgs(newMsgs);
     setChatLoading(true);
 
-    var l1active = u.l1.filter(function(r){return r.status==="active"});
-    var l1cancelled = u.l1.filter(function(r){return r.status==="cancelled"});
+    var l1active = (u.l1||[]).filter(function(r){return r.status==="active"});
+    var l1cancelled = (u.l1||[]).filter(function(r){return r.status==="cancelled"});
     var monthlyL1 = l1active.length * PRICE * L1_RATE;
-    var monthlyL2 = u.l2.length * PRICE * L2_RATE;
+    var monthlyL2 = (u.l2||[]).length * PRICE * L2_RATE;
     var completedLessons = courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return l.done}).length},0);
     var tLessons = courses.reduce(function(s,c){return s+c.lessons.length},0);
 
@@ -1764,8 +1764,8 @@ function UserPortal(props) {
       "Payment Method: " + u.paymentMethod + " (via MamoPay)\n" +
       "Next Billing Date: " + u.nextBilling + "\n" +
       "Billing History:\n" +
-      u.billing.map(function(b){return "- " + b.date + ": $" + b.amount.toFixed(2) + " (" + b.status + ") via " + b.method}).join("\n") + "\n" +
-      "Total Spent on Subscription: AED " + (u.billing.length * PRICE).toFixed(2) + " (" + u.billing.length + " payments)\n\n" +
+      (u.billing||[]).map(function(b){return "- " + b.date + ": $" + b.amount.toFixed(2) + " (" + b.status + ") via " + b.method}).join("\n") + "\n" +
+      "Total Spent on Subscription: AED " + ((u.billing||[]).length * PRICE).toFixed(2) + " (" + (u.billing||[]).length + " payments)\n\n" +
 
       "=== EARNINGS SUMMARY ===\n" +
       "Total Earned (all time): AED " + u.earn.total + "\n" +
@@ -1773,16 +1773,16 @@ function UserPortal(props) {
       "Pending Payout: AED " + u.earn.pending + " (will be paid next Tuesday if above AED 50 minimum)\n" +
       "Already Paid Out: AED " + u.earn.paid + "\n" +
       "Monthly L1 Income: AED " + monthlyL1.toFixed(2) + " (" + l1active.length + " active L1 referrals x $" + (PRICE*L1_RATE).toFixed(2) + " each)\n" +
-      "Monthly L2 Income: AED " + monthlyL2.toFixed(2) + " (" + u.l2.length + " L2 referrals x $" + (PRICE*L2_RATE).toFixed(2) + " each)\n" +
+      "Monthly L2 Income: AED " + monthlyL2.toFixed(2) + " (" + (u.l2||[]).length + " L2 referrals x $" + (PRICE*L2_RATE).toFixed(2) + " each)\n" +
       "Total Monthly Gross: $" + (monthlyL1 + monthlyL2).toFixed(2) + "\n" +
       "Monthly Subscription Cost: -$" + PRICE + "\n" +
       "Net Monthly Profit: $" + (monthlyL1 + monthlyL2 - PRICE).toFixed(2) + "\n" +
       "ROI: " + (((monthlyL1 + monthlyL2 - PRICE) / PRICE) * 100).toFixed(0) + "% return on subscription cost\n" +
       "Break-even: Achieved (need 1 active L1 referral to cover subscription, user has " + l1active.length + ")\n" +
-      "Lifetime Net Profit: $" + (u.earn.total - (u.billing.length * PRICE)).toFixed(2) + " (total earned minus total subscription payments)\n\n" +
+      "Lifetime Net Profit: $" + (u.earn.total - ((u.billing||[]).length * PRICE)).toFixed(2) + " (total earned minus total subscription payments)\n\n" +
 
       "=== EARNING PROJECTIONS ===\n" +
-      "If user maintains current " + l1active.length + " active L1 and " + u.l2.length + " L2 referrals:\n" +
+      "If user maintains current " + l1active.length + " active L1 and " + (u.l2||[]).length + " L2 referrals:\n" +
       "- Monthly: $" + (monthlyL1 + monthlyL2 - PRICE).toFixed(2) + " net profit\n" +
       "- Quarterly: $" + ((monthlyL1 + monthlyL2 - PRICE) * 3).toFixed(2) + " net profit\n" +
       "- Annually: $" + ((monthlyL1 + monthlyL2 - PRICE) * 12).toFixed(2) + " net profit\n" +
@@ -1798,31 +1798,31 @@ function UserPortal(props) {
       "Minimum Payout: AED 50\n" +
       "Current Pending: $" + u.earn.pending + "\n" +
       "Payout History:\n" +
-      u.payouts.map(function(p){return "- " + p.date + " 2026: $" + p.amount.toFixed(2) + " (" + p.status + ") - " + p.method}).join("\n") + "\n" +
-      "Total Payouts Received: " + u.payouts.length + " payouts totalling $" + u.payouts.reduce(function(s,p){return s+p.amount},0).toFixed(2) + "\n" +
-      "Average Payout: $" + (u.payouts.reduce(function(s,p){return s+p.amount},0) / u.payouts.length).toFixed(2) + "\n\n" +
+      (u.payouts||[]).map(function(p){return "- " + p.date + " 2026: $" + p.amount.toFixed(2) + " (" + p.status + ") - " + p.method}).join("\n") + "\n" +
+      "Total Payouts Received: " + (u.payouts||[]).length + " payouts totalling $" + (u.payouts||[]).reduce(function(s,p){return s+p.amount},0).toFixed(2) + "\n" +
+      "Average Payout: $" + ((u.payouts||[]).reduce(function(s,p){return s+p.amount},0) / (u.payouts||[]).length).toFixed(2) + "\n\n" +
 
       "=== LEVEL 1 REFERRALS (Direct, 40% = $" + (PRICE*L1_RATE).toFixed(2) + "/each/month) ===\n" +
-      "Total L1: " + u.l1.length + " (" + l1active.length + " active, " + l1cancelled.length + " cancelled)\n" +
-      u.l1.map(function(r,i){return (i+1) + ". " + r.name + " - Joined: " + r.date + " 2026, Status: " + r.status.toUpperCase() + ", Total earned you: $" + r.earned.toFixed(2) + (r.status==="active" ? ", Currently earning $"+(PRICE*L1_RATE).toFixed(2)+"/month" : ", No longer earning (cancelled)")}).join("\n") + "\n" +
+      "Total L1: " + (u.l1||[]).length + " (" + l1active.length + " active, " + l1cancelled.length + " cancelled)\n" +
+      (u.l1||[]).map(function(r,i){return (i+1) + ". " + r.name + " - Joined: " + r.date + " 2026, Status: " + r.status.toUpperCase() + ", Total earned you: $" + r.earned.toFixed(2) + (r.status==="active" ? ", Currently earning $"+(PRICE*L1_RATE).toFixed(2)+"/month" : ", No longer earning (cancelled)")}).join("\n") + "\n" +
       "Best performing L1: " + (function(){var best=u.l1.reduce(function(a,b){return a.earned>b.earned?a:b});return best.name+" ($"+best.earned.toFixed(2)+" earned)"})() + "\n" +
-      "Most recent L1: " + u.l1[u.l1.length-1].name + " (joined " + u.l1[u.l1.length-1].date + ")\n" +
-      "L1 retention rate: " + Math.round((l1active.length/u.l1.length)*100) + "% (" + l1active.length + " of " + u.l1.length + " still active)\n\n" +
+      "Most recent L1: " + u.l1[(u.l1||[]).length-1].name + " (joined " + u.l1[(u.l1||[]).length-1].date + ")\n" +
+      "L1 retention rate: " + Math.round((l1active.length/(u.l1||[]).length)*100) + "% (" + l1active.length + " of " + (u.l1||[]).length + " still active)\n\n" +
 
       "=== LEVEL 2 REFERRALS (Indirect, 5% = $" + (PRICE*L2_RATE).toFixed(2) + "/each/month) ===\n" +
-      "Total L2: " + u.l2.length + "\n" +
-      u.l2.map(function(r,i){return (i+1) + ". " + r.name + " - Referred by: " + r.from + ", Joined: " + r.date + " 2026, Earned you: $" + r.earned.toFixed(2)}).join("\n") + "\n" +
+      "Total L2: " + (u.l2||[]).length + "\n" +
+      (u.l2||[]).map(function(r,i){return (i+1) + ". " + r.name + " - Referred by: " + r.from + ", Joined: " + r.date + " 2026, Earned you: $" + r.earned.toFixed(2)}).join("\n") + "\n" +
       "L2 breakdown by L1 referrer:\n" +
       (function(){var map={};u.l2.forEach(function(r){if(!map[r.from])map[r.from]=0;map[r.from]++});return Object.keys(map).map(function(k){return "- "+k+": "+map[k]+" L2 referral"+(map[k]>1?"s":"")}).join("\n")})() + "\n" +
       "Best L1 recruiter (most L2s): " + (function(){var map={};u.l2.forEach(function(r){if(!map[r.from])map[r.from]=0;map[r.from]++});var best="";var max=0;Object.keys(map).forEach(function(k){if(map[k]>max){max=map[k];best=k}});return best+" ("+max+" L2 referrals)"})() + "\n\n" +
 
       "=== NETWORK SUMMARY ===\n" +
-      "Total Network Size: " + (u.l1.length + u.l2.length) + " people (" + u.l1.length + " L1 + " + u.l2.length + " L2)\n" +
-      "Active Network: " + (l1active.length + u.l2.length) + " people generating income\n" +
+      "Total Network Size: " + ((u.l1||[]).length + (u.l2||[]).length) + " people (" + (u.l1||[]).length + " L1 + " + (u.l2||[]).length + " L2)\n" +
+      "Active Network: " + (l1active.length + (u.l2||[]).length) + " people generating income\n" +
       "Total Earned from L1: $" + u.l1.reduce(function(s,r){return s+r.earned},0).toFixed(2) + "\n" +
       "Total Earned from L2: $" + u.l2.reduce(function(s,r){return s+r.earned},0).toFixed(2) + "\n" +
-      "Average L1 has earned user: $" + (u.l1.reduce(function(s,r){return s+r.earned},0)/u.l1.length).toFixed(2) + "\n" +
-      "Average L2 has earned user: $" + (u.l2.reduce(function(s,r){return s+r.earned},0)/u.l2.length).toFixed(2) + "\n\n" +
+      "Average L1 has earned user: $" + (u.l1.reduce(function(s,r){return s+r.earned},0)/(u.l1||[]).length).toFixed(2) + "\n" +
+      "Average L2 has earned user: $" + (u.l2.reduce(function(s,r){return s+r.earned},0)/(u.l2||[]).length).toFixed(2) + "\n\n" +
 
       "=== COURSE PROGRESS (DETAILED) ===\n" +
       "Overall: " + completedLessons + "/" + tLessons + " lessons completed (" + (tLessons>0?Math.round(completedLessons/tLessons*100):0) + "%)\n" +
@@ -2032,7 +2032,7 @@ function UserPortal(props) {
             <div style={{ width:32, height:32, borderRadius:"50%", background:"rgb(200,180,140)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:"#0a0a0c" }}>{u.avatar}</div>
             <div><div style={{ fontSize:12, fontWeight:600, color:"#fff" }}>{u.name}</div><div style={{ fontSize:10, color:"#52525b" }}>{u.email}</div></div>
           </div>
-          <button onClick={function(){ var {logout} = useAuth(); logout(); go("landing"); }} style={{ width:"100%", padding:"8px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Log Out</button>
+          <button onClick={function(){ logout(); go("landing"); }} style={{ width:"100%", padding:"8px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Log Out</button>
         </div>
       </div>}
       {mob && <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"12px 16px", background:"#111113", borderBottom:"1px solid rgba(255,255,255,0.06)", position:"sticky", top:0, zIndex:50 }}>
@@ -2078,7 +2078,7 @@ function UserPortal(props) {
           <div style={{ display:"grid", gridTemplateColumns:mob?"1fr 1fr":"repeat(4, 1fr)", gap:mob?10:14, marginBottom:mob?16:24, alignItems:"stretch" }}>
             <StatCard icon="dollar" label="Total Earnings" value={"AED "+u.earn.total} />
             <StatCard icon="chart" label="This Month's Earnings" value={"AED "+u.earn.month} />
-            <StatCard icon="users" label="My Referrals" value={u.l1.length} sub={activeL1+" active"} />
+            <StatCard icon="users" label="My Referrals" value={(u.l1||[]).length} sub={activeL1+" active"} />
             <StatCard icon="book" label="Course Progress" value={pct+"%"} sub={doneL+"/"+totalL+" lessons"} color="#d97706" />
           </div>
           <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr", gap:14, alignItems:"stretch" }}>
@@ -2141,7 +2141,7 @@ function UserPortal(props) {
                 <div style={{ width:28, height:28, borderRadius:7, background:"rgba(200,180,140,0.08)", border:"1px solid rgba(200,180,140,0.12)", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0 }}><Ico name="target" size={13} color="rgb(200,180,140)" /></div>
               </div>
               {(function(){
-                var monthlyGross = activeL1 * PRICE * L1_RATE + u.l2.length * PRICE * L2_RATE;
+                var monthlyGross = activeL1 * PRICE * L1_RATE + (u.l2||[]).length * PRICE * L2_RATE;
                 var monthlyNet = monthlyGross - PRICE;
                 var roiPct = monthlyGross > 0 ? Math.round((monthlyNet / monthlyGross) * 100) : 0;
                 var r = 44; var circ = 2 * Math.PI * r;
@@ -2178,8 +2178,8 @@ function UserPortal(props) {
                 <div style={{ width:28, height:28, borderRadius:7, background:"rgba(200,180,140,0.08)", border:"1px solid rgba(200,180,140,0.12)", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0 }}><Ico name="users" size={13} color="rgb(200,180,140)" /></div>
               </div>
               {(function(){
-                var l1cancelled = u.l1.filter(function(r){return r.status==="cancelled"}).length;
-                var retPct = u.l1.length > 0 ? Math.round((activeL1 / u.l1.length) * 100) : 0;
+                var l1cancelled = (u.l1||[]).filter(function(r){return r.status==="cancelled"}).length;
+                var retPct = (u.l1||[]).length > 0 ? Math.round((activeL1 / (u.l1||[]).length) * 100) : 0;
                 return (
                   <div>
                     <div style={{ marginBottom:14 }}>
@@ -2188,8 +2188,8 @@ function UserPortal(props) {
                         <span style={{ color:retPct>=70?"rgb(200,180,140)":"#fbbf24", fontWeight:600, fontSize:10, padding:"2px 8px", borderRadius:5, background:retPct>=70?"rgba(200,180,140,0.08)":"rgba(251,191,36,0.08)", border:"1px solid "+(retPct>=70?"rgba(200,180,140,0.12)":"rgba(251,191,36,0.12)") }}>{retPct+"%"}</span>
                       </div>
                       <div style={{ width:"100%", height:8, borderRadius:4, background:"rgba(255,255,255,0.06)", overflow:"hidden", display:"flex" }}>
-                        <div style={{ height:8, background:"linear-gradient(90deg, rgba(200,180,140,0.7), rgb(200,180,140))", width:(activeL1/Math.max(u.l1.length,1)*100)+"%", borderRadius:"4px 0 0 4px", boxShadow:"0 0 6px rgba(200,180,140,0.2)", transition:"width 0.5s" }} />
-                        <div style={{ height:8, background:"rgba(248,113,113,0.3)", width:(l1cancelled/Math.max(u.l1.length,1)*100)+"%", borderRadius:"0 4px 4px 0" }} />
+                        <div style={{ height:8, background:"linear-gradient(90deg, rgba(200,180,140,0.7), rgb(200,180,140))", width:(activeL1/Math.max((u.l1||[]).length,1)*100)+"%", borderRadius:"4px 0 0 4px", boxShadow:"0 0 6px rgba(200,180,140,0.2)", transition:"width 0.5s" }} />
+                        <div style={{ height:8, background:"rgba(248,113,113,0.3)", width:(l1cancelled/Math.max((u.l1||[]).length,1)*100)+"%", borderRadius:"0 4px 4px 0" }} />
                       </div>
                       <div style={{ display:"flex", justifyContent:"space-between", marginTop:4 }}>
                         <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:6, height:6, borderRadius:1, background:"rgb(200,180,140)" }} /><span style={{ fontSize:9, color:"#52525b", padding:"1px 6px", borderRadius:4, background:"rgba(200,180,140,0.06)", border:"1px solid rgba(200,180,140,0.08)" }}>{activeL1+" active"}</span></div>
@@ -2199,11 +2199,11 @@ function UserPortal(props) {
                     <div style={{ borderTop:"1px solid rgba(255,255,255,0.04)", paddingTop:12 }}>
                       <div style={{ display:"flex", justifyContent:"space-between", fontSize:11, color:"#52525b", marginBottom:4 }}>
                         <span>Network</span>
-                        <span style={{ fontWeight:600, color:"#71717a", fontSize:10, padding:"2px 8px", borderRadius:5, background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.05)" }}>{(u.l1.length + u.l2.length)+" total"}</span>
+                        <span style={{ fontWeight:600, color:"#71717a", fontSize:10, padding:"2px 8px", borderRadius:5, background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.05)" }}>{((u.l1||[]).length + (u.l2||[]).length)+" total"}</span>
                       </div>
                       <div style={{ display:"flex", gap:4 }}>
-                        <div style={{ flex:u.l1.length, height:20, borderRadius:"4px 0 0 4px", background:"rgba(200,180,140,0.2)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:9, fontWeight:600, color:"rgb(200,180,140)", letterSpacing:0.5 }}>{u.l1.length+" L1"}</div>
-                        <div style={{ flex:Math.max(u.l2.length,1), height:20, borderRadius:"0 4px 4px 0", background:"rgba(167,139,250,0.15)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:9, fontWeight:600, color:"#a78bfa", letterSpacing:0.5 }}>{u.l2.length+" L2"}</div>
+                        <div style={{ flex:(u.l1||[]).length, height:20, borderRadius:"4px 0 0 4px", background:"rgba(200,180,140,0.2)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:9, fontWeight:600, color:"rgb(200,180,140)", letterSpacing:0.5 }}>{(u.l1||[]).length+" L1"}</div>
+                        <div style={{ flex:Math.max((u.l2||[]).length,1), height:20, borderRadius:"0 4px 4px 0", background:"rgba(167,139,250,0.15)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:9, fontWeight:600, color:"#a78bfa", letterSpacing:0.5 }}>{(u.l2||[]).length+" L2"}</div>
                       </div>
                     </div>
                   </div>
@@ -2220,9 +2220,9 @@ function UserPortal(props) {
 
           {/* Network summary cards */}
           <div style={{ display:"grid", gridTemplateColumns:mob?"1fr 1fr":"repeat(4, 1fr)", gap:mob?10:14, marginBottom:mob?16:20, alignItems:"stretch" }}>
-            <StatCard icon="users" label="Level 1 Referrals" value={u.l1.length} sub={activeL1+" active"} />
-            <StatCard icon="link" label="Level 2 Referrals" value={u.l2.length} sub={"via "+new Set(u.l2.map(function(r){return r.from})).size+" referrers"} />
-            <StatCard icon="chart" label="Total Network Size" value={u.l1.length + u.l2.length} />
+            <StatCard icon="users" label="Level 1 Referrals" value={(u.l1||[]).length} sub={activeL1+" active"} />
+            <StatCard icon="link" label="Level 2 Referrals" value={(u.l2||[]).length} sub={"via "+new Set((u.l2||[]).map(function(r){return r.from})).size+" referrers"} />
+            <StatCard icon="chart" label="Total Network Size" value={(u.l1||[]).length + (u.l2||[]).length} />
             <StatCard icon="dollar" label="Total Network Revenue" value={"AED "+(u.l1.reduce(function(s,r){return s+r.earned},0)+u.l2.reduce(function(s,r){return s+r.earned},0)).toFixed(2)} />
           </div>
 
@@ -2234,7 +2234,7 @@ function UserPortal(props) {
               <div style={{ display:"flex", alignItems:"center", gap:20 }}>
                 <ResponsiveContainer width="50%" height={180}>
                   <PieChart>
-                    <Pie data={[{name:"L1 Active",value:activeL1},{name:"L1 Cancelled",value:u.l1.length-activeL1},{name:"Level 2",value:u.l2.length}]} cx="50%" cy="50%" innerRadius={32} outerRadius={55} paddingAngle={3} dataKey="value">
+                    <Pie data={[{name:"L1 Active",value:activeL1},{name:"L1 Cancelled",value:(u.l1||[]).length-activeL1},{name:"Level 2",value:(u.l2||[]).length}]} cx="50%" cy="50%" innerRadius={32} outerRadius={55} paddingAngle={3} dataKey="value">
                       <Cell fill="rgb(200,180,140)" />
                       <Cell fill="rgba(248,113,113,0.35)" />
                       <Cell fill="rgba(167,139,250,0.6)" />
@@ -2243,7 +2243,7 @@ function UserPortal(props) {
                   </PieChart>
                 </ResponsiveContainer>
                 <div>
-                  {[{c:"rgb(200,180,140)",l:"Level 1 Active",v:activeL1},{c:"rgba(248,113,113,0.6)",l:"Level 1 Cancelled",v:u.l1.length-activeL1},{c:"rgba(167,139,250,0.7)",l:"Level 2",v:u.l2.length}].map(function(d){return (
+                  {[{c:"rgb(200,180,140)",l:"Level 1 Active",v:activeL1},{c:"rgba(248,113,113,0.6)",l:"Level 1 Cancelled",v:(u.l1||[]).length-activeL1},{c:"rgba(167,139,250,0.7)",l:"Level 2",v:(u.l2||[]).length}].map(function(d){return (
                     <div key={d.l} style={{ display:"flex", alignItems:"center", gap:8, marginBottom:8 }}>
                       <div style={{ width:10, height:10, borderRadius:2, background:d.c, flexShrink:0 }} />
                       <span style={{ fontSize:11, color:"#71717a" }}>{d.l}</span>
@@ -2283,14 +2283,14 @@ function UserPortal(props) {
             <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 14px", color:"#d4d4d8" }}>{"Level 1 - Direct (40% = $"+(PRICE*L1_RATE).toFixed(2)+" each)"}</h3>
             <table style={{ width:"100%", borderCollapse:"collapse" }}>
               <thead><tr>{["Name","Joined","Status","Earned"].map(function(h){return <th key={h} style={{ padding:"8px 10px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#52525b", textAlign:"left", borderBottom:"2px solid rgba(255,255,255,0.08)" }}>{h}</th>})}</tr></thead>
-              <tbody>{u.l1.map(function(r){return <tr key={r.name} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}><td style={{ padding:"10px", fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{r.name}</td><td style={{ padding:"10px", fontSize:12, color:"#52525b" }}>{r.date}</td><td style={{ padding:"10px" }}><Badge s={r.status}/></td><td style={{ padding:"10px", fontSize:13, fontWeight:500, color:"#d4d4d8" }}>{"AED "+r.earned.toFixed(2)}</td></tr>})}</tbody>
+              <tbody>{(u.l1||[]).map(function(r){return <tr key={r.name} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}><td style={{ padding:"10px", fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{r.name}</td><td style={{ padding:"10px", fontSize:12, color:"#52525b" }}>{r.date}</td><td style={{ padding:"10px" }}><Badge s={r.status}/></td><td style={{ padding:"10px", fontSize:13, fontWeight:500, color:"#d4d4d8" }}>{"AED "+r.earned.toFixed(2)}</td></tr>})}</tbody>
             </table>
           </div>
           <div style={{ background:"#131315", borderRadius:14, padding:mob?14:22, border:"1px solid rgba(255,255,255,0.06)", boxSizing:"border-box" }}>
             <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 14px", color:"#d4d4d8" }}>{"Level 2 - Indirect (5% = $"+(PRICE*L2_RATE).toFixed(2)+" each)"}</h3>
             <table style={{ width:"100%", borderCollapse:"collapse" }}>
               <thead><tr>{["Name","Via","Joined","Earned"].map(function(h){return <th key={h} style={{ padding:"8px 10px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#52525b", textAlign:"left", borderBottom:"2px solid rgba(255,255,255,0.08)" }}>{h}</th>})}</tr></thead>
-              <tbody>{u.l2.map(function(r){return <tr key={r.name} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}><td style={{ padding:"10px", fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{r.name}</td><td style={{ padding:"10px", fontSize:12, color:"#a1a1aa" }}>{r.from}</td><td style={{ padding:"10px", fontSize:12, color:"#52525b" }}>{r.date}</td><td style={{ padding:"10px", fontSize:13, fontWeight:500, color:"#a78bfa" }}>{"AED "+r.earned.toFixed(2)}</td></tr>})}</tbody>
+              <tbody>{(u.l2||[]).map(function(r){return <tr key={r.name} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}><td style={{ padding:"10px", fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{r.name}</td><td style={{ padding:"10px", fontSize:12, color:"#a1a1aa" }}>{r.from}</td><td style={{ padding:"10px", fontSize:12, color:"#52525b" }}>{r.date}</td><td style={{ padding:"10px", fontSize:13, fontWeight:500, color:"#a78bfa" }}>{"AED "+r.earned.toFixed(2)}</td></tr>})}</tbody>
             </table>
           </div>
         </div>}
@@ -2339,11 +2339,11 @@ function UserPortal(props) {
               </div>
               <div style={{ background:"rgba(167,139,250,0.08)", borderRadius:12, padding:18, textAlign:"center", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center" }}>
                 <div style={{ fontSize:10, fontWeight:700, color:"#a78bfa", marginBottom:6, letterSpacing:0.5, textTransform:"uppercase" }}>Level 2 (5%)</div>
-                <div style={{ fontSize:18, fontWeight:500, color:"#a78bfa" }}>{"AED "+(u.l2.length*PRICE*L2_RATE).toFixed(2)}</div>
+                <div style={{ fontSize:18, fontWeight:500, color:"#a78bfa" }}>{"AED "+((u.l2||[]).length*PRICE*L2_RATE).toFixed(2)}</div>
               </div>
               <div style={{ background:"rgba(200,180,140,0.06)", borderRadius:12, padding:18, textAlign:"center", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center" }}>
                 <div style={{ fontSize:10, fontWeight:700, color:"rgb(200,180,140)", marginBottom:6, letterSpacing:0.5, textTransform:"uppercase" }}>Net Monthly</div>
-                <div style={{ fontSize:18, fontWeight:500, color:"rgb(200,180,140)" }}>{"AED "+(activeL1*PRICE*L1_RATE + u.l2.length*PRICE*L2_RATE - PRICE).toFixed(2)}</div>
+                <div style={{ fontSize:18, fontWeight:500, color:"rgb(200,180,140)" }}>{"AED "+(activeL1*PRICE*L1_RATE + (u.l2||[]).length*PRICE*L2_RATE - PRICE).toFixed(2)}</div>
               </div>
             </div>
           </div>
@@ -2377,7 +2377,7 @@ function UserPortal(props) {
             <div style={{ background:"linear-gradient(180deg, rgba(19,19,21,1) 0%, rgba(14,14,16,1) 100%)", borderRadius:16, padding:mob?14:24, border:"1px solid rgba(200,180,140,0.06)", boxShadow:"0 4px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)", boxSizing:"border-box", display:"flex", flexDirection:"column" }}>
               <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 16px", color:"#d4d4d8" }}>Projected Annual Earnings</h3>
               {(function(){
-                var monthlyGross = activeL1 * PRICE * L1_RATE + u.l2.length * PRICE * L2_RATE;
+                var monthlyGross = activeL1 * PRICE * L1_RATE + (u.l2||[]).length * PRICE * L2_RATE;
                 var monthlyNet = monthlyGross - PRICE;
                 var annualNet = monthlyNet * 12;
                 return (
@@ -2385,7 +2385,7 @@ function UserPortal(props) {
                     <div>
                       <div style={{ display:"inline-block", fontSize:9, fontWeight:700, color:"#52525b", marginBottom:8, padding:"3px 10px", borderRadius:5, background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.05)", letterSpacing:0.8 }}>IF CURRENT RATE HOLDS</div>
                       <div style={{ fontSize:28, fontWeight:500, color:annualNet>=0?"rgb(200,180,140)":"#f87171", marginBottom:4 }}>{"AED "+annualNet.toFixed(2)}</div>
-                      <div style={{ display:"inline-block", fontSize:9, color:"#52525b", marginTop:4, padding:"2px 8px", borderRadius:4, background:"rgba(255,255,255,0.02)", border:"1px solid rgba(255,255,255,0.04)", letterSpacing:0.3 }}>{"net per year · " + activeL1 + " active L1 · " + u.l2.length + " L2"}</div>
+                      <div style={{ display:"inline-block", fontSize:9, color:"#52525b", marginTop:4, padding:"2px 8px", borderRadius:4, background:"rgba(255,255,255,0.02)", border:"1px solid rgba(255,255,255,0.04)", letterSpacing:0.3 }}>{"net per year · " + activeL1 + " active L1 · " + (u.l2||[]).length + " L2"}</div>
                     </div>
                     <div style={{ borderTop:"1px solid rgba(255,255,255,0.04)", paddingTop:14, marginTop:14 }}>
                       <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
@@ -2415,8 +2415,8 @@ function UserPortal(props) {
           <div style={{ display:"grid", gridTemplateColumns:mob?"1fr 1fr":"repeat(4, 1fr)", gap:mob?10:14, marginBottom:mob?16:20, alignItems:"stretch" }}>
             <StatCard icon="bank" label="Total Paid Out" value={"AED "+u.earn.paid} />
             <StatCard icon="refresh" label="Pending Payout" value={"AED "+u.earn.pending} />
-            <StatCard icon="check" label="Total Payouts" value={u.payouts.length} />
-            <StatCard icon="dollar" label="Avg Payout" value={"AED "+(u.payouts.length>0?(u.payouts.reduce(function(s,p){return s+p.amount},0)/u.payouts.length).toFixed(2):"0.00")} />
+            <StatCard icon="check" label="Total Payouts" value={(u.payouts||[]).length} />
+            <StatCard icon="dollar" label="Avg Payout" value={"AED "+((u.payouts||[]).length>0?((u.payouts||[]).reduce(function(s,p){return s+p.amount},0)/(u.payouts||[]).length).toFixed(2):"0.00")} />
           </div>
 
           {/* Payout amounts bar chart + cumulative */}
@@ -2425,13 +2425,13 @@ function UserPortal(props) {
               <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 4px", color:"#d4d4d8" }}>Weekly Payout History</h3>
               <p style={{ fontSize:11, color:"#52525b", margin:"0 0 16px" }}>Amount paid out to your bank each Tuesday</p>
               <ResponsiveContainer width="100%" height={220}>
-                <BarChart margin={{top:5,right:5,left:mob?-25:-10,bottom:5}} data={u.payouts.map(function(p){return {date:p.date,amount:p.amount,status:p.status}})}>
+                <BarChart margin={{top:5,right:5,left:mob?-25:-10,bottom:5}} data={(u.payouts||[]).map(function(p){return {date:p.date,amount:p.amount,status:p.status}})}>
                   <CartesianGrid strokeDasharray="4 6" stroke="rgba(255,255,255,0.04)" strokeWidth={0.5} vertical={false} />
                   <XAxis dataKey="date" tick={{fill:"#52525b",fontSize:9}} axisLine={false} tickLine={false} />
                   <YAxis tick={{fill:"#52525b",fontSize:10}} tickFormatter={function(v){return "AED "+v}} axisLine={false} tickLine={false} />
                   <Tooltip contentStyle={{background:"#131315",border:"1px solid rgba(255,255,255,0.06)",borderRadius:8,fontSize:12}} formatter={function(v){return "AED "+v.toFixed(2)}} />
                   <Bar dataKey="amount" radius={[4,4,0,0]} name="Amount">
-                    {u.payouts.map(function(p,i){return <Cell key={i} fill={p.status==="completed"?"rgb(200,180,140)":p.status==="processing"?"rgba(251,191,36,0.5)":"rgba(248,113,113,0.4)"} />})}
+                    {(u.payouts||[]).map(function(p,i){return <Cell key={i} fill={p.status==="completed"?"rgb(200,180,140)":p.status==="processing"?"rgba(251,191,36,0.5)":"rgba(248,113,113,0.4)"} />})}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
@@ -2443,7 +2443,7 @@ function UserPortal(props) {
               <ResponsiveContainer width="100%" height={220}>
                 <AreaChart margin={{top:5,right:5,left:mob?-25:-10,bottom:5}} data={(function(){
                   var running = 0;
-                  return u.payouts.filter(function(p){return p.status==="completed"}).map(function(p){
+                  return (u.payouts||[]).filter(function(p){return p.status==="completed"}).map(function(p){
                     running += p.amount;
                     return {date:p.date, total:Math.round(running*100)/100};
                   });
@@ -2472,7 +2472,7 @@ function UserPortal(props) {
             <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 14px", color:"#d4d4d8" }}>Payout History</h3>
             <table style={{ width:"100%", borderCollapse:"collapse" }}>
               <thead><tr>{["Date","Amount","Status"].map(function(h){return <th key={h} style={{ padding:"8px 10px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#52525b", textAlign:"left", borderBottom:"2px solid rgba(255,255,255,0.08)" }}>{h}</th>})}</tr></thead>
-              <tbody>{u.payouts.map(function(p){return <tr key={p.date} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}><td style={{ padding:"10px", fontSize:13, color:"#a1a1aa" }}>{p.date+", 2026"}</td><td style={{ padding:"10px", fontSize:14, fontWeight:500, color:"#d4d4d8" }}>{"AED "+p.amount.toFixed(2)}</td><td style={{ padding:"10px" }}><Badge s={p.status}/></td></tr>})}</tbody>
+              <tbody>{(u.payouts||[]).map(function(p){return <tr key={p.date} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}><td style={{ padding:"10px", fontSize:13, color:"#a1a1aa" }}>{p.date+", 2026"}</td><td style={{ padding:"10px", fontSize:14, fontWeight:500, color:"#d4d4d8" }}>{"AED "+p.amount.toFixed(2)}</td><td style={{ padding:"10px" }}><Badge s={p.status}/></td></tr>})}</tbody>
             </table>
           </div>
         </div>}
