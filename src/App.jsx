@@ -227,6 +227,7 @@ function Ico(props) {
     bot: "M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z",
     question: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z",
     wallet: "M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z",
+    lock: "M19 11H5c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7c0-1.1-.9-2-2-2zm0 9H5v-7h14v7zm-7-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm3-10V5c0-1.66-1.34-3-3-3S9 3.34 9 5v2H7v-2c0-2.76 2.24-5 5-5s5 2.24 5 5v2h-2z",
     briefcase: "M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z",
     check: "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z",
     mosque: "M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2zm0 2.83L18.17 11H5.83L12 4.83z",
@@ -1134,15 +1135,10 @@ function UserLogin(props) {
   var _err = useState("");
   var error = _err[0]; var setError = _err[1];
 
-  //function handleLogin() {
-  //  if (!email || !pass) { setError("Please enter your email and password"); return; }
-  //  if (email === "1" && pass === "1") { go("userPortal"); return; }
-  //  setError("Invalid credentials. Use username: 1 / password: 1");
-  //}
-
-  var { login } = useAuth();
   var _loading = useState(false);
   var loading = _loading[0]; var setLoading = _loading[1];
+
+  var { login } = useAuth();
 
   async function handleLogin() {
     if (!email || !pass) { setError("Please enter your email and password"); return; }
@@ -1168,23 +1164,319 @@ function UserLogin(props) {
         <div style={{ maxWidth:400, width:"100%" }}>
           <h3 style={{ fontSize:24, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>Log in to your account</h3>
           <p style={{ fontSize:14, color:"#71717a", marginBottom:32 }}>Enter your email and password</p>
-          {error && <div style={{ padding:"10px 14px", borderRadius:8, background:"rgba(220,38,38,0.1)", color:"#f87171", fontSize:13, marginBottom:16, fontWeight:500 }}>{error}</div>}
+          {error && <div style={{ padding:"14px 18px", borderRadius:12, background:"linear-gradient(135deg, rgba(220,38,38,0.08), rgba(220,38,38,0.04))", border:"1px solid rgba(248,113,113,0.15)", marginBottom:20, display:"flex", alignItems:"center", gap:12 }}>
+            <div style={{ width:32, height:32, borderRadius:8, background:"rgba(248,113,113,0.1)", border:"1px solid rgba(248,113,113,0.12)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#f87171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+            <div>
+              <div style={{ fontSize:13, fontWeight:600, color:"#fca5a5", lineHeight:1.3 }}>{error === "invalid" ? "Invalid login credentials" : error}</div>
+              <div style={{ fontSize:11, color:"rgba(248,113,113,0.6)", marginTop:2 }}>{error === "invalid" ? "The email or password you entered is incorrect. Please try again." : ""}</div>
+            </div>
+          </div>}
           <div style={{ marginBottom:20 }}>
             <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Email Address</label>
-            <input type="email" value={email} onChange={function(e){setEmail(e.target.value);setError("")}} placeholder="you@example.com" style={{ width:"100%", padding:"12px 16px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" }} />
+            <input type="email" value={email} onChange={function(e){setEmail(e.target.value);setError("")}} placeholder="you@example.com" style={{ width:"100%", padding:"12px 16px", borderRadius:10, border:"1px solid "+(error ? "rgba(248,113,113,0.3)" : "rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8", transition:"border-color 0.3s" }} />
           </div>
-          <div style={{ marginBottom:28 }}>
+          <div style={{ marginBottom:8 }}>
             <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Password</label>
-            <input type="password" value={pass} onChange={function(e){setPass(e.target.value);setError("")}} placeholder="********" style={{ width:"100%", padding:"12px 16px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" }} />
+            <input type="password" value={pass} onChange={function(e){setPass(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleLogin()}} placeholder="********" style={{ width:"100%", padding:"12px 16px", borderRadius:10, border:"1px solid "+(error ? "rgba(248,113,113,0.3)" : "rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8", transition:"border-color 0.3s" }} />
           </div>
-          <Btn onClick={handleLogin} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12, opacity:loading?0.6:1 }}>{loading ? "Logging in..." : "Log In"}</Btn>          
-          
+          <div style={{ textAlign:"right", marginBottom:24 }}>
+            <span onClick={function(){go("forgotPassword")}} style={{ fontSize:12, color:"rgb(200,180,140)", cursor:"pointer", fontWeight:500 }}>Forgot password?</span>
+          </div>
+          <Btn onClick={handleLogin} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12, opacity:loading?0.6:1 }}>{loading ? "Logging in..." : "Log In"}</Btn>
+          <div style={{ textAlign:"center", padding:"8px 12px", borderRadius:8, background:"rgba(200,180,140,0.08)", fontSize:12, color:"rgb(200,180,140)", marginBottom:16 }}>
+            {"Demo: username "}<strong>1</strong>{" / password "}<strong>1</strong>
+          </div>
           <div style={{ textAlign:"center", fontSize:13, color:"#71717a" }}>
             {"No account? "}<span onClick={function(){go("subscribe")}} style={{ color:"rgb(200,180,140)", fontWeight:600, cursor:"pointer" }}>Subscribe now</span>
           </div>
           <div style={{ textAlign:"center", marginTop:16 }}>
             <span onClick={function(){go("landing")}} style={{ fontSize:12, color:"#52525b", cursor:"pointer" }}>Back to home</span>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═════════════════════════════════════════
+// FORGOT PASSWORD
+// ═════════════════════════════════════════
+function ForgotPasswordPage(props) {
+  var go = props.go;
+  var mob = useIsMobile();
+  var _email = useState("");
+  var email = _email[0]; var setEmail = _email[1];
+  var _sent = useState(false);
+  var sent = _sent[0]; var setSent = _sent[1];
+  var _loading = useState(false);
+  var loading = _loading[0]; var setLoading = _loading[1];
+  var _error = useState("");
+  var error = _error[0]; var setError = _error[1];
+  var _countdown = useState(0);
+  var countdown = _countdown[0]; var setCountdown = _countdown[1];
+
+  useEffect(function() {
+    if (countdown <= 0) return;
+    var t = setTimeout(function() { setCountdown(countdown - 1); }, 1000);
+    return function() { clearTimeout(t); };
+  }, [countdown]);
+
+  function handleSubmit() {
+    if (!email.trim()) { setError("Please enter your email address"); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError("Please enter a valid email address"); return; }
+    setLoading(true); setError("");
+    setTimeout(function() {
+      setSent(true);
+      setLoading(false);
+      setCountdown(60);
+    }, 1200);
+  }
+
+  function handleResend() {
+    if (countdown > 0) return;
+    setLoading(true);
+    setTimeout(function() {
+      setLoading(false);
+      setCountdown(60);
+    }, 800);
+  }
+
+  return (
+    <div style={{ minHeight:"100vh", display:"flex", flexDirection:mob?"column":"row", background:"#0a0a0c" }}>
+      <div style={{ flex:mob?"none":"0 0 50%", background:"#111113", display:"flex", flexDirection:"column", justifyContent:"center", padding:mob?"32px 24px":"64px 56px" }}>
+        <Logo light onClick={function(){go("landing")}} />
+        <h2 style={{ fontSize:mob?28:36, fontWeight:800, color:"#fff", margin:mob?"24px 0 10px":"48px 0 16px", lineHeight:1.15 }}>Reset your password</h2>
+        <p style={{ fontSize:mob?14:15, color:"rgb(200,180,140)", lineHeight:1.7, maxWidth:380 }}>{"Don\u2019t worry, it happens to everyone. We\u2019ll send you a link to get back in."}</p>
+      </div>
+      <div style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", padding:mob?"24px 20px":48 }}>
+        <div style={{ maxWidth:400, width:"100%" }}>
+
+          {!sent ? (
+            <div>
+              <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg, rgba(200,180,140,0.12), rgba(200,180,140,0.04))", border:"1px solid rgba(200,180,140,0.15)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:24 }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="rgb(200,180,140)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M22 6l-10 7L2 6" stroke="rgb(200,180,140)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </div>
+              <h3 style={{ fontSize:24, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>Forgot your password?</h3>
+              <p style={{ fontSize:14, color:"#71717a", marginBottom:32, lineHeight:1.7 }}>{"Enter the email address linked to your account and we\u2019ll send you a password reset link."}</p>
+
+              {error && <div style={{ padding:"14px 18px", borderRadius:12, background:"linear-gradient(135deg, rgba(220,38,38,0.08), rgba(220,38,38,0.04))", border:"1px solid rgba(248,113,113,0.15)", marginBottom:20, display:"flex", alignItems:"center", gap:12 }}>
+                <div style={{ width:32, height:32, borderRadius:8, background:"rgba(248,113,113,0.1)", border:"1px solid rgba(248,113,113,0.12)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#f87171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </div>
+                <div style={{ fontSize:13, fontWeight:600, color:"#fca5a5", lineHeight:1.3 }}>{error}</div>
+              </div>}
+
+              <div style={{ marginBottom:24 }}>
+                <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Email Address</label>
+                <input type="email" value={email} onChange={function(e){setEmail(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleSubmit()}} placeholder="you@example.com" style={{ width:"100%", padding:"12px 16px", borderRadius:10, border:"1px solid "+(error ? "rgba(248,113,113,0.3)" : "rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8", transition:"border-color 0.3s" }} />
+              </div>
+
+              <Btn onClick={handleSubmit} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:16, opacity:loading?0.6:1 }}>{loading ? "Sending..." : "Send Reset Link"}</Btn>
+
+              <div style={{ textAlign:"center", fontSize:13, color:"#71717a" }}>
+                {"Remember your password? "}<span onClick={function(){go("login")}} style={{ color:"rgb(200,180,140)", fontWeight:600, cursor:"pointer" }}>Back to login</span>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg, rgba(200,180,140,0.12), rgba(200,180,140,0.04))", border:"1px solid rgba(200,180,140,0.15)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:24 }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="rgb(200,180,140)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="10" stroke="rgb(200,180,140)" strokeWidth="1.5"/></svg>
+              </div>
+              <h3 style={{ fontSize:24, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>Check your inbox</h3>
+              <p style={{ fontSize:14, color:"#71717a", marginBottom:24, lineHeight:1.7 }}>{"We\u2019ve sent a password reset link to:"}</p>
+
+              <div style={{ background:"rgba(200,180,140,0.06)", border:"1px solid rgba(200,180,140,0.12)", borderRadius:12, padding:"14px 18px", marginBottom:24, display:"flex", alignItems:"center", gap:12 }}>
+                <div style={{ width:32, height:32, borderRadius:8, background:"rgba(200,180,140,0.1)", border:"1px solid rgba(200,180,140,0.15)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="rgb(200,180,140)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M22 6l-10 7L2 6" stroke="rgb(200,180,140)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </div>
+                <span style={{ fontSize:14, fontWeight:600, color:"rgb(200,180,140)" }}>{email}</span>
+              </div>
+
+              <div style={{ background:"rgba(255,255,255,0.03)", borderRadius:12, padding:20, border:"1px solid rgba(255,255,255,0.06)", marginBottom:24 }}>
+                <div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8", marginBottom:10 }}>{"Didn\u2019t receive it?"}</div>
+                <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+                  <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                    <div style={{ width:4, height:4, borderRadius:"50%", background:"#52525b", flexShrink:0 }} />
+                    <span style={{ fontSize:12, color:"#71717a" }}>Check your spam or junk folder</span>
+                  </div>
+                  <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                    <div style={{ width:4, height:4, borderRadius:"50%", background:"#52525b", flexShrink:0 }} />
+                    <span style={{ fontSize:12, color:"#71717a" }}>Make sure the email address is correct</span>
+                  </div>
+                  <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                    <div style={{ width:4, height:4, borderRadius:"50%", background:"#52525b", flexShrink:0 }} />
+                    <span style={{ fontSize:12, color:"#71717a" }}>The link expires in 30 minutes</span>
+                  </div>
+                </div>
+              </div>
+
+              <button onClick={handleResend} disabled={countdown > 0 || loading} style={{ width:"100%", padding:"13px", borderRadius:12, border:"1px solid "+(countdown > 0 ? "rgba(255,255,255,0.06)" : "rgba(200,180,140,0.2)"), background:countdown > 0 ? "transparent" : "rgba(200,180,140,0.06)", color:countdown > 0 ? "#52525b" : "rgb(200,180,140)", fontSize:14, fontWeight:600, cursor:countdown > 0 ? "default" : "pointer", marginBottom:16, fontFamily:"'Plus Jakarta Sans',sans-serif", transition:"all 0.3s" }}>
+                {loading ? "Resending..." : countdown > 0 ? "Resend available in " + countdown + "s" : "Resend Reset Link"}
+              </button>
+
+              <div style={{ display:"flex", gap:12, justifyContent:"center" }}>
+                <span onClick={function(){go("login")}} style={{ fontSize:13, color:"rgb(200,180,140)", cursor:"pointer", fontWeight:600 }}>Back to login</span>
+                <span style={{ color:"#27272a" }}>{"\u00B7"}</span>
+                <span onClick={function(){go("support")}} style={{ fontSize:13, color:"#71717a", cursor:"pointer" }}>Contact support</span>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═════════════════════════════════════════
+// RESET PASSWORD (user lands here from email link)
+// ═════════════════════════════════════════
+function ResetPasswordPage(props) {
+  var go = props.go;
+  var mob = useIsMobile();
+
+  // In production, extract token from URL: new URLSearchParams(window.location.search).get("token")
+  var _token = useState(new URLSearchParams(window.location.search).get("token") || "");
+  var token = _token[0];
+  var _pass = useState(""); var pass = _pass[0]; var setPass = _pass[1];
+  var _confirm = useState(""); var confirm = _confirm[0]; var setConfirm = _confirm[1];
+  var _loading = useState(false); var loading = _loading[0]; var setLoading = _loading[1];
+  var _error = useState(""); var error = _error[0]; var setError = _error[1];
+  var _done = useState(false); var done = _done[0]; var setDone = _done[1];
+  var _validating = useState(true); var validating = _validating[0]; var setValidating = _validating[1];
+  var _tokenValid = useState(false); var tokenValid = _tokenValid[0]; var setTokenValid = _tokenValid[1];
+  var _tokenEmail = useState(""); var tokenEmail = _tokenEmail[0]; var setTokenEmail = _tokenEmail[1];
+  var _showPass = useState(false); var showPass = _showPass[0]; var setShowPass = _showPass[1];
+
+  // Validate token on mount
+  useEffect(function() {
+    if (!token) {
+      setValidating(false);
+      setTokenValid(false);
+      return;
+    }
+    // In production, call: auth.validateResetToken(token)
+    // For demo, simulate validation
+    setTimeout(function() {
+      setTokenValid(true);
+      setTokenEmail("aisha@example.com");
+      setValidating(false);
+    }, 600);
+  }, []);
+
+  function validate() {
+    if (!pass) { setError("Please enter a new password"); return false; }
+    if (pass.length < 8) { setError("Password must be at least 8 characters"); return false; }
+    if (!/[A-Z]/.test(pass)) { setError("Password must contain at least one uppercase letter"); return false; }
+    if (!/[0-9]/.test(pass)) { setError("Password must contain at least one number"); return false; }
+    if (pass !== confirm) { setError("Passwords do not match"); return false; }
+    return true;
+  }
+
+  function handleSubmit() {
+    setError("");
+    if (!validate()) return;
+    setLoading(true);
+    // In production, call: auth.resetPassword(token, pass)
+    setTimeout(function() {
+      setDone(true);
+      setLoading(false);
+    }, 1000);
+  }
+
+  // Password strength indicator
+  var strength = 0;
+  if (pass.length >= 8) strength++;
+  if (/[A-Z]/.test(pass)) strength++;
+  if (/[0-9]/.test(pass)) strength++;
+  if (/[^A-Za-z0-9]/.test(pass)) strength++;
+  var strengthLabel = ["", "Weak", "Fair", "Good", "Strong"][strength] || "";
+  var strengthColor = ["", "#ef4444", "#f59e0b", "#22c55e", "#10b981"][strength] || "";
+
+  return (
+    <div style={{ minHeight:"100vh", display:"flex", flexDirection:mob?"column":"row", background:"#0a0a0c" }}>
+      <div style={{ flex:mob?"none":"0 0 50%", background:"#111113", display:"flex", flexDirection:"column", justifyContent:"center", padding:mob?"32px 24px":"64px 56px" }}>
+        <Logo light onClick={function(){go("landing")}} />
+        <h2 style={{ fontSize:mob?28:36, fontWeight:800, color:"#fff", margin:mob?"24px 0 10px":"48px 0 16px", lineHeight:1.15 }}>Choose a new password</h2>
+        <p style={{ fontSize:mob?14:15, color:"rgb(200,180,140)", lineHeight:1.7, maxWidth:380 }}>{"Pick something secure that you\u2019ll remember. You\u2019ll be able to log in immediately after."}</p>
+      </div>
+      <div style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", padding:mob?"24px 20px":48 }}>
+        <div style={{ maxWidth:400, width:"100%" }}>
+
+          {validating ? (
+            <div style={{ textAlign:"center", padding:"60px 0" }}>
+              <div style={{ width:40, height:40, borderRadius:10, background:"rgba(200,180,140,0.08)", border:"1px solid rgba(200,180,140,0.12)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 16px", animation:"pulse 1.5s ease-in-out infinite" }}>
+                <Ico name="shield" size={18} color="rgb(200,180,140)" />
+              </div>
+              <p style={{ fontSize:14, color:"#71717a" }}>Validating your reset link...</p>
+            </div>
+          ) : !tokenValid ? (
+            <div style={{ textAlign:"center" }}>
+              <div style={{ width:56, height:56, borderRadius:16, background:"rgba(248,113,113,0.08)", border:"1px solid rgba(248,113,113,0.15)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 24px" }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#f87171" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </div>
+              <h3 style={{ fontSize:22, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>Invalid or expired link</h3>
+              <p style={{ fontSize:14, color:"#71717a", marginBottom:28, lineHeight:1.7 }}>This password reset link is no longer valid. It may have expired or already been used.</p>
+              <Btn onClick={function(){go("forgotPassword")}} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12 }}>Request a New Link</Btn>
+              <div style={{ textAlign:"center" }}>
+                <span onClick={function(){go("login")}} style={{ fontSize:13, color:"#71717a", cursor:"pointer" }}>Back to login</span>
+              </div>
+            </div>
+          ) : done ? (
+            <div style={{ textAlign:"center" }}>
+              <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg, rgba(200,180,140,0.12), rgba(200,180,140,0.04))", border:"1px solid rgba(200,180,140,0.15)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 24px" }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="rgb(200,180,140)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="10" stroke="rgb(200,180,140)" strokeWidth="1.5"/></svg>
+              </div>
+              <h3 style={{ fontSize:22, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>Password reset complete</h3>
+              <p style={{ fontSize:14, color:"#71717a", marginBottom:28, lineHeight:1.7 }}>Your password has been updated successfully. You can now log in with your new password.</p>
+              <Btn onClick={function(){go("login")}} full style={{ padding:"13px", fontSize:15, borderRadius:12 }}>Log In</Btn>
+            </div>
+          ) : (
+            <div>
+              <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg, rgba(200,180,140,0.12), rgba(200,180,140,0.04))", border:"1px solid rgba(200,180,140,0.15)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:24 }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="rgb(200,180,140)" strokeWidth="1.5"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="rgb(200,180,140)" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              </div>
+              <h3 style={{ fontSize:24, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>Set a new password</h3>
+              {tokenEmail && <p style={{ fontSize:13, color:"#52525b", marginBottom:24 }}>{"for " + tokenEmail}</p>}
+
+              {error && <div style={{ padding:"14px 18px", borderRadius:12, background:"linear-gradient(135deg, rgba(220,38,38,0.08), rgba(220,38,38,0.04))", border:"1px solid rgba(248,113,113,0.15)", marginBottom:20, display:"flex", alignItems:"center", gap:12 }}>
+                <div style={{ width:32, height:32, borderRadius:8, background:"rgba(248,113,113,0.1)", border:"1px solid rgba(248,113,113,0.12)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#f87171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </div>
+                <div style={{ fontSize:13, fontWeight:600, color:"#fca5a5", lineHeight:1.3 }}>{error}</div>
+              </div>}
+
+              <div style={{ marginBottom:20 }}>
+                <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>New Password</label>
+                <div style={{ position:"relative" }}>
+                  <input type={showPass ? "text" : "password"} value={pass} onChange={function(e){setPass(e.target.value);setError("")}} placeholder="Minimum 8 characters" style={{ width:"100%", padding:"12px 44px 12px 16px", borderRadius:10, border:"1px solid "+(error ? "rgba(248,113,113,0.3)" : "rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8", transition:"border-color 0.3s" }} />
+                  <button onClick={function(){setShowPass(!showPass)}} style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", padding:4, lineHeight:0 }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d={showPass ? "M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" : "M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"} stroke="#52525b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>{!showPass && <circle cx="12" cy="12" r="3" stroke="#52525b" strokeWidth="1.5"/>}</svg>
+                  </button>
+                </div>
+                {pass && <div style={{ display:"flex", gap:4, marginTop:8 }}>
+                  {[1,2,3,4].map(function(i){return <div key={i} style={{ flex:1, height:3, borderRadius:2, background:i <= strength ? strengthColor : "rgba(255,255,255,0.06)", transition:"background 0.3s" }} />})}
+                  <span style={{ fontSize:10, color:strengthColor, fontWeight:600, marginLeft:4 }}>{strengthLabel}</span>
+                </div>}
+                <div style={{ marginTop:8, display:"flex", flexDirection:"column", gap:4 }}>
+                  {[["8+ characters", pass.length >= 8],["One uppercase letter",/[A-Z]/.test(pass)],["One number",/[0-9]/.test(pass)]].map(function(r){return <div key={r[0]} style={{ display:"flex", alignItems:"center", gap:6, fontSize:11, color:r[1] ? "rgb(200,180,140)" : "#3f3f46", transition:"color 0.3s" }}><span>{r[1] ? "\u2713" : "\u2022"}</span>{r[0]}</div>})}
+                </div>
+              </div>
+
+              <div style={{ marginBottom:28 }}>
+                <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Confirm Password</label>
+                <input type="password" value={confirm} onChange={function(e){setConfirm(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleSubmit()}} placeholder="Re-enter your password" style={{ width:"100%", padding:"12px 16px", borderRadius:10, border:"1px solid "+(error && error.includes("match") ? "rgba(248,113,113,0.3)" : confirm && confirm === pass ? "rgba(200,180,140,0.3)" : "rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8", transition:"border-color 0.3s" }} />
+                {confirm && confirm === pass && <div style={{ fontSize:11, color:"rgb(200,180,140)", marginTop:4, display:"flex", alignItems:"center", gap:4 }}>{"\u2713"} Passwords match</div>}
+              </div>
+
+              <Btn onClick={handleSubmit} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:16, opacity:loading?0.6:1 }}>{loading ? "Updating..." : "Reset Password"}</Btn>
+
+              <div style={{ textAlign:"center" }}>
+                <span onClick={function(){go("login")}} style={{ fontSize:13, color:"#71717a", cursor:"pointer" }}>Back to login</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -1213,27 +1505,27 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
     if (!form.name.trim()) e.name = "Full name is required";
     if (!form.email.trim()) e.email = "Email is required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Enter a valid email address";
+    if (!form.password || form.password.length < 8) e.password = "Password must be at least 8 characters";
+    else if (!/[A-Z]/.test(form.password)) e.password = "Password must contain at least one uppercase letter";
     if (!form.phone.trim()) e.phone = "Phone number is required";
     else if (!/^[+]?[\d\s-]{7,15}$/.test(form.phone.replace(/\s/g,""))) e.phone = "Enter a valid phone number";
-    if (form.ref.trim() && !["DAVID2026","AISHA22","CARLOS01","PRIYA05","FATIMA12","MARIA18"].includes(form.ref.trim().toUpperCase())) e.ref = "Referral code not found";
-    if (form.email.trim() && ["david@tutorii.com","aisha@example.com","carlos@example.com","priya@example.com","fatima@example.com","maria@example.com"].includes(form.email.trim().toLowerCase())) e.email = "An account with this email already exists. Please log in instead.";
     setErrors(e);
     return Object.keys(e).length === 0;
   }
   async function handlePay() {
-  if (!termsAgreed) return;
-  setProcessing(true);
-  try {
-    await register(form.name, form.email, form.password, form.ref || null);
-    const sub = await subscriptionsApi.create();
-    if (sub.payment_link) window.open(sub.payment_link, "_blank");
-    setStep(3);
-  } catch(e) {
-    setErrors({ api: e.message || "Something went wrong. Please try again." });
-  } finally {
-    setProcessing(false);
+    if (!termsAgreed) return;
+    setProcessing(true);
+    try {
+      await register(form.name, form.email, form.password, form.ref || null);
+      const sub = await subscriptionsApi.create();
+      if (sub.payment_link) window.open(sub.payment_link, "_blank");
+      setStep(3);
+    } catch(e) {
+      setErrors({ api: e.message || "Something went wrong. Please try again." });
+    } finally {
+      setProcessing(false);
+    }
   }
-}
 
   return (
     <div style={{ minHeight:"100vh", display:"flex", flexDirection:mob?"column":"row", background:"#0a0a0c" }}>
@@ -1352,6 +1644,18 @@ function UserPortal(props) {
   var _cancelled = useState(false); var cancelled = _cancelled[0]; var setCancelled = _cancelled[1];
   var _chartRange = useState("all"); var chartRange = _chartRange[0]; var setChartRange = _chartRange[1];
   var _dashLoading = useState(true); var dashLoading = _dashLoading[0]; var setDashLoading = _dashLoading[1];
+  // Support ticket state
+  var _tickets = useState([
+    { id:"T001", ref:"TK-8291", subject:"Payout not received for February", category:"billing", status:"in_progress", created:"Feb 26, 2026", updated:"Mar 2, 2026", messages:3 },
+    { id:"T002", ref:"TK-8315", subject:"Cannot access module 3 lessons", category:"courses", status:"resolved", created:"Mar 1, 2026", updated:"Mar 3, 2026", messages:5 },
+    { id:"T003", ref:"TK-8402", subject:"Referral code not tracked for Sara", category:"referrals", status:"open", created:"Mar 8, 2026", updated:"Mar 8, 2026", messages:1 },
+  ]);
+  var tickets = _tickets[0]; var setTickets = _tickets[1];
+  var _viewTicket = useState(null); var viewTicket = _viewTicket[0]; var setViewTicket = _viewTicket[1];
+  var _newTicket = useState(false); var newTicket = _newTicket[0]; var setNewTicket = _newTicket[1];
+  var _ticketForm = useState({ subject:"", category:"general", message:"" }); var ticketForm = _ticketForm[0]; var setTicketForm = _ticketForm[1];
+  var _ticketReply = useState(""); var ticketReply = _ticketReply[0]; var setTicketReply = _ticketReply[1];
+  var _ticketMsgs = useState([]);  var ticketMsgs = _ticketMsgs[0]; var setTicketMsgs = _ticketMsgs[1];
   var contentRef = useRef(null);
   useEffect(function(){ var t = setTimeout(function(){ setDashLoading(false); }, 900); return function(){clearTimeout(t)}; }, []);
   var u = USER;
@@ -1626,6 +1930,16 @@ function UserPortal(props) {
       setChatMsgs(function(prev){return prev.concat([{role:"assistant",content:"I'm having trouble connecting right now. Please try again or email support@tutorii.com."}])});
       setChatLoading(false);
     });
+
+
+
+
+
+
+
+
+
+
   }
 
   var navItems = [
@@ -1634,6 +1948,7 @@ function UserPortal(props) {
     { id:"earnings", icon:"dollar", label:"Earnings" },
     { id:"payouts", icon:"bank", label:"Payouts" },
     { id:"courses", icon:"book", label:"Courses" },
+    { id:"support", icon:"chat", label:"Support" },
     { id:"settings", icon:"gear", label:"Settings" },
   ];
 
@@ -1660,7 +1975,11 @@ function UserPortal(props) {
       </div>}
       {mob && <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"12px 16px", background:"#111113", borderBottom:"1px solid rgba(255,255,255,0.06)", position:"sticky", top:0, zIndex:50 }}>
         <Logo light />
-        <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+          <button onClick={function(){setTab("support");if(contentRef.current)contentRef.current.scrollTop=0}} style={{ display:"flex", alignItems:"center", gap:5, padding:"6px 12px", borderRadius:6, border:"1px solid "+(tab==="support"?"rgba(200,180,140,0.3)":"rgba(255,255,255,0.06)"), background:tab==="support"?"rgba(200,180,140,0.08)":"transparent", cursor:"pointer" }}>
+            <Ico name="chat" size={13} color={tab==="support"?"rgb(200,180,140)":"#71717a"} />
+            <span style={{ fontSize:11, fontWeight:600, color:tab==="support"?"rgb(200,180,140)":"#71717a" }}>Support</span>
+          </button>
           <div style={{ width:28, height:28, borderRadius:"50%", background:"rgb(200,180,140)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:9, fontWeight:700, color:"#0a0a0c" }}>{u.avatar}</div>
           <button onClick={function(){go("landing")}} style={{ padding:"6px 12px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:11, cursor:"pointer" }}>Log Out</button>
         </div>
@@ -2182,6 +2501,169 @@ function UserPortal(props) {
           )}
         </div>}
 
+        {tab === "support" && <div>
+          {viewTicket ? (
+            <div>
+              <button onClick={function(){setViewTicket(null);setTicketMsgs([]);setTicketReply("")}} style={{ background:"none", border:"none", fontSize:13, color:"rgb(200,180,140)", cursor:"pointer", fontWeight:600, marginBottom:16, padding:0 }}>{"\u2190 Back to tickets"}</button>
+
+              <div style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden", marginBottom:16 }}>
+                <div style={{ padding:mob?"14px":"20px 24px", borderBottom:"1px solid rgba(255,255,255,0.06)", display:"flex", justifyContent:"space-between", alignItems:mob?"flex-start":"center", flexDirection:mob?"column":"row", gap:mob?8:0 }}>
+                  <div>
+                    <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:4 }}>
+                      <code style={{ fontSize:10, color:"#52525b", background:"#0a0a0c", padding:"2px 8px", borderRadius:4 }}>{viewTicket.ref}</code>
+                      <Badge s={viewTicket.status} />
+                    </div>
+                    <h3 style={{ fontSize:mob?16:18, fontWeight:700, color:"#d4d4d8", margin:0 }}>{viewTicket.subject}</h3>
+                    <div style={{ fontSize:11, color:"#52525b", marginTop:4 }}>{"Created "+viewTicket.created+" \u00B7 "+viewTicket.category}</div>
+                  </div>
+                </div>
+
+                <div style={{ padding:mob?"14px":"20px 24px" }}>
+                  {(function(){
+                    var msgs = ticketMsgs.length > 0 ? ticketMsgs : [
+                      { sender: u.name, role: "user", content: "Hi, I need help with: " + viewTicket.subject, time: viewTicket.created + ", 10:15 AM" },
+                      { sender: "Support Team", role: "admin", content: "Hi " + u.name.split(" ")[0] + ", thanks for reaching out. We're looking into this for you and will update you shortly.", time: viewTicket.created + ", 2:30 PM" },
+                      viewTicket.status !== "open" ? { sender: "Support Team", role: "admin", content: "We've investigated this and taken action. Please let us know if there's anything else we can help with.", time: viewTicket.updated + ", 11:00 AM" } : null,
+                    ].filter(Boolean);
+                    return msgs.map(function(msg, i) {
+                      var isUser = msg.role === "user";
+                      return (
+                        <div key={i} style={{ display:"flex", gap:12, marginBottom:16, flexDirection:isUser?"row-reverse":"row" }}>
+                          <div style={{ width:32, height:32, borderRadius:"50%", background:isUser?"rgb(200,180,140)":"rgba(59,130,246,0.15)", border:"1px solid "+(isUser?"rgba(200,180,140,0.3)":"rgba(59,130,246,0.2)"), display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, fontWeight:700, color:isUser?"#0a0a0c":"#3b82f6", flexShrink:0 }}>{isUser ? u.avatar : "S"}</div>
+                          <div style={{ maxWidth:"75%" }}>
+                            <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:4, flexDirection:isUser?"row-reverse":"row" }}>
+                              <span style={{ fontSize:12, fontWeight:600, color:isUser?"#d4d4d8":"#3b82f6" }}>{msg.sender}</span>
+                              <span style={{ fontSize:10, color:"#3f3f46" }}>{msg.time}</span>
+                            </div>
+                            <div style={{ padding:"12px 16px", borderRadius:12, background:isUser?"rgba(200,180,140,0.08)":"rgba(255,255,255,0.03)", border:"1px solid "+(isUser?"rgba(200,180,140,0.12)":"rgba(255,255,255,0.06)"), fontSize:13, color:"#a1a1aa", lineHeight:1.7, borderBottomRightRadius:isUser?4:12, borderBottomLeftRadius:isUser?12:4 }}>{msg.content}</div>
+                          </div>
+                        </div>
+                      );
+                    });
+                  })()}
+
+                  {viewTicket.status !== "closed" && viewTicket.status !== "resolved" && (
+                    <div style={{ display:"flex", gap:8, marginTop:8 }}>
+                      <input value={ticketReply} onChange={function(e){setTicketReply(e.target.value)}} onKeyDown={function(e){if(e.key==="Enter"&&ticketReply.trim()){setTicketMsgs(function(prev){var base=prev.length>0?prev:[{sender:u.name,role:"user",content:"Hi, I need help with: "+viewTicket.subject,time:viewTicket.created+", 10:15 AM"},{sender:"Support Team",role:"admin",content:"Hi "+u.name.split(" ")[0]+", thanks for reaching out. We're looking into this.",time:viewTicket.created+", 2:30 PM"}];return base.concat([{sender:u.name,role:"user",content:ticketReply,time:"Just now"}])});setTicketReply("")}}} placeholder="Type your reply..." style={{ flex:1, padding:"11px 16px", borderRadius:10, border:"1px solid rgba(255,255,255,0.08)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", fontFamily:"'Plus Jakarta Sans',sans-serif" }} />
+                      <button onClick={function(){if(!ticketReply.trim())return;setTicketMsgs(function(prev){var base=prev.length>0?prev:[{sender:u.name,role:"user",content:"Hi, I need help with: "+viewTicket.subject,time:viewTicket.created+", 10:15 AM"},{sender:"Support Team",role:"admin",content:"Hi "+u.name.split(" ")[0]+", thanks for reaching out.",time:viewTicket.created+", 2:30 PM"}];return base.concat([{sender:u.name,role:"user",content:ticketReply,time:"Just now"}])});setTicketReply("")}} style={{ padding:"11px 20px", borderRadius:10, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:13, fontWeight:600, cursor:"pointer" }}>Send</button>
+                    </div>
+                  )}
+                  {(viewTicket.status === "closed" || viewTicket.status === "resolved") && (
+                    <div style={{ padding:"12px 16px", borderRadius:10, background:"rgba(16,185,129,0.06)", border:"1px solid rgba(16,185,129,0.12)", fontSize:12, color:"#10b981", textAlign:"center" }}>This ticket has been {viewTicket.status}. Need more help? Open a new ticket.</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : newTicket ? (
+            <div>
+              <button onClick={function(){setNewTicket(false)}} style={{ background:"none", border:"none", fontSize:13, color:"rgb(200,180,140)", cursor:"pointer", fontWeight:600, marginBottom:16, padding:0 }}>{"\u2190 Back to tickets"}</button>
+              <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:"0 0 20px", color:"#d4d4d8" }}>Submit a Support Ticket</h2>
+
+              <div style={{ background:"#131315", borderRadius:14, padding:mob?16:24, border:"1px solid rgba(255,255,255,0.06)" }}>
+                <div style={{ marginBottom:18 }}>
+                  <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Category</label>
+                  <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
+                    {[["general","General"],["billing","Billing & Payment"],["referrals","Referrals & Earnings"],["courses","Courses & Content"],["technical","Technical Issue"],["account","Account"]].map(function(c){ return (
+                      <button key={c[0]} onClick={function(){setTicketForm(function(p){return Object.assign({},p,{category:c[0]})})}} style={{ padding:"8px 14px", borderRadius:8, border:"2px solid "+(ticketForm.category===c[0]?"rgb(200,180,140)":"#27272a"), background:ticketForm.category===c[0]?"rgba(200,180,140,0.08)":"transparent", fontSize:12, fontWeight:600, color:ticketForm.category===c[0]?"rgb(200,180,140)":"#71717a", cursor:"pointer" }}>{c[1]}</button>
+                    )})}
+                  </div>
+                </div>
+
+                <div style={{ marginBottom:18 }}>
+                  <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Subject</label>
+                  <input value={ticketForm.subject} onChange={function(e){setTicketForm(function(p){return Object.assign({},p,{subject:e.target.value})})}} placeholder="Brief description of your issue" style={{ width:"100%", padding:"11px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" }} />
+                </div>
+
+                <div style={{ marginBottom:24 }}>
+                  <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Message</label>
+                  <textarea value={ticketForm.message} onChange={function(e){setTicketForm(function(p){return Object.assign({},p,{message:e.target.value})})}} rows={5} placeholder="Describe your issue in detail..." style={{ width:"100%", padding:"11px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", fontSize:14, outline:"none", boxSizing:"border-box", resize:"vertical", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" }} />
+                </div>
+
+                <Btn onClick={function(){
+                  if(!ticketForm.subject.trim()||!ticketForm.message.trim()) return;
+                  var newRef = "TK-" + (8400 + Math.floor(Math.random()*100));
+                  var now = new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+                  setTickets(function(prev){return [{id:"T"+Date.now(), ref:newRef, subject:ticketForm.subject, category:ticketForm.category, status:"open", created:now, updated:now, messages:1}].concat(prev)});
+                  setTicketForm({subject:"",category:"general",message:""});
+                  setNewTicket(false);
+                }} full style={{ padding:"13px", fontSize:15, borderRadius:12 }}>Submit Ticket</Btn>
+
+                <div style={{ marginTop:16, padding:14, background:"rgba(255,255,255,0.02)", borderRadius:10, border:"1px solid rgba(255,255,255,0.04)" }}>
+                  <p style={{ fontSize:12, color:"#52525b", margin:0 }}>You can also email us directly at <strong style={{ color:"rgb(200,180,140)" }}>support@tutorii.com</strong>. Our team responds within 24 hours (Sun-Thu, 9AM-6PM GST).</p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div style={{ display:"flex", flexDirection:mob?"column":"row", justifyContent:"space-between", alignItems:mob?"flex-start":"center", gap:mob?10:0, marginBottom:20 }}>
+                <div>
+                  <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>Support</h2>
+                  <p style={{ fontSize:13, color:"#71717a", marginTop:4 }}>View your tickets or get help</p>
+                </div>
+                <Btn onClick={function(){setNewTicket(true)}} style={{ fontSize:13, padding:"10px 20px" }}>New Ticket</Btn>
+              </div>
+
+              {/* Quick actions */}
+              <div style={{ display:"grid", gridTemplateColumns:mob?"1fr 1fr":"repeat(4, 1fr)", gap:10, marginBottom:20 }}>
+                {[
+                  ["chat","Talk to AI Assistant",function(){setChatOpen(true);setChatMinimized(false)}],
+                  ["link","Copy Referral Link",function(){copyLink()}],
+                  ["gear","Account Settings",function(){setTab("settings")}],
+                  ["globe","Email Support",function(){window.open("mailto:support@tutorii.com?subject=Support Request - "+u.code)}],
+                ].map(function(a){return (
+                  <div key={a[1]} onClick={a[2]} style={{ background:"#131315", borderRadius:12, padding:"16px 14px", border:"1px solid rgba(255,255,255,0.06)", cursor:"pointer", textAlign:"center", transition:"border-color 0.2s" }}>
+                    <div style={{ marginBottom:8, lineHeight:0, display:"flex", justifyContent:"center" }}><Ico name={a[0]} size={20} color="rgb(200,180,140)" /></div>
+                    <div style={{ fontSize:11, fontWeight:600, color:"#71717a" }}>{a[1]}</div>
+                  </div>
+                )})}
+              </div>
+
+              {/* Ticket list */}
+              {tickets.length === 0 ? (
+                <div style={{ background:"#131315", borderRadius:14, padding:48, border:"1px solid rgba(255,255,255,0.06)", textAlign:"center" }}>
+                  <div style={{ marginBottom:12, lineHeight:0 }}><Ico name="chat" size={36} color="#27272a" /></div>
+                  <div style={{ fontSize:15, fontWeight:600, color:"#52525b", marginBottom:4 }}>No tickets yet</div>
+                  <div style={{ fontSize:13, color:"#3f3f46" }}>When you submit a support request, it will appear here.</div>
+                </div>
+              ) : (
+                <div style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden" }}>
+                  {tickets.map(function(t, ti) {
+                    var statusColors = { open:"rgb(200,180,140)", in_progress:"#3b82f6", resolved:"#10b981", closed:"#71717a" };
+                    return (
+                      <div key={t.id} onClick={function(){setViewTicket(t)}} style={{ display:"flex", alignItems:mob?"flex-start":"center", gap:mob?10:16, padding:mob?"14px":"16px 20px", borderBottom:ti<tickets.length-1?"1px solid rgba(255,255,255,0.04)":"none", cursor:"pointer", transition:"background 0.2s" }}>
+                        <div style={{ width:8, height:8, borderRadius:"50%", background:statusColors[t.status]||"#52525b", flexShrink:0, marginTop:mob?6:0 }} />
+                        <div style={{ flex:1, minWidth:0 }}>
+                          <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:2 }}>
+                            <span style={{ fontSize:14, fontWeight:600, color:"#d4d4d8", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{t.subject}</span>
+                          </div>
+                          <div style={{ display:"flex", gap:8, alignItems:"center", flexWrap:"wrap" }}>
+                            <code style={{ fontSize:9, color:"#3f3f46", background:"#0a0a0c", padding:"1px 6px", borderRadius:3 }}>{t.ref}</code>
+                            <span style={{ fontSize:11, color:"#52525b" }}>{t.category}</span>
+                            <span style={{ fontSize:10, color:"#3f3f46" }}>{"\u00B7"}</span>
+                            <span style={{ fontSize:11, color:"#3f3f46" }}>{t.created}</span>
+                          </div>
+                        </div>
+                        <div style={{ display:"flex", alignItems:"center", gap:8, flexShrink:0 }}>
+                          <Badge s={t.status.replace("_"," ")} />
+                          <div style={{ display:"flex", alignItems:"center", gap:4 }}>
+                            <Ico name="chat" size={12} color="#3f3f46" />
+                            <span style={{ fontSize:11, color:"#3f3f46" }}>{t.messages}</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              <div style={{ marginTop:16, padding:14, background:"rgba(255,255,255,0.02)", borderRadius:10, border:"1px solid rgba(255,255,255,0.04)", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                <span style={{ fontSize:12, color:"#52525b" }}>Our team responds within 24 hours (Sun-Thu, 9AM-6PM GST)</span>
+                <span style={{ fontSize:12, color:"rgb(200,180,140)", fontWeight:600 }}>support@tutorii.com</span>
+              </div>
+            </div>
+          )}
+        </div>}
+
         {tab === "settings" && <div>
           <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:"0 0 20px", color:"#d4d4d8" }}>Account Settings</h2>
 
@@ -2437,85 +2919,88 @@ function UserPortal(props) {
             )}
           </div>
 
-          {/* Quick Actions */}
+
+          {/* Quick Ask Buttons (shown at start) */}
           {chatMsgs.length <= 1 && (
-            <div style={{ padding:"0 16px 8px", display:"flex", gap:6, flexWrap:"wrap" }}>
-              {["How much have I earned?","Who are my referrals?","My course progress","How do payouts work?"].map(function(q){
-                return (
-                  <button key={q} onClick={function(){
-                    var newMsgs = chatMsgs.concat([{role:"user",content:q}]);
-                    setChatMsgs(newMsgs);
-                    setChatLoading(true);
-                    setChatInput("");
-
-                    var l1active = u.l1.filter(function(r){return r.status==="active"});
-                    var monthlyL1 = l1active.length * PRICE * L1_RATE;
-                    var monthlyL2 = u.l2.length * PRICE * L2_RATE;
-                    var completedLessons = courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return l.done}).length},0);
-                    var tLessons = courses.reduce(function(s,c){return s+c.lessons.length},0);
-
-                    var l1cancelled = u.l1.filter(function(r){return r.status==="cancelled"});
-                    var sp = "You are the Tutorii AI support assistant. Answer everything from the data below. Never guess.\n\n" +
-                      "USER: " + u.name + ", " + u.email + ", Phone: " + u.phone + ", Code: " + u.code + ", Link: tutorii.com/ref/" + u.code + "\n" +
-                      "ACCOUNT: Status: " + u.status + ", Joined: " + u.joined + ", Referred by: " + u.referredBy + ", Last login: " + u.lastLogin + "\n" +
-                      "BILLING: " + u.plan + " via " + u.paymentMethod + " (MamoPay). Next charge: " + u.nextBilling + ". Total paid: $" + (u.billing.length*PRICE).toFixed(2) + " (" + u.billing.length + " payments). NO REFUNDS - all sales final.\n" +
-                      "EARNINGS: Total $" + u.earn.total + ", This month $" + u.earn.month + ", Pending $" + u.earn.pending + ", Paid out $" + u.earn.paid + "\n" +
-                      "MONTHLY: L1 $" + monthlyL1.toFixed(2) + " (" + l1active.length + " active x $" + (PRICE*L1_RATE).toFixed(2) + "), L2 $" + monthlyL2.toFixed(2) + " (" + u.l2.length + " x $" + (PRICE*L2_RATE).toFixed(2) + "), Gross $" + (monthlyL1+monthlyL2).toFixed(2) + ", Sub -$" + PRICE + ", Net $" + (monthlyL1+monthlyL2-PRICE).toFixed(2) + ", ROI " + (((monthlyL1+monthlyL2-PRICE)/PRICE)*100).toFixed(0) + "%\n" +
-                      "PROJECTIONS: Annual net $" + ((monthlyL1+monthlyL2-PRICE)*12).toFixed(2) + ". Need ~" + Math.ceil((500+PRICE-monthlyL2)/(PRICE*L1_RATE)) + " L1 for AED 2,400/mo, ~" + Math.ceil((1000+PRICE-monthlyL2)/(PRICE*L1_RATE)) + " for AED 5000/mo\n" +
-                      "LIFETIME: Net profit $" + (u.earn.total-(u.billing.length*PRICE)).toFixed(2) + " (earned $" + u.earn.total + " minus $" + (u.billing.length*PRICE).toFixed(2) + " in subs)\n" +
-                      "L1 (" + u.l1.length + " total, " + l1active.length + " active, " + l1cancelled.length + " cancelled, " + Math.round((l1active.length/u.l1.length)*100) + "% retention): " + u.l1.map(function(r){return r.name+"("+r.status+", joined "+r.date+", $"+r.earned.toFixed(2)+")"}).join("; ") + "\n" +
-                      "L2 (" + u.l2.length + " total): " + u.l2.map(function(r){return r.name+"(via "+r.from+", joined "+r.date+", $"+r.earned.toFixed(2)+")"}).join("; ") + "\n" +
-                      "NETWORK: " + (u.l1.length+u.l2.length) + " total (" + u.l1.length + " L1 + " + u.l2.length + " L2). L1 total earned: $" + u.l1.reduce(function(s,r){return s+r.earned},0).toFixed(2) + ". L2 total earned: $" + u.l2.reduce(function(s,r){return s+r.earned},0).toFixed(2) + "\n" +
-                      "PAYOUTS: IBAN: " + u.iban + ". " + u.payouts.length + " payouts totalling $" + u.payouts.reduce(function(s,p){return s+p.amount},0).toFixed(2) + ". Avg $" + (u.payouts.reduce(function(s,p){return s+p.amount},0)/u.payouts.length).toFixed(2) + ". History: " + u.payouts.map(function(p){return p.date+": $"+p.amount.toFixed(2)+"("+p.status+")"}).join(", ") + "\n" +
-                      "COURSES: " + completedLessons + "/" + tLessons + " done (" + (tLessons>0?Math.round(completedLessons/tLessons*100):0) + "%). " + courses.map(function(c){var d=c.lessons.filter(function(l){return l.done}).length;return c.module+": "+d+"/"+c.lessons.length}).join(", ") + "\n" +
-                      "LESSON DETAIL: " + courses.map(function(c){return c.lessons.map(function(l){return (l.done?"[DONE]":"[TODO]")+" "+l.title+"("+l.dur+")"+(l.video?" +vid":"")+(l.pdf?" +pdf":"")}).join("; ")}).join("; ") + "\n" +
-                      "Content stats: " + courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return l.video}).length},0) + " videos, " + courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return l.pdf}).length},0) + " PDFs available of " + tLessons + " lessons\n" +
-                      "PLATFORM: $" + PRICE + "/mo, NO REFUNDS. L1=40%, L2=5%. MamoPay only. Weekly Tuesday payouts, AED 50 min. " + courses.length + " modules, " + tLessons + " lessons.\n" +
-                      "RULES: Referrer PERMANENT, cannot change. No self-referrals. No cap. Optional program. One account per person. Progress saved on cancel.\n" +
-                      "SUPPORT: support@tutorii.com Sun-Thu 9-6 GST. Complaints: complaints@tutorii.com.\n" +
-                      "Today: " + new Date().toLocaleDateString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric"}) + "\n" +
-                      "Cite specific numbers. Be concise and helpful.";
-
-                    chatApi.send(q, null, null)
-                    .then(function(data){
-                      var reply = data.response || "Sorry, something went wrong.";
-                      setChatMsgs(function(p){return p.concat([{role:"assistant",content:reply}])});
-                      setChatLoading(false);
-                    }).catch(function(){
-                      setChatMsgs(function(p){return p.concat([{role:"assistant",content:"Connection issue. Please try again."}])});
-                      setChatLoading(false);
-                    });
-                  }} style={{
-                    padding:"6px 12px", borderRadius:20, border:"1px solid rgba(255,255,255,0.08)", background:"#131315",
-                    fontSize:11, color:"rgb(200,180,140)", cursor:"pointer", fontWeight:500
-                  }}>{q}</button>
-                );
-              })}
+            <div style={{ padding:"0 16px 8px" }}>
+              <div style={{ fontSize:9, fontWeight:700, color:"#52525b", letterSpacing:0.5, marginBottom:6, textTransform:"uppercase" }}>Ask me anything</div>
+              <div style={{ display:"flex", gap:5, flexWrap:"wrap" }}>
+                {["How much have I earned?","Who are my referrals?","My course progress","How do payouts work?"].map(function(q){
+                  return (
+                    <button key={q} onClick={function(){
+                      setChatMsgs(function(prev){return prev.concat([{role:"user",content:q}])});
+                      setChatLoading(true);
+                      chatApi.send(q, null, null)
+                      .then(function(data){
+                        var reply = data.response || "Sorry, something went wrong.";
+                        setChatMsgs(function(p){return p.concat([{role:"assistant",content:reply}])});
+                        setChatLoading(false);
+                      }).catch(function(){
+                        setChatMsgs(function(p){return p.concat([{role:"assistant",content:"Connection issue. Please try again."}])});
+                        setChatLoading(false);
+                      });
+                    }} style={{
+                      padding:"5px 10px", borderRadius:16, border:"1px solid rgba(255,255,255,0.08)", background:"#131315",
+                      fontSize:10, color:"rgb(200,180,140)", cursor:"pointer", fontWeight:500
+                    }}>{q}</button>
+                  );
+                })}
+              </div>
             </div>
           )}
 
-          {/* Escalation */}
-          <div style={{ padding:"6px 16px", borderTop:"1px solid rgba(255,255,255,0.04)", display:"flex", justifyContent:"center" }}>
-            <span onClick={function(){window.open("mailto:support@tutorii.com?subject=Support%20Request%20-%20"+encodeURIComponent(u.code))}} style={{ fontSize:10, color:"#52525b", cursor:"pointer" }}>{"Need human help? "}<span style={{ color:"rgb(200,180,140)", fontWeight:600 }}>Email support</span></span>
+          {/* Self-Service Quick Actions (appear after first message) */}
+          {chatMsgs.length > 1 && (
+            <div style={{ padding:"4px 16px 6px", borderTop:"1px solid rgba(255,255,255,0.04)" }}>
+              <div style={{ display:"flex", gap:4, flexWrap:"wrap" }}>
+                {[
+                  ["Copy Referral Link", "link", function(){ copyLink(); setChatMsgs(function(p){return p.concat([{role:"assistant",content:"Your referral link has been copied!\n\ntutorii.com/ref/"+u.code+"\n\nShare it on WhatsApp, SMS, or social media."}])}); }],
+                  ["Cancel Subscription", "lock", function(){ setChatMsgs(function(p){return p.concat([{role:"user",content:"I want to cancel my subscription"},{role:"assistant",content:"Before you cancel, here\u2019s what happens:\n\n\u2022 Access continues until "+u.nextBilling+"\n\u2022 Your referral link stops earning\n\u2022 Pending earnings above AED 50 are still paid\n\u2022 Course progress is saved\n\nTo confirm, go to Settings \u2192 Danger Zone \u2192 Cancel Subscription."}])}); }],
+                  ["Update My IBAN", "bank", function(){ setChatMsgs(function(p){return p.concat([{role:"user",content:"I need to update my IBAN"},{role:"assistant",content:"You can update your payout IBAN in Settings \u2192 Payout Details.\n\nYour current IBAN ends in ..."+u.iban.slice(-3)+". Changes take effect on the next Tuesday payout."}])}); }],
+                  ["Change Password", "shield", function(){ setChatMsgs(function(p){return p.concat([{role:"user",content:"I want to change my password"},{role:"assistant",content:"Two options:\n\n1. Settings \u2192 Change Password (if you know your current one)\n2. I can send a reset link to "+u.email+"\n\nWhich would you prefer?"}])}); }],
+                  ["Share on WhatsApp", "phone", function(){ window.open("https://wa.me/?text="+encodeURIComponent("Learn practical skills for life in the UAE and earn while you grow! Join Tutorii: https://tutorii.com/ref/"+u.code),"_blank"); setChatMsgs(function(p){return p.concat([{role:"assistant",content:"WhatsApp opened with your referral link ready to share!"}])}); }],
+                ].map(function(a){return (
+                  <button key={a[0]} onClick={a[2]} style={{ display:"flex", alignItems:"center", gap:4, padding:"4px 9px", borderRadius:12, border:"1px solid rgba(255,255,255,0.06)", background:"rgba(255,255,255,0.02)", fontSize:9, fontWeight:600, color:"#71717a", cursor:"pointer" }}>
+                    <Ico name={a[1]} size={10} color="#52525b" />{a[0]}
+                  </button>
+                )})}
+              </div>
+            </div>
+          )}
+
+          {/* Escalate to Human */}
+          <div style={{ padding:"6px 16px", borderTop:"1px solid rgba(255,255,255,0.04)", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+            <span onClick={function(){
+              var ref = "TK-"+Math.floor(8400+Math.random()*600);
+              setChatMsgs(function(p){return p.concat([
+                {role:"user",content:"I need to speak to a human"},
+                {role:"assistant",content:"I\u2019ve escalated this conversation to our support team. A ticket has been created with the full chat context so you won\u2019t need to repeat anything.\n\nTicket: "+ref+"\nTrack it in your Support tab.\n\nOur team responds within 24 hours (Sun\u2013Thu, 9AM\u20136PM GST)."}
+              ])});
+              setTickets(function(prev){
+                var now = new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+                return [{id:"T"+Date.now(),ref:ref,subject:"Chat escalation",category:"general",status:"open",created:now,updated:now,messages:chatMsgs.length+2}].concat(prev);
+              });
+            }} style={{ fontSize:10, color:"#52525b", cursor:"pointer", display:"flex", alignItems:"center", gap:4 }}>
+              <Ico name="users" size={10} color="#52525b" />
+              <span>{"Need a human? "}<span style={{ color:"rgb(200,180,140)", fontWeight:600 }}>Escalate to support</span></span>
+            </span>
+            <span onClick={function(){setTab("support");setChatOpen(false)}} style={{ fontSize:10, color:"#52525b", cursor:"pointer" }}>View tickets</span>
           </div>
+
           {/* Chat Input */}
-          <div style={{ padding:"12px 16px", borderTop:"1px solid rgba(255,255,255,0.06)", display:"flex", gap:8 }}>
+          <div style={{ padding:"10px 16px", borderTop:"1px solid rgba(255,255,255,0.06)", display:"flex", gap:8, alignItems:"center" }}>
             <input
               value={chatInput}
               onChange={function(e){setChatInput(e.target.value)}}
               onKeyDown={function(e){if(e.key==="Enter") sendChat()}}
-              placeholder="Type here"
+              placeholder="Type your message..."
               style={{ flex:1, padding:"10px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.08)", fontSize:13, outline:"none", background:"#0a0a0c", color:"#d4d4d8", fontFamily:"'Plus Jakarta Sans',sans-serif" }}
             />
-            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:6 }}>
-              <span onClick={function(){window.open("mailto:support@tutorii.com?subject=Support Request from "+u.name+"&body=Hi Tutorii support,%0A%0A")}} style={{ fontSize:10, color:"#52525b", cursor:"pointer", textDecoration:"underline" }}>Email support instead</span>
-              <span onClick={function(){go("support")}} style={{ fontSize:10, color:"#52525b", cursor:"pointer", textDecoration:"underline" }}>Submit ticket</span>
-            </div>
             <button onClick={sendChat} disabled={chatLoading || !chatInput.trim()} style={{
               width:40, height:40, borderRadius:10, border:"none",
               background: chatInput.trim() ? "rgb(200,180,140)" : "#27272a",
               color:"#fff", fontSize:16, cursor: chatInput.trim() ? "pointer" : "default",
-              display:"flex", alignItems:"center", justifyContent:"center"
+              display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0
             }}><Ico name="rocket" size={16} color="#fff" /></button>
           </div>
         </div>
@@ -2590,6 +3075,19 @@ function AdminPanel(props) {
   var _upl = useState(null); var uploading = _upl[0]; var setUploading = _upl[1];
   var _selUser = useState(null); var selectedUser = _selUser[0]; var setSelectedUser = _selUser[1];
   var adminContentRef = useRef(null);
+
+  // Admin action states
+  var _actionPanel = useState(null); var actionPanel = _actionPanel[0]; var setActionPanel = _actionPanel[1]; // "resetPass"|"changeEmail"|"reassignRef"|"updateIban"|"extendSub"|"viewProgress"
+  var _tempPass = useState(""); var tempPass = _tempPass[0]; var setTempPass = _tempPass[1];
+  var _newEmail = useState(""); var newEmail = _newEmail[0]; var setNewEmail = _newEmail[1];
+  var _newRefCode = useState(""); var newRefCode = _newRefCode[0]; var setNewRefCode = _newRefCode[1];
+  var _newIban = useState(""); var newIban = _newIban[0]; var setNewIban = _newIban[1];
+  var _newIbanName = useState(""); var newIbanName = _newIbanName[0]; var setNewIbanName = _newIbanName[1];
+  var _extendDays = useState("7"); var extendDays = _extendDays[0]; var setExtendDays = _extendDays[1];
+  var _actionLoading = useState(false); var actionLoading = _actionLoading[0]; var setActionLoading = _actionLoading[1];
+  var _actionResult = useState(null); var actionResult = _actionResult[0]; var setActionResult = _actionResult[1];
+  var _auditEntries = useState([]); var auditEntries = _auditEntries[0]; var setAuditEntries = _auditEntries[1];
+  var _auditFilter = useState(""); var auditFilter = _auditFilter[0]; var setAuditFilter = _auditFilter[1];
 
   var active = ADMIN_USERS.filter(function(u){return u.status==="active"}).length;
   var mrr = active * PRICE;
@@ -2679,7 +3177,38 @@ function AdminPanel(props) {
 
   var ICONS = ["book","globe","shield","target","dollar","rocket","book","target","lightbulb","globe","bank","shield","chart","users","phone","bank","phone","lock","chart","sparkle"];
 
-  var admSide = [["dash","chart","Dashboard"],["users","users","Users"],["courses","book","Courses"],["payouts","dollar","Payouts"],["api","gear","API Config"]];
+  function doAction(label, cb) {
+    setActionLoading(true); setActionResult(null);
+    setTimeout(function(){
+      setActionLoading(false);
+      var msg = cb();
+      setActionResult({ok:true, msg:msg});
+      flash(msg);
+      setTimeout(function(){setActionResult(null)},4000);
+    }, 800);
+  }
+
+  function clearActionPanel() { setActionPanel(null); setActionResult(null); setTempPass(""); setNewEmail(""); setNewRefCode(""); setNewIban(""); setNewIbanName(""); setExtendDays("7"); }
+
+  // Demo audit log entries
+  var DEMO_AUDIT = [
+    {id:1,action:"reset_password",admin_email:"david@tutorii.com",target_user_id:"u2",detail:"Password force-reset for aisha@example.com",created_at:"2026-03-10T14:22:00Z"},
+    {id:2,action:"change_email",admin_email:"david@tutorii.com",target_user_id:"u5",detail:"Email changed: old@example.com → fatima@example.com",created_at:"2026-03-10T11:05:00Z"},
+    {id:3,action:"deactivate_user",admin_email:"david@tutorii.com",target_user_id:"u5",detail:"Account fatima@example.com deactivated",created_at:"2026-03-09T16:30:00Z"},
+    {id:4,action:"activate_user",admin_email:"david@tutorii.com",target_user_id:"u5",detail:"Account fatima@example.com reactivated",created_at:"2026-03-09T17:01:00Z"},
+    {id:5,action:"reassign_referrer",admin_email:"david@tutorii.com",target_user_id:"u3",detail:"Referrer changed for carlos@example.com: null → David Chen",created_at:"2026-03-08T09:15:00Z"},
+    {id:6,action:"extend_subscription",admin_email:"david@tutorii.com",target_user_id:"u2",detail:"Extended by 7 days for aisha@example.com",created_at:"2026-03-07T12:44:00Z"},
+    {id:7,action:"manual_payout_complete",admin_email:"david@tutorii.com",target_user_id:"u2",detail:"Manually completed: AED 456.00, ref: BANK-TXN-8812",created_at:"2026-03-06T10:20:00Z"},
+    {id:8,action:"retry_payout",admin_email:"david@tutorii.com",target_user_id:"u3",detail:"Payout retried successfully: AED 304.00",created_at:"2026-03-05T15:33:00Z"},
+    {id:9,action:"update_payout_info",admin_email:"david@tutorii.com",target_user_id:"u4",detail:"IBAN changed: ...3456 → ...9012",created_at:"2026-03-04T08:55:00Z"},
+    {id:10,action:"cancel_subscription",admin_email:"david@tutorii.com",target_user_id:"u5",detail:"Subscription cancelled by admin for fatima@example.com",created_at:"2026-03-03T13:10:00Z"},
+    {id:11,action:"activate_subscription",admin_email:"david@tutorii.com",target_user_id:"u6",detail:"New subscription created and activated for maria@example.com",created_at:"2026-03-02T11:28:00Z"},
+    {id:12,action:"trigger_payouts",admin_email:"david@tutorii.com",target_user_id:null,detail:"Manual payout run triggered",created_at:"2026-03-01T09:00:00Z"},
+    {id:13,action:"mark_lesson_complete",admin_email:"david@tutorii.com",target_user_id:"u2",detail:"Lesson 'Understanding UAE Culture' marked complete",created_at:"2026-02-28T14:50:00Z"},
+    {id:14,action:"reset_password",admin_email:"david@tutorii.com",target_user_id:"u4",detail:"Password force-reset for priya@example.com",created_at:"2026-02-27T16:12:00Z"},
+  ];
+
+  var admSide = [["dash","chart","Dashboard"],["users","users","Users"],["tickets","chat","Tickets"],["courses","book","Courses"],["payouts","dollar","Payouts"],["audit","shield","Audit Log"],["api","gear","API Config"]];
 
   return (
     <div style={{ display:"flex", flexDirection:mob?"column":"row", minHeight:"100vh", background:"#0a0a0c" }}>
@@ -2945,14 +3474,35 @@ function AdminPanel(props) {
         </div>}
 
         {tab === "users" && <div style={{ maxWidth:"100%", overflow:"hidden" }}>
-          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
+          <div style={{ display:"flex", flexDirection:mob?"column":"row", justifyContent:"space-between", alignItems:mob?"flex-start":"center", gap:mob?10:0, marginBottom:20 }}>
             <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>{"Users ("+ADMIN_USERS.length+")"}</h2>
-            <input value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="Search..." style={{ padding:"9px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#fff", fontSize:13, width:mob?140:220, outline:"none" }} />
+            <div style={{ position:"relative", width:mob?"100%":"auto" }}>
+              <div style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", lineHeight:0, pointerEvents:"none" }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#52525b" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+              <input value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="Search name, email, or code..." style={{ padding:"9px 14px 9px 34px", borderRadius:8, border:"1px solid "+(search ? "rgba(200,180,140,0.2)" : "rgba(255,255,255,0.06)"), background:search ? "rgba(200,180,140,0.04)" : "#0a0a0c", color:"#fff", fontSize:13, width:mob?"100%":340, outline:"none", boxSizing:"border-box", transition:"border-color 0.2s, background 0.2s" }} />
+              {search && <button onClick={function(){setSearch("")}} style={{ position:"absolute", right:10, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", lineHeight:0, padding:2 }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#52525b" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>}
+            </div>
           </div>
-          <div style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden" }}>
-            <div style={{ overflowX:"auto", WebkitOverflowScrolling:"touch" }}><table style={{ width:"100%", borderCollapse:"collapse", minWidth:mob?700:"auto" }}>
-              <thead><tr>{["User","Code","Level 1","Level 2","Earned","Status","Actions"].map(function(h){return <th key={h} style={{ padding:"12px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#71717a", textAlign:"left", verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>{h}</th>})}</tr></thead>
-              <tbody>{ADMIN_USERS.filter(function(u){return u.name.toLowerCase().includes(search.toLowerCase())}).map(function(u){ return (
+          {(function(){
+            var q = search.toLowerCase().trim();
+            var filtered = ADMIN_USERS.filter(function(u){
+              if (!q) return true;
+              return u.name.toLowerCase().includes(q) ||
+                     u.email.toLowerCase().includes(q) ||
+                     u.code.toLowerCase().includes(q) ||
+                     u.status.toLowerCase().includes(q);
+            });
+            return (
+              <div>
+                {search && <div style={{ fontSize:11, color:"#52525b", marginBottom:10 }}>{"Showing "+filtered.length+" of "+ADMIN_USERS.length+" users"+(filtered.length===0 ? " — try a different search" : "")}</div>}
+                <div style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden" }}>
+                  <div style={{ overflowX:"auto", WebkitOverflowScrolling:"touch" }}><table style={{ width:"100%", borderCollapse:"collapse", minWidth:mob?700:"auto" }}>
+                    <thead><tr>{["User","Code","Level 1","Level 2","Earned","Status","Actions"].map(function(h){return <th key={h} style={{ padding:"12px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#71717a", textAlign:"left", verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>{h}</th>})}</tr></thead>
+                    <tbody>{filtered.length === 0 ? (
+                      <tr><td colSpan={7} style={{ padding:40, textAlign:"center", color:"#3f3f46", fontSize:13 }}>
+                        <div style={{ marginBottom:8 }}><Ico name="users" size={28} color="#27272a" /></div>
+                        {"No users match \u201C"+search+"\u201D"}
+                      </td></tr>
+                    ) : filtered.map(function(u){ return (
                 <tr key={u.name} onClick={function(){setSelectedUser(selectedUser && selectedUser.name===u.name ? null : u)}} style={{ borderBottom:"1px solid rgba(255,255,255,0.06)", cursor:"pointer", background:selectedUser && selectedUser.name===u.name ? "rgba(200,180,140,0.06)" : "transparent", transition:"background 0.2s" }}>
                   <td style={{ padding:"12px", verticalAlign:"middle" }}><div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{u.name}</div><div style={{ fontSize:11, color:"#71717a" }}>{u.email}</div></td>
                   <td style={{ padding:"12px", verticalAlign:"middle" }}><code style={{ fontSize:11, background:"#0a0a0c", padding:"2px 8px", borderRadius:4, color:"#52525b" }}>{u.code}</code></td>
@@ -2968,9 +3518,13 @@ function AdminPanel(props) {
                     </div>
                   </td>
                 </tr>
-              )})}</tbody>
-            </table></div>
-          </div>
+              )})}
+              </tbody>
+                  </table></div>
+                </div>
+              </div>
+            );
+          })()}
 
           {/* USER DETAIL PANEL WITH REFERRAL TREE */}
           {selectedUser && (
@@ -2985,7 +3539,7 @@ function AdminPanel(props) {
                     <span style={{ fontSize:11, color:"#52525b" }}>{"Code: "+selectedUser.code}</span>
                   </div>
                 </div>
-                <button onClick={function(){setSelectedUser(null)}} style={{ width:28, height:28, borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                <button onClick={function(){setSelectedUser(null);clearActionPanel()}} style={{ width:28, height:28, borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
               </div>
 
               {/* Stats row */}
@@ -2996,6 +3550,197 @@ function AdminPanel(props) {
                     <div style={{ fontSize:mob?16:20, fontWeight:600, color:s[2] }}>{s[1]}</div>
                   </div>
                 )})}
+              </div>
+
+              {/* ═══ ADMIN ACTIONS ═══ */}
+              <div style={{ padding:mob?"14px":"20px 24px", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
+                <div style={{ fontSize:12, fontWeight:700, textTransform:"uppercase", letterSpacing:0.5, color:"#52525b", marginBottom:12 }}>Admin Actions</div>
+                <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom: actionPanel ? 16 : 0 }}>
+                  {[
+                    ["resetPass","lock","Reset Password","#f59e0b"],
+                    ["changeEmail","chat","Change Email","#3b82f6"],
+                    ["reassignRef","link","Reassign Referrer","#a78bfa"],
+                    ["updateIban","bank","Update IBAN","rgb(200,180,140)"],
+                    ["toggleActive",selectedUser.status==="active"?"lock":"shield",selectedUser.status==="active"?"Deactivate":"Reactivate",selectedUser.status==="active"?"#ef4444":"#10b981"],
+                    ["cancelSub","dollar","Cancel Sub","#ef4444"],
+                    ["activateSub","shield","Activate Sub","#10b981"],
+                    ["extendSub","chart","Extend Sub","#3b82f6"],
+                    ["viewProgress","book","View Progress","#10b981"],
+                  ].map(function(a){
+                    var isActive = actionPanel === a[0];
+                    return (
+                      <button key={a[0]} onClick={function(){ if(a[0]==="toggleActive"){ doAction(a[2], function(){ return (selectedUser.status==="active" ? "Deactivated " : "Reactivated ") + selectedUser.name }); return; } if(a[0]==="cancelSub"){ doAction("Cancel", function(){ return "Subscription cancelled for "+selectedUser.name }); return; } if(a[0]==="activateSub"){ doAction("Activate", function(){ return "Subscription activated for "+selectedUser.name }); return; } clearActionPanel(); setActionPanel(isActive ? null : a[0]); }} style={{ display:"flex", alignItems:"center", gap:5, padding:"7px 12px", borderRadius:8, border:"1px solid "+(isActive ? a[3]+"40" : "rgba(255,255,255,0.06)"), background:isActive ? a[3]+"15" : "transparent", fontSize:11, fontWeight:600, color:isActive ? a[3] : "#71717a", cursor:"pointer", transition:"all 0.2s" }}>
+                        <Ico name={a[1]} size={12} color={isActive ? a[3] : "#52525b"} />
+                        {a[2]}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Action Result Banner */}
+                {actionResult && (
+                  <div style={{ padding:"10px 14px", borderRadius:8, background:actionResult.ok?"rgba(16,185,129,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(actionResult.ok?"rgba(16,185,129,0.15)":"rgba(248,113,113,0.15)"), marginBottom:12, fontSize:12, fontWeight:600, color:actionResult.ok?"#10b981":"#f87171", display:"flex", alignItems:"center", gap:8 }}>
+                    <span>{actionResult.ok ? "\u2713" : "\u2717"}</span>
+                    {actionResult.msg}
+                  </div>
+                )}
+
+                {/* Reset Password Panel */}
+                {actionPanel === "resetPass" && (
+                  <div style={{ background:"rgba(255,255,255,0.02)", borderRadius:10, padding:16, border:"1px solid rgba(255,255,255,0.06)" }}>
+                    <div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8", marginBottom:8 }}>Reset Password for {selectedUser.name}</div>
+                    <p style={{ fontSize:11, color:"#52525b", marginBottom:12 }}>Generate a temporary password or enter one manually. You will need to communicate this to the user securely (WhatsApp, phone, etc.).</p>
+                    <input value={tempPass} onChange={function(e){setTempPass(e.target.value)}} placeholder="Leave blank to auto-generate" style={{ width:"100%", padding:"10px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", boxSizing:"border-box", marginBottom:10, fontFamily:"monospace" }} />
+                    <div style={{ display:"flex", gap:8 }}>
+                      <button onClick={function(){ doAction("Reset", function(){ var p = tempPass || "Tut" + Math.random().toString(36).slice(2,6).toUpperCase() + "9A"; setTempPass(p); return "Password reset. Temporary: " + p; }) }} disabled={actionLoading} style={{ padding:"8px 18px", borderRadius:8, border:"none", background:"#f59e0b", color:"#0a0a0c", fontSize:12, fontWeight:700, cursor:"pointer", opacity:actionLoading?0.6:1 }}>{actionLoading ? "Resetting..." : "Reset Password"}</button>
+                      <button onClick={clearActionPanel} style={{ padding:"8px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Cancel</button>
+                    </div>
+                    {actionResult && actionResult.msg && actionResult.msg.includes("Temporary") && (
+                      <div style={{ marginTop:12, background:"rgba(245,158,11,0.08)", border:"1px solid rgba(245,158,11,0.15)", borderRadius:8, padding:"10px 14px" }}>
+                        <div style={{ fontSize:10, fontWeight:700, color:"#f59e0b", marginBottom:4 }}>TEMPORARY PASSWORD</div>
+                        <code style={{ fontSize:16, fontWeight:700, color:"#d4d4d8", letterSpacing:1 }}>{tempPass}</code>
+                        <div style={{ fontSize:10, color:"#52525b", marginTop:6 }}>User should change this on first login.</div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Change Email Panel */}
+                {actionPanel === "changeEmail" && (
+                  <div style={{ background:"rgba(255,255,255,0.02)", borderRadius:10, padding:16, border:"1px solid rgba(255,255,255,0.06)" }}>
+                    <div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8", marginBottom:4 }}>Change Email for {selectedUser.name}</div>
+                    <div style={{ fontSize:11, color:"#52525b", marginBottom:4 }}>{"Current: "}<strong style={{color:"#71717a"}}>{selectedUser.email}</strong></div>
+                    <p style={{ fontSize:11, color:"#52525b", marginBottom:12 }}>Use this when a user has lost access to their registration email. They can then use forgot-password with the new email.</p>
+                    <input value={newEmail} onChange={function(e){setNewEmail(e.target.value)}} placeholder="New email address" type="email" style={{ width:"100%", padding:"10px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", boxSizing:"border-box", marginBottom:10 }} />
+                    <div style={{ display:"flex", gap:8 }}>
+                      <button onClick={function(){ if(!newEmail.trim()||!newEmail.includes("@")){flash("Enter a valid email");return;} doAction("Change", function(){ return "Email changed to "+newEmail; }) }} disabled={actionLoading} style={{ padding:"8px 18px", borderRadius:8, border:"none", background:"#3b82f6", color:"#fff", fontSize:12, fontWeight:700, cursor:"pointer", opacity:actionLoading?0.6:1 }}>{actionLoading ? "Updating..." : "Update Email"}</button>
+                      <button onClick={clearActionPanel} style={{ padding:"8px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Cancel</button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Reassign Referrer Panel */}
+                {actionPanel === "reassignRef" && (
+                  <div style={{ background:"rgba(255,255,255,0.02)", borderRadius:10, padding:16, border:"1px solid rgba(255,255,255,0.06)" }}>
+                    <div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8", marginBottom:4 }}>Reassign Referrer for {selectedUser.name}</div>
+                    <div style={{ fontSize:11, color:"#52525b", marginBottom:4 }}>{"Current referrer: "}<strong style={{color:"#71717a"}}>{selectedUser.referrer || "None"}</strong></div>
+                    <p style={{ fontSize:11, color:"#52525b", marginBottom:12 }}>Enter the new referrer's code, or leave blank and click "Remove Referrer" to unlink.</p>
+                    <input value={newRefCode} onChange={function(e){setNewRefCode(e.target.value.toUpperCase())}} placeholder="Referral code (e.g. DAVID2026)" style={{ width:"100%", padding:"10px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", boxSizing:"border-box", marginBottom:10, fontFamily:"monospace", textTransform:"uppercase" }} />
+                    <div style={{ display:"flex", gap:8 }}>
+                      <button onClick={function(){ if(!newRefCode.trim()){flash("Enter a referral code");return;} doAction("Reassign", function(){ return "Referrer changed to "+newRefCode; }) }} disabled={actionLoading} style={{ padding:"8px 18px", borderRadius:8, border:"none", background:"#a78bfa", color:"#fff", fontSize:12, fontWeight:700, cursor:"pointer", opacity:actionLoading?0.6:1 }}>Assign Referrer</button>
+                      <button onClick={function(){ doAction("Remove", function(){ return "Referrer removed for "+selectedUser.name; }) }} disabled={actionLoading} style={{ padding:"8px 14px", borderRadius:8, border:"1px solid rgba(248,113,113,0.2)", background:"transparent", color:"#f87171", fontSize:12, fontWeight:600, cursor:"pointer" }}>Remove Referrer</button>
+                      <button onClick={clearActionPanel} style={{ padding:"8px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Cancel</button>
+                    </div>
+                    <div style={{ marginTop:10, fontSize:10, color:"#3f3f46", fontStyle:"italic" }}>Note: Past commissions are not retroactively recalculated.</div>
+                  </div>
+                )}
+
+                {/* Update IBAN Panel */}
+                {actionPanel === "updateIban" && (
+                  <div style={{ background:"rgba(255,255,255,0.02)", borderRadius:10, padding:16, border:"1px solid rgba(255,255,255,0.06)" }}>
+                    <div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8", marginBottom:8 }}>Update Payout Info for {selectedUser.name}</div>
+                    <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr", gap:10, marginBottom:10 }}>
+                      <div>
+                        <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>IBAN</label>
+                        <input value={newIban} onChange={function(e){setNewIban(e.target.value.toUpperCase().replace(/\s/g,""))}} placeholder="AE070331234567890123456" style={{ width:"100%", padding:"10px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", boxSizing:"border-box", fontFamily:"monospace" }} />
+                      </div>
+                      <div>
+                        <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>Account Holder Name</label>
+                        <input value={newIbanName} onChange={function(e){setNewIbanName(e.target.value)}} placeholder="Full name on account" style={{ width:"100%", padding:"10px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", boxSizing:"border-box" }} />
+                      </div>
+                    </div>
+                    <div style={{ display:"flex", gap:8 }}>
+                      <button onClick={function(){ if(!newIban.trim()){flash("Enter an IBAN");return;} doAction("Update", function(){ return "IBAN updated for "+selectedUser.name; }) }} disabled={actionLoading} style={{ padding:"8px 18px", borderRadius:8, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:12, fontWeight:700, cursor:"pointer", opacity:actionLoading?0.6:1 }}>Update Payout Info</button>
+                      <button onClick={clearActionPanel} style={{ padding:"8px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Cancel</button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Extend Subscription Panel */}
+                {actionPanel === "extendSub" && (
+                  <div style={{ background:"rgba(255,255,255,0.02)", borderRadius:10, padding:16, border:"1px solid rgba(255,255,255,0.06)" }}>
+                    <div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8", marginBottom:8 }}>Extend Subscription for {selectedUser.name}</div>
+                    <p style={{ fontSize:11, color:"#52525b", marginBottom:12 }}>Add extra days to the current billing period. Use for goodwill, service issues, or compensation.</p>
+                    <div style={{ display:"flex", gap:8, alignItems:"center", marginBottom:12 }}>
+                      <input type="number" value={extendDays} onChange={function(e){setExtendDays(e.target.value)}} min="1" max="365" style={{ width:80, padding:"10px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:14, fontWeight:600, outline:"none", textAlign:"center" }} />
+                      <span style={{ fontSize:13, color:"#71717a" }}>days</span>
+                      <div style={{ display:"flex", gap:4, marginLeft:8 }}>
+                        {["7","14","30"].map(function(d){return <button key={d} onClick={function(){setExtendDays(d)}} style={{ padding:"6px 10px", borderRadius:6, border:"1px solid "+(extendDays===d?"rgba(59,130,246,0.3)":"rgba(255,255,255,0.06)"), background:extendDays===d?"rgba(59,130,246,0.1)":"transparent", fontSize:11, fontWeight:600, color:extendDays===d?"#3b82f6":"#52525b", cursor:"pointer" }}>{d+"d"}</button>})}
+                      </div>
+                    </div>
+                    <div style={{ display:"flex", gap:8 }}>
+                      <button onClick={function(){ var d=parseInt(extendDays); if(!d||d<1||d>365){flash("Enter 1-365 days");return;} doAction("Extend", function(){ return "Subscription extended by "+d+" days for "+selectedUser.name; }) }} disabled={actionLoading} style={{ padding:"8px 18px", borderRadius:8, border:"none", background:"#3b82f6", color:"#fff", fontSize:12, fontWeight:700, cursor:"pointer", opacity:actionLoading?0.6:1 }}>Extend</button>
+                      <button onClick={clearActionPanel} style={{ padding:"8px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Cancel</button>
+                    </div>
+                  </div>
+                )}
+
+                {/* View Progress Panel */}
+                {actionPanel === "viewProgress" && (
+                  <div style={{ background:"rgba(255,255,255,0.02)", borderRadius:10, padding:16, border:"1px solid rgba(255,255,255,0.06)" }}>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
+                      <div>
+                        <div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8" }}>Course Progress for {selectedUser.name}</div>
+                        <div style={{ fontSize:11, color:"#52525b", marginTop:2 }}>Click any lesson to toggle its completion status</div>
+                      </div>
+                      <button onClick={clearActionPanel} style={{ padding:"6px 12px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:11, cursor:"pointer" }}>Close</button>
+                    </div>
+
+                    {(function(){
+                      var totalL = courses.reduce(function(s,c){return s+c.lessons.length},0);
+                      var doneL = courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return l.done}).length},0);
+                      var pct = totalL > 0 ? Math.round((doneL/totalL)*100) : 0;
+
+                      return (
+                        <div>
+                          {/* Progress bar */}
+                          <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:16, padding:"12px 14px", borderRadius:8, background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.06)" }}>
+                            <div style={{ flex:1 }}>
+                              <div style={{ width:"100%", height:6, borderRadius:3, background:"rgba(255,255,255,0.06)" }}>
+                                <div style={{ height:6, borderRadius:3, background:"rgb(200,180,140)", width:pct+"%", transition:"width 0.3s" }} />
+                              </div>
+                            </div>
+                            <span style={{ fontSize:13, fontWeight:700, color:"rgb(200,180,140)", minWidth:48, textAlign:"right" }}>{pct+"%"}</span>
+                            <span style={{ fontSize:11, color:"#52525b" }}>{doneL+"/"+totalL+" lessons"}</span>
+                          </div>
+
+                          {/* Course list */}
+                          {courses.map(function(c){
+                            var courseDone = c.lessons.filter(function(l){return l.done}).length;
+                            var coursePct = c.lessons.length > 0 ? Math.round((courseDone/c.lessons.length)*100) : 0;
+                            return (
+                              <div key={c.id} style={{ marginBottom:8 }}>
+                                <div style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 12px", borderRadius:8, background:"rgba(255,255,255,0.02)", border:"1px solid rgba(255,255,255,0.04)" }}>
+                                  <Ico name={c.icon} size={16} color="rgb(200,180,140)" />
+                                  <span style={{ fontSize:12, fontWeight:600, color:"#d4d4d8", flex:1 }}>{c.module}</span>
+                                  <span style={{ fontSize:10, color:coursePct===100?"#10b981":"#52525b", fontWeight:600 }}>{courseDone+"/"+c.lessons.length}</span>
+                                  <div style={{ width:40, height:4, borderRadius:2, background:"rgba(255,255,255,0.06)" }}>
+                                    <div style={{ height:4, borderRadius:2, background:coursePct===100?"#10b981":"rgb(200,180,140)", width:coursePct+"%", transition:"width 0.3s" }} />
+                                  </div>
+                                </div>
+                                <div style={{ paddingLeft:mob?20:38 }}>
+                                  {c.lessons.map(function(l){
+                                    return (
+                                      <div key={l.id} onClick={function(){
+                                        var newDone = !l.done;
+                                        setCourses(function(prev){return prev.map(function(cc){return cc.id===c.id?Object.assign({},cc,{lessons:cc.lessons.map(function(ll){return ll.id===l.id?Object.assign({},ll,{done:newDone}):ll})}):cc})});
+                                        flash("Lesson '"+ l.title +"' marked " + (newDone ? "complete" : "incomplete"));
+                                      }} style={{ display:"flex", alignItems:"center", gap:8, padding:"6px 10px", cursor:"pointer", borderBottom:"1px solid rgba(255,255,255,0.02)" }}>
+                                        <div style={{ width:18, height:18, borderRadius:"50%", border:"2px solid "+(l.done?"#10b981":"#3f3f46"), background:l.done?"#10b981":"transparent", display:"flex", alignItems:"center", justifyContent:"center", fontSize:9, color:"#fff", flexShrink:0, transition:"all 0.2s", cursor:"pointer" }}>{l.done ? "\u2713" : ""}</div>
+                                        <span style={{ fontSize:11, color:l.done?"#71717a":"#d4d4d8", textDecoration:l.done?"line-through":"none", flex:1, transition:"color 0.2s" }}>{l.title}</span>
+                                        <span style={{ fontSize:9, color:"#3f3f46" }}>{l.dur}</span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
               </div>
 
               {/* Referral Tree */}
@@ -3071,6 +3816,152 @@ function AdminPanel(props) {
             </div>
           )}
         </div>}
+
+        {tab === "tickets" && (function(){
+          var DEMO_TICKETS = [
+            { id:"T1", ref:"TK-8291", user:"Aisha Khan", email:"aisha@example.com", subject:"Payout not received for February", category:"billing", status:"in_progress", priority:"high", created:"Feb 26", updated:"Mar 2", messages:3, assignedTo:"David Chen" },
+            { id:"T2", ref:"TK-8315", user:"Carlos Reyes", email:"carlos@example.com", subject:"Cannot access module 3 lessons", category:"courses", status:"open", priority:"normal", created:"Mar 1", updated:"Mar 1", messages:1, assignedTo:null },
+            { id:"T3", ref:"TK-8320", user:"Priya Sharma", email:"priya@example.com", subject:"Referral code not working for friend", category:"referrals", status:"open", priority:"normal", created:"Mar 3", updated:"Mar 3", messages:2, assignedTo:null },
+            { id:"T4", ref:"TK-8340", user:"Aisha Khan", email:"aisha@example.com", subject:"Course video not loading on mobile", category:"technical", status:"resolved", priority:"normal", created:"Mar 5", updated:"Mar 7", messages:4, assignedTo:"David Chen" },
+            { id:"T5", ref:"TK-8402", user:"Maria Lopez", email:"maria@example.com", subject:"Need to change my registered email", category:"account", status:"open", priority:"high", created:"Mar 8", updated:"Mar 8", messages:1, assignedTo:null },
+            { id:"T6", ref:"TK-8410", user:"Carlos Reyes", email:"carlos@example.com", subject:"Commission missing for February referral", category:"referrals", status:"closed", priority:"normal", created:"Mar 9", updated:"Mar 10", messages:6, assignedTo:"David Chen" },
+          ];
+          var _tFilter = useState(""); var tFilter = _tFilter[0]; var setTFilter = _tFilter[1];
+          var _tCatFilter = useState(""); var tCatFilter = _tCatFilter[0]; var setTCatFilter = _tCatFilter[1];
+          var _tSelected = useState(null); var tSelected = _tSelected[0]; var setTSelected = _tSelected[1];
+          var _tReply = useState(""); var tReply = _tReply[0]; var setTReply = _tReply[1];
+
+          var filtered = DEMO_TICKETS.filter(function(t){
+            if(tFilter && t.status !== tFilter) return false;
+            if(tCatFilter && t.category !== tCatFilter) return false;
+            return true;
+          });
+
+          var openCount = DEMO_TICKETS.filter(function(t){return t.status==="open"}).length;
+          var ipCount = DEMO_TICKETS.filter(function(t){return t.status==="in_progress"}).length;
+
+          return <div style={{ maxWidth:"100%", overflow:"hidden" }}>
+            <div style={{ display:"flex", flexDirection:mob?"column":"row", justifyContent:"space-between", alignItems:mob?"flex-start":"center", gap:mob?10:0, marginBottom:20 }}>
+              <div>
+                <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>Support Tickets</h2>
+                <p style={{ fontSize:13, color:"#71717a", marginTop:4 }}>{openCount+" open, "+ipCount+" in progress"}</p>
+              </div>
+              <div style={{ display:"flex", gap:8 }}>
+                <select value={tFilter} onChange={function(e){setTFilter(e.target.value)}} style={{ padding:"8px 12px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:12, outline:"none", cursor:"pointer" }}>
+                  <option value="">All status</option>
+                  <option value="open">Open</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="resolved">Resolved</option>
+                  <option value="closed">Closed</option>
+                </select>
+                <select value={tCatFilter} onChange={function(e){setTCatFilter(e.target.value)}} style={{ padding:"8px 12px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:12, outline:"none", cursor:"pointer" }}>
+                  <option value="">All categories</option>
+                  <option value="billing">Billing</option>
+                  <option value="referrals">Referrals</option>
+                  <option value="courses">Courses</option>
+                  <option value="technical">Technical</option>
+                  <option value="account">Account</option>
+                  <option value="general">General</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Stats row */}
+            <div style={{ display:"grid", gridTemplateColumns:mob?"repeat(2,1fr)":"repeat(4,1fr)", gap:10, marginBottom:16 }}>
+              {[["Open",openCount,"#f59e0b"],["In Progress",ipCount,"#3b82f6"],["Resolved",DEMO_TICKETS.filter(function(t){return t.status==="resolved"}).length,"#10b981"],["Closed",DEMO_TICKETS.filter(function(t){return t.status==="closed"}).length,"#71717a"]].map(function(s){return (
+                <div key={s[0]} onClick={function(){setTFilter(tFilter===s[0].toLowerCase().replace(" ","_")?"":s[0].toLowerCase().replace(" ","_"))}} style={{ background:"#131315", borderRadius:10, padding:"12px 14px", border:"1px solid "+(tFilter===s[0].toLowerCase().replace(" ","_")?"rgba(200,180,140,0.2)":"rgba(255,255,255,0.06)"), cursor:"pointer", textAlign:"center" }}>
+                  <div style={{ fontSize:20, fontWeight:600, color:s[2] }}>{s[1]}</div>
+                  <div style={{ fontSize:10, color:"#52525b", fontWeight:600 }}>{s[0]}</div>
+                </div>
+              )})}
+            </div>
+
+            {/* Ticket table */}
+            <div style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden" }}>
+              <div style={{ overflowX:"auto", WebkitOverflowScrolling:"touch" }}>
+                <table style={{ width:"100%", borderCollapse:"collapse", minWidth:mob?700:"auto" }}>
+                  <thead><tr>{["Ref","User","Subject","Category","Status","Priority","Assigned","Messages"].map(function(h){return <th key={h} style={{ padding:"10px 12px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#71717a", textAlign:"left", verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)", whiteSpace:"nowrap" }}>{h}</th>})}</tr></thead>
+                  <tbody>{filtered.length === 0 ? (
+                    <tr><td colSpan={8} style={{ padding:40, textAlign:"center", color:"#3f3f46", fontSize:13 }}>No tickets match this filter</td></tr>
+                  ) : filtered.map(function(t){
+                    var prioColors = { low:"#71717a", normal:"#d4d4d8", high:"#f59e0b", urgent:"#ef4444" };
+                    return (
+                      <tr key={t.id} onClick={function(){setTSelected(tSelected && tSelected.id===t.id ? null : t)}} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)", cursor:"pointer", background:tSelected && tSelected.id===t.id ? "rgba(200,180,140,0.06)" : "transparent" }}>
+                        <td style={{ padding:"10px 12px", verticalAlign:"middle" }}><code style={{ fontSize:10, color:"#52525b", background:"#0a0a0c", padding:"2px 6px", borderRadius:3 }}>{t.ref}</code></td>
+                        <td style={{ padding:"10px 12px", verticalAlign:"middle" }}><div style={{ fontSize:12, fontWeight:600, color:"#d4d4d8" }}>{t.user}</div><div style={{ fontSize:10, color:"#52525b" }}>{t.email}</div></td>
+                        <td style={{ padding:"10px 12px", fontSize:12, color:"#d4d4d8", verticalAlign:"middle", maxWidth:200 }}><div style={{ overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{t.subject}</div></td>
+                        <td style={{ padding:"10px 12px", verticalAlign:"middle" }}><span style={{ fontSize:10, padding:"3px 8px", borderRadius:4, background:"rgba(255,255,255,0.04)", color:"#71717a", fontWeight:600 }}>{t.category}</span></td>
+                        <td style={{ padding:"10px 12px", verticalAlign:"middle" }}><Badge s={t.status.replace("_"," ")}/></td>
+                        <td style={{ padding:"10px 12px", verticalAlign:"middle" }}><span style={{ fontSize:11, fontWeight:600, color:prioColors[t.priority]||"#71717a" }}>{t.priority}</span></td>
+                        <td style={{ padding:"10px 12px", fontSize:11, color:t.assignedTo?"#d4d4d8":"#3f3f46", verticalAlign:"middle" }}>{t.assignedTo||"\u2014"}</td>
+                        <td style={{ padding:"10px 12px", verticalAlign:"middle" }}><div style={{ display:"flex", alignItems:"center", gap:4 }}><Ico name="chat" size={12} color="#52525b" /><span style={{ fontSize:11, color:"#52525b" }}>{t.messages}</span></div></td>
+                      </tr>
+                    );
+                  })}</tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Selected ticket detail */}
+            {tSelected && (
+              <div style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(200,180,140,0.15)", marginTop:14, overflow:"hidden", animation:"scaleIn 0.3s ease-out" }}>
+                <div style={{ padding:mob?"14px":"20px 24px", borderBottom:"1px solid rgba(255,255,255,0.06)", display:"flex", justifyContent:"space-between", alignItems:mob?"flex-start":"center", flexDirection:mob?"column":"row", gap:mob?8:0 }}>
+                  <div>
+                    <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:4 }}>
+                      <code style={{ fontSize:10, color:"#52525b", background:"#0a0a0c", padding:"2px 8px", borderRadius:4 }}>{tSelected.ref}</code>
+                      <Badge s={tSelected.status.replace("_"," ")} />
+                      <span style={{ fontSize:10, fontWeight:600, color:({low:"#71717a",normal:"#d4d4d8",high:"#f59e0b",urgent:"#ef4444"})[tSelected.priority] }}>{tSelected.priority}</span>
+                    </div>
+                    <h3 style={{ fontSize:mob?15:17, fontWeight:700, color:"#d4d4d8", margin:0 }}>{tSelected.subject}</h3>
+                    <div style={{ fontSize:11, color:"#52525b", marginTop:4 }}>{tSelected.user+" \u00B7 "+tSelected.email+" \u00B7 "+tSelected.created}</div>
+                  </div>
+                  <div style={{ display:"flex", gap:6 }}>
+                    <select defaultValue={tSelected.status} onChange={function(e){flash("Status changed to "+e.target.value)}} style={{ padding:"6px 10px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:11, outline:"none", cursor:"pointer" }}>
+                      <option value="open">Open</option>
+                      <option value="in_progress">In Progress</option>
+                      <option value="resolved">Resolved</option>
+                      <option value="closed">Closed</option>
+                    </select>
+                    <button onClick={function(){flash("Assigned to you")}} style={{ padding:"6px 12px", borderRadius:6, border:"1px solid rgba(200,180,140,0.2)", background:"rgba(200,180,140,0.06)", fontSize:11, fontWeight:600, color:"rgb(200,180,140)", cursor:"pointer" }}>Assign to Me</button>
+                    <button onClick={function(){setTSelected(null)}} style={{ width:28, height:28, borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                  </div>
+                </div>
+
+                {/* Conversation thread */}
+                <div style={{ padding:mob?"14px":"20px 24px" }}>
+                  {[
+                    { sender:tSelected.user, role:"user", content:"Hi, I need help with: "+tSelected.subject, time:tSelected.created+", 10:15 AM" },
+                    tSelected.messages > 1 ? { sender:"Support Team", role:"admin", content:"Hi "+tSelected.user.split(" ")[0]+", thanks for reaching out. We're looking into this for you.", time:tSelected.created+", 2:30 PM" } : null,
+                    tSelected.messages > 2 ? { sender:tSelected.user, role:"user", content:"Any updates on this? It's been a few days.", time:tSelected.updated+", 9:00 AM" } : null,
+                  ].filter(Boolean).map(function(msg, i){
+                    var isUser = msg.role === "user";
+                    return (
+                      <div key={i} style={{ display:"flex", gap:12, marginBottom:14 }}>
+                        <div style={{ width:28, height:28, borderRadius:"50%", background:isUser?"rgba(200,180,140,0.15)":"rgba(59,130,246,0.15)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:9, fontWeight:700, color:isUser?"rgb(200,180,140)":"#3b82f6", flexShrink:0 }}>{isUser?tSelected.user.split(" ").map(function(n){return n[0]}).join(""):"DC"}</div>
+                        <div style={{ flex:1 }}>
+                          <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:2 }}>
+                            <span style={{ fontSize:12, fontWeight:600, color:isUser?"#d4d4d8":"#3b82f6" }}>{msg.sender}</span>
+                            <span style={{ fontSize:10, color:"#3f3f46" }}>{msg.time}</span>
+                          </div>
+                          <div style={{ fontSize:13, color:"#a1a1aa", lineHeight:1.7 }}>{msg.content}</div>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {tSelected.status !== "closed" && (
+                    <div style={{ display:"flex", gap:8, marginTop:8, paddingTop:12, borderTop:"1px solid rgba(255,255,255,0.04)" }}>
+                      <input value={tReply} onChange={function(e){setTReply(e.target.value)}} placeholder="Type admin reply..." style={{ flex:1, padding:"11px 16px", borderRadius:10, border:"1px solid rgba(255,255,255,0.08)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", fontFamily:"'Plus Jakarta Sans',sans-serif" }} />
+                      <button onClick={function(){if(tReply.trim()){flash("Reply sent to "+tSelected.user);setTReply("")}}} style={{ padding:"11px 20px", borderRadius:10, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:13, fontWeight:600, cursor:"pointer" }}>Reply</button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <div style={{ marginTop:12, fontSize:11, color:"#3f3f46", textAlign:"right" }}>{"Showing "+filtered.length+" of "+DEMO_TICKETS.length+" tickets"}</div>
+          </div>;
+        })()}
 
         {tab === "courses" && <div style={{ maxWidth:"100%", overflow:"hidden" }}>
           <div style={{ display:"flex", flexDirection:mob?"column":"row", justifyContent:"space-between", alignItems:mob?"flex-start":"center", gap:mob?10:0, marginBottom:20 }}>
@@ -3232,10 +4123,10 @@ function AdminPanel(props) {
             <button onClick={function(){setConfirmPayout(true)}} style={{ background:"rgb(200,180,140)", color:"#0a0a0c", border:"none", padding:mob?"8px 16px":"10px 22px", borderRadius:10, fontSize:mob?12:13, fontWeight:600, cursor:"pointer" }}>{"Process "+(sel.length>0?"("+sel.length+")":"All Queued")}</button>
           </div>
           <div style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden" }}>
-            <div style={{ overflowX:"auto", WebkitOverflowScrolling:"touch" }}><table style={{ width:"100%", borderCollapse:"collapse", minWidth:mob?650:"auto" }}>
+            <div style={{ overflowX:"auto", WebkitOverflowScrolling:"touch" }}><table style={{ width:"100%", borderCollapse:"collapse", minWidth:mob?750:"auto" }}>
               <thead><tr>
                 <th style={{ padding:"12px", width:40, verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)" }}><input type="checkbox" onChange={function(e){setSel(e.target.checked ? payouts.filter(function(p){return p.status==="queued"}).map(function(p){return p.id}) : [])}} /></th>
-                {["User","IBAN","Amount","Status","Date"].map(function(h){return <th key={h} style={{ padding:"12px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#71717a", textAlign:"left", verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>{h}</th>})}
+                {["User","IBAN","Amount","Status","Date","Actions"].map(function(h){return <th key={h} style={{ padding:"12px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#71717a", textAlign:"left", verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>{h}</th>})}
               </tr></thead>
               <tbody>{payouts.map(function(p){ return (
                 <tr key={p.id} style={{ borderBottom:"1px solid rgba(255,255,255,0.06)", background:sel.includes(p.id)?"rgba(200,180,140,0.12)":"transparent" }}>
@@ -3245,10 +4136,91 @@ function AdminPanel(props) {
                   <td style={{ padding:"12px", fontSize:14, fontWeight:500, color:"#d4d4d8", verticalAlign:"middle" }}>{"AED "+p.amount.toFixed(2)}</td>
                   <td style={{ padding:"12px", verticalAlign:"middle" }}><Badge s={p.status}/></td>
                   <td style={{ padding:"12px", fontSize:12, color:"#71717a", verticalAlign:"middle" }}>{p.date}</td>
+                  <td style={{ padding:"12px", verticalAlign:"middle" }}>
+                    <div style={{ display:"flex", gap:4 }}>
+                      {p.status === "failed" && <button onClick={function(e){e.stopPropagation(); setPayouts(function(prev){return prev.map(function(x){return x.id===p.id?Object.assign({},x,{status:"processing"}):x})}); setTimeout(function(){setPayouts(function(prev){return prev.map(function(x){return x.id===p.id?Object.assign({},x,{status:"completed"}):x})}); flash("Payout "+p.id+" retried successfully")},1200)}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(200,180,140,0.2)", background:"rgba(200,180,140,0.06)", fontSize:10, fontWeight:600, color:"rgb(200,180,140)", cursor:"pointer", whiteSpace:"nowrap" }}>Retry</button>}
+                      {(p.status === "failed" || p.status === "processing") && <button onClick={function(e){e.stopPropagation(); setPayouts(function(prev){return prev.map(function(x){return x.id===p.id?Object.assign({},x,{status:"completed"}):x})}); flash("Payout "+p.id+" marked as completed")}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(16,185,129,0.2)", background:"rgba(16,185,129,0.06)", fontSize:10, fontWeight:600, color:"#10b981", cursor:"pointer", whiteSpace:"nowrap" }}>Mark Done</button>}
+                      {p.status === "completed" && <span style={{ fontSize:10, color:"#3f3f46" }}>{"\u2014"}</span>}
+                      {p.status === "queued" && <span style={{ fontSize:10, color:"#3f3f46" }}>Pending</span>}
+                    </div>
+                  </td>
                 </tr>
               )})}</tbody>
             </table></div>
           </div>
+        </div>}
+
+        {tab === "audit" && <div style={{ maxWidth:"100%", overflow:"hidden" }}>
+          <div style={{ display:"flex", flexDirection:mob?"column":"row", justifyContent:"space-between", alignItems:mob?"flex-start":"center", gap:mob?10:0, marginBottom:20 }}>
+            <div>
+              <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>Audit Log</h2>
+              <p style={{ fontSize:13, color:"#71717a", marginTop:4 }}>All admin actions are recorded here</p>
+            </div>
+            <div style={{ display:"flex", gap:8, alignItems:"center" }}>
+              <select value={auditFilter} onChange={function(e){setAuditFilter(e.target.value)}} style={{ padding:"8px 12px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:12, outline:"none", cursor:"pointer" }}>
+                <option value="">All actions</option>
+                <option value="reset_password">Reset Password</option>
+                <option value="change_email">Change Email</option>
+                <option value="reassign_referrer">Reassign Referrer</option>
+                <option value="activate_user">Activate User</option>
+                <option value="deactivate_user">Deactivate User</option>
+                <option value="activate_subscription">Activate Subscription</option>
+                <option value="cancel_subscription">Cancel Subscription</option>
+                <option value="extend_subscription">Extend Subscription</option>
+                <option value="retry_payout">Retry Payout</option>
+                <option value="manual_payout_complete">Manual Payout</option>
+                <option value="update_payout_info">Update IBAN</option>
+                <option value="mark_lesson_complete">Mark Lesson</option>
+                <option value="trigger_payouts">Trigger Payouts</option>
+              </select>
+            </div>
+          </div>
+
+          <div style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden" }}>
+            <div style={{ overflowX:"auto", WebkitOverflowScrolling:"touch" }}>
+              <table style={{ width:"100%", borderCollapse:"collapse", minWidth:mob?700:"auto" }}>
+                <thead><tr>{["Time","Action","Admin","Target","Detail"].map(function(h){return <th key={h} style={{ padding:"12px 14px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#71717a", textAlign:"left", verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)", whiteSpace:"nowrap" }}>{h}</th>})}</tr></thead>
+                <tbody>
+                  {DEMO_AUDIT.filter(function(e){return !auditFilter || e.action === auditFilter}).map(function(entry){
+                    var actionColors = {
+                      reset_password:"#f59e0b", change_email:"#3b82f6", reassign_referrer:"#a78bfa",
+                      deactivate_user:"#ef4444", activate_user:"#10b981", cancel_subscription:"#ef4444",
+                      activate_subscription:"#10b981", extend_subscription:"#3b82f6",
+                      retry_payout:"rgb(200,180,140)", retry_payout_failed:"#ef4444",
+                      manual_payout_complete:"rgb(200,180,140)", update_payout_info:"rgb(200,180,140)",
+                      trigger_payouts:"#71717a", mark_lesson_complete:"#10b981", mark_lesson_incomplete:"#f59e0b",
+                    };
+                    var color = actionColors[entry.action] || "#71717a";
+                    var actionLabel = entry.action.replace(/_/g," ").replace(/\b\w/g, function(c){return c.toUpperCase()});
+                    var d = new Date(entry.created_at);
+                    var timeStr = d.toLocaleDateString("en-GB",{day:"numeric",month:"short"}) + " " + d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
+                    var targetName = "";
+                    if(entry.target_user_id){
+                      var found = ADMIN_USERS.find(function(u){return "u"+ADMIN_USERS.indexOf(u) === entry.target_user_id || u.email === (entry.detail||"").match(/for (\S+@\S+)/)?.[1]});
+                      targetName = found ? found.name : (entry.detail||"").match(/for (.+?)(?:\.|$)/)?.[1] || entry.target_user_id;
+                    }
+                    return (
+                      <tr key={entry.id} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}>
+                        <td style={{ padding:"10px 14px", fontSize:11, color:"#52525b", whiteSpace:"nowrap", verticalAlign:"middle" }}>{timeStr}</td>
+                        <td style={{ padding:"10px 14px", verticalAlign:"middle" }}>
+                          <span style={{ display:"inline-block", padding:"4px 10px", borderRadius:6, fontSize:10, fontWeight:700, background:color+"15", color:color, letterSpacing:0.3, lineHeight:1.4, textAlign:"center" }}>{actionLabel}</span>
+                        </td>
+                        <td style={{ padding:"10px 14px", fontSize:12, color:"#a1a1aa", verticalAlign:"middle", whiteSpace:"nowrap" }}>{entry.admin_email}</td>
+                        <td style={{ padding:"10px 14px", fontSize:12, color:"#d4d4d8", fontWeight:500, verticalAlign:"middle", whiteSpace:"nowrap" }}>{targetName || "\u2014"}</td>
+                        <td style={{ padding:"10px 14px", fontSize:11, color:"#71717a", verticalAlign:"middle", maxWidth:300 }}>
+                          <div style={{ overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{entry.detail}</div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            {DEMO_AUDIT.filter(function(e){return !auditFilter || e.action === auditFilter}).length === 0 && (
+              <div style={{ padding:40, textAlign:"center", color:"#3f3f46", fontSize:13 }}>No audit entries found for this filter.</div>
+            )}
+          </div>
+          <div style={{ marginTop:12, fontSize:11, color:"#3f3f46", textAlign:"right" }}>{"Showing "+DEMO_AUDIT.filter(function(e){return !auditFilter || e.action === auditFilter}).length+" of "+DEMO_AUDIT.length+" entries"}</div>
         </div>}
 
         {tab === "api" && <div style={{ maxWidth:"100%", overflow:"hidden" }}>
@@ -3628,6 +4600,8 @@ function TutoriiApp() {
       {page === "curriculum" && <><CursorGlow /><FloatingParticles /><CurriculumPage go={go} /></>}
       {page === "faq" && <><CursorGlow /><FloatingParticles /><FaqPage go={go} /></>}
       {page === "login" && <UserLogin go={go} />}
+      {page === "forgotPassword" && <ForgotPasswordPage go={go} />}
+      {page === "resetPassword" && <ResetPasswordPage go={go} />}
       {page === "subscribe" && <Subscribe go={go} refCode={refCode} />}
       {page === "userPortal" && <UserPortal go={go} courses={courses} setCourses={setCourses} chatOpen={chatOpen} setChatOpen={setChatOpen} chatMinimized={chatMinimized} setChatMinimized={setChatMinimized} chatMsgs={chatMsgs} setChatMsgs={setChatMsgs} chatInput={chatInput} setChatInput={setChatInput} chatLoading={chatLoading} setChatLoading={setChatLoading} />}
       {page === "adminLogin" && <AdminLogin go={go} />}
