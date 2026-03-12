@@ -3164,7 +3164,7 @@ function AdminPanel(props) {
 
   useEffect(function(){
     var token = localStorage.getItem("tutorii_access_token");
-    var API = (typeof import !== "undefined" && import.meta && import.meta.env && import.meta.env.VITE_API_URL) || "https://backend-tut-production.up.railway.app/api/v1";
+    var API = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
     Promise.allSettled([
       fetch(API + "/admin/users?limit=200", { headers:{ "Authorization":"Bearer "+token } }).then(function(r){return r.json()}),
       fetch(API + "/admin/dashboard", { headers:{ "Authorization":"Bearer "+token } }).then(function(r){return r.json()}),
