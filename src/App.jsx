@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth, AuthProvider } from "./AuthContext";
-import { users as usersApi, subscriptions as subscriptionsApi, courses as coursesApi, chat as chatApi, payouts as payoutsApi } from "./api";
+import { users as usersApi, subscriptions as subscriptionsApi, courses as coursesApi, chat as chatApi, payouts as payoutsApi, admin as adminApi } from "./api";
 import { LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 const PRICE = 95;
@@ -1711,7 +1711,15 @@ function UserPortal(props) {
     l1: referralStats && referralStats.level1 ? referralStats.level1.map(function(r){ return { name:r.full_name||r.email, status:r.subscription_status||"active", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
     l2: referralStats && referralStats.level2 ? referralStats.level2.map(function(r){ return { name:r.full_name||r.email, from:r.referred_by_name||"", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
     payouts: myPayouts.map(function(p){ return { date: p.created_at ? new Date(p.created_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", amount: p.amount_aed||0, status: p.status||"pending", ref: p.id||"" }; }),
-  } : USER;
+  } : {
+    name: authUser ? (authUser.full_name || authUser.email) : "Loading...",
+    email: authUser ? authUser.email : "",
+    phone: "", code: "", avatar: authUser ? (authUser.full_name||"U").split(" ").map(function(n){return n[0]}).join("").slice(0,2).toUpperCase() : "?",
+    status: "inactive", plan: "Tutorii Monthly", paymentMethod: "MamoPay",
+    joined: "", lastLogin: "", nextBilling: "N/A", referredBy: "Direct",
+    iban: "", ibanName: "", billing: [], earn: { total:"0.00", month:"0.00", pending:"0.00", paid:"0.00" },
+    l1: [], l2: [], payouts: [],
+  };
 
   var mob = useIsMobile();
 
@@ -3069,29 +3077,30 @@ function AdminLogin(props) {
   var _p = useState(""); var pass = _p[0]; var setPass = _p[1];
   var _er = useState(""); var error = _er[0]; var setError = _er[1];
   var _loading = useState(false); var loading = _loading[0]; var setLoading = _loading[1];
-  var { login, user } = useAuth();
+  var { login, logout } = useAuth();
+
+  // Always log out any existing session when admin login page loads
+  useEffect(function() {
+    logout();
+  }, []);
 
   async function handleLogin() {
     if (!email || !pass) { setError("Enter admin credentials"); return; }
     setLoading(true); setError("");
     try {
-      await login(email, pass);
-      // Check role after login
-      var stored = localStorage.getItem("tutorii_access_token");
-      // Role will be checked on next render via user object
+      var me = await login(email, pass);
+      if (me.role !== "admin") {
+        logout();
+        setError("This account does not have admin access.");
+        setLoading(false);
+        return;
+      }
+      go("adminPanel");
     } catch(e) {
       setError(e.message || "Invalid credentials");
-      setLoading(false);
-      return;
     }
     setLoading(false);
   }
-
-  // Redirect if logged in as admin
-  useEffect(function() {
-    if (user && user.role === "admin") { go("adminPanel"); return; }
-    if (user && user.role !== "admin") { setError("This account does not have admin access."); }
-  }, [user]);
 
 
   return (
@@ -3158,16 +3167,16 @@ function AdminPanel(props) {
   var _actionResult = useState(null); var actionResult = _actionResult[0]; var setActionResult = _actionResult[1];
   var _auditEntries = useState([]); var auditEntries = _auditEntries[0]; var setAuditEntries = _auditEntries[1];
   var _auditFilter = useState(""); var auditFilter = _auditFilter[0]; var setAuditFilter = _auditFilter[1];
-  var _adminUsers = useState(adminUsers); var adminUsers = _adminUsers[0]; var setAdminUsers = _adminUsers[1];
+  var _adminUsers = useState([]); var adminUsers = _adminUsers[0]; var setAdminUsers = _adminUsers[1];
   var _adminStats = useState(null); var adminStats = _adminStats[0]; var setAdminStats = _adminStats[1];
   var _adminLoading = useState(true); var adminLoading = _adminLoading[0]; var setAdminLoading = _adminLoading[1];
+  var { user: adminAuthUser } = useAuth();
 
   useEffect(function(){
-    var token = localStorage.getItem("tutorii_access_token");
-    var API = (typeof import !== "undefined" && import.meta && import.meta.env && import.meta.env.VITE_API_URL) || "https://backend-tut-production.up.railway.app/api/v1";
+    if (!adminAuthUser || adminAuthUser.role !== "admin") return;
     Promise.allSettled([
-      fetch(API + "/admin/users?limit=200", { headers:{ "Authorization":"Bearer "+token } }).then(function(r){return r.json()}),
-      fetch(API + "/admin/dashboard", { headers:{ "Authorization":"Bearer "+token } }).then(function(r){return r.json()}),
+      adminApi.users(),
+      adminApi.dashboard(),
     ]).then(function(results){
       if(results[0].status==="fulfilled" && Array.isArray(results[0].value)){
         setAdminUsers(results[0].value.map(function(u){
@@ -3183,7 +3192,7 @@ function AdminPanel(props) {
       if(results[1].status==="fulfilled") setAdminStats(results[1].value);
       setAdminLoading(false);
     });
-  }, []);
+  }, [adminAuthUser]);
 
   var active = adminUsers.filter(function(u){return u.status==="active"}).length;
   var mrr = adminStats ? adminStats.total_revenue_aed : active * PRICE;
@@ -3286,23 +3295,7 @@ function AdminPanel(props) {
 
   function clearActionPanel() { setActionPanel(null); setActionResult(null); setTempPass(""); setNewEmail(""); setNewRefCode(""); setNewIban(""); setNewIbanName(""); setExtendDays("7"); }
 
-  // Demo audit log entries
-  var DEMO_AUDIT = [
-    {id:1,action:"reset_password",admin_email:"david@tutorii.com",target_user_id:"u2",detail:"Password force-reset for aisha@example.com",created_at:"2026-03-10T14:22:00Z"},
-    {id:2,action:"change_email",admin_email:"david@tutorii.com",target_user_id:"u5",detail:"Email changed: old@example.com → fatima@example.com",created_at:"2026-03-10T11:05:00Z"},
-    {id:3,action:"deactivate_user",admin_email:"david@tutorii.com",target_user_id:"u5",detail:"Account fatima@example.com deactivated",created_at:"2026-03-09T16:30:00Z"},
-    {id:4,action:"activate_user",admin_email:"david@tutorii.com",target_user_id:"u5",detail:"Account fatima@example.com reactivated",created_at:"2026-03-09T17:01:00Z"},
-    {id:5,action:"reassign_referrer",admin_email:"david@tutorii.com",target_user_id:"u3",detail:"Referrer changed for carlos@example.com: null → David Chen",created_at:"2026-03-08T09:15:00Z"},
-    {id:6,action:"extend_subscription",admin_email:"david@tutorii.com",target_user_id:"u2",detail:"Extended by 7 days for aisha@example.com",created_at:"2026-03-07T12:44:00Z"},
-    {id:7,action:"manual_payout_complete",admin_email:"david@tutorii.com",target_user_id:"u2",detail:"Manually completed: AED 456.00, ref: BANK-TXN-8812",created_at:"2026-03-06T10:20:00Z"},
-    {id:8,action:"retry_payout",admin_email:"david@tutorii.com",target_user_id:"u3",detail:"Payout retried successfully: AED 304.00",created_at:"2026-03-05T15:33:00Z"},
-    {id:9,action:"update_payout_info",admin_email:"david@tutorii.com",target_user_id:"u4",detail:"IBAN changed: ...3456 → ...9012",created_at:"2026-03-04T08:55:00Z"},
-    {id:10,action:"cancel_subscription",admin_email:"david@tutorii.com",target_user_id:"u5",detail:"Subscription cancelled by admin for fatima@example.com",created_at:"2026-03-03T13:10:00Z"},
-    {id:11,action:"activate_subscription",admin_email:"david@tutorii.com",target_user_id:"u6",detail:"New subscription created and activated for maria@example.com",created_at:"2026-03-02T11:28:00Z"},
-    {id:12,action:"trigger_payouts",admin_email:"david@tutorii.com",target_user_id:null,detail:"Manual payout run triggered",created_at:"2026-03-01T09:00:00Z"},
-    {id:13,action:"mark_lesson_complete",admin_email:"david@tutorii.com",target_user_id:"u2",detail:"Lesson 'Understanding UAE Culture' marked complete",created_at:"2026-02-28T14:50:00Z"},
-    {id:14,action:"reset_password",admin_email:"david@tutorii.com",target_user_id:"u4",detail:"Password force-reset for priya@example.com",created_at:"2026-02-27T16:12:00Z"},
-  ];
+  var DEMO_AUDIT = [];
 
   var admSide = [["dash","chart","Dashboard"],["users","users","Users"],["tickets","chat","Tickets"],["courses","book","Courses"],["payouts","dollar","Payouts"],["audit","shield","Audit Log"],["api","gear","API Config"]];
 
@@ -3323,7 +3316,7 @@ function AdminPanel(props) {
           )})}
         </nav>
         <div style={{ padding:"12px 16px", borderTop:"1px solid rgba(255,255,255,0.06)" }}>
-          <div style={{ fontSize:12, fontWeight:600, color:"#fff", marginBottom:8 }}>David Chen</div>
+          <div style={{ fontSize:12, fontWeight:600, color:"#fff", marginBottom:8 }}>{adminAuthUser ? (adminAuthUser.full_name || adminAuthUser.email) : "Admin"}</div>
           <button onClick={function(){go("landing")}} style={{ width:"100%", padding:"8px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#71717a", fontSize:12, cursor:"pointer" }}>Log Out</button>
         </div>
       </div>}
@@ -3914,14 +3907,7 @@ function AdminPanel(props) {
         </div>}
 
         {tab === "tickets" && (function(){
-          var DEMO_TICKETS = [
-            { id:"T1", ref:"TK-8291", user:"Aisha Khan", email:"aisha@example.com", subject:"Payout not received for February", category:"billing", status:"in_progress", priority:"high", created:"Feb 26", updated:"Mar 2", messages:3, assignedTo:"David Chen" },
-            { id:"T2", ref:"TK-8315", user:"Carlos Reyes", email:"carlos@example.com", subject:"Cannot access module 3 lessons", category:"courses", status:"open", priority:"normal", created:"Mar 1", updated:"Mar 1", messages:1, assignedTo:null },
-            { id:"T3", ref:"TK-8320", user:"Priya Sharma", email:"priya@example.com", subject:"Referral code not working for friend", category:"referrals", status:"open", priority:"normal", created:"Mar 3", updated:"Mar 3", messages:2, assignedTo:null },
-            { id:"T4", ref:"TK-8340", user:"Aisha Khan", email:"aisha@example.com", subject:"Course video not loading on mobile", category:"technical", status:"resolved", priority:"normal", created:"Mar 5", updated:"Mar 7", messages:4, assignedTo:"David Chen" },
-            { id:"T5", ref:"TK-8402", user:"Maria Lopez", email:"maria@example.com", subject:"Need to change my registered email", category:"account", status:"open", priority:"high", created:"Mar 8", updated:"Mar 8", messages:1, assignedTo:null },
-            { id:"T6", ref:"TK-8410", user:"Carlos Reyes", email:"carlos@example.com", subject:"Commission missing for February referral", category:"referrals", status:"closed", priority:"normal", created:"Mar 9", updated:"Mar 10", messages:6, assignedTo:"David Chen" },
-          ];
+          var DEMO_TICKETS = [];
           var _tFilter = useState(""); var tFilter = _tFilter[0]; var setTFilter = _tFilter[1];
           var _tCatFilter = useState(""); var tCatFilter = _tCatFilter[0]; var setTCatFilter = _tCatFilter[1];
           var _tSelected = useState(null); var tSelected = _tSelected[0]; var setTSelected = _tSelected[1];
@@ -4336,22 +4322,10 @@ function AdminPanel(props) {
                 if (!cae.trim()) { setCaResult({ok:false, msg:"Enter an email address"}); return; }
                 setCaLoading(true); setCaResult(null);
                 try {
-                  // Find user by email first
-                  const API = import.meta.env.VITE_API_URL || "/api/v1";
-                  const token = localStorage.getItem("tutorii_access_token");
-                  const usersRes = await fetch(API + "/admin/users?limit=200", {
-                    headers: { "Authorization": "Bearer " + token }
-                  });
-                  const users = await usersRes.json();
+                  const users = await adminApi.users();
                   const found = users.find(function(u){ return u.email.toLowerCase() === cae.toLowerCase().trim(); });
                   if (!found) { setCaResult({ok:false, msg:"No account found with that email. They must register first."}); setCaLoading(false); return; }
-                  // Promote to admin
-                  const roleRes = await fetch(API + "/admin/users/" + found.id + "/role", {
-                    method: "PATCH",
-                    headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
-                    body: JSON.stringify({ role: "admin" })
-                  });
-                  if (!roleRes.ok) throw new Error("Failed to update role");
+                  await adminApi.updateRole(found.id, "admin");
                   setCaResult({ok:true, msg:"✓ " + found.full_name + " (" + found.email + ") is now an admin."});
                   setCae(""); setCap("");
                 } catch(e) {
@@ -4738,7 +4712,9 @@ function TutoriiApp() {
   var courses = _courses[0]; var setCourses = _courses[1];
   var _chatOpen = useState(false); var chatOpen = _chatOpen[0]; var setChatOpen = _chatOpen[1];
   var _chatMinimized = useState(false); var chatMinimized = _chatMinimized[0]; var setChatMinimized = _chatMinimized[1];
-  var _chatMsgs = useState([{role:"assistant",content:"Hi "+USER.name.split(" ")[0]+"! I'm your Tutorii support assistant. I have access to your account details, referrals, earnings, and course progress. How can I help you today?"}]);
+  var { user: authUser } = useAuth();
+  var firstName = authUser && authUser.full_name ? authUser.full_name.split(" ")[0] : "there";
+  var _chatMsgs = useState([{role:"assistant",content:"Hi "+firstName+"! I'm your Tutorii support assistant. I have access to your account details, referrals, earnings, and course progress. How can I help you today?"}]);
   var chatMsgs = _chatMsgs[0]; var setChatMsgs = _chatMsgs[1];
   var _chatInput = useState(""); var chatInput = _chatInput[0]; var setChatInput = _chatInput[1];
   var _chatLoading = useState(false); var chatLoading = _chatLoading[0]; var setChatLoading = _chatLoading[1];
