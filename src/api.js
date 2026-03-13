@@ -89,6 +89,7 @@ export const users = {
   me: () => api.get("/users/me"),
   update: (data) => api.patch("/users/me", data),
   referrals: () => api.get("/users/me/referrals"),
+  referralList: () => api.get("/users/me/referrals/list"),
 };
 
 // ── Subscriptions ──

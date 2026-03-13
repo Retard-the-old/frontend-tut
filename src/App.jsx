@@ -1660,6 +1660,7 @@ function UserPortal(props) {
   var { user: authUser, logout } = useAuth();
   var _realUser = useState(null); var realUser = _realUser[0]; var setRealUser = _realUser[1];
   var _referralStats = useState(null); var referralStats = _referralStats[0]; var setReferralStats = _referralStats[1];
+  var _referralList = useState(null); var referralList = _referralList[0]; var setReferralList = _referralList[1];
   var _myCommissions = useState([]); var myCommissions = _myCommissions[0]; var setMyCommissions = _myCommissions[1];
   var _myPayouts = useState([]); var myPayouts = _myPayouts[0]; var setMyPayouts = _myPayouts[1];
   var _mySub = useState(null); var mySub = _mySub[0]; var setMySub = _mySub[1];
@@ -1672,6 +1673,7 @@ function UserPortal(props) {
       payoutsApi.mine(),
       subscriptionsApi.me(),
       coursesApi.list(),
+      usersApi.referralList(),
     ]).then(function(results){
       if(results[0].status==="fulfilled") setRealUser(results[0].value);
       if(results[1].status==="fulfilled") setReferralStats(results[1].value);
@@ -1681,6 +1683,7 @@ function UserPortal(props) {
       if(results[5].status==="fulfilled" && results[5].value && results[5].value.length > 0) {
         setCourses(results[5].value.map(function(c){ return { id:c.id, module:c.title, icon:c.icon||"book", lessons: (c.lessons||[]).map(function(l){ return { id:l.id, title:l.title, dur:l.duration_minutes?(l.duration_minutes+" min"):"10 min", done:l.completed||false }; }) }; }));
       }
+      if(results[6].status==="fulfilled") setReferralList(results[6].value);
       setDashLoading(false);
     });
   }, []);
@@ -1708,8 +1711,8 @@ function UserPortal(props) {
       pending: parseFloat(myCommissions.filter(function(c){return c.status==="pending"}).reduce(function(s,c){return s+(c.amount_aed||0)},0).toFixed(2)),
       paid: parseFloat(myPayouts.filter(function(p){return p.status==="completed"}).reduce(function(s,p){return s+(p.amount_aed||0)},0).toFixed(2)),
     },
-    l1: referralStats && Array.isArray(referralStats.level1) ? referralStats.level1.map(function(r){ return { name:r.full_name||r.email, status:r.subscription_status||"active", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
-    l2: referralStats && Array.isArray(referralStats.level2) ? referralStats.level2.map(function(r){ return { name:r.full_name||r.email, from:r.referred_by_name||"", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
+    l1: referralList && Array.isArray(referralList.level1) ? referralList.level1.map(function(r){ return { name:r.name||r.email, status:r.subscription_status||"inactive", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
+    l2: referralList && Array.isArray(referralList.level2) ? referralList.level2.map(function(r){ return { name:r.name||r.email, from:r.referred_by_name||"", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
     payouts: myPayouts.map(function(p){ return { date: p.created_at ? new Date(p.created_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", amount: p.amount_aed||0, status: p.status||"pending", ref: p.id||"" }; }),
   } : {
     name: authUser ? (authUser.full_name || authUser.email) : "Loading...",
