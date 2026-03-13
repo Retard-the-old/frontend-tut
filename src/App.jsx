@@ -3493,17 +3493,17 @@ function AdminPanel(props) {
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
             <div>
               <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>Analytics Dashboard</h2>
-              <p style={{ fontSize:mob?11:12, color:"#71717a", marginTop:4 }}>Last 30 days - Feb 1 to Mar 1, 2026</p>
+              <p style={{ fontSize:mob?11:12, color:"#71717a", marginTop:4 }}>Live data from your database</p>
             </div>
           </div>
 
           {/* KPI CARDS ROW 1 */}
           <div style={{ display:"grid", gridTemplateColumns:mob?"1fr 1fr":"repeat(4, 1fr)", gap:mob?10:12, marginBottom:16, alignItems:"stretch" }}>
             {[
-              ["dollar","Monthly Revenue","AED 6,840","+12.6% vs last month","#059669","#064e3b"],
-              ["chart","Net Profit","AED 4,104","60% margin","rgb(200,180,140)","rgba(200,180,140,0.12)"],
-              ["users","Total Users","86","+48 this month","#8b5cf6","#2e1065"],
-              ["shield","Active Subscribers","72","83.7% retention","#f59e0b","#451a03"],
+              ["dollar","Total Revenue","AED "+(adminStats?adminStats.total_revenue_aed.toFixed(2):"—"),"All time payments","#059669","#064e3b"],
+              ["users","Total Users",adminStats?adminStats.total_users:"—","Registered accounts","#8b5cf6","#2e1065"],
+              ["shield","Active Subscribers",adminStats?adminStats.active_subscribers:"—","Current active subs","#f59e0b","#451a03"],
+              ["book","Total Courses",adminStats?adminStats.total_courses:"—","Published modules","rgb(200,180,140)","rgba(200,180,140,0.12)"],
             ].map(function(c){ return (
               <div key={c[1]} style={{ background:"linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)", borderRadius:14, padding:mob?"12px 10px":"18px 20px", border:"1px solid rgba(255,255,255,0.06)", display:"flex", alignItems:"center", gap:mob?8:14, boxSizing:"border-box", overflow:"hidden" }}>
                 <div style={{ width:mob?30:38, height:mob?30:38, borderRadius:mob?8:10, background:"rgba(200,180,140,0.08)", border:"1px solid rgba(200,180,140,0.12)", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0, flexShrink:0 }}><Ico name={c[0]} size={16} color="rgb(200,180,140)" /></div>
@@ -3519,10 +3519,10 @@ function AdminPanel(props) {
           {/* KPI CARDS ROW 2 */}
           <div style={{ display:"grid", gridTemplateColumns:mob?"1fr 1fr":"repeat(4, 1fr)", gap:mob?10:12, marginBottom:20, alignItems:"stretch" }}>
             {[
-              ["dollar","Commissions Paid","AED 2,736","40% of revenue","#f59e0b"],
-              ["bank","Pending Payouts","AED 571","2 queued","#d97706"],
-              ["refresh","Churn Rate","4.9%","Down from 8.2% Oct","#10b981"],
-              ["link","Avg Referrals/User","1.4","Top: 46 (David C.)","#8b5cf6"],
+              ["dollar","Commissions Pending","AED "+(adminStats?adminStats.pending_commissions_aed.toFixed(2):"—"),"Awaiting payout","#f59e0b"],
+              ["bank","Total Paid Out","AED "+(adminStats?adminStats.total_payouts_aed.toFixed(2):"—"),"Completed payouts","#d97706"],
+              ["link","Avg Referrals/User",(adminUsers.length>0?(adminUsers.reduce(function(s,u){return s+u.l1},0)/adminUsers.length).toFixed(1):"—"),"L1 referrals per user","#8b5cf6"],
+              ["refresh","Active Rate",(adminUsers.length>0?((adminUsers.filter(function(u){return u.status==="active"}).length/adminUsers.length)*100).toFixed(1)+"%":"—"),"Subscribers / total users","#10b981"],
             ].map(function(c){ return (
               <div key={c[1]} style={{ background:"linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)", borderRadius:14, padding:mob?"12px 10px":"18px 20px", border:"1px solid rgba(255,255,255,0.06)", display:"flex", alignItems:"center", gap:mob?8:14, boxSizing:"border-box", overflow:"hidden" }}>
                 <div style={{ width:mob?30:38, height:mob?30:38, borderRadius:mob?8:10, background:"rgba(200,180,140,0.08)", border:"1px solid rgba(200,180,140,0.12)", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0, flexShrink:0 }}><Ico name={c[0]} size={16} color="rgb(200,180,140)" /></div>
