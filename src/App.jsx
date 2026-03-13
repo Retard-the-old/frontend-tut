@@ -1776,6 +1776,19 @@ function UserPortal(props) {
   var showOnboard = _showOnboard[0]; var setShowOnboard = _showOnboard[1];
   var _showCancel = useState(false); var showCancel = _showCancel[0]; var setShowCancel = _showCancel[1];
   var _cancelled = useState(false); var cancelled = _cancelled[0]; var setCancelled = _cancelled[1];
+  var _cancelling = useState(false); var cancelling = _cancelling[0]; var setCancelling = _cancelling[1];
+  var _cancelErr = useState(""); var cancelErr = _cancelErr[0]; var setCancelErr = _cancelErr[1];
+
+  async function doCancel() {
+    setCancelling(true); setCancelErr("");
+    try {
+      await subscriptionsApi.cancel();
+      setCancelled(true); setShowCancel(false);
+    } catch(e) {
+      setCancelErr(e.message || "Failed to cancel. Please try again.");
+      setCancelling(false);
+    }
+  }
   var _chartRange = useState("all"); var chartRange = _chartRange[0]; var setChartRange = _chartRange[1];
   var _dashLoading = useState(true); var dashLoading = _dashLoading[0]; var setDashLoading = _dashLoading[1];
   // Support ticket state
@@ -2880,9 +2893,10 @@ function UserPortal(props) {
               <div>{"• Pending earnings below AED 50 are forfeited"}</div>
               <div>{"• Course progress is saved — you can re-subscribe anytime"}</div>
             </div>
+            {cancelErr && <div style={{ padding:"10px 14px", borderRadius:8, background:"rgba(248,113,113,0.08)", border:"1px solid rgba(248,113,113,0.2)", color:"#f87171", fontSize:13, marginBottom:14 }}>{cancelErr}</div>}
             <div style={{ display:"flex", gap:10 }}>
               <button onClick={function(){setShowCancel(false)}} style={{ flex:1, padding:"11px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", background:"transparent", color:"#d4d4d8", fontSize:13, fontWeight:600, cursor:"pointer" }}>Keep Subscription</button>
-              <button onClick={function(){setCancelled(true);setShowCancel(false)}} style={{ flex:1, padding:"11px", borderRadius:10, border:"none", background:"#dc2626", color:"#fff", fontSize:13, fontWeight:600, cursor:"pointer" }}>Yes, Cancel</button>
+              <button onClick={doCancel} disabled={cancelling} style={{ flex:1, padding:"11px", borderRadius:10, border:"none", background:"#dc2626", color:"#fff", fontSize:13, fontWeight:600, cursor:"pointer", opacity:cancelling?0.6:1 }}>{cancelling ? "Cancelling..." : "Yes, Cancel"}</button>
             </div>
           </div>
         </div>
