@@ -133,4 +133,6 @@ export const admin = {
   users: (limit=200) => api.get("/admin/users?limit="+limit),
   dashboard: () => api.get("/admin/dashboard"),
   updateRole: (userId, role) => api.patch("/admin/users/"+userId+"/role", { role }),
+  payouts: (limit=200) => api.get("/admin/payouts?limit="+limit),
+  triggerPayouts: () => api.post("/admin/payouts/trigger"),
 };

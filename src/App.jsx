@@ -3280,7 +3280,7 @@ function AdminPanel(props) {
   var mob = useIsMobile();
   var _tab = useState("dash"); var tab = _tab[0]; var setTab = _tab[1];
   var _search = useState(""); var search = _search[0]; var setSearch = _search[1];
-  var _pay = useState(INIT_PAYOUTS); var payouts = _pay[0]; var setPayouts = _pay[1];
+  var _pay = useState([]); var payouts = _pay[0]; var setPayouts = _pay[1];
   var _sel = useState([]); var sel = _sel[0]; var setSel = _sel[1];
   var _toast = useState(null); var toast = _toast[0]; var setToast = _toast[1];
   var _em = useState(null); var editingModule = _em[0]; var setEditingModule = _em[1];
@@ -3319,6 +3319,7 @@ function AdminPanel(props) {
     Promise.allSettled([
       adminApi.users(),
       adminApi.dashboard(),
+      adminApi.payouts(),
     ]).then(function(results){
       if(results[0].status==="fulfilled" && Array.isArray(results[0].value)){
         setAdminUsers(results[0].value.map(function(u){
@@ -3332,6 +3333,7 @@ function AdminPanel(props) {
         }));
       }
       if(results[1].status==="fulfilled") setAdminStats(results[1].value);
+      if(results[2].status==="fulfilled" && Array.isArray(results[2].value)) setPayouts(results[2].value);
       setAdminLoading(false);
     });
   }, [adminAuthUser]);
@@ -3342,10 +3344,17 @@ function AdminPanel(props) {
 
   function flash(msg) { setToast(msg); setTimeout(function(){setToast(null)},3000); }
 
-  function processPayouts() {
-    setPayouts(function(p){return p.map(function(x){return (sel.includes(x.id)||(sel.length===0&&x.status==="queued")) ? Object.assign({},x,{status:"processing"}) : x})});
+  async function processPayouts() {
+    try {
+      var result = await adminApi.triggerPayouts();
+      flash("Payouts processed: " + (result.payouts_processed || 0) + " sent to MamoPay");
+      // Refresh payout list
+      var updated = await adminApi.payouts();
+      if (Array.isArray(updated)) setPayouts(updated);
+    } catch(e) {
+      flash("Error: " + (e.message || "Failed to process payouts"));
+    }
     setSel([]);
-    flash("Payouts submitted to MamoPay!");
   }
 
   function addModule() {
@@ -3677,23 +3686,20 @@ function AdminPanel(props) {
               </div>
               <div style={{ width:"100%" }}>
               <table style={{ width:"100%", borderCollapse:"collapse" }}>
-                <thead><tr>{(mob?["#","Name","L1","L2","Tot","Earned"]:["#","Name","Level 1","Level 2","Total","Earned","Conv %"]).map(function(h){return <th key={h} style={{ padding:mob?"6px 5px":"8px 8px", fontSize:9, fontWeight:700, textTransform:"uppercase", letterSpacing:0.5, color:"#71717a", textAlign:"left", verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)", whiteSpace:"nowrap" }}>{h}</th>})}</tr></thead>
-                <tbody>{REFERRAL_LEADERS.map(function(r,i){ return (
-                  <tr key={r.name} style={{ borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
+                <thead><tr>{(mob?["#","Name","L1","L2","Tot","Earned"]:["#","Name","Level 1","Level 2","Total","Earned","Status"]).map(function(h){return <th key={h} style={{ padding:mob?"6px 5px":"8px 8px", fontSize:9, fontWeight:700, textTransform:"uppercase", letterSpacing:0.5, color:"#71717a", textAlign:"left", verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)", whiteSpace:"nowrap" }}>{h}</th>})}</tr></thead>
+                <tbody>{[...adminUsers].sort(function(a,b){return (b.l1+b.l2)-(a.l1+a.l2)}).slice(0,10).map(function(r,i){ return (
+                  <tr key={r.name+i} style={{ borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
                     <td style={{ padding:mob?"7px 5px":"10px 8px", verticalAlign:"middle" }}>
                       <div style={{ width:mob?18:22, height:mob?18:22, borderRadius:"50%", background:i===0?"#f59e0b":i===1?"#9ca3af":i===2?"#b45309":"rgba(255,255,255,0.06)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:mob?8:10, fontWeight:700, color:i<3?"#0a0a0c":"#9ca3af" }}>{i+1}</div>
                     </td>
                     <td style={{ padding:mob?"7px 5px":"10px 8px", fontSize:mob?11:12, fontWeight:600, color:"#d4d4d8", verticalAlign:"middle", whiteSpace:"nowrap" }}>{r.name}</td>
                     <td style={{ padding:mob?"7px 5px":"10px 8px", fontSize:mob?11:12, color:"#d4d4d8", fontWeight:600, verticalAlign:"middle" }}>{r.l1}</td>
                     <td style={{ padding:mob?"7px 5px":"10px 8px", fontSize:mob?11:12, color:"#8b5cf6", fontWeight:600, verticalAlign:"middle" }}>{r.l2}</td>
-                    <td style={{ padding:mob?"7px 5px":"10px 8px", fontSize:mob?12:13, fontWeight:700, color:"#fff", verticalAlign:"middle" }}>{r.total}</td>
-                    <td style={{ padding:mob?"7px 5px":"10px 8px", fontSize:mob?11:12, fontWeight:500, color:"#d4d4d8", verticalAlign:"middle", whiteSpace:"nowrap" }}>{"AED "+r.earned.toFixed(2)}</td>
+                    <td style={{ padding:mob?"7px 5px":"10px 8px", fontSize:mob?12:13, fontWeight:700, color:"#fff", verticalAlign:"middle" }}>{r.l1+r.l2}</td>
+                    <td style={{ padding:mob?"7px 5px":"10px 8px", fontSize:mob?11:12, fontWeight:500, color:"#d4d4d8", verticalAlign:"middle", whiteSpace:"nowrap" }}>{"AED "+(r.earned||0).toFixed(2)}</td>
                     {!mob && <td style={{ padding:"10px 8px", verticalAlign:"middle" }}>
                       <div style={{ display:"flex", alignItems:"center", gap:6 }}>
-                        <div style={{ width:40, height:5, borderRadius:3, background:"rgba(255,255,255,0.06)" }}>
-                          <div style={{ height:5, borderRadius:3, background:r.conv>=70?"#059669":"#f59e0b", width:r.conv+"%" }} />
-                        </div>
-                        <span style={{ fontSize:10, color:"#52525b" }}>{r.conv+"%"}</span>
+                        <Badge s={r.status} />
                       </div>
                     </td>}
                   </tr>
