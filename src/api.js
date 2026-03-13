@@ -135,4 +135,10 @@ export const admin = {
   updateRole: (userId, role) => api.patch("/admin/users/"+userId+"/role", { role }),
   payouts: (limit=200) => api.get("/admin/payouts?limit="+limit),
   triggerPayouts: () => api.post("/admin/payouts/trigger"),
+  createCourse: (data) => api.post("/courses/", data),
+  deleteCourse: (id) => api.delete("/courses/"+id),
+  getLessons: (courseId) => api.get("/courses/"+courseId+"/lessons"),
+  createLesson: (courseId, data) => api.post("/courses/"+courseId+"/lessons", data),
+  updateLesson: (courseId, lessonId, data) => api.patch("/courses/"+courseId+"/lessons/"+lessonId, data),
+  deleteLesson: (courseId, lessonId) => api.delete("/courses/"+courseId+"/lessons/"+lessonId),
 };

@@ -1617,6 +1617,40 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
 }
 
 // ═════════════════════════════════════════
+// LESSON EDIT PANEL (Admin)
+// ═════════════════════════════════════════
+function LessonEditPanel(props) {
+  var lesson = props.lesson;
+  var _title = useState(lesson.title||""); var title = _title[0]; var setTitle = _title[1];
+  var _dur = useState((lesson.dur||"10 min").replace(" min","")); var dur = _dur[0]; var setDur = _dur[1];
+  var _videoUrl = useState(lesson.video_url||""); var videoUrl = _videoUrl[0]; var setVideoUrl = _videoUrl[1];
+  var _notes = useState(lesson.notes||""); var notes = _notes[0]; var setNotes = _notes[1];
+  var inputStyle = { width:"100%", padding:"8px 12px", borderRadius:6, border:"1px solid rgba(255,255,255,0.1)", background:"#131315", color:"#fff", fontSize:13, outline:"none", boxSizing:"border-box", fontFamily:"inherit" };
+  return (
+    <div style={{ padding:"16px 20px 16px 56px", background:"rgba(200,180,140,0.04)", borderBottom:"1px solid rgba(255,255,255,0.04)", borderTop:"1px solid rgba(200,180,140,0.08)" }}>
+      <div style={{ fontSize:11, fontWeight:700, color:"rgb(200,180,140)", letterSpacing:0.8, marginBottom:12, textTransform:"uppercase" }}>Edit Lesson</div>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 80px", gap:8, marginBottom:8 }}>
+        <input value={title} onChange={function(e){setTitle(e.target.value)}} placeholder="Lesson title" style={inputStyle} />
+        <input value={dur} onChange={function(e){setDur(e.target.value)}} placeholder="Mins" style={Object.assign({},inputStyle,{width:"100%"})} />
+      </div>
+      <div style={{ marginBottom:8 }}>
+        <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>VIMEO URL</label>
+        <input value={videoUrl} onChange={function(e){setVideoUrl(e.target.value)}} placeholder="https://vimeo.com/123456789" style={inputStyle} />
+        {videoUrl && <div style={{ fontSize:10, color:"#10b981", marginTop:4 }}>✓ Vimeo URL set</div>}
+      </div>
+      <div style={{ marginBottom:12 }}>
+        <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>LESSON NOTES</label>
+        <textarea value={notes} onChange={function(e){setNotes(e.target.value)}} placeholder="Notes or description shown to students" rows={3} style={Object.assign({},inputStyle,{resize:"vertical"})} />
+      </div>
+      <div style={{ display:"flex", gap:8, justifyContent:"flex-end" }}>
+        <button onClick={props.onClose} style={{ padding:"7px 14px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Cancel</button>
+        <button onClick={function(){ props.onSave({ title:title.trim(), duration_minutes:parseInt(dur)||10, video_url:videoUrl.trim()||null, content_md:notes.trim()||null }); }} style={{ padding:"7px 18px", borderRadius:6, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:12, fontWeight:600, cursor:"pointer" }}>Save</button>
+      </div>
+    </div>
+  );
+}
+
+// ═════════════════════════════════════════
 // SETTINGS TAB
 // ═════════════════════════════════════════
 function SettingsTab(props) {
@@ -3289,7 +3323,7 @@ function AdminPanel(props) {
   var _sam = useState(false); var showAddModule = _sam[0]; var setShowAddModule = _sam[1];
   var _sal = useState(null); var showAddLesson = _sal[0]; var setShowAddLesson = _sal[1];
   var _nm = useState({module:"",icon:"book"}); var newModule = _nm[0]; var setNewModule = _nm[1];
-  var _nl = useState({title:"",dur:"10 min"}); var newLesson = _nl[0]; var setNewLesson = _nl[1];
+  var _nl = useState({title:"",dur:"10",videoUrl:"",notes:""}); var newLesson = _nl[0]; var setNewLesson = _nl[1];
   var _cd = useState(null); var confirmDelete = _cd[0]; var setConfirmDelete = _cd[1];
   var _mm = useState(null); var manageMedia = _mm[0]; var setManageMedia = _mm[1];
   var _confirmPay = useState(false); var confirmPayout = _confirmPay[0]; var setConfirmPayout = _confirmPay[1];
@@ -3357,42 +3391,77 @@ function AdminPanel(props) {
     setSel([]);
   }
 
-  function addModule() {
+  async function addModule() {
     if (!newModule.module.trim()) return;
-    var id = "c" + Date.now();
-    setCourses(function(p){return p.concat([{id:id, module:newModule.module, icon:newModule.icon, lessons:[]}])});
-    setNewModule({module:"",icon:"book"});
-    setShowAddModule(false);
-    flash("Module added!");
+    try {
+      var slug = newModule.module.toLowerCase().replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"");
+      var created = await adminApi.createCourse({ title: newModule.module, slug: slug, icon: newModule.icon, is_published: true, sort_order: courses.length });
+      setCourses(function(p){ return p.concat([{ id: created.id, module: created.title, icon: created.category || newModule.icon, lessons: [] }]) });
+      setNewModule({module:"",icon:"book"});
+      setShowAddModule(false);
+      flash("Module added!");
+    } catch(e) {
+      flash("Error: " + (e.message || "Failed to create module"));
+    }
   }
 
   function updateModule(cid, field, value) {
     setCourses(function(p){return p.map(function(c){if(c.id!==cid) return c; var n=Object.assign({},c); n[field]=value; return n;})});
   }
 
-  function deleteModule(cid) {
-    setCourses(function(p){return p.filter(function(c){return c.id!==cid})});
-    setConfirmDelete(null); setExpandedModule(null);
-    flash("Module deleted");
+  async function deleteModule(cid) {
+    try {
+      await adminApi.deleteCourse(cid);
+      setCourses(function(p){return p.filter(function(c){return c.id!==cid})});
+      setConfirmDelete(null); setExpandedModule(null);
+      flash("Module deleted");
+    } catch(e) {
+      flash("Error: " + (e.message || "Failed to delete module"));
+      setConfirmDelete(null);
+    }
   }
 
-  function addLessonTo(cid) {
+  async function addLessonTo(cid) {
     if (!newLesson.title.trim()) return;
-    var lid = "l" + Date.now();
-    setCourses(function(p){return p.map(function(c){return c.id===cid ? Object.assign({},c,{lessons:c.lessons.concat([{id:lid,title:newLesson.title,dur:newLesson.dur,done:false,video:null,pdf:null}])}) : c})});
-    setNewLesson({title:"",dur:"10 min"});
-    setShowAddLesson(null);
-    flash("Lesson added!");
+    var durMins = parseInt(newLesson.dur) || 10;
+    try {
+      var created = await adminApi.createLesson(cid, {
+        title: newLesson.title,
+        video_url: newLesson.videoUrl || null,
+        content_md: newLesson.notes || null,
+        duration_minutes: durMins,
+        sort_order: (courses.find(function(c){return c.id===cid})||{lessons:[]}).lessons.length,
+        is_published: true,
+      });
+      setCourses(function(p){return p.map(function(c){
+        return c.id===cid ? Object.assign({},c,{lessons:c.lessons.concat([{
+          id: created.id, title: created.title,
+          dur: created.duration_minutes + " min",
+          video_url: created.video_url, done: false,
+        }])}) : c;
+      })});
+      setNewLesson({title:"",dur:"10",videoUrl:"",notes:""});
+      setShowAddLesson(null);
+      flash("Lesson added!");
+    } catch(e) {
+      flash("Error: " + (e.message || "Failed to add lesson"));
+    }
   }
 
   function updateLesson(cid,lid,field,value) {
     setCourses(function(p){return p.map(function(c){return c.id===cid ? Object.assign({},c,{lessons:c.lessons.map(function(l){if(l.id!==lid) return l; var n=Object.assign({},l); n[field]=value; return n;})}) : c})});
   }
 
-  function deleteLessonFrom(cid,lid) {
-    setCourses(function(p){return p.map(function(c){return c.id===cid ? Object.assign({},c,{lessons:c.lessons.filter(function(l){return l.id!==lid})}) : c})});
-    setConfirmDelete(null);
-    flash("Lesson deleted");
+  async function deleteLessonFrom(cid, lid) {
+    try {
+      await adminApi.deleteLesson(cid, lid);
+      setCourses(function(p){return p.map(function(c){return c.id===cid ? Object.assign({},c,{lessons:c.lessons.filter(function(l){return l.id!==lid})}) : c})});
+      setConfirmDelete(null);
+      flash("Lesson deleted");
+    } catch(e) {
+      flash("Error: " + (e.message || "Failed to delete lesson"));
+      setConfirmDelete(null);
+    }
   }
 
   function moveLesson(cid,lid,dir) {
@@ -3416,20 +3485,8 @@ function AdminPanel(props) {
     });
   }
 
-  function simulateUpload(cid,lid,type,file) {
-    setUploading(type);
-    setTimeout(function(){
-      var media = {name:file.name, size:(file.size/(1024*1024)).toFixed(1)+" MB", uploaded: new Date().toLocaleDateString("en-US",{month:"short",day:"numeric"})};
-      updateLesson(cid,lid,type,media);
-      setUploading(null);
-      flash((type==="video"?"Video":"PDF")+" uploaded: "+file.name);
-    },1500);
-  }
-
-  function removeMedia(cid,lid,type) {
-    updateLesson(cid,lid,type,null);
-    flash((type==="video"?"Video":"PDF")+" removed");
-  }
+  function simulateUpload(cid,lid,type,file) { flash("Use Vimeo URL instead — click the lesson to edit"); }
+  function removeMedia(cid,lid,type) { flash("Edit the lesson to update the Vimeo URL"); }
 
   var ICONS = ["book","globe","shield","target","dollar","rocket","book","target","lightbulb","globe","bank","shield","chart","users","phone","bank","phone","lock","chart","sparkle"];
 
@@ -4084,8 +4141,26 @@ function AdminPanel(props) {
           {courses.map(function(c, ci){ return (
             <div key={c.id} style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden", marginBottom:12 }}>
               <div style={{ display:"flex", alignItems:"center", gap:mob?8:12, padding:mob?"12px 10px":"16px 20px", minHeight:mob?44:56, flexWrap:"wrap" }}>
-                <span style={{ lineHeight:0, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", width:40, height:40, borderRadius:10, background:"rgba(200,180,140,0.08)", border:"1px solid rgba(200,180,140,0.1)", flexShrink:0 }} onClick={function(){setExpandedModule(expandedModule===c.id?null:c.id)}}><Ico name={c.icon} size={20} color="rgb(200,180,140)" /></span>
-                <div style={{ flex:1, cursor:"pointer" }} onClick={function(){setExpandedModule(expandedModule===c.id?null:c.id)}}>
+                <span style={{ lineHeight:0, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", width:40, height:40, borderRadius:10, background:"rgba(200,180,140,0.08)", border:"1px solid rgba(200,180,140,0.1)", flexShrink:0 }} onClick={async function(){
+                  var next = expandedModule===c.id ? null : c.id;
+                  setExpandedModule(next);
+                  if (next && c.lessons.length === 0) {
+                    try {
+                      var lessons = await adminApi.getLessons(c.id);
+                      setCourses(function(p){return p.map(function(x){return x.id===c.id ? Object.assign({},x,{lessons: lessons.map(function(l){return {id:l.id,title:l.title,dur:l.duration_minutes+" min",video_url:l.video_url,done:false}})}) : x})});
+                    } catch(e) { /* not subscribed as admin is fine, lessons may still load */ }
+                  }
+                }}><Ico name={c.icon} size={20} color="rgb(200,180,140)" /></span>
+                <div style={{ flex:1, cursor:"pointer" }} onClick={async function(){
+                  var next = expandedModule===c.id ? null : c.id;
+                  setExpandedModule(next);
+                  if (next && c.lessons.length === 0) {
+                    try {
+                      var lessons = await adminApi.getLessons(c.id);
+                      setCourses(function(p){return p.map(function(x){return x.id===c.id ? Object.assign({},x,{lessons: lessons.map(function(l){return {id:l.id,title:l.title,dur:l.duration_minutes+" min",video_url:l.video_url,done:false}})}) : x})});
+                    } catch(e) {}
+                  }
+                }}>
                   {editingModule === c.id ? (
                     <input value={c.module} onChange={function(e){updateModule(c.id,"module",e.target.value)}} onBlur={function(){setEditingModule(null)}} autoFocus style={{ background:"#0a0a0c", border:"1px solid rgb(200,180,140)", borderRadius:6, padding:"6px 10px", color:"#fff", fontSize:15, fontWeight:700, outline:"none", width:"100%" }} />
                   ) : (
@@ -4117,8 +4192,7 @@ function AdminPanel(props) {
                             <div style={{ fontSize:13, fontWeight:500, color:"#d4d4d8" }}>{l.title}</div>
                             <div style={{ display:"flex", gap:8, marginTop:3 }}>
                               <span style={{ fontSize:10, color:"#71717a" }}>{l.dur}</span>
-                              {!mob && <span style={{ fontSize:10, padding:"1px 6px", borderRadius:4, background:l.video?"rgba(200,180,140,0.12)":"rgba(255,255,255,0.04)", color:l.video?"rgb(200,180,140)":"#52525b" }}>{l.video ? "Video: "+l.video.name : "No video"}</span>}
-                              {!mob && <span style={{ fontSize:10, padding:"1px 6px", borderRadius:4, background:l.pdf?"rgba(200,180,140,0.12)":"rgba(255,255,255,0.04)", color:l.pdf?"rgb(200,180,140)":"#52525b" }}>{l.pdf ? "PDF: "+l.pdf.name : "No PDF"}</span>}
+                              {!mob && <span style={{ fontSize:10, padding:"1px 6px", borderRadius:4, background:l.video_url?"rgba(200,180,140,0.12)":"rgba(255,255,255,0.04)", color:l.video_url?"rgb(200,180,140)":"#52525b" }}>{l.video_url ? "Vimeo ✓" : "No video"}</span>}
                             </div>
                           </div>
                         )}
@@ -4132,77 +4206,34 @@ function AdminPanel(props) {
                       </div>
 
                       {manageMedia && manageMedia.lid === l.id && (
-                        <div style={{ padding:mob?"12px 10px 12px 16px":"16px 20px 16px 56px", background:"#0a0a0c", borderBottom:"1px solid rgba(255,255,255,0.04)" }}>
-                          <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr", gap:mob?10:14 }}>
-                            <div style={{ background:"#0a0a0c", borderRadius:10, padding:mob?12:16, border:"1px solid rgba(255,255,255,0.06)" }}>
-                              <div style={{ fontSize:11, fontWeight:700, color:"#71717a", letterSpacing:0.5, marginBottom:10, textTransform:"uppercase" }}>Video (MP4)</div>
-                              {l.video ? (
-                                <div>
-                                  <div style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 12px", background:"rgba(200,180,140,0.12)", borderRadius:8, marginBottom:10 }}>
-                                    <div style={{ flex:1 }}>
-                                      <div style={{ fontSize:12, fontWeight:600, color:"#ecfdf5" }}>{l.video.name}</div>
-                                      <div style={{ fontSize:10, color:"#6ee7b7" }}>{l.video.size+" - Uploaded "+l.video.uploaded}</div>
-                                    </div>
-                                  </div>
-                                  <div style={{ display:"flex", gap:6 }}>
-                                    <label style={{ flex:1, padding:"7px 0", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:11, fontWeight:600, cursor:"pointer", textAlign:"center" }}>
-                                      Replace
-                                      <input type="file" accept="video/mp4,video/webm" hidden onChange={function(e){if(e.target.files[0]) simulateUpload(c.id,l.id,"video",e.target.files[0])}} />
-                                    </label>
-                                    <button onClick={function(){removeMedia(c.id,l.id,"video")}} style={{ flex:1, padding:"7px 0", borderRadius:6, border:"1px solid #7f1d1d", background:"transparent", color:"#f87171", fontSize:11, fontWeight:600, cursor:"pointer" }}>Remove</button>
-                                  </div>
-                                </div>
-                              ) : (
-                                <label style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:8, padding:"24px 16px", border:"2px dashed rgba(255,255,255,0.1)", borderRadius:8, cursor:"pointer" }}>
-                                  <div style={{ lineHeight:0 }}><Ico name="rocket" size={28} color="rgb(200,180,140)" /></div>
-                                  <div style={{ fontSize:12, fontWeight:600, color:"#52525b" }}>Upload MP4 Video</div>
-                                  <div style={{ fontSize:10, color:"#71717a" }}>MP4 or WebM</div>
-                                  <input type="file" accept="video/mp4,video/webm" hidden onChange={function(e){if(e.target.files[0]) simulateUpload(c.id,l.id,"video",e.target.files[0])}} />
-                                </label>
-                              )}
-                            </div>
-                            <div style={{ background:"#0a0a0c", borderRadius:10, padding:16, border:"1px solid rgba(255,255,255,0.06)" }}>
-                              <div style={{ fontSize:11, fontWeight:700, color:"#71717a", letterSpacing:0.5, marginBottom:10, textTransform:"uppercase" }}>PDF Document</div>
-                              {l.pdf ? (
-                                <div>
-                                  <div style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 12px", background:"rgba(200,180,140,0.12)", borderRadius:8, marginBottom:10 }}>
-                                    <div style={{ flex:1 }}>
-                                      <div style={{ fontSize:12, fontWeight:600, color:"#d4d4d8" }}>{l.pdf.name}</div>
-                                      <div style={{ fontSize:10, color:"#71717a" }}>{l.pdf.size+" - Uploaded "+l.pdf.uploaded}</div>
-                                    </div>
-                                  </div>
-                                  <div style={{ display:"flex", gap:6 }}>
-                                    <label style={{ flex:1, padding:"7px 0", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:11, fontWeight:600, cursor:"pointer", textAlign:"center" }}>
-                                      Replace
-                                      <input type="file" accept="application/pdf" hidden onChange={function(e){if(e.target.files[0]) simulateUpload(c.id,l.id,"pdf",e.target.files[0])}} />
-                                    </label>
-                                    <button onClick={function(){removeMedia(c.id,l.id,"pdf")}} style={{ flex:1, padding:"7px 0", borderRadius:6, border:"1px solid #7f1d1d", background:"transparent", color:"#f87171", fontSize:11, fontWeight:600, cursor:"pointer" }}>Remove</button>
-                                  </div>
-                                </div>
-                              ) : (
-                                <label style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:8, padding:"24px 16px", border:"2px dashed rgba(255,255,255,0.1)", borderRadius:8, cursor:"pointer" }}>
-                                  <div style={{ lineHeight:0 }}><Ico name="rocket" size={28} color="rgb(200,180,140)" /></div>
-                                  <div style={{ fontSize:12, fontWeight:600, color:"#52525b" }}>Upload PDF Guide</div>
-                                  <div style={{ fontSize:10, color:"#71717a" }}>PDF only</div>
-                                  <input type="file" accept="application/pdf" hidden onChange={function(e){if(e.target.files[0]) simulateUpload(c.id,l.id,"pdf",e.target.files[0])}} />
-                                </label>
-                              )}
-                            </div>
-                          </div>
-                        </div>
+                        <LessonEditPanel key={l.id} lesson={l} cid={c.id} onSave={async function(updates){
+                          try {
+                            var updated = await adminApi.updateLesson(c.id, l.id, updates);
+                            setCourses(function(p){return p.map(function(x){return x.id===c.id ? Object.assign({},x,{lessons:x.lessons.map(function(ls){return ls.id===l.id ? Object.assign({},ls,{title:updated.title,dur:updated.duration_minutes+" min",video_url:updated.video_url}) : ls})}) : x})});
+                            setManageMedia(null);
+                            flash("Lesson updated!");
+                          } catch(e){ flash("Error: "+(e.message||"Failed to save")); }
+                        }} onClose={function(){setManageMedia(null)}} />
                       )}
                     </div>
                   )})}
 
                   {showAddLesson === c.id ? (
-                    <div style={{ padding:"12px 20px 12px 56px", background:"#0a0a0c", display:"flex", gap:8, alignItems:"center" }}>
-                      <input value={newLesson.title} onChange={function(e){setNewLesson({title:e.target.value,dur:newLesson.dur})}} placeholder="Lesson title" style={{ flex:1, padding:"8px 12px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"#131315", color:"#fff", fontSize:13, outline:"none" }} />
-                      <input value={newLesson.dur} onChange={function(e){setNewLesson({title:newLesson.title,dur:e.target.value})}} placeholder="Duration" style={{ width:80, padding:"8px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"#131315", color:"#fff", fontSize:12, outline:"none" }} />
-                      <button onClick={function(){addLessonTo(c.id)}} style={{ padding:"8px 14px", borderRadius:6, border:"none", background:"rgb(200,180,140)", color:"#fff", fontSize:12, fontWeight:600, cursor:"pointer" }}>Add</button>
-                      <button onClick={function(){setShowAddLesson(null)}} style={{ padding:"8px 10px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#71717a", fontSize:12, cursor:"pointer" }}>X</button>
+                    <div style={{ padding:"16px 20px", background:"#0a0a0c", borderTop:"1px solid rgba(255,255,255,0.06)" }}>
+                      <div style={{ fontSize:12, fontWeight:700, color:"#d4d4d8", marginBottom:12 }}>New Lesson</div>
+                      <div style={{ display:"grid", gridTemplateColumns:"1fr 80px", gap:8, marginBottom:8 }}>
+                        <input value={newLesson.title} onChange={function(e){setNewLesson(function(p){return Object.assign({},p,{title:e.target.value})})}} placeholder="Lesson title" style={{ padding:"8px 12px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"#131315", color:"#fff", fontSize:13, outline:"none" }} />
+                        <input value={newLesson.dur} onChange={function(e){setNewLesson(function(p){return Object.assign({},p,{dur:e.target.value})})}} placeholder="Mins" style={{ padding:"8px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"#131315", color:"#fff", fontSize:12, outline:"none" }} />
+                      </div>
+                      <input value={newLesson.videoUrl} onChange={function(e){setNewLesson(function(p){return Object.assign({},p,{videoUrl:e.target.value})})}} placeholder="Vimeo URL (e.g. https://vimeo.com/123456789)" style={{ width:"100%", padding:"8px 12px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"#131315", color:"#fff", fontSize:12, outline:"none", boxSizing:"border-box", marginBottom:8 }} />
+                      <textarea value={newLesson.notes} onChange={function(e){setNewLesson(function(p){return Object.assign({},p,{notes:e.target.value})})}} placeholder="Lesson notes / description (optional)" rows={3} style={{ width:"100%", padding:"8px 12px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"#131315", color:"#fff", fontSize:12, outline:"none", boxSizing:"border-box", resize:"vertical", fontFamily:"inherit", marginBottom:8 }} />
+                      <div style={{ display:"flex", gap:8, justifyContent:"flex-end" }}>
+                        <button onClick={function(){setShowAddLesson(null)}} style={{ padding:"8px 16px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Cancel</button>
+                        <button onClick={function(){addLessonTo(c.id)}} style={{ padding:"8px 20px", borderRadius:6, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:12, fontWeight:600, cursor:"pointer" }}>Add Lesson</button>
+                      </div>
                     </div>
                   ) : (
-                    <button onClick={function(){setShowAddLesson(c.id)}} style={{ width:"100%", padding:mob?"10px 10px 10px 16px":"10px 20px 10px 56px", background:"#0a0a0c", border:"none", borderTop:"1px solid rgba(255,255,255,0.04)", color:"rgb(200,180,140)", fontSize:12, fontWeight:600, cursor:"pointer", textAlign:"left", color:"rgb(200,180,140)" }}>+ Add Lesson</button>
+                    <button onClick={function(){setShowAddLesson(c.id)}} style={{ width:"100%", padding:mob?"10px 10px 10px 16px":"10px 20px 10px 56px", background:"#0a0a0c", border:"none", borderTop:"1px solid rgba(255,255,255,0.04)", color:"rgb(200,180,140)", fontSize:12, fontWeight:600, cursor:"pointer", textAlign:"left" }}>+ Add Lesson</button>
                   )}
                 </div>
               )}
