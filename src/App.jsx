@@ -4710,11 +4710,62 @@ function SupportPage(props) {
 // ═════════════════════════════════════════
 // MAIN APP
 // ═════════════════════════════════════════
+// ═════════════════════════════════════════
+// URL ROUTING HELPERS
+// ═════════════════════════════════════════
+var PAGE_TO_PATH = {
+  landing: "/",
+  howItWorks: "/how-it-works",
+  curriculum: "/curriculum",
+  faq: "/faq",
+  login: "/login",
+  forgotPassword: "/forgot-password",
+  resetPassword: "/reset-password",
+  subscribe: "/subscribe",
+  userPortal: "/portal",
+  adminLogin: "/admin-login",
+  adminPanel: "/admin",
+  terms: "/terms",
+  privacy: "/privacy",
+  contact: "/contact",
+  support: "/support",
+};
+var PATH_TO_PAGE = {};
+Object.keys(PAGE_TO_PATH).forEach(function(k){ PATH_TO_PAGE[PAGE_TO_PATH[k]] = k; });
+
+function getInitialPage() {
+  var path = window.location.pathname;
+  // Handle /ref/:code
+  var refMatch = path.match(/^\/ref\/(.+)$/);
+  if (refMatch) return { page: "subscribe", refCode: refMatch[1] };
+  return { page: PATH_TO_PAGE[path] || "landing", refCode: "" };
+}
+
 function TutoriiApp() {
-  var _page = useState("landing");
+  var initial = getInitialPage();
+  var _page = useState(initial.page);
   var page = _page[0]; var setPage = _page[1];
-  var _refCode = useState(""); var refCode = _refCode[0]; var setRefCode = _refCode[1];
-  var go = function(p, ref) { setPage(p); if (ref) setRefCode(ref); window.scrollTo(0, 0); };
+  var _refCode = useState(initial.refCode); var refCode = _refCode[0]; var setRefCode = _refCode[1];
+
+  var go = function(p, ref) {
+    setPage(p);
+    if (ref) setRefCode(ref);
+    var path = PAGE_TO_PATH[p] || "/";
+    window.history.pushState({page: p}, "", path);
+    window.scrollTo(0, 0);
+  };
+
+  // Handle browser back/forward buttons
+  useEffect(function() {
+    function onPop(e) {
+      var path = window.location.pathname;
+      var refMatch = path.match(/^\/ref\/(.+)$/);
+      if (refMatch) { setPage("subscribe"); setRefCode(refMatch[1]); }
+      else { setPage(PATH_TO_PAGE[path] || "landing"); }
+    }
+    window.addEventListener("popstate", onPop);
+    return function() { window.removeEventListener("popstate", onPop); };
+  }, []);
   var _courses = useState(INIT_COURSES);
   var courses = _courses[0]; var setCourses = _courses[1];
   var _chatOpen = useState(false); var chatOpen = _chatOpen[0]; var setChatOpen = _chatOpen[1];
