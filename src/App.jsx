@@ -1623,7 +1623,7 @@ function LessonEditPanel(props) {
   var lesson = props.lesson;
   var _title = useState(lesson.title||""); var title = _title[0]; var setTitle = _title[1];
   var _dur = useState((lesson.dur||"10 min").replace(" min","")); var dur = _dur[0]; var setDur = _dur[1];
-  var _videoUrl = useState(lesson.video_url||""); var videoUrl = _videoUrl[0]; var setVideoUrl = _videoUrl[1];
+  var _pdfUrl = useState(lesson.video_url||""); var pdfUrl = _pdfUrl[0]; var setPdfUrl = _pdfUrl[1];
   var _notes = useState(lesson.notes||""); var notes = _notes[0]; var setNotes = _notes[1];
   var inputStyle = { width:"100%", padding:"8px 12px", borderRadius:6, border:"1px solid rgba(255,255,255,0.1)", background:"#131315", color:"#fff", fontSize:13, outline:"none", boxSizing:"border-box", fontFamily:"inherit" };
   return (
@@ -1634,9 +1634,9 @@ function LessonEditPanel(props) {
         <input value={dur} onChange={function(e){setDur(e.target.value)}} placeholder="Mins" style={Object.assign({},inputStyle,{width:"100%"})} />
       </div>
       <div style={{ marginBottom:8 }}>
-        <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>VIMEO URL</label>
-        <input value={videoUrl} onChange={function(e){setVideoUrl(e.target.value)}} placeholder="https://vimeo.com/123456789" style={inputStyle} />
-        {videoUrl && <div style={{ fontSize:10, color:"#10b981", marginTop:4 }}>✓ Vimeo URL set</div>}
+        <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>PDF URL</label>
+        <input value={pdfUrl} onChange={function(e){setPdfUrl(e.target.value)}} placeholder="https://drive.google.com/file/d/FILE_ID/preview" style={inputStyle} />
+        {pdfUrl && <div style={{ fontSize:10, color:"#10b981", marginTop:4 }}>✓ PDF URL set</div>}
       </div>
       <div style={{ marginBottom:12 }}>
         <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>LESSON NOTES</label>
@@ -1644,7 +1644,7 @@ function LessonEditPanel(props) {
       </div>
       <div style={{ display:"flex", gap:8, justifyContent:"flex-end" }}>
         <button onClick={props.onClose} style={{ padding:"7px 14px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Cancel</button>
-        <button onClick={function(){ props.onSave({ title:title.trim(), duration_minutes:parseInt(dur)||10, video_url:videoUrl.trim()||null, content_md:notes.trim()||null }); }} style={{ padding:"7px 18px", borderRadius:6, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:12, fontWeight:600, cursor:"pointer" }}>Save</button>
+        <button onClick={function(){ props.onSave({ title:title.trim(), duration_minutes:parseInt(dur)||10, video_url:pdfUrl.trim()||null, content_md:notes.trim()||null }); }} style={{ padding:"7px 18px", borderRadius:6, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:12, fontWeight:600, cursor:"pointer" }}>Save</button>
       </div>
     </div>
   );
@@ -2664,41 +2664,33 @@ function UserPortal(props) {
         {tab === "courses" && <div style={{ maxWidth:"100%", overflow:"hidden" }}>
           {activeLesson ? (
             <div>
-              <button onClick={function(){setActiveLesson(null)}} style={{ background:"none", border:"none", fontSize:13, color:"rgb(200,180,140)", cursor:"pointer", fontWeight:600, marginBottom:16, padding:0 }}>Back to courses</button>
-              <div style={{ background:"#131315", borderRadius:16, aspectRatio:"16/9", maxHeight:"50vh", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:24 }}>
-                {activeLesson.video ? (
-                  <div style={{ textAlign:"center" }}>
-                    <div style={{ lineHeight:0 }}><Ico name={(courses.find(function(c){return c.id===openCourse}) || {}).icon} size={48} color="rgb(200,180,140)" /></div>
-                    <div style={{ fontSize:18, fontWeight:600, color:"#fff", marginTop:12 }}>{activeLesson.title}</div>
-                    <div style={{ fontSize:12, color:"rgb(200,180,140)", marginTop:4 }}>{activeLesson.video.name + " - " + activeLesson.video.size}</div>
-                    <div style={{ marginTop:20, width:56, height:56, borderRadius:"50%", background:"rgb(200,180,140)", display:"inline-flex", alignItems:"center", justifyContent:"center", cursor:"pointer" }}>
-                      <Ico name="rocket" size={22} color="#fff" />
-                    </div>
-                  </div>
-                ) : (
-                  <div style={{ textAlign:"center" }}>
-                    <div style={{ opacity:0.3, lineHeight:0 }}><Ico name="phone" size={48} color="#71717a" /></div>
-                    <div style={{ fontSize:14, color:"#71717a", marginTop:8 }}>Video not yet available</div>
-                  </div>
-                )}
-              </div>
-              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
-                <h2 style={{ fontSize:20, fontWeight:700, margin:0, color:"#d4d4d8" }}>{activeLesson.title}</h2>
+              <button onClick={function(){setActiveLesson(null)}} style={{ background:"none", border:"none", fontSize:13, color:"rgb(200,180,140)", cursor:"pointer", fontWeight:600, marginBottom:16, padding:0 }}>← Back to courses</button>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16 }}>
+                <h2 style={{ fontSize:mob?16:20, fontWeight:700, margin:0, color:"#d4d4d8" }}>{activeLesson.title}</h2>
                 {activeLesson.done
                   ? <Badge s="completed" />
                   : <Btn onClick={function(){markDone(openCourse,activeLesson.id);setActiveLesson(Object.assign({},activeLesson,{done:true}))}} green style={{ fontSize:12 }}>Mark Complete</Btn>
                 }
               </div>
-              {activeLesson.pdf && (
-                <div style={{ background:"rgba(200,180,140,0.06)", borderRadius:12, padding:"14px 20px", border:"1px solid rgba(200,180,140,0.15)", marginBottom:16, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-                  <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-                    <div style={{ width:36, height:36, borderRadius:8, background:"rgba(200,180,140,0.15)", border:"1px solid rgba(200,180,140,0.2)", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0 }}><Ico name="book" size={18} color="rgb(200,180,140)" /></div>
-                    <div>
-                      <div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{activeLesson.pdf.name}</div>
-                      <div style={{ fontSize:11, color:"rgb(200,180,140)" }}>{activeLesson.pdf.size}</div>
-                    </div>
-                  </div>
-                  <button style={{ background:"rgb(200,180,140)", color:"#0a0a0c", border:"none", padding:"8px 16px", borderRadius:8, fontSize:12, fontWeight:600, cursor:"pointer" }}>Download PDF</button>
+              {activeLesson.video_url ? (
+                <div style={{ background:"#131315", borderRadius:16, overflow:"hidden", marginBottom:20, border:"1px solid rgba(255,255,255,0.06)" }}>
+                  <iframe
+                    src={activeLesson.video_url.includes("drive.google.com") ? activeLesson.video_url.replace("/view","/preview") : activeLesson.video_url}
+                    style={{ width:"100%", height:mob?"60vw":"520px", border:"none", display:"block" }}
+                    allow="autoplay"
+                    allowFullScreen
+                  />
+                </div>
+              ) : (
+                <div style={{ background:"#131315", borderRadius:16, padding:"48px 24px", marginBottom:20, border:"1px solid rgba(255,255,255,0.06)", textAlign:"center" }}>
+                  <div style={{ opacity:0.3, lineHeight:0, marginBottom:12 }}><Ico name="book" size={48} color="#71717a" /></div>
+                  <div style={{ fontSize:14, color:"#71717a" }}>PDF not yet available for this lesson</div>
+                </div>
+              )}
+              {activeLesson.notes && (
+                <div style={{ background:"#131315", borderRadius:12, padding:"16px 20px", border:"1px solid rgba(255,255,255,0.06)", marginBottom:16 }}>
+                  <div style={{ fontSize:11, fontWeight:700, color:"#52525b", letterSpacing:0.8, marginBottom:8, textTransform:"uppercase" }}>Lesson Notes</div>
+                  <p style={{ fontSize:14, color:"#a1a1aa", lineHeight:1.7, margin:0, whiteSpace:"pre-wrap" }}>{activeLesson.notes}</p>
                 </div>
               )}
             </div>
@@ -2711,29 +2703,46 @@ function UserPortal(props) {
                   <span style={{ fontSize:12, fontWeight:600, color:"rgb(200,180,140)" }}>{pct+"% complete"}</span>
                 </div>
               </div>
+              {u.status !== "active" && (
+                <div style={{ background:"rgba(200,180,140,0.06)", borderRadius:12, padding:"20px 24px", border:"1px solid rgba(200,180,140,0.15)", marginBottom:20, textAlign:"center" }}>
+                  <div style={{ fontSize:14, fontWeight:600, color:"rgb(200,180,140)", marginBottom:8 }}>Subscribe to access course materials</div>
+                  <Btn onClick={function(){go("subscribe")}} style={{ fontSize:13 }}>Subscribe Now</Btn>
+                </div>
+              )}
               {courses.map(function(c){
                 var done = c.lessons.filter(function(l){return l.done}).length;
                 return (
                   <div key={c.id} style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden", marginBottom:12 }}>
-                    <div onClick={function(){setOpenCourse(openCourse===c.id?null:c.id)}} style={{ display:"flex", alignItems:"center", gap:14, padding:"16px 20px", cursor:"pointer" }}>
+                    <div onClick={async function(){
+                      var next = openCourse===c.id ? null : c.id;
+                      setOpenCourse(next);
+                      if (next && c.lessons.length === 0) {
+                        try {
+                          var lessons = await coursesApi.lessons(c.id);
+                          setCourses(function(p){return p.map(function(x){return x.id===c.id ? Object.assign({},x,{lessons:lessons.map(function(l){return {id:l.id,title:l.title,dur:l.duration_minutes+" min",video_url:l.video_url,notes:l.content_md,done:false}})}) : x})});
+                        } catch(e) {}
+                      }
+                    }} style={{ display:"flex", alignItems:"center", gap:14, padding:"16px 20px", cursor:"pointer" }}>
                       <span style={{ lineHeight:0, display:"flex", alignItems:"center", justifyContent:"center", width:40, height:40, borderRadius:10, background:"rgba(200,180,140,0.08)", border:"1px solid rgba(200,180,140,0.1)", flexShrink:0 }}><Ico name={c.icon} size={20} color="rgb(200,180,140)" /></span>
                       <div style={{ flex:1 }}>
                         <div style={{ fontSize:15, fontWeight:700, color:"#d4d4d8" }}>{c.module}</div>
-                        <div style={{ fontSize:12, color:"#52525b" }}>{done+"/"+c.lessons.length+" completed"}</div>
+                        <div style={{ fontSize:12, color:"#52525b" }}>{c.lessons.length > 0 ? done+"/"+c.lessons.length+" completed" : "Click to load lessons"}</div>
                       </div>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#52525b" strokeWidth="2.5" strokeLinecap="round"><path d={openCourse===c.id?"M18 15l-6-6-6 6":"M6 9l6 6 6-6"}/></svg>
                     </div>
                     {openCourse===c.id && (
                       <div style={{ borderTop:"1px solid rgba(255,255,255,0.06)" }}>
+                        {c.lessons.length === 0 && (
+                          <div style={{ padding:"20px", textAlign:"center", color:"#52525b", fontSize:13 }}>Loading lessons...</div>
+                        )}
                         {c.lessons.map(function(l){ return (
                           <div key={l.id} onClick={function(){setActiveLesson(l)}} style={{ display:"flex", alignItems:"center", gap:12, padding:"12px 20px 12px 60px", cursor:"pointer", borderBottom:"1px solid rgba(255,255,255,0.04)" }}>
-                            <div style={{ width:20, height:20, borderRadius:"50%", border:"2px solid "+(l.done?"rgb(200,180,140)":"#3f3f46"), background:l.done?"rgb(200,180,140)":"transparent", display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, color:"#fff", flexShrink:0 }}>{l.done ? "\u2713" : ""}</div>
+                            <div style={{ width:20, height:20, borderRadius:"50%", border:"2px solid "+(l.done?"rgb(200,180,140)":"#3f3f46"), background:l.done?"rgb(200,180,140)":"transparent", display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, color:"#fff", flexShrink:0 }}>{l.done ? "✓" : ""}</div>
                             <div style={{ flex:1 }}>
                               <div style={{ fontSize:13, fontWeight:500, color:l.done?"#71717a":"#d4d4d8" }}>{l.title}</div>
                               <div style={{ display:"flex", gap:6, marginTop:2 }}>
                                 <span style={{ fontSize:10, color:"#3f3f46" }}>{l.dur}</span>
-                                {l.video && <span style={{ fontSize:10, color:"#d4d4d8" }}>Video</span>}
-                                {l.pdf && <span style={{ fontSize:10, color:"rgb(200,180,140)" }}>PDF</span>}
-                                {!l.video && !l.pdf && <span style={{ fontSize:10, color:"#3f3f46" }}>Coming soon</span>}
+                                {l.video_url ? <span style={{ fontSize:10, color:"rgb(200,180,140)" }}>PDF ✓</span> : <span style={{ fontSize:10, color:"#3f3f46" }}>Coming soon</span>}
                               </div>
                             </div>
                           </div>
@@ -3323,7 +3332,7 @@ function AdminPanel(props) {
   var _sam = useState(false); var showAddModule = _sam[0]; var setShowAddModule = _sam[1];
   var _sal = useState(null); var showAddLesson = _sal[0]; var setShowAddLesson = _sal[1];
   var _nm = useState({module:"",icon:"book"}); var newModule = _nm[0]; var setNewModule = _nm[1];
-  var _nl = useState({title:"",dur:"10",videoUrl:"",notes:""}); var newLesson = _nl[0]; var setNewLesson = _nl[1];
+  var _nl = useState({title:"",dur:"10",pdfUrl:"",notes:""}); var newLesson = _nl[0]; var setNewLesson = _nl[1];
   var _cd = useState(null); var confirmDelete = _cd[0]; var setConfirmDelete = _cd[1];
   var _mm = useState(null); var manageMedia = _mm[0]; var setManageMedia = _mm[1];
   var _confirmPay = useState(false); var confirmPayout = _confirmPay[0]; var setConfirmPayout = _confirmPay[1];
@@ -3427,7 +3436,7 @@ function AdminPanel(props) {
     try {
       var created = await adminApi.createLesson(cid, {
         title: newLesson.title,
-        video_url: newLesson.videoUrl || null,
+        video_url: newLesson.pdfUrl || null,
         content_md: newLesson.notes || null,
         duration_minutes: durMins,
         sort_order: (courses.find(function(c){return c.id===cid})||{lessons:[]}).lessons.length,
@@ -3440,7 +3449,7 @@ function AdminPanel(props) {
           video_url: created.video_url, done: false,
         }])}) : c;
       })});
-      setNewLesson({title:"",dur:"10",videoUrl:"",notes:""});
+      setNewLesson({title:"",dur:"10",pdfUrl:"",notes:""});
       setShowAddLesson(null);
       flash("Lesson added!");
     } catch(e) {
@@ -3485,8 +3494,8 @@ function AdminPanel(props) {
     });
   }
 
-  function simulateUpload(cid,lid,type,file) { flash("Use Vimeo URL instead — click the lesson to edit"); }
-  function removeMedia(cid,lid,type) { flash("Edit the lesson to update the Vimeo URL"); }
+  function simulateUpload(cid,lid,type,file) { flash("Use PDF URL instead — click the lesson to edit"); }
+  function removeMedia(cid,lid,type) { flash("Edit the lesson to update the PDF URL"); }
 
   var ICONS = ["book","globe","shield","target","dollar","rocket","book","target","lightbulb","globe","bank","shield","chart","users","phone","bank","phone","lock","chart","sparkle"];
 
@@ -4192,7 +4201,7 @@ function AdminPanel(props) {
                             <div style={{ fontSize:13, fontWeight:500, color:"#d4d4d8" }}>{l.title}</div>
                             <div style={{ display:"flex", gap:8, marginTop:3 }}>
                               <span style={{ fontSize:10, color:"#71717a" }}>{l.dur}</span>
-                              {!mob && <span style={{ fontSize:10, padding:"1px 6px", borderRadius:4, background:l.video_url?"rgba(200,180,140,0.12)":"rgba(255,255,255,0.04)", color:l.video_url?"rgb(200,180,140)":"#52525b" }}>{l.video_url ? "Vimeo ✓" : "No video"}</span>}
+                              {!mob && <span style={{ fontSize:10, padding:"1px 6px", borderRadius:4, background:l.video_url?"rgba(200,180,140,0.12)":"rgba(255,255,255,0.04)", color:l.video_url?"rgb(200,180,140)":"#52525b" }}>{l.video_url ? "PDF ✓" : "No PDF"}</span>}
                             </div>
                           </div>
                         )}
@@ -4225,7 +4234,7 @@ function AdminPanel(props) {
                         <input value={newLesson.title} onChange={function(e){setNewLesson(function(p){return Object.assign({},p,{title:e.target.value})})}} placeholder="Lesson title" style={{ padding:"8px 12px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"#131315", color:"#fff", fontSize:13, outline:"none" }} />
                         <input value={newLesson.dur} onChange={function(e){setNewLesson(function(p){return Object.assign({},p,{dur:e.target.value})})}} placeholder="Mins" style={{ padding:"8px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"#131315", color:"#fff", fontSize:12, outline:"none" }} />
                       </div>
-                      <input value={newLesson.videoUrl} onChange={function(e){setNewLesson(function(p){return Object.assign({},p,{videoUrl:e.target.value})})}} placeholder="Vimeo URL (e.g. https://vimeo.com/123456789)" style={{ width:"100%", padding:"8px 12px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"#131315", color:"#fff", fontSize:12, outline:"none", boxSizing:"border-box", marginBottom:8 }} />
+                      <input value={newLesson.pdfUrl} onChange={function(e){setNewLesson(function(p){return Object.assign({},p,{pdfUrl:e.target.value})})}} placeholder="PDF URL (e.g. https://drive.google.com/file/d/FILE_ID/preview)" style={{ width:"100%", padding:"8px 12px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"#131315", color:"#fff", fontSize:12, outline:"none", boxSizing:"border-box", marginBottom:8 }} />
                       <textarea value={newLesson.notes} onChange={function(e){setNewLesson(function(p){return Object.assign({},p,{notes:e.target.value})})}} placeholder="Lesson notes / description (optional)" rows={3} style={{ width:"100%", padding:"8px 12px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"#131315", color:"#fff", fontSize:12, outline:"none", boxSizing:"border-box", resize:"vertical", fontFamily:"inherit", marginBottom:8 }} />
                       <div style={{ display:"flex", gap:8, justifyContent:"flex-end" }}>
                         <button onClick={function(){setShowAddLesson(null)}} style={{ padding:"8px 16px", borderRadius:6, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Cancel</button>
