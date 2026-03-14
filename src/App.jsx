@@ -1791,8 +1791,19 @@ function UserPortal(props) {
   var go = props.go;
   var courses = props.courses;
   var setCourses = props.setCourses;
-  var _tab = useState("overview");
+  var _tab = useState(function(){
+    var parts = window.location.pathname.split("/");
+    var sub = parts[2];
+    var valid = ["overview","referrals","earnings","payouts","courses","settings","support"];
+    return (sub && valid.includes(sub)) ? sub : "overview";
+  });
   var tab = _tab[0]; var setTab = _tab[1];
+
+  function gotoTab(t) {
+    setTab(t);
+    window.history.pushState({}, "", "/portal/" + t);
+    if (contentRef && contentRef.current) contentRef.current.scrollTop = 0;
+  }
   var _oc = useState(null);
   var openCourse = _oc[0]; var setOpenCourse = _oc[1];
   var _al = useState(null);
@@ -2204,7 +2215,7 @@ function UserPortal(props) {
         <div style={{ padding:"0 20px 20px", borderBottom:"1px solid rgba(255,255,255,0.06)" }}><Logo light /></div>
         <nav style={{ flex:1, padding:"12px 10px" }}>
           {navItems.map(function(n){ return (
-            <button key={n.id} onClick={function(){setTab(n.id);setActiveLesson(null)}} style={{
+            <button key={n.id} onClick={function(){gotoTab(n.id);setActiveLesson(null)}} style={{
               display:"flex", alignItems:"center", gap:10, width:"100%", padding:"10px 14px", borderRadius:8, border:"none", textAlign:"left",
               background: tab===n.id ? "rgba(200,180,140,0.15)" : "transparent", color: tab===n.id ? "#d4d4d8" : "#71717a",
               fontSize:13, fontWeight: tab===n.id ? 600 : 500, cursor:"pointer", marginBottom:2
@@ -2222,7 +2233,7 @@ function UserPortal(props) {
       {mob && <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"12px 16px", background:"#111113", borderBottom:"1px solid rgba(255,255,255,0.06)", position:"sticky", top:0, zIndex:50 }}>
         <Logo light />
         <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-          <button onClick={function(){setTab("support");if(contentRef.current)contentRef.current.scrollTop=0}} style={{ display:"flex", alignItems:"center", gap:5, padding:"6px 12px", borderRadius:6, border:"1px solid "+(tab==="support"?"rgba(200,180,140,0.3)":"rgba(255,255,255,0.06)"), background:tab==="support"?"rgba(200,180,140,0.08)":"transparent", cursor:"pointer" }}>
+          <button onClick={function(){gotoTab("support")}} style={{ display:"flex", alignItems:"center", gap:5, padding:"6px 12px", borderRadius:6, border:"1px solid "+(tab==="support"?"rgba(200,180,140,0.3)":"rgba(255,255,255,0.06)"), background:tab==="support"?"rgba(200,180,140,0.08)":"transparent", cursor:"pointer" }}>
             <Ico name="chat" size={13} color={tab==="support"?"rgb(200,180,140)":"#71717a"} />
             <span style={{ fontSize:11, fontWeight:600, color:tab==="support"?"rgb(200,180,140)":"#71717a" }}>Support</span>
           </button>
@@ -2280,7 +2291,7 @@ function UserPortal(props) {
               {courses.filter(function(c){return c.lessons.some(function(l){return !l.done})}).slice(0,3).map(function(c){
                 var next = c.lessons.find(function(l){return !l.done});
                 return (
-                  <div key={c.id} onClick={function(){setTab("courses");setOpenCourse(c.id);setActiveLesson(next)}} style={{ display:"flex", gap:12, alignItems:"center", padding:"10px 0", borderBottom:"1px solid rgba(255,255,255,0.04)", cursor:"pointer" }}>
+                  <div key={c.id} onClick={function(){gotoTab("courses");setOpenCourse(c.id);setActiveLesson(next)}} style={{ display:"flex", gap:12, alignItems:"center", padding:"10px 0", borderBottom:"1px solid rgba(255,255,255,0.04)", cursor:"pointer" }}>
                     <span style={{ lineHeight:0 }}><Ico name={c.icon} size={20} color="rgb(200,180,140)" /></span>
                     <div><div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{next ? next.title : ""}</div><div style={{ fontSize:11, color:"#52525b" }}>{c.module}</div></div>
                   </div>
@@ -2648,7 +2659,7 @@ function UserPortal(props) {
           <div style={{ background:"#131315", borderRadius:14, padding:mob?14:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:16, boxSizing:"border-box" }}>
             <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 12px", color:"#d4d4d8" }}>Payout Method & Settings</h3>
             <div style={{ background:"rgba(255,255,255,0.03)", borderRadius:10, padding:14, display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr", gap:16, alignItems:"stretch" }}>
-              <div><div style={{ display:"inline-block", fontSize:9, fontWeight:700, color:"#52525b", marginBottom:5, padding:"2px 8px", borderRadius:4, background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.05)", letterSpacing:0.8 }}>IBAN</div><div style={{ fontSize:13, fontWeight:600, fontFamily:"monospace", color:"#d4d4d8" }}>{"****  ****  ****  ****  **** " + u.iban.slice(-3)}</div><div style={{ fontSize:11, fontStyle:"italic", color:"#52525b", marginTop:4 }}>{"You can update your IBAN in "}<span onClick={function(){setTab("settings")}} style={{ color:"rgb(200,180,140)", cursor:"pointer" }}>Settings</span></div></div>
+              <div><div style={{ display:"inline-block", fontSize:9, fontWeight:700, color:"#52525b", marginBottom:5, padding:"2px 8px", borderRadius:4, background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.05)", letterSpacing:0.8 }}>IBAN</div><div style={{ fontSize:13, fontWeight:600, fontFamily:"monospace", color:"#d4d4d8" }}>{"****  ****  ****  ****  **** " + u.iban.slice(-3)}</div><div style={{ fontSize:11, fontStyle:"italic", color:"#52525b", marginTop:4 }}>{"You can update your IBAN in "}<span onClick={function(){gotoTab("settings")}} style={{ color:"rgb(200,180,140)", cursor:"pointer" }}>Settings</span></div></div>
               <div><div style={{ display:"inline-block", fontSize:9, fontWeight:700, color:"#52525b", marginBottom:5, padding:"2px 8px", borderRadius:4, background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.05)", letterSpacing:0.8 }}>METHOD</div><div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8" }}>MamoPay - Bank Transfer (Weekly)</div></div>
             </div>
           </div>
@@ -2863,7 +2874,7 @@ function UserPortal(props) {
                 {[
                   ["chat","Talk to AI Assistant",function(){setChatOpen(true);setChatMinimized(false)}],
                   ["link","Copy Referral Link",function(){copyLink()}],
-                  ["gear","Account Settings",function(){setTab("settings")}],
+                  ["gear","Account Settings",function(){gotoTab("settings")}],
                   ["globe","Email Support",function(){window.open("mailto:support@tutorii.com?subject=Support Request - "+u.code)}],
                 ].map(function(a){return (
                   <div key={a[1]} onClick={a[2]} style={{ background:"#131315", borderRadius:12, padding:"16px 14px", border:"1px solid rgba(255,255,255,0.06)", cursor:"pointer", textAlign:"center", transition:"border-color 0.2s" }}>
@@ -2995,7 +3006,7 @@ function UserPortal(props) {
       {/* ═══ MOBILE BOTTOM TAB BAR ═══ */}
       {mob && <div style={{ position:"fixed", bottom:0, left:0, right:0, display:"flex", justifyContent:"space-around", alignItems:"center", background:"rgba(17,17,19,0.95)", backdropFilter:"blur(16px)", WebkitBackdropFilter:"blur(16px)", borderTop:"1px solid rgba(255,255,255,0.06)", padding:"6px 0 8px", zIndex:60 }}>
         {[["overview","chart","Overview"],["referrals","users","Referrals"],["earnings","dollar","Earnings"],["payouts","bank","Payouts"],["courses","book","Courses"],["settings","gear","Settings"]].map(function(item){ return (
-          <button key={item[0]} onClick={function(){setTab(item[0]);if(contentRef.current)contentRef.current.scrollTop=0}} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:2, background:"none", border:"none", cursor:"pointer", padding:"6px 4px", minWidth:48 }}>
+          <button key={item[0]} onClick={function(){gotoTab(item[0])}} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:2, background:"none", border:"none", cursor:"pointer", padding:"6px 4px", minWidth:48 }}>
             <Ico name={item[1]} size={18} color={tab===item[0]?"rgb(200,180,140)":"#52525b"} />
             <span style={{ fontSize:9, fontWeight:tab===item[0]?700:500, color:tab===item[0]?"rgb(200,180,140)":"#52525b" }}>{item[2]}</span>
           </button>
@@ -3135,7 +3146,7 @@ function UserPortal(props) {
               <Ico name="users" size={10} color="#52525b" />
               <span>{"Need a human? "}<span style={{ color:"rgb(200,180,140)", fontWeight:600 }}>Escalate to support</span></span>
             </span>
-            <span onClick={function(){setTab("support");setChatOpen(false)}} style={{ fontSize:10, color:"#52525b", cursor:"pointer" }}>View tickets</span>
+            <span onClick={function(){gotoTab("support");setChatOpen(false)}} style={{ fontSize:10, color:"#52525b", cursor:"pointer" }}>View tickets</span>
           </div>
 
           {/* Chat Input */}
@@ -4747,6 +4758,9 @@ function getInitialPage() {
   // Handle /ref/:code
   var refMatch = path.match(/^\/ref\/(.+)$/);
   if (refMatch) return { page: "subscribe", refCode: refMatch[1] };
+  // Handle /portal/* and /admin/*
+  if (path.startsWith("/portal")) return { page: "userPortal", refCode: "" };
+  if (path.startsWith("/admin") && path !== "/admin-login") return { page: "adminPanel", refCode: "" };
   return { page: PATH_TO_PAGE[path] || "landing", refCode: "" };
 }
 
@@ -4759,7 +4773,7 @@ function TutoriiApp() {
   var go = function(p, ref) {
     setPage(p);
     if (ref) setRefCode(ref);
-    var path = PAGE_TO_PATH[p] || "/";
+    var path = p === "userPortal" ? "/portal/overview" : (PAGE_TO_PATH[p] || "/");
     window.history.pushState({page: p}, "", path);
     window.scrollTo(0, 0);
   };
