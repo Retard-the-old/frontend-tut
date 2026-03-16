@@ -3501,14 +3501,22 @@ function AdminPanel(props) {
     })});
   }
 
-  function moveModule(cid,dir) {
+  async function moveModule(cid,dir) {
+    var newCourses;
     setCourses(function(p){
       var idx = p.findIndex(function(c){return c.id===cid});
       if((dir===-1 && idx===0)||(dir===1 && idx===p.length-1)) return p;
       var arr = p.slice();
       var tmp = arr[idx]; arr[idx] = arr[idx+dir]; arr[idx+dir] = tmp;
+      newCourses = arr;
       return arr;
     });
+    // Persist new sort_order for all courses
+    if (newCourses) {
+      newCourses.forEach(function(c, i) {
+        adminApi.patchCourse(c.id, { sort_order: i }).catch(function(){});
+      });
+    }
   }
 
   function simulateUpload(cid,lid,type,file) { flash("Use PDF URL instead — click the lesson to edit"); }

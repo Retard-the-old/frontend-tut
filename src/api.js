@@ -136,6 +136,7 @@ export const admin = {
   payouts: (limit=200) => api.get("/admin/payouts?limit="+limit),
   triggerPayouts: () => api.post("/admin/payouts/trigger"),
   createCourse: (data) => api.post("/courses/", data),
+  patchCourse: (id, data) => api.patch("/courses/"+id, data),
   deleteCourse: (id) => api.delete("/courses/"+id),
   getLessons: (courseId) => api.get("/courses/"+courseId+"/lessons"),
   createLesson: (courseId, data) => api.post("/courses/"+courseId+"/lessons", data),
