@@ -1867,6 +1867,10 @@ function UserPortal(props) {
       coursesApi.list(),
       usersApi.referralList(),
     ]).then(function(results){
+      // If /users/me 403s, session is dead — redirect to login
+      if(results[0].status==="rejected" && results[0].reason && results[0].reason.message === "Session expired") {
+        go("login"); return;
+      }
       if(results[0].status==="fulfilled") setRealUser(results[0].value);
       if(results[1].status==="fulfilled") setReferralStats(results[1].value);
       if(results[2].status==="fulfilled") setMyCommissions(results[2].value || []);
@@ -1906,6 +1910,21 @@ function UserPortal(props) {
     l1: referralList && Array.isArray(referralList.level1) ? referralList.level1.map(function(r){ return { name:r.name||r.email, status:r.subscription_status||"inactive", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
     l2: referralList && Array.isArray(referralList.level2) ? referralList.level2.map(function(r){ return { name:r.name||r.email, from:r.referred_by_name||"", date: r.joined_at ? new Date(r.joined_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", earned: r.commission_earned||0 }; }) : [],
     payouts: myPayouts.map(function(p){ return { date: p.created_at ? new Date(p.created_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "", amount: p.amount_aed||0, status: p.status||"pending", ref: p.id||"" }; }),
+    earningsHistory: (function(){
+      // Build weekly earnings history from commissions
+      var weeks = {};
+      (myCommissions||[]).forEach(function(c){
+        var d = new Date(c.created_at);
+        // Get week start (Monday)
+        var day = d.getDay(); var diff = (day===0?-6:1-day);
+        var mon = new Date(d); mon.setDate(d.getDate()+diff);
+        var key = mon.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+        if (!weeks[key]) weeks[key] = {week:key, l1:0, l2:0, net:0};
+        if (c.level===1) weeks[key].l1 += c.amount_aed||0;
+        if (c.level===2) weeks[key].l2 += c.amount_aed||0;
+      });
+      return Object.values(weeks).map(function(w){ w.net=parseFloat((w.l1+w.l2).toFixed(2)); w.l1=parseFloat(w.l1.toFixed(2)); w.l2=parseFloat(w.l2.toFixed(2)); return w; });
+    })(),
   } : {
     name: authUser ? (authUser.full_name || authUser.email) : "Loading...",
     email: authUser ? authUser.email : "",
@@ -1913,7 +1932,7 @@ function UserPortal(props) {
     status: "inactive", plan: "Tutorii Monthly", paymentMethod: "MamoPay",
     joined: "", lastLogin: "", nextBilling: "N/A", referredBy: "Direct",
     iban: "", ibanName: "", billing: [], earn: { total:0, month:0, pending:0, paid:0 },
-    l1: [], l2: [], payouts: [],
+    l1: [], l2: [], payouts: [], earningsHistory: [],
   };
 
   var mob = useIsMobile();
@@ -2509,7 +2528,7 @@ function UserPortal(props) {
             </div>
             <p style={{ fontSize:11, color:"#52525b", margin:"0 0 16px" }}>Weekly commission breakdown — Level 1 direct, Level 2 indirect, and net profit</p>
             <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={chartRange==="4w"?u.earningsHistory.slice(-4):chartRange==="3m"?u.earningsHistory.slice(-12):u.earningsHistory} margin={{top:5,right:5,left:mob?-25:-10,bottom:5}}>
+              <AreaChart data={(function(){ var h=u.earningsHistory||[]; return chartRange==="4w"?h.slice(-4):chartRange==="3m"?h.slice(-12):h; })()} margin={{top:5,right:5,left:mob?-25:-10,bottom:5}}>
                 <defs>
                   <linearGradient id="uL1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="rgb(200,180,140)" stopOpacity={0.45}/><stop offset="50%" stopColor="rgb(200,180,140)" stopOpacity={0.15}/><stop offset="100%" stopColor="rgb(200,180,140)" stopOpacity={0}/></linearGradient>
                   <linearGradient id="uL2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#a78bfa" stopOpacity={0.4}/><stop offset="50%" stopColor="#7c3aed" stopOpacity={0.12}/><stop offset="100%" stopColor="#7c3aed" stopOpacity={0}/></linearGradient>
@@ -2551,7 +2570,7 @@ function UserPortal(props) {
               <ResponsiveContainer width="100%" height={240}>
                 <AreaChart margin={{top:5,right:5,left:mob?-25:-10,bottom:5}} data={(function(){
                   var running = 0;
-                  return u.earningsHistory.map(function(w){
+                  return (u.earningsHistory||[]).map(function(w){
                     running += w.l1 + w.l2;
                     return {week:w.week, total:Math.round(running*100)/100};
                   });
@@ -2714,17 +2733,23 @@ function UserPortal(props) {
                   <span style={{ fontSize:12, fontWeight:600, color:"rgb(200,180,140)" }}>{pct+"% complete"}</span>
                 </div>
               </div>
-              {u.status !== "active" && (
-                <div style={{ background:"rgba(200,180,140,0.06)", borderRadius:12, padding:"20px 24px", border:"1px solid rgba(200,180,140,0.15)", marginBottom:20, textAlign:"center" }}>
-                  <div style={{ fontSize:14, fontWeight:600, color:"rgb(200,180,140)", marginBottom:8 }}>Subscribe to access course materials</div>
-                  <Btn onClick={function(){go("subscribe")}} style={{ fontSize:13 }}>Subscribe Now</Btn>
+              {u.status !== "active" ? (
+                <div style={{ background:"#131315", borderRadius:16, padding:"48px 24px", border:"1px solid rgba(200,180,140,0.15)", textAlign:"center", marginTop:8 }}>
+                  <div style={{ lineHeight:0, marginBottom:16 }}><Ico name="lock" size={40} color="rgb(200,180,140)" /></div>
+                  <h3 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>Course Access Locked</h3>
+                  <p style={{ fontSize:14, color:"#71717a", lineHeight:1.7, maxWidth:380, margin:"0 auto 24px" }}>An active subscription is required to access course materials. Subscribe now to unlock all modules and lessons.</p>
+                  <Btn onClick={function(){go("subscribe")}} style={{ fontSize:14, padding:"12px 32px" }}>{"Subscribe · AED "+PRICE+"/month"}</Btn>
+                  <div style={{ fontSize:12, color:"#52525b", marginTop:12 }}>Already paid? Contact support and we'll activate your account.</div>
                 </div>
-              )}
-              {courses.map(function(c){
+              ) : courses.map(function(c){
                 var done = c.lessons.filter(function(l){return l.done}).length;
                 return (
                   <div key={c.id} style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden", marginBottom:12 }}>
                     <div onClick={async function(){
+                      if (u.status !== "active") {
+                        gotoTab("overview");
+                        return;
+                      }
                       var next = openCourse===c.id ? null : c.id;
                       setOpenCourse(next);
                       if (next && c.lessons.length === 0) {
