@@ -3897,7 +3897,30 @@ function AdminPanel(props) {
                   ].map(function(a){
                     var isActive = actionPanel === a[0];
                     return (
-                      <button key={a[0]} onClick={function(){ if(a[0]==="toggleActive"){ doAction(a[2], function(){ return (selectedUser.status==="active" ? "Deactivated " : "Reactivated ") + selectedUser.name }); return; } if(a[0]==="cancelSub"){ doAction("Cancel", function(){ return "Subscription cancelled for "+selectedUser.name }); return; } if(a[0]==="activateSub"){ doAction("Activate", function(){ return "Subscription activated for "+selectedUser.name }); return; } clearActionPanel(); setActionPanel(isActive ? null : a[0]); }} style={{ display:"flex", alignItems:"center", gap:5, padding:"7px 12px", borderRadius:8, border:"1px solid "+(isActive ? a[3]+"40" : "rgba(255,255,255,0.06)"), background:isActive ? a[3]+"15" : "transparent", fontSize:11, fontWeight:600, color:isActive ? a[3] : "#71717a", cursor:"pointer", transition:"all 0.2s" }}>
+                      <button key={a[0]} onClick={async function(){
+                        if (a[0]==="toggleActive") { doAction(a[2], function(){ return (selectedUser.status==="active" ? "Deactivated " : "Reactivated ") + selectedUser.name }); return; }
+                        if (a[0]==="cancelSub") {
+                          setActionLoading(true);
+                          try {
+                            await adminApi.cancelSubscription(selectedUser.id);
+                            setAdminUsers(function(p){return p.map(function(u){return u.id===selectedUser.id?Object.assign({},u,{status:"inactive"}):u})});
+                            setSelectedUser(function(u){return Object.assign({},u,{status:"inactive"})});
+                            flash("Subscription cancelled for "+selectedUser.name);
+                          } catch(e){ flash("Error: "+(e.message||"Failed")); }
+                          setActionLoading(false); return;
+                        }
+                        if (a[0]==="activateSub") {
+                          setActionLoading(true);
+                          try {
+                            await adminApi.activateSubscription(selectedUser.id);
+                            setAdminUsers(function(p){return p.map(function(u){return u.id===selectedUser.id?Object.assign({},u,{status:"active"}):u})});
+                            setSelectedUser(function(u){return Object.assign({},u,{status:"active"})});
+                            flash("Subscription activated for "+selectedUser.name);
+                          } catch(e){ flash("Error: "+(e.message||"Failed")); }
+                          setActionLoading(false); return;
+                        }
+                        clearActionPanel(); setActionPanel(isActive ? null : a[0]);
+                      }} style={{ display:"flex", alignItems:"center", gap:5, padding:"7px 12px", borderRadius:8, border:"1px solid "+(isActive ? a[3]+"40" : "rgba(255,255,255,0.06)"), background:isActive ? a[3]+"15" : "transparent", fontSize:11, fontWeight:600, color:isActive ? a[3] : "#71717a", cursor:"pointer", transition:"all 0.2s" }}>
                         <Ico name={a[1]} size={12} color={isActive ? a[3] : "#52525b"} />
                         {a[2]}
                       </button>
