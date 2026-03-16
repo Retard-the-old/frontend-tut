@@ -3374,6 +3374,7 @@ function AdminPanel(props) {
       adminApi.users(),
       adminApi.dashboard(),
       adminApi.payouts(),
+      coursesApi.list(),
     ]).then(function(results){
       if(results[0].status==="fulfilled" && Array.isArray(results[0].value)){
         setAdminUsers(results[0].value.map(function(u){
@@ -3388,6 +3389,11 @@ function AdminPanel(props) {
       }
       if(results[1].status==="fulfilled") setAdminStats(results[1].value);
       if(results[2].status==="fulfilled" && Array.isArray(results[2].value)) setPayouts(results[2].value);
+      if(results[3].status==="fulfilled" && Array.isArray(results[3].value)){
+        setCourses(results[3].value.map(function(c){
+          return { id:c.id, module:c.title, icon:c.category||"book", lessons:[] };
+        }));
+      }
       setAdminLoading(false);
     });
   }, [adminAuthUser]);
@@ -3415,7 +3421,7 @@ function AdminPanel(props) {
     if (!newModule.module.trim()) return;
     try {
       var slug = newModule.module.toLowerCase().replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"");
-      var created = await adminApi.createCourse({ title: newModule.module, slug: slug, icon: newModule.icon, is_published: true, sort_order: courses.length });
+      var created = await adminApi.createCourse({ title: newModule.module, slug: slug, category: newModule.icon, is_published: true, sort_order: courses.length });
       setCourses(function(p){ return p.concat([{ id: created.id, module: created.title, icon: created.category || newModule.icon, lessons: [] }]) });
       setNewModule({module:"",icon:"book"});
       setShowAddModule(false);
@@ -4789,8 +4795,16 @@ function TutoriiApp() {
     window.addEventListener("popstate", onPop);
     return function() { window.removeEventListener("popstate", onPop); };
   }, []);
-  var _courses = useState(INIT_COURSES);
+  var _courses = useState([]);
   var courses = _courses[0]; var setCourses = _courses[1];
+
+  useEffect(function(){
+    coursesApi.list().then(function(list){
+      if (Array.isArray(list) && list.length > 0) {
+        setCourses(list.map(function(c){ return { id:c.id, module:c.title, icon:c.category||"book", lessons:[] }; }));
+      }
+    }).catch(function(){});
+  }, []);
   var _chatOpen = useState(false); var chatOpen = _chatOpen[0]; var setChatOpen = _chatOpen[1];
   var _chatMinimized = useState(false); var chatMinimized = _chatMinimized[0]; var setChatMinimized = _chatMinimized[1];
   var { user: authUser } = useAuth();
