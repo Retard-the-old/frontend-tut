@@ -1521,7 +1521,11 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
       if (sub.payment_link) window.open(sub.payment_link, "_blank");
       setStep(3);
     } catch(e) {
-      setErrors({ api: e.message || "Something went wrong. Please try again." });
+      var msg = e.message || "Something went wrong. Please try again.";
+      if (msg.toLowerCase().includes("already") || msg.toLowerCase().includes("exist") || msg.includes("409")) {
+        msg = "An account with this email already exists. Please log in instead.";
+      }
+      setErrors({ api: msg });
     } finally {
       setProcessing(false);
     }
@@ -1590,6 +1594,7 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
             <Btn onClick={function(){if(termsAgreed)handlePay()}} full style={{ padding:"13px", fontSize:15, borderRadius:12, opacity:termsAgreed?1:0.4, cursor:termsAgreed?"pointer":"not-allowed" }}>
               {processing ? "Processing..." : "Pay AED "+PRICE+" - Subscribe"}
             </Btn>
+            {errors.api && <div style={{ marginTop:12, padding:"10px 14px", borderRadius:8, background:"rgba(248,113,113,0.08)", border:"1px solid rgba(248,113,113,0.2)", color:"#f87171", fontSize:13, textAlign:"center" }}>{errors.api}{errors.api.includes("log in") && <span> <span onClick={function(){go("login")}} style={{ color:"rgb(200,180,140)", fontWeight:600, cursor:"pointer", textDecoration:"underline" }}>Log in here</span></span>}</div>}
             {!termsAgreed && <div style={{ textAlign:"center", fontSize:11, color:"#52525b", marginTop:8 }}>You must accept the terms to continue</div>}
             <div style={{ textAlign:"center", marginTop:12 }}>
               <span onClick={function(){setStep(1)}} style={{ fontSize:13, color:"rgb(200,180,140)", cursor:"pointer" }}>Back</span>
