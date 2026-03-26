@@ -1574,10 +1574,17 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
 
           {step === 2 && <div>
             <h3 style={{ fontSize:22, fontWeight:700, color:"#d4d4d8", margin:"0 0 24px" }}>Complete payment</h3>
-            <div style={{ background:"rgba(255,255,255,0.03)", borderRadius:12, padding:20, marginBottom:24, border:"1px solid rgba(255,255,255,0.06)" }}>
+            <div style={{ background:"rgba(255,255,255,0.03)", borderRadius:12, padding:20, marginBottom:16, border:"1px solid rgba(255,255,255,0.06)" }}>
               <div style={{ display:"flex", justifyContent:"space-between", marginBottom:8 }}>
                 <span style={{ fontSize:14, color:"#71717a" }}>Tutorii Monthly</span>
                 <span style={{ fontSize:14, fontWeight:500, color:"#d4d4d8" }}>{"AED "+PRICE+"/month"}</span>
+              </div>
+            </div>
+            <div style={{ background:"rgba(200,180,140,0.06)", borderRadius:10, padding:"12px 16px", marginBottom:16, border:"1px solid rgba(200,180,140,0.2)", display:"flex", gap:10, alignItems:"flex-start" }}>
+              <Ico name="shield" size={16} color="rgb(200,180,140)" />
+              <div>
+                <div style={{ fontSize:13, fontWeight:700, color:"rgb(200,180,140)", marginBottom:3 }}>Important — use your Tutorii email</div>
+                <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.6 }}>{"When MamoPay asks for your email, use "}<strong style={{ color:"#d4d4d8" }}>{form.email}</strong>{" — the same email you just registered with. This is how we verify your payment and activate your account."}</div>
               </div>
             </div>
             <div style={{ background:"#131315", borderRadius:12, border:"2px dashed rgba(255,255,255,0.1)", padding:36, textAlign:"center", marginBottom:24 }}>
@@ -1616,6 +1623,67 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
             <Btn onClick={function(){go("userPortal")}} full style={{ padding:"13px", fontSize:15, borderRadius:12 }}>Enter My Dashboard</Btn>
           </div>}
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ═════════════════════════════════════════
+// CREATE USER FORM (Admin)
+// ═════════════════════════════════════════
+function CreateUserForm(props) {
+  var _name = useState(""); var name = _name[0]; var setName = _name[1];
+  var _email = useState(""); var email = _email[0]; var setEmail = _email[1];
+  var _pass = useState(""); var pass = _pass[0]; var setPass = _pass[1];
+  var _role = useState("user"); var role = _role[0]; var setRole = _role[1];
+  var _loading = useState(false); var loading = _loading[0]; var setLoading = _loading[1];
+  var _err = useState(""); var err = _err[0]; var setErr = _err[1];
+  var inputStyle = { width:"100%", padding:"9px 12px", borderRadius:8, border:"1px solid rgba(255,255,255,0.08)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", boxSizing:"border-box", fontFamily:"inherit" };
+
+  async function handleCreate() {
+    if (!name.trim() || !email.trim() || !pass.trim()) { setErr("All fields are required"); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setErr("Enter a valid email"); return; }
+    if (pass.length < 8) { setErr("Password must be at least 8 characters"); return; }
+    setLoading(true); setErr("");
+    try {
+      var created = await adminApi.createUser({ full_name: name.trim(), email: email.trim().toLowerCase(), password: pass, role: role });
+      props.onSuccess(created);
+    } catch(e) {
+      setErr(e.message || "Failed to create user");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div style={{ background:"#131315", borderRadius:14, padding:20, border:"1px solid rgba(200,180,140,0.2)", marginBottom:16 }}>
+      <div style={{ fontSize:14, fontWeight:700, color:"#d4d4d8", marginBottom:16 }}>Create New User</div>
+      {err && <div style={{ padding:"8px 12px", borderRadius:6, background:"rgba(248,113,113,0.08)", border:"1px solid rgba(248,113,113,0.2)", color:"#f87171", fontSize:12, marginBottom:12 }}>{err}</div>}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:10 }}>
+        <div>
+          <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>FULL NAME</label>
+          <input value={name} onChange={function(e){setName(e.target.value);setErr("")}} placeholder="John Smith" style={inputStyle} />
+        </div>
+        <div>
+          <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>EMAIL</label>
+          <input type="email" value={email} onChange={function(e){setEmail(e.target.value);setErr("")}} placeholder="john@example.com" style={inputStyle} />
+        </div>
+        <div>
+          <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>PASSWORD</label>
+          <input type="password" value={pass} onChange={function(e){setPass(e.target.value);setErr("")}} placeholder="Min 8 characters" style={inputStyle} />
+        </div>
+        <div>
+          <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>ROLE</label>
+          <select value={role} onChange={function(e){setRole(e.target.value)}} style={Object.assign({},inputStyle,{cursor:"pointer"})}>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+            <option value="support">Support</option>
+          </select>
+        </div>
+      </div>
+      <div style={{ display:"flex", gap:8, justifyContent:"flex-end" }}>
+        <button onClick={props.onClose} style={{ padding:"8px 16px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Cancel</button>
+        <button onClick={handleCreate} disabled={loading} style={{ padding:"8px 20px", borderRadius:8, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:12, fontWeight:700, cursor:"pointer", opacity:loading?0.6:1 }}>{loading?"Creating...":"Create User"}</button>
       </div>
     </div>
   );
@@ -3834,12 +3902,21 @@ function AdminPanel(props) {
         {tab === "users" && <div style={{ maxWidth:"100%", overflow:"hidden" }}>
           <div style={{ display:"flex", flexDirection:mob?"column":"row", justifyContent:"space-between", alignItems:mob?"flex-start":"center", gap:mob?10:0, marginBottom:20 }}>
             <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>{"Users ("+adminUsers.length+")"}</h2>
-            <div style={{ position:"relative", width:mob?"100%":"auto" }}>
-              <div style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", lineHeight:0, pointerEvents:"none" }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#52525b" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
-              <input value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="Search name, email, or code..." style={{ padding:"9px 14px 9px 34px", borderRadius:8, border:"1px solid "+(search ? "rgba(200,180,140,0.2)" : "rgba(255,255,255,0.06)"), background:search ? "rgba(200,180,140,0.04)" : "#0a0a0c", color:"#fff", fontSize:13, width:mob?"100%":340, outline:"none", boxSizing:"border-box", transition:"border-color 0.2s, background 0.2s" }} />
-              {search && <button onClick={function(){setSearch("")}} style={{ position:"absolute", right:10, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", lineHeight:0, padding:2 }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#52525b" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>}
+            <div style={{ display:"flex", gap:8, alignItems:"center", width:mob?"100%":"auto" }}>
+              <div style={{ position:"relative", flex:mob?1:"none" }}>
+                <div style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", lineHeight:0, pointerEvents:"none" }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#52525b" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+                <input value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="Search name, email, or code..." style={{ padding:"9px 14px 9px 34px", borderRadius:8, border:"1px solid "+(search ? "rgba(200,180,140,0.2)" : "rgba(255,255,255,0.06)"), background:search ? "rgba(200,180,140,0.04)" : "#0a0a0c", color:"#fff", fontSize:13, width:mob?"100%":280, outline:"none", boxSizing:"border-box" }} />
+                {search && <button onClick={function(){setSearch("")}} style={{ position:"absolute", right:10, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", lineHeight:0, padding:2 }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#52525b" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>}
+              </div>
+              <button onClick={function(){setActionPanel(actionPanel==="createUser"?null:"createUser");setSelectedUser(null)}} style={{ padding:"9px 16px", borderRadius:8, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>+ Create User</button>
             </div>
           </div>
+
+          {actionPanel === "createUser" && <CreateUserForm onSuccess={function(newUser){
+            setAdminUsers(function(p){ return [{ name:newUser.full_name, email:newUser.email, code:newUser.referral_code, l1:0, l2:0, earned:0, pending:0, status:"inactive", joined:new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}), referrer:null, l1Names:[], l2Names:[], id:newUser.id, role:newUser.role, iban:"", ibanName:"" }].concat(p) });
+            setActionPanel(null);
+            flash("User created: "+newUser.email);
+          }} onClose={function(){setActionPanel(null)}} />}
           {(function(){
             var q = search.toLowerCase().trim();
             var filtered = adminUsers.filter(function(u){
@@ -3872,6 +3949,7 @@ function AdminPanel(props) {
                     <div style={{ display:"flex", gap:4 }}>
                       <button onClick={function(e){e.stopPropagation();setSelectedUser(selectedUser && selectedUser.name===u.name ? null : u)}} style={{ width:26, height:26, borderRadius:6, border:"1px solid "+(selectedUser && selectedUser.name===u.name?"rgba(200,180,140,0.3)":"rgba(255,255,255,0.06)"), background:selectedUser && selectedUser.name===u.name?"rgba(200,180,140,0.1)":"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0 }}><Ico name="chart" size={11} color={selectedUser && selectedUser.name===u.name?"rgb(200,180,140)":"#52525b"} /></button>
                       <button onClick={function(e){e.stopPropagation();flash(u.status==="active"?"Suspended "+u.name:"Reactivated "+u.name)}} style={{ width:26, height:26, borderRadius:6, border:"1px solid "+(u.status==="active"?"rgba(248,113,113,0.2)":"rgba(200,180,140,0.2)"), background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0 }}><Ico name={u.status==="active"?"lock":"shield"} size={11} color={u.status==="active"?"#f87171":"rgb(200,180,140)"} /></button>
+                      <button onClick={async function(e){ e.stopPropagation(); if(!window.confirm("Delete "+u.name+"? This cannot be undone.")) return; try { await adminApi.deleteUser(u.id); setAdminUsers(function(p){return p.filter(function(x){return x.id!==u.id})}); if(selectedUser && selectedUser.id===u.id) setSelectedUser(null); flash("Deleted "+u.name); } catch(err){ flash("Error: "+(err.message||"Failed to delete")); } }} style={{ width:26, height:26, borderRadius:6, border:"1px solid rgba(248,113,113,0.2)", background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0 }}><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
                       <button onClick={function(e){e.stopPropagation();flash("Manual payout initiated for "+u.name)}} style={{ width:26, height:26, borderRadius:6, border:"1px solid rgba(200,180,140,0.2)", background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0 }}><Ico name="dollar" size={11} color="rgb(200,180,140)" /></button>
                     </div>
                   </td>
