@@ -1517,8 +1517,6 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
     setProcessing(true);
     try {
       await register(form.name, form.email, form.password, form.ref || null);
-      const sub = await subscriptionsApi.create();
-      if (sub.payment_link) window.open(sub.payment_link, "_blank");
       setStep(3);
     } catch(e) {
       var msg = e.message || "Something went wrong. Please try again.";
@@ -1609,18 +1607,15 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
           </div>}
 
           {step === 3 && <div style={{ textAlign:"center", padding:"32px 0" }}>
-            <div style={{ width:60, height:60, borderRadius:"50%", background:"rgba(200,180,140,0.1)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px", lineHeight:0 }}><Ico name="shield" size={28} color="rgb(200,180,140)" /></div>
-            <h3 style={{ fontSize:24, fontWeight:700, color:"#d4d4d8", margin:"0 0 10px" }}>Welcome to Tutorii!</h3>
-            <p style={{ fontSize:14, color:"#71717a", marginBottom:12 }}>Your subscription is active.</p>
-            <div style={{ background:"rgba(200,180,140,0.08)", border:"1px solid rgba(200,180,140,0.15)", borderRadius:10, padding:"12px 16px", marginBottom:20, display:"flex", alignItems:"center", gap:10 }}>
-              <Ico name="chat" size={16} color="rgb(200,180,140)" />
-              <span style={{ fontSize:12, color:"rgb(200,180,140)" }}>{"A verification email has been sent to "}<strong>{form.email}</strong>{". Please verify your email to secure your account."}</span>
+            <div style={{ width:60, height:60, borderRadius:"50%", background:"rgba(200,180,140,0.1)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px", lineHeight:0 }}><Ico name="bank" size={28} color="rgb(200,180,140)" /></div>
+            <h3 style={{ fontSize:24, fontWeight:700, color:"#d4d4d8", margin:"0 0 10px" }}>Complete Your Payment</h3>
+            <p style={{ fontSize:14, color:"#71717a", marginBottom:20, lineHeight:1.7 }}>Your account has been created. Complete your payment on MamoPay to unlock full access to your dashboard and courses.</p>
+            <div style={{ background:"rgba(200,180,140,0.06)", border:"1px solid rgba(200,180,140,0.2)", borderRadius:10, padding:"14px 18px", marginBottom:20, textAlign:"left" }}>
+              <div style={{ fontSize:12, fontWeight:700, color:"rgb(200,180,140)", marginBottom:4 }}>Important</div>
+              <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.7 }}>{"Use "}<strong style={{ color:"#d4d4d8" }}>{form.email}</strong>{" as your email on MamoPay so we can verify your payment and activate your account automatically."}</div>
             </div>
-            <div style={{ background:"rgba(255,255,255,0.03)", borderRadius:12, padding:16, marginBottom:24, border:"1px solid rgba(255,255,255,0.06)" }}>
-              <div style={{ fontSize:11, fontWeight:600, color:"#52525b", marginBottom:6 }}>YOUR REFERRAL LINK</div>
-              <code style={{ fontSize:13, color:"#d4d4d8", fontWeight:600 }}>{"tutorii.com/ref/" + (form.ref || "YOUR_CODE")}</code>
-            </div>
-            <Btn onClick={function(){go("userPortal")}} full style={{ padding:"13px", fontSize:15, borderRadius:12 }}>Enter My Dashboard</Btn>
+            <Btn onClick={function(){ window.open("https://business.mamopay.com/pay/galcofzellc-2d4c35", "_blank"); }} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12 }}>Pay AED {PRICE} on MamoPay</Btn>
+            <p style={{ fontSize:12, color:"#52525b", marginTop:8 }}>Already paid? <span onClick={function(){go("login")}} style={{ color:"rgb(200,180,140)", cursor:"pointer", fontWeight:600 }}>Log in here</span> — access activates automatically once payment is confirmed.</p>
           </div>}
         </div>
       </div>
@@ -1953,6 +1948,12 @@ function UserPortal(props) {
         setCourses(results[5].value.map(function(c){ return { id:c.id, module:c.title, icon:c.icon||"book", lessons: (c.lessons||[]).map(function(l){ return { id:l.id, title:l.title, dur:l.duration_minutes?(l.duration_minutes+" min"):"10 min", done:l.completed||false }; }) }; }));
       }
       if(results[6].status==="fulfilled") setReferralList(results[6].value);
+      // Check subscription status — redirect to landing if not active
+      var sub = results[4].status==="fulfilled" ? results[4].value : null;
+      if (!sub || sub.status !== "active") {
+        go("subscribe");
+        return;
+      }
       setDashLoading(false);
     });
   }, []);
@@ -1964,7 +1965,7 @@ function UserPortal(props) {
     phone: realUser.phone || "",
     code: realUser.referral_code || "",
     avatar: (realUser.full_name||"U").split(" ").map(function(n){return n[0]}).join("").slice(0,2).toUpperCase(),
-    status: mySub ? mySub.status : "inactive",
+    status: mySub && mySub.status === "active" ? "active" : "inactive",
     plan: "Tutorii Monthly",
     paymentMethod: "MamoPay",
     joined: realUser.created_at ? new Date(realUser.created_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "",
