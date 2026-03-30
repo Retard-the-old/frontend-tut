@@ -80,8 +80,8 @@ export const api = {
 export const auth = {
   login: (email, password) =>
     api.post("/auth/login", { email, password }),
-  register: (full_name, email, password, referral_code) =>
-    api.post("/auth/register", { full_name, email, password, referral_code }),
+  register: (full_name, email, password, referral_code, phone) =>
+    api.post("/auth/register", { full_name, email, password, referral_code, phone: phone || "" }),
 };
 
 // ── User ──
