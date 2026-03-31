@@ -1614,7 +1614,7 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
               <div style={{ fontSize:12, fontWeight:700, color:"rgb(200,180,140)", marginBottom:4 }}>Important</div>
               <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.7 }}>{"Use "}<strong style={{ color:"#d4d4d8" }}>{form.email}</strong>{" as your email on MamoPay so we can verify your payment and activate your account automatically."}</div>
             </div>
-            <Btn onClick={function(){ window.open("https://business.mamopay.com/pay/galcofzellc-2d4c35", "_blank"); }} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12 }}>Pay AED {PRICE} on MamoPay</Btn>
+            <Btn onClick={function(){ window.open("https://business.mamopay.com/pay/galcofzellc-4b20ab", "_blank"); }} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12 }}>Pay AED {PRICE} on MamoPay</Btn>
             <p style={{ fontSize:12, color:"#52525b", marginTop:8 }}>Already paid? <span onClick={function(){go("login")}} style={{ color:"rgb(200,180,140)", cursor:"pointer", fontWeight:600 }}>Log in here</span> — access activates automatically once payment is confirmed.</p>
           </div>}
         </div>
