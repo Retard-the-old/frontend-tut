@@ -1880,7 +1880,7 @@ function UserPortal(props) {
   var chatLoading = props.chatLoading; var setChatLoading = props.setChatLoading;
   var _onboard = useState(0);
   var onboard = _onboard[0]; var setOnboard = _onboard[1];
-  var _showOnboard = useState(true);
+  var _showOnboard = useState(function(){ return !localStorage.getItem("tutorii_tour_done"); });
   var showOnboard = _showOnboard[0]; var setShowOnboard = _showOnboard[1];
   var _showCancel = useState(false); var showCancel = _showCancel[0]; var setShowCancel = _showCancel[1];
   var _cancelled = useState(false); var cancelled = _cancelled[0]; var setCancelled = _cancelled[1];
@@ -1943,10 +1943,15 @@ function UserPortal(props) {
         setCourses(results[5].value.map(function(c){ return { id:c.id, module:c.title, icon:c.icon||"book", lessons: (c.lessons||[]).map(function(l){ return { id:l.id, title:l.title, dur:l.duration_minutes?(l.duration_minutes+" min"):"10 min", done:l.completed||false }; }) }; }));
       }
       if(results[6].status==="fulfilled") setReferralList(results[6].value);
-      // Check subscription status — redirect to landing if not active
+      // If /users/me failed, user is not logged in — redirect to login
+      if(results[0].status==="rejected") {
+        go("login");
+        return;
+      }
+      // Check subscription — only redirect if we got a valid response
       var sub = results[4].status==="fulfilled" ? results[4].value : null;
-      if (!sub || sub.status !== "active") {
-        go("subscribe");
+      if (results[4].status==="fulfilled" && (!sub || sub.status !== "active")) {
+        go("login");
         return;
       }
       setDashLoading(false);
@@ -2034,7 +2039,7 @@ function UserPortal(props) {
       "=== USER PROFILE ===\n" +
       "Full Name: " + u.name + "\n" +
       "Email: " + u.email + "\n" +
-      "Phone: ***" + u.phone.slice(-4) + "\n" +
+      "Phone: ***" + (u.phone||"").slice(-4) + "\n" +
       "Account Status: " + u.status + "\n" +
       "Member Since: " + u.joined + "\n" +
       "Last Login: " + u.lastLogin + "\n" +
@@ -2357,7 +2362,7 @@ function UserPortal(props) {
         </div>
 
         {tab === "overview" && <div>
-          <h2 style={{ fontSize:22, fontWeight:700, margin:"0 0 20px", color:"#d4d4d8" }}>{"Welcome back, " + u.name.split(" ")[0]}</h2>
+          <h2 style={{ fontSize:22, fontWeight:700, margin:"0 0 20px", color:"#d4d4d8" }}>{"Welcome back, " + (u.name||"there").split(" ")[0]}</h2>
           <div style={{ display:"grid", gridTemplateColumns:mob?"1fr 1fr":"repeat(4, 1fr)", gap:mob?10:14, marginBottom:mob?16:24, alignItems:"stretch" }}>
             <StatCard icon="dollar" label="Total Earnings" value={"AED "+u.earn.total} />
             <StatCard icon="chart" label="This Month's Earnings" value={"AED "+u.earn.month} />
@@ -2367,24 +2372,30 @@ function UserPortal(props) {
           <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr", gap:14, alignItems:"stretch" }}>
             <div style={{ background:"#131315", borderRadius:14, padding:mob?14:22, border:"1px solid rgba(255,255,255,0.06)", boxSizing:"border-box" }}>
               <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 14px", color:"#d4d4d8" }}>Recent Referral Activity</h3>
-              {u.l1.slice(0,4).map(function(r){ return (
-                <div key={r.name} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"9px 0", borderBottom:"1px solid rgba(255,255,255,0.04)" }}>
-                  <div><div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{r.name}</div><div style={{ fontSize:11, color:"#52525b" }}>{r.date}</div></div>
-                  <div style={{ textAlign:"right" }}><div style={{ fontSize:13, fontWeight:500, color:"#d4d4d8" }}>{"AED "+r.earned.toFixed(2)}</div><Badge s={r.status} /></div>
-                </div>
-              )})}
+              {(u.l1||[]).length === 0
+                ? <div style={{ textAlign:"center", padding:"24px 0" }}><Ico name="link" size={28} color="#3f3f46" /><p style={{ fontSize:13, color:"#52525b", marginTop:10 }}>No referrals yet. Share your link to start earning.</p><span onClick={function(){gotoTab("referrals")}} style={{ fontSize:12, color:"rgb(200,180,140)", cursor:"pointer", fontWeight:600 }}>Get your referral link →</span></div>
+                : (u.l1||[]).slice(0,4).map(function(r){ return (
+                  <div key={r.name} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"9px 0", borderBottom:"1px solid rgba(255,255,255,0.04)" }}>
+                    <div><div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{r.name}</div><div style={{ fontSize:11, color:"#52525b" }}>{r.date}</div></div>
+                    <div style={{ textAlign:"right" }}><div style={{ fontSize:13, fontWeight:500, color:"#d4d4d8" }}>{"AED "+(r.earned||0).toFixed(2)}</div><Badge s={r.status} /></div>
+                  </div>
+                )})
+              }
             </div>
             <div style={{ background:"#131315", borderRadius:14, padding:mob?14:22, border:"1px solid rgba(255,255,255,0.06)", boxSizing:"border-box" }}>
               <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 14px", color:"#d4d4d8" }}>Continue Where You Left Off</h3>
-              {courses.filter(function(c){return c.lessons.some(function(l){return !l.done})}).slice(0,3).map(function(c){
-                var next = c.lessons.find(function(l){return !l.done});
-                return (
-                  <div key={c.id} onClick={function(){gotoTab("courses");setOpenCourse(c.id);setActiveLesson(next)}} style={{ display:"flex", gap:12, alignItems:"center", padding:"10px 0", borderBottom:"1px solid rgba(255,255,255,0.04)", cursor:"pointer" }}>
-                    <span style={{ lineHeight:0 }}><Ico name={c.icon} size={20} color="rgb(200,180,140)" /></span>
-                    <div><div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{next ? next.title : ""}</div><div style={{ fontSize:11, color:"#52525b" }}>{c.module}</div></div>
-                  </div>
-                );
-              })}
+              {courses.filter(function(c){return c.lessons.some(function(l){return !l.done})}).length === 0
+                ? <div style={{ textAlign:"center", padding:"24px 0" }}><Ico name="book" size={28} color="#3f3f46" /><p style={{ fontSize:13, color:"#52525b", marginTop:10 }}>{courses.length === 0 ? "Courses loading..." : "All lessons complete! Great work."}</p></div>
+                : courses.filter(function(c){return c.lessons.some(function(l){return !l.done})}).slice(0,3).map(function(c){
+                  var next = c.lessons.find(function(l){return !l.done});
+                  return (
+                    <div key={c.id} onClick={function(){gotoTab("courses");setOpenCourse(c.id);setActiveLesson(next)}} style={{ display:"flex", gap:12, alignItems:"center", padding:"10px 0", borderBottom:"1px solid rgba(255,255,255,0.04)", cursor:"pointer" }}>
+                      <span style={{ lineHeight:0 }}><Ico name={c.icon} size={20} color="rgb(200,180,140)" /></span>
+                      <div><div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{next ? next.title : ""}</div><div style={{ fontSize:11, color:"#52525b" }}>{c.module}</div></div>
+                    </div>
+                  );
+                })
+              }
             </div>
           </div>
 
@@ -2411,7 +2422,7 @@ function UserPortal(props) {
                   </div>
                   <div style={{ display:"flex", justifyContent:"space-between", fontSize:10, color:"#52525b" }}>
                     <span style={{ padding:"2px 8px", borderRadius:5, background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.05)" }}>Pending Balance</span>
-                    <span style={{ padding:"2px 8px", borderRadius:5, background:u.earn.pending >= 10 ? "rgba(200,180,140,0.08)" : "rgba(248,113,113,0.08)", border:"1px solid "+(u.earn.pending >= 10 ? "rgba(200,180,140,0.12)" : "rgba(248,113,113,0.12)"), color: u.earn.pending >= 10 ? "rgb(200,180,140)" : "#f87171", fontWeight:600 }}>{"AED "+u.earn.pending.toFixed(2)}{u.earn.pending >= 10 ? " \u2713" : " (min AED 50)"}</span>
+                    <span style={{ padding:"2px 8px", borderRadius:5, background:parseFloat(u.earn.pending||0) >= 10 ? "rgba(200,180,140,0.08)" : "rgba(248,113,113,0.08)", border:"1px solid "+(parseFloat(u.earn.pending||0) >= 10 ? "rgba(200,180,140,0.12)" : "rgba(248,113,113,0.12)"), color: parseFloat(u.earn.pending||0) >= 10 ? "rgb(200,180,140)" : "#f87171", fontWeight:600 }}>{"AED "+parseFloat(u.earn.pending||0).toFixed(2)}{parseFloat(u.earn.pending||0) >= 10 ? " \u2713" : " (min AED 50)"}</span>
                   </div>
                 </div>
               );
@@ -2441,7 +2452,7 @@ function UserPortal(props) {
                     <div>
                       <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:6 }}>
                         <div style={{ width:8, height:8, borderRadius:2, background:"rgb(200,180,140)" }} />
-                        <span style={{ fontSize:10, color:"#71717a", padding:"2px 8px", borderRadius:5, background:"rgba(200,180,140,0.06)", border:"1px solid rgba(200,180,140,0.1)" }}>{"Earned $"+monthlyGross.toFixed(2)}</span>
+                        <span style={{ fontSize:10, color:"#71717a", padding:"2px 8px", borderRadius:5, background:"rgba(200,180,140,0.06)", border:"1px solid rgba(200,180,140,0.1)" }}>{"Earned AED "+monthlyGross.toFixed(2)}</span>
                       </div>
                       <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:8 }}>
                         <div style={{ width:8, height:8, borderRadius:2, background:"rgba(248,113,113,0.4)" }} />
@@ -2882,7 +2893,7 @@ function UserPortal(props) {
                   {(function(){
                     var msgs = ticketMsgs.length > 0 ? ticketMsgs : [
                       { sender: u.name, role: "user", content: "Hi, I need help with: " + viewTicket.subject, time: viewTicket.created + ", 10:15 AM" },
-                      { sender: "Support Team", role: "admin", content: "Hi " + u.name.split(" ")[0] + ", thanks for reaching out. We're looking into this for you and will update you shortly.", time: viewTicket.created + ", 2:30 PM" },
+                      { sender: "Support Team", role: "admin", content: "Hi " + (u.name||"there").split(" ")[0] + ", thanks for reaching out. We're looking into this for you and will update you shortly.", time: viewTicket.created + ", 2:30 PM" },
                       viewTicket.status !== "open" ? { sender: "Support Team", role: "admin", content: "We've investigated this and taken action. Please let us know if there's anything else we can help with.", time: viewTicket.updated + ", 11:00 AM" } : null,
                     ].filter(Boolean);
                     return msgs.map(function(msg, i) {
@@ -2904,8 +2915,8 @@ function UserPortal(props) {
 
                   {viewTicket.status !== "closed" && viewTicket.status !== "resolved" && (
                     <div style={{ display:"flex", gap:8, marginTop:8 }}>
-                      <input value={ticketReply} onChange={function(e){setTicketReply(e.target.value)}} onKeyDown={function(e){if(e.key==="Enter"&&ticketReply.trim()){setTicketMsgs(function(prev){var base=prev.length>0?prev:[{sender:u.name,role:"user",content:"Hi, I need help with: "+viewTicket.subject,time:viewTicket.created+", 10:15 AM"},{sender:"Support Team",role:"admin",content:"Hi "+u.name.split(" ")[0]+", thanks for reaching out. We're looking into this.",time:viewTicket.created+", 2:30 PM"}];return base.concat([{sender:u.name,role:"user",content:ticketReply,time:"Just now"}])});setTicketReply("")}}} placeholder="Type your reply..." style={{ flex:1, padding:"11px 16px", borderRadius:10, border:"1px solid rgba(255,255,255,0.08)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", fontFamily:"'Plus Jakarta Sans',sans-serif" }} />
-                      <button onClick={function(){if(!ticketReply.trim())return;setTicketMsgs(function(prev){var base=prev.length>0?prev:[{sender:u.name,role:"user",content:"Hi, I need help with: "+viewTicket.subject,time:viewTicket.created+", 10:15 AM"},{sender:"Support Team",role:"admin",content:"Hi "+u.name.split(" ")[0]+", thanks for reaching out.",time:viewTicket.created+", 2:30 PM"}];return base.concat([{sender:u.name,role:"user",content:ticketReply,time:"Just now"}])});setTicketReply("")}} style={{ padding:"11px 20px", borderRadius:10, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:13, fontWeight:600, cursor:"pointer" }}>Send</button>
+                      <input value={ticketReply} onChange={function(e){setTicketReply(e.target.value)}} onKeyDown={function(e){if(e.key==="Enter"&&ticketReply.trim()){setTicketMsgs(function(prev){var base=prev.length>0?prev:[{sender:u.name,role:"user",content:"Hi, I need help with: "+viewTicket.subject,time:viewTicket.created+", 10:15 AM"},{sender:"Support Team",role:"admin",content:"Hi "+(u.name||"there").split(" ")[0]+", thanks for reaching out. We're looking into this.",time:viewTicket.created+", 2:30 PM"}];return base.concat([{sender:u.name,role:"user",content:ticketReply,time:"Just now"}])});setTicketReply("")}}} placeholder="Type your reply..." style={{ flex:1, padding:"11px 16px", borderRadius:10, border:"1px solid rgba(255,255,255,0.08)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", fontFamily:"'Plus Jakarta Sans',sans-serif" }} />
+                      <button onClick={function(){if(!ticketReply.trim())return;setTicketMsgs(function(prev){var base=prev.length>0?prev:[{sender:u.name,role:"user",content:"Hi, I need help with: "+viewTicket.subject,time:viewTicket.created+", 10:15 AM"},{sender:"Support Team",role:"admin",content:"Hi "+(u.name||"there").split(" ")[0]+", thanks for reaching out.",time:viewTicket.created+", 2:30 PM"}];return base.concat([{sender:u.name,role:"user",content:ticketReply,time:"Just now"}])});setTicketReply("")}} style={{ padding:"11px 20px", borderRadius:10, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:13, fontWeight:600, cursor:"pointer" }}>Send</button>
                     </div>
                   )}
                   {(viewTicket.status === "closed" || viewTicket.status === "resolved") && (
@@ -3050,12 +3061,12 @@ function UserPortal(props) {
         </div>
       )}
       {/* ═══ ONBOARDING WALKTHROUGH ═══ */}
-      {showOnboard && (
+      {showOnboard && !dashLoading && (
         <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.6)", zIndex:400, display:"flex", alignItems:"center", justifyContent:"center" }}>
           <div style={{ background:"#131315", borderRadius:20, padding:"36px 40px", maxWidth:480, width:"90%", textAlign:"center", boxShadow:"0 20px 60px rgba(0,0,0,0.3)" }}>
             {onboard === 0 && <div>
               <div style={{ marginBottom:16, lineHeight:0 }}><Ico name="sparkle" size={48} color="rgb(200,180,140)" /></div>
-              <h2 style={{ fontSize:20, fontWeight:500, color:"#d4d4d8", margin:"0 0 8px" }}>{"Welcome to Tutorii, "+u.name.split(" ")[0]+"!"}</h2>
+              <h2 style={{ fontSize:20, fontWeight:500, color:"#d4d4d8", margin:"0 0 8px" }}>{"Welcome to Tutorii, "+(u.name||"there").split(" ")[0]+"!"}</h2>
               <p style={{ fontSize:14, color:"#71717a", lineHeight:1.7, marginBottom:24 }}>{"Let's take a quick tour of your dashboard so you can start learning and earning right away."}</p>
             </div>}
             {onboard === 1 && <div>
@@ -3089,10 +3100,10 @@ function UserPortal(props) {
               {onboard < 4 ? (
                 <Btn onClick={function(){setOnboard(onboard+1)}} style={{ padding:"11px 28px", fontSize:13 }}>Next</Btn>
               ) : (
-                <Btn onClick={function(){setShowOnboard(false)}} style={{ padding:"11px 28px", fontSize:13, background:"rgb(200,180,140)", color:"#0a0a0c" }}>{"Get Started"}</Btn>
+                <Btn onClick={function(){localStorage.setItem("tutorii_tour_done","1");setShowOnboard(false)}} style={{ padding:"11px 28px", fontSize:13, background:"rgb(200,180,140)", color:"#0a0a0c" }}>{"Get Started"}</Btn>
               )}
             </div>
-            {onboard < 4 && <div style={{ marginTop:12 }}><span onClick={function(){setShowOnboard(false)}} style={{ fontSize:12, color:"#52525b", cursor:"pointer" }}>Skip tour</span></div>}
+            {onboard < 4 && <div style={{ marginTop:12 }}><span onClick={function(){localStorage.setItem("tutorii_tour_done","1");setShowOnboard(false)}} style={{ fontSize:12, color:"#52525b", cursor:"pointer" }}>Skip tour</span></div>}
           </div>
         </div>
       )}
@@ -4965,8 +4976,22 @@ function TutoriiApp() {
   }, []);
   var _chatOpen = useState(false); var chatOpen = _chatOpen[0]; var setChatOpen = _chatOpen[1];
   var _chatMinimized = useState(false); var chatMinimized = _chatMinimized[0]; var setChatMinimized = _chatMinimized[1];
-  var { user: authUser } = useAuth();
+  var { user: authUser, loading: authLoading } = useAuth();
   var firstName = authUser && authUser.full_name ? authUser.full_name.split(" ")[0] : "there";
+
+  // Don't render portal pages until auth is restored from localStorage
+  if (authLoading) {
+    return (
+      <div style={{ minHeight:"100vh", background:"#0a0a0c", display:"flex", alignItems:"center", justifyContent:"center" }}>
+        <div style={{ textAlign:"center" }}>
+          <div style={{ width:40, height:40, borderRadius:10, background:"rgba(200,180,140,0.08)", border:"1px solid rgba(200,180,140,0.15)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 16px", animation:"pulse 1.5s ease-in-out infinite" }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgb(200,180,140)" strokeWidth="2" strokeLinecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <p style={{ fontSize:13, color:"#52525b" }}>Loading...</p>
+        </div>
+      </div>
+    );
+  }
   var _chatMsgs = useState([{role:"assistant",content:"Hi "+firstName+"! I'm your Tutorii support assistant. I have access to your account details, referrals, earnings, and course progress. How can I help you today?"}]);
   var chatMsgs = _chatMsgs[0]; var setChatMsgs = _chatMsgs[1];
   var _chatInput = useState(""); var chatInput = _chatInput[0]; var setChatInput = _chatInput[1];
