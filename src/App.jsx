@@ -41,77 +41,17 @@ const INIT_COURSES = [
 ];
 
 const USER = {
-  name: "Aisha Khan", email: "aisha@example.com", code: "AISHA22", avatar: "AK",
-  phone: "+971 55 123 4567",
-  joined: "Jan 28, 2026",
-  status: "active",
-  plan: "AED 95/month",
-  nextBilling: "Mar 28, 2026",
-  paymentMethod: "Visa ending 6411",
-  referredBy: "David Chen (DAVID2026)",
-  iban: "AE07 0331 2345 6789 0123 457",
-  lastLogin: "Mar 3, 2026, 10:42 AM GST",
-  l1: [
-    { name: "Priya Sharma", date: "Feb 5", status: "active", earned: 228 },
-    { name: "Marco Santos", date: "Feb 10", status: "active", earned: 190 },
-    { name: "Sara Ahmed", date: "Feb 14", status: "active", earned: 152 },
-    { name: "Raj Patel", date: "Feb 18", status: "active", earned: 114 },
-    { name: "Lina Gomez", date: "Feb 22", status: "active", earned: 76 },
-    { name: "Omar Hassan", date: "Feb 25", status: "cancelled", earned: 38 },
-    { name: "Nina Costa", date: "Feb 27", status: "active", earned: 38 },
-    { name: "Ali Raza", date: "Mar 1", status: "active", earned: 0 },
-  ],
-  l2: [
-    { name: "Jin Park", from: "Priya Sharma", date: "Feb 15", earned: 14.25 },
-    { name: "Yuki Tanaka", from: "Priya Sharma", date: "Feb 20", earned: 9.50 },
-    { name: "Leo Morales", from: "Marco Santos", date: "Feb 22", earned: 9.50 },
-    { name: "Ava Smith", from: "Sara Ahmed", date: "Feb 26", earned: 4.75 },
-  ],
-  earn: { total: 2508, month: 456, pending: 456, paid: 2052 },
-  payouts: [
-    { date: "Feb 25", amount: 612, status: "completed", method: "Bank transfer to AE07...457" },
-    { date: "Feb 18", amount: 496, status: "completed", method: "Bank transfer to AE07...457" },
-    { date: "Feb 11", amount: 472, status: "completed", method: "Bank transfer to AE07...457" },
-    { date: "Feb 4", amount: 472, status: "completed", method: "Bank transfer to AE07...457" },
-  ],
-  billing: [
-    { date: "Feb 28, 2026", amount: 95, status: "paid", method: "Visa ending 6411" },
-    { date: "Jan 28, 2026", amount: 95, status: "paid", method: "Visa ending 6411" },
-  ],
-  earningsHistory: [
-    {week:"Oct 7",l1:0,l2:0,net:-95},
-    {week:"Oct 14",l1:0,l2:0,net:-95},
-    {week:"Oct 21",l1:38,l2:0,net:-57},
-    {week:"Oct 28",l1:38,l2:0,net:-57},
-    {week:"Nov 4",l1:76,l2:0,net:-19},
-    {week:"Nov 11",l1:76,l2:0,net:-19},
-    {week:"Nov 18",l1:114,l2:0,net:19},
-    {week:"Nov 25",l1:114,l2:4.75,net:23.75},
-    {week:"Dec 2",l1:152,l2:4.75,net:61.75},
-    {week:"Dec 9",l1:152,l2:4.75,net:61.75},
-    {week:"Dec 16",l1:190,l2:4.75,net:99.75},
-    {week:"Dec 23",l1:190,l2:9.50,net:104.50},
-    {week:"Dec 30",l1:190,l2:9.50,net:104.50},
-    {week:"Jan 6",l1:228,l2:9.50,net:147.25},
-    {week:"Jan 13",l1:228,l2:9.50,net:147.25},
-    {week:"Jan 20",l1:228,l2:14.25,net:147.25},
-    {week:"Jan 28",l1:228,l2:14.25,net:147.25},
-    {week:"Feb 4",l1:266,l2:14.25,net:185.25},
-    {week:"Feb 11",l1:266,l2:14.25,net:185.25},
-    {week:"Feb 18",l1:266,l2:19,net:190},
-    {week:"Feb 25",l1:266,l2:19,net:190},
-    {week:"Mar 1",l1:266,l2:19,net:190},
-  ],
+  name: "", email: "", code: "", avatar: "?",
+  phone: "", joined: "", status: "inactive",
+  plan: "Tutorii Monthly", nextBilling: "N/A",
+  paymentMethod: "MamoPay", referredBy: "Direct",
+  iban: "", ibanName: "", lastLogin: "",
+  l1: [], l2: [],
+  earn: { total: "0.00", month: "0.00", pending: "0.00", paid: "0.00" },
+  payouts: [], billing: [], earningsHistory: [],
 };
 
-const adminUsers = [
-  { name: "David Chen", email: "david@tutorii.com", code: "DAVID2026", l1: 12, l2: 34, earned: 4056, pending: 749, status: "active", joined: "Oct 2, 2025", referrer: null, l1Names: ["Aisha Khan","Carlos Reyes","Priya Sharma","Maria Lopez","James Tan","Ravi Patel","Nina Gomez","Sara Al-M.","Tom Nguyen","Leo Park","Hana Ito","Yuki Sato"], l2Names: [{ref:"Aisha Khan",subs:["Fatima Al-R.","Omar Hassan","Lina Choi","Yara Farouk","Sam Rivera","Dana Malik","Noor Abbas","Khalid Zain","Reem Haddad","Layla Youssef","Tariq Nasser","Sami Khoury","Huda Salem","Jamal Othman","Rania Bishara"]},{ref:"Carlos Reyes",subs:["Pedro Santos","Ana Diaz","Luis Moreno","Marta Silva","Diego Ruiz","Rosa Vega","Ivan Cruz","Elena Rojas"]},{ref:"Maria Lopez",subs:["Sofia Herrera","Pablo Mendez","Carmen Torres","Lucia Flores","Marco Paz","Isla Reyes"]}] },
-  { name: "Aisha Khan", email: "aisha@example.com", code: "AISHA22", l1: 8, l2: 15, earned: 2508, pending: 456, status: "active", joined: "Oct 14, 2025", referrer: "David Chen", l1Names: ["Fatima Al-R.","Omar Hassan","Lina Choi","Yara Farouk","Sam Rivera","Dana Malik","Noor Abbas","Khalid Zain"], l2Names: [{ref:"Omar Hassan",subs:["Ali Mansoor","Zara Begum","Imran Shah"]},{ref:"Lina Choi",subs:["Jin Park","Hye Kim","Soo Lee"]},{ref:"Yara Farouk",subs:["Mona Saleh","Dina Aziz","Rami Hanna","Fadi Issa","Nadia Karam","Tala Bishara"]},{ref:"Dana Malik",subs:["Samir Jaber","Leen Awad","Rasha Nasr"]}] },
-  { name: "Carlos Reyes", email: "carlos@example.com", code: "CARLOS01", l1: 5, l2: 8, earned: 1430, pending: 304, status: "active", joined: "Nov 3, 2025", referrer: "David Chen", l1Names: ["Pedro Santos","Ana Diaz","Luis Moreno","Marta Silva","Diego Ruiz"], l2Names: [{ref:"Pedro Santos",subs:["Bruno Costa","Clara Lima"]},{ref:"Ana Diaz",subs:["Victor Paz","Gloria Herrera","Oscar Mendez"]},{ref:"Luis Moreno",subs:["Andres Vega","Camila Cruz","Felipe Rojas"]}] },
-  { name: "Priya Sharma", email: "priya@example.com", code: "PRIYA05", l1: 3, l2: 2, earned: 684, pending: 228, status: "active", joined: "Nov 22, 2025", referrer: "David Chen", l1Names: ["Raj Patel","Meera Iyer","Vikram Singh"], l2Names: [{ref:"Raj Patel",subs:["Anita Gupta","Deepak Nair"]}] },
-  { name: "Fatima Al-R.", email: "fatima@example.com", code: "FATIMA12", l1: 0, l2: 0, earned: 0, pending: 0, status: "inactive", joined: "Dec 5, 2025", referrer: "Aisha Khan", l1Names: [], l2Names: [] },
-  { name: "Maria Lopez", email: "maria@example.com", code: "MARIA18", l1: 4, l2: 6, earned: 1031, pending: 267, status: "active", joined: "Nov 10, 2025", referrer: "David Chen", l1Names: ["Sofia Herrera","Pablo Mendez","Carmen Torres","Lucia Flores"], l2Names: [{ref:"Sofia Herrera",subs:["Eva Molina","Hugo Blanco"]},{ref:"Pablo Mendez",subs:["Isabel Cruz","Mateo Rios"]},{ref:"Carmen Torres",subs:["Rosa Vidal","Nico Pena"]}] },
-];
+const adminUsers = [];
 
 const INIT_PAYOUTS = [
   { id: "P1", user: "David Chen", amount: 749, iban: "AE07...3456", status: "completed", date: "Feb 25" },
@@ -933,7 +873,7 @@ function HowItWorksPage(props) {
       <section style={{ padding:"40px 48px 120px" }}>
         <div style={{ maxWidth:760, margin:"0 auto", position:"relative" }}>
           <StepConnector />
-          {[{n:"01",i:"phone",t:"Subscribe and get immediate access",d:"Pay AED "+PRICE+"/month via MamoPay (Visa, Mastercard, Apple Pay, Google Pay). Unlock every course, every lesson, and your referral dashboard instantly."},{n:"02",i:"book",t:"Learn skills that matter",d:INIT_COURSES.length+" modules, "+tl+" lessons covering UAE culture, legal rights, career development, financial literacy, and entrepreneurship."},{n:"03",i:"link",t:"Share your personal referral link",d:"Every subscriber gets a unique link. Share through WhatsApp, SMS, email, or social media. When someone subscribes, they are permanently connected to you."},{n:"04",i:"dollar",t:"Earn recurring commissions weekly",d:"40% ($"+(PRICE*L1_RATE).toFixed(2)+") per direct referral per month. 5% ($"+(PRICE*L2_RATE).toFixed(2)+") on their referrals. Paid every Tuesday to your bank."}].map(function(s,si){return (
+          {[{n:"01",i:"phone",t:"Subscribe and get immediate access",d:"Pay AED "+PRICE+"/month via MamoPay (Visa, Mastercard, Apple Pay, Google Pay). Unlock every course, every lesson, and your referral dashboard instantly."},{n:"02",i:"book",t:"Learn skills that matter",d:INIT_COURSES.length+" modules, "+tl+" lessons covering UAE culture, legal rights, career development, financial literacy, and entrepreneurship."},{n:"03",i:"link",t:"Share your personal referral link",d:"Every subscriber gets a unique link. Share through WhatsApp, SMS, email, or social media. When someone subscribes, they are permanently connected to you."},{n:"04",i:"dollar",t:"Earn recurring commissions weekly",d:"40% (AED "+(PRICE*L1_RATE).toFixed(2)+") per direct referral per month. 5% (AED "+(PRICE*L2_RATE).toFixed(2)+") on their referrals. Paid every Tuesday to your bank."}].map(function(s,si){return (
             <FadeIn key={s.n} delay={si*0.15}><div style={{ display:"flex", gap:24, marginBottom:48, position:"relative", zIndex:1 }}>
               <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))", border:"1px solid rgba(255,255,255,0.08)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, boxShadow:"0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)", lineHeight:0 }}><Ico name={s.i} size={24} color="rgb(200,180,140)" /></div>
               <div><div style={{ fontSize:12, fontWeight:500, color:"#52525b", letterSpacing:"1px", marginBottom:6 }}>{"STEP "+s.n}</div><h3 style={{ fontSize:18, fontWeight:600, color:"#d4d4d8", margin:"0 0 8px" }}>{s.t}</h3><p style={{ fontSize:14, color:"#71717a", lineHeight:1.8, margin:0 }}>{s.d}</p></div>
@@ -1059,13 +999,13 @@ function FaqPage(props) {
   var open = _open[0]; var setOpen = _open[1];
   var tl = INIT_COURSES.reduce(function(s,c){return s+c.lessons.length},0);
   var faqs = [
-    {q:"What exactly is Tutorii?",a:"A subscription education platform for expats in the UAE/GCC. $"+PRICE+"/month for "+INIT_COURSES.length+" modules, "+tl+" lessons covering life skills, legal rights, career growth, and finance  - plus an optional referral program with weekly payouts."},
+    {q:"What exactly is Tutorii?",a:"A subscription education platform for expats in the UAE/GCC. AED "+PRICE+"/month for "+INIT_COURSES.length+" modules, "+tl+" lessons covering life skills, legal rights, career growth, and finance  - plus an optional referral program with weekly payouts."},
     {q:"Who is Tutorii designed for?",a:"Anyone living or relocating to the UAE or GCC  - workers, professionals, families, and entrepreneurs. The content is practical and built around real challenges expats face: navigating visa rules, understanding employment rights, finding housing, managing finances, and building careers in the Gulf."},
     {q:"What topics do the courses cover?",a:"Currently "+INIT_COURSES.length+" modules: "+INIT_COURSES.map(function(c){return c.module}).join(", ")+". New modules are added regularly based on community feedback. Each lesson is 8\u201325 minutes with video content and downloadable PDF guides."},
     {q:"What languages are available?",a:"Courses are currently in English. Arabic, Hindi, Urdu, and Tagalog versions are on the roadmap. The platform interface is English-only for now."},
     {q:"Can I use Tutorii on my phone?",a:"Yes. Tutorii works on any device with a browser  - phone, tablet, laptop, or desktop. No app download needed. Your progress syncs across all your devices automatically."},
-    {q:"How does the referral program work?",a:"Share your unique link. When someone subscribes through it, you earn 40% ($"+(PRICE*L1_RATE).toFixed(2)+") every month they stay active. If they refer others, you earn 5% ($"+(PRICE*L2_RATE).toFixed(2)+") on those too. Two levels, no complexity."},
-    {q:"How much can I realistically earn?",a:"There is no cap. Each active Level 1 referral earns you $"+(PRICE*L1_RATE).toFixed(2)+"/month. Just 3 referrals covers your subscription and puts you in profit. 10 referrals = $"+(PRICE*L1_RATE*10).toFixed(2)+"/month. Earnings compound as your network grows."},
+    {q:"How does the referral program work?",a:"Share your unique link. When someone subscribes through it, you earn 40% (AED "+(PRICE*L1_RATE).toFixed(2)+") every month they stay active. If they refer others, you earn 5% (AED "+(PRICE*L2_RATE).toFixed(2)+") on those too. Two levels, no complexity."},
+    {q:"How much can I realistically earn?",a:"There is no cap. Each active Level 1 referral earns you AED "+(PRICE*L1_RATE).toFixed(2)+"/month. Just 3 referrals covers your subscription and puts you in profit. 10 referrals = AED "+(PRICE*L1_RATE*10).toFixed(2)+"/month. Earnings compound as your network grows."},
     {q:"When and how do I get paid?",a:"Every Tuesday via bank transfer through MamoPay to your registered IBAN. Minimum payout is AED 50. Payouts typically arrive within 1\u20133 business days depending on your bank."},
     {q:"Do I have to refer people to use Tutorii?",a:"Not at all. The referral program is completely optional. Many members use Tutorii purely for the courses and never refer anyone. The earning feature is an added benefit, not a requirement."},
     {q:"What payment methods do you accept?",a:"Visa, Mastercard, Apple Pay, and Google Pay  - all processed securely through MamoPay, a CBUAE-licensed payment provider. Tutorii never sees or stores your card details."},
@@ -1227,20 +1167,30 @@ function ForgotPasswordPage(props) {
     if (!email.trim()) { setError("Please enter your email address"); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError("Please enter a valid email address"); return; }
     setLoading(true); setError("");
-    setTimeout(function() {
+    var API = (typeof import !== "undefined" && import.meta && import.meta.env && import.meta.env.VITE_API_URL) || "https://backend-tut-production.up.railway.app/api/v1";
+    fetch(API + "/auth/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.trim().toLowerCase() })
+    }).finally(function() {
       setSent(true);
       setLoading(false);
       setCountdown(60);
-    }, 1200);
+    });
   }
 
   function handleResend() {
     if (countdown > 0) return;
     setLoading(true);
-    setTimeout(function() {
+    var API = (typeof import !== "undefined" && import.meta && import.meta.env && import.meta.env.VITE_API_URL) || "https://backend-tut-production.up.railway.app/api/v1";
+    fetch(API + "/auth/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.trim().toLowerCase() })
+    }).finally(function() {
       setLoading(false);
       setCountdown(60);
-    }, 800);
+    });
   }
 
   return (
@@ -1356,13 +1306,19 @@ function ResetPasswordPage(props) {
       setTokenValid(false);
       return;
     }
-    // In production, call: auth.validateResetToken(token)
-    // For demo, simulate validation
-    setTimeout(function() {
-      setTokenValid(true);
-      setTokenEmail("aisha@example.com");
-      setValidating(false);
-    }, 600);
+    var API = (typeof import !== "undefined" && import.meta && import.meta.env && import.meta.env.VITE_API_URL) || "https://backend-tut-production.up.railway.app/api/v1";
+    fetch(API + "/auth/validate-reset-token?token=" + encodeURIComponent(token))
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.valid) {
+          setTokenValid(true);
+          setTokenEmail(d.email || "");
+        } else {
+          setTokenValid(false);
+        }
+      })
+      .catch(function() { setTokenValid(false); })
+      .finally(function() { setValidating(false); });
   }, []);
 
   function validate() {
@@ -1378,11 +1334,17 @@ function ResetPasswordPage(props) {
     setError("");
     if (!validate()) return;
     setLoading(true);
-    // In production, call: auth.resetPassword(token, pass)
-    setTimeout(function() {
+    var API = (typeof import !== "undefined" && import.meta && import.meta.env && import.meta.env.VITE_API_URL) || "https://backend-tut-production.up.railway.app/api/v1";
+    fetch(API + "/auth/reset-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: token, new_password: pass })
+    }).then(function(r) {
+      if (!r.ok) throw new Error("Reset failed");
       setDone(true);
-      setLoading(false);
-    }, 1000);
+    }).catch(function() {
+      setError("Reset link has expired or is invalid. Please request a new one.");
+    }).finally(function() { setLoading(false); });
   }
 
   // Password strength indicator
@@ -1560,7 +1522,7 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
             )})}
             <div style={{ marginBottom:24 }}>
               <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:5 }}>Referral Code (optional)</label>
-              <input value={form.ref} onChange={function(e){set("ref",e.target.value)}} placeholder="e.g. DAVID2026" style={{ width:"100%", padding:"11px 14px", borderRadius:10, border:"1px solid "+(errors.ref?"rgba(248,113,113,0.5)":form.ref && !errors.ref?"rgba(200,180,140,0.4)":"rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:form.ref && !errors.ref?"rgba(200,180,140,0.06)":"#0a0a0c", color:"#d4d4d8" }} />
+              <input value={form.ref} onChange={function(e){set("ref",e.target.value)}} placeholder="e.g. ABC12345" style={{ width:"100%", padding:"11px 14px", borderRadius:10, border:"1px solid "+(errors.ref?"rgba(248,113,113,0.5)":form.ref && !errors.ref?"rgba(200,180,140,0.4)":"rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:form.ref && !errors.ref?"rgba(200,180,140,0.06)":"#0a0a0c", color:"#d4d4d8" }} />
               {errors.ref && <div style={{ fontSize:11, color:"#f87171", marginTop:4 }}>{errors.ref}</div>}
               {form.ref && !errors.ref && <div style={{ fontSize:11, color:"rgb(200,180,140)", marginTop:4, display:"flex", alignItems:"center", gap:4 }}><Ico name="shield" size={10} color="rgb(200,180,140)" />{" Referred by code: "+form.ref.toUpperCase()}</div>}
             </div>
@@ -1606,17 +1568,54 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
             </div>
           </div>}
 
-          {step === 3 && <div style={{ textAlign:"center", padding:"32px 0" }}>
-            <div style={{ width:60, height:60, borderRadius:"50%", background:"rgba(200,180,140,0.1)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px", lineHeight:0 }}><Ico name="bank" size={28} color="rgb(200,180,140)" /></div>
-            <h3 style={{ fontSize:24, fontWeight:700, color:"#d4d4d8", margin:"0 0 10px" }}>Complete Your Payment</h3>
-            <p style={{ fontSize:14, color:"#71717a", marginBottom:20, lineHeight:1.7 }}>Your account has been created. Complete your payment on MamoPay to unlock full access to your dashboard and courses.</p>
-            <div style={{ background:"rgba(200,180,140,0.06)", border:"1px solid rgba(200,180,140,0.2)", borderRadius:10, padding:"14px 18px", marginBottom:20, textAlign:"left" }}>
-              <div style={{ fontSize:12, fontWeight:700, color:"rgb(200,180,140)", marginBottom:4 }}>Important</div>
-              <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.7 }}>{"Use "}<strong style={{ color:"#d4d4d8" }}>{form.email}</strong>{" as your email on MamoPay so we can verify your payment and activate your account automatically."}</div>
-            </div>
-            <Btn onClick={function(){ window.open("https://business.mamopay.com/pay/galcofzellc-4b20ab", "_blank"); }} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12 }}>Pay AED {PRICE} on MamoPay</Btn>
-            <p style={{ fontSize:12, color:"#52525b", marginTop:8 }}>Already paid? <span onClick={function(){go("login")}} style={{ color:"rgb(200,180,140)", cursor:"pointer", fontWeight:600 }}>Log in here</span> — access activates automatically once payment is confirmed.</p>
-          </div>}
+          {step === 3 && (function(){
+            var _checking = useState(false); var checking = _checking[0]; var setChecking = _checking[1];
+            var _checkMsg = useState(""); var checkMsg = _checkMsg[0]; var setCheckMsg = _checkMsg[1];
+
+            function checkAndRedirect() {
+              setChecking(true); setCheckMsg("Checking your payment with MamoPay...");
+              var API = (typeof import !== "undefined" && import.meta && import.meta.env && import.meta.env.VITE_API_URL) || "https://backend-tut-production.up.railway.app/api/v1";
+              var token = localStorage.getItem("tutorii_access_token");
+              if (!token) { setChecking(false); go("login"); return; }
+
+              fetch(API + "/subscriptions/verify-payment", {
+                method: "POST",
+                headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" }
+              })
+              .then(function(r) { return r.json(); })
+              .then(function(data) {
+                if (data.activated) {
+                  setCheckMsg("Payment confirmed! Taking you to your dashboard...");
+                  setTimeout(function(){ go("userPortal"); }, 1200);
+                } else {
+                  setCheckMsg(data.message || "No payment found yet. Make sure you used " + form.email + " on MamoPay, then try again.");
+                  setChecking(false);
+                }
+              })
+              .catch(function() {
+                setCheckMsg("Could not reach payment server. Try logging in directly.");
+                setChecking(false);
+              });
+            }
+
+            return (
+              <div style={{ textAlign:"center", padding:"32px 0" }}>
+                <div style={{ width:60, height:60, borderRadius:"50%", background:"rgba(200,180,140,0.1)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px", lineHeight:0 }}><Ico name="bank" size={28} color="rgb(200,180,140)" /></div>
+                <h3 style={{ fontSize:24, fontWeight:700, color:"#d4d4d8", margin:"0 0 10px" }}>Complete Your Payment</h3>
+                <p style={{ fontSize:14, color:"#71717a", marginBottom:20, lineHeight:1.7 }}>Your account has been created. Complete your payment on MamoPay to unlock full access.</p>
+                <div style={{ background:"rgba(200,180,140,0.06)", border:"1px solid rgba(200,180,140,0.2)", borderRadius:10, padding:"14px 18px", marginBottom:20, textAlign:"left" }}>
+                  <div style={{ fontSize:12, fontWeight:700, color:"rgb(200,180,140)", marginBottom:4 }}>Important</div>
+                  <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.7 }}>{"Use "}<strong style={{ color:"#d4d4d8" }}>{form.email}</strong>{" as your email on MamoPay — this is how we verify and activate your account."}</div>
+                </div>
+                <Btn onClick={function(){ window.open("https://business.mamopay.com/pay/galcofzellc-4b20ab", "_blank"); }} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12 }}>Pay AED {PRICE} on MamoPay ↗</Btn>
+                <Btn onClick={checkAndRedirect} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:8, background:"rgba(255,255,255,0.06)", color:"#d4d4d8" }} disabled={checking}>
+                  {checking ? "Checking payment..." : "I've paid — take me to my dashboard"}
+                </Btn>
+                {checkMsg && <div style={{ fontSize:12, color: checkMsg.includes("not confirmed") ? "#f87171" : "#a1a1aa", marginTop:8, padding:"8px 12px", borderRadius:6, background:"rgba(255,255,255,0.03)" }}>{checkMsg}</div>}
+                <p style={{ fontSize:12, color:"#52525b", marginTop:12 }}>Already have an account? <span onClick={function(){go("login")}} style={{ color:"rgb(200,180,140)", cursor:"pointer", fontWeight:600 }}>Log in here</span></p>
+              </div>
+            );
+          })()}
         </div>
       </div>
     </div>
@@ -2063,7 +2062,7 @@ function UserPortal(props) {
       "Monthly L1 Income: AED " + monthlyL1.toFixed(2) + " (" + l1active.length + " active L1 referrals x $" + (PRICE*L1_RATE).toFixed(2) + " each)\n" +
       "Monthly L2 Income: AED " + monthlyL2.toFixed(2) + " (" + (u.l2||[]).length + " L2 referrals x $" + (PRICE*L2_RATE).toFixed(2) + " each)\n" +
       "Total Monthly Gross: $" + (monthlyL1 + monthlyL2).toFixed(2) + "\n" +
-      "Monthly Subscription Cost: -$" + PRICE + "\n" +
+      "Monthly Subscription Cost: -AED " + PRICE + "\n" +
       "Net Monthly Profit: $" + (monthlyL1 + monthlyL2 - PRICE).toFixed(2) + "\n" +
       "ROI: " + (((monthlyL1 + monthlyL2 - PRICE) / PRICE) * 100).toFixed(0) + "% return on subscription cost\n" +
       "Break-even: Achieved (need 1 active L1 referral to cover subscription, user has " + l1active.length + ")\n" +
@@ -2090,14 +2089,14 @@ function UserPortal(props) {
       "Total Payouts Received: " + (u.payouts||[]).length + " payouts totalling $" + (u.payouts||[]).reduce(function(s,p){return s+p.amount},0).toFixed(2) + "\n" +
       "Average Payout: $" + ((u.payouts||[]).reduce(function(s,p){return s+p.amount},0) / (u.payouts||[]).length).toFixed(2) + "\n\n" +
 
-      "=== LEVEL 1 REFERRALS (Direct, 40% = $" + (PRICE*L1_RATE).toFixed(2) + "/each/month) ===\n" +
+      "=== LEVEL 1 REFERRALS (Direct, 40% = AED " + (PRICE*L1_RATE).toFixed(2) + "/each/month) ===\n" +
       "Total L1: " + (u.l1||[]).length + " (" + l1active.length + " active, " + l1cancelled.length + " cancelled)\n" +
-      (u.l1||[]).map(function(r,i){return (i+1) + ". " + r.name + " - Joined: " + r.date + " 2026, Status: " + r.status.toUpperCase() + ", Total earned you: $" + r.earned.toFixed(2) + (r.status==="active" ? ", Currently earning $"+(PRICE*L1_RATE).toFixed(2)+"/month" : ", No longer earning (cancelled)")}).join("\n") + "\n" +
+      (u.l1||[]).map(function(r,i){return (i+1) + ". " + r.name + " - Joined: " + r.date + " 2026, Status: " + r.status.toUpperCase() + ", Total earned you: AED " + r.earned.toFixed(2) + (r.status==="active" ? ", Currently earning AED "+(PRICE*L1_RATE).toFixed(2)+"/month" : ", No longer earning (cancelled)")}).join("\n") + "\n" +
       "Best performing L1: " + (function(){var best=u.l1.reduce(function(a,b){return a.earned>b.earned?a:b});return best.name+" ($"+best.earned.toFixed(2)+" earned)"})() + "\n" +
       "Most recent L1: " + u.l1[(u.l1||[]).length-1].name + " (joined " + u.l1[(u.l1||[]).length-1].date + ")\n" +
       "L1 retention rate: " + Math.round((l1active.length/(u.l1||[]).length)*100) + "% (" + l1active.length + " of " + (u.l1||[]).length + " still active)\n\n" +
 
-      "=== LEVEL 2 REFERRALS (Indirect, 5% = $" + (PRICE*L2_RATE).toFixed(2) + "/each/month) ===\n" +
+      "=== LEVEL 2 REFERRALS (Indirect, 5% = AED " + (PRICE*L2_RATE).toFixed(2) + "/each/month) ===\n" +
       "Total L2: " + (u.l2||[]).length + "\n" +
       (u.l2||[]).map(function(r,i){return (i+1) + ". " + r.name + " - Referred by: " + r.from + ", Joined: " + r.date + " 2026, Earned you: $" + r.earned.toFixed(2)}).join("\n") + "\n" +
       "L2 breakdown by L1 referrer:\n" +
@@ -2165,7 +2164,7 @@ function UserPortal(props) {
       "Q: Can I pay with bank transfer instead of card? A: Subscriptions must be paid via card through MamoPay. Bank transfer is only used for receiving payouts.\n\n" +
 
       "REFERRAL PROGRAM:\n" +
-      "Q: How does the referral program work? A: Share your unique referral link. When someone subscribes through it, you earn 40% ($" + (PRICE*L1_RATE).toFixed(2) + ") monthly as long as they stay subscribed (Level 1). You also earn 5% ($" + (PRICE*L2_RATE).toFixed(2) + ") on anyone they refer (Level 2).\n" +
+      "Q: How does the referral program work? A: Share your unique referral link. When someone subscribes through it, you earn 40% (AED " + (PRICE*L1_RATE).toFixed(2) + ") monthly as long as they stay subscribed (Level 1). You also earn 5% ($" + (PRICE*L2_RATE).toFixed(2) + ") on anyone they refer (Level 2).\n" +
       "Q: Where is my referral link? A: Your link is displayed at the top of your dashboard and in the Referrals tab: tutorii.com/ref/YOUR_CODE.\n" +
       "Q: Is there a limit to how many people I can refer? A: No. There is no cap on Level 1 or Level 2 referrals. The more active referrals you have, the more you earn.\n" +
       "Q: What is Level 1 vs Level 2? A: Level 1 (L1) are people who subscribe directly through YOUR link - you earn 40%. Level 2 (L2) are people who subscribe through THEIR links - you earn 5%.\n" +
@@ -2450,9 +2449,9 @@ function UserPortal(props) {
                       </div>
                       <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:8 }}>
                         <div style={{ width:8, height:8, borderRadius:2, background:"rgba(248,113,113,0.4)" }} />
-                        <span style={{ fontSize:10, color:"#71717a", padding:"2px 8px", borderRadius:5, background:"rgba(248,113,113,0.05)", border:"1px solid rgba(248,113,113,0.1)" }}>{"Subscription -$"+PRICE}</span>
+                        <span style={{ fontSize:10, color:"#71717a", padding:"2px 8px", borderRadius:5, background:"rgba(248,113,113,0.05)", border:"1px solid rgba(248,113,113,0.1)" }}>{"Subscription -AED "+PRICE}</span>
                       </div>
-                      <div style={{ display:"inline-block", fontSize:13, fontWeight:600, color:monthlyNet>=0?"rgb(200,180,140)":"#f87171", padding:"4px 12px", borderRadius:8, background:monthlyNet>=0?"rgba(200,180,140,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(monthlyNet>=0?"rgba(200,180,140,0.15)":"rgba(248,113,113,0.15)"), marginTop:4 }}>{"Net Profit $"+monthlyNet.toFixed(2)}</div>
+                      <div style={{ display:"inline-block", fontSize:13, fontWeight:600, color:monthlyNet>=0?"rgb(200,180,140)":"#f87171", padding:"4px 12px", borderRadius:8, background:monthlyNet>=0?"rgba(200,180,140,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(monthlyNet>=0?"rgba(200,180,140,0.15)":"rgba(248,113,113,0.15)"), marginTop:4 }}>{"Net Profit AED "+monthlyNet.toFixed(2)}</div>
                     </div>
                   </div>
                 );
@@ -2568,14 +2567,14 @@ function UserPortal(props) {
           </div>
 
           <div style={{ background:"#131315", borderRadius:14, padding:mob?14:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:16, boxSizing:"border-box" }}>
-            <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 14px", color:"#d4d4d8" }}>{"Level 1 - Direct (40% = $"+(PRICE*L1_RATE).toFixed(2)+" each)"}</h3>
+            <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 14px", color:"#d4d4d8" }}>{"Level 1 - Direct (40% = AED "+(PRICE*L1_RATE).toFixed(2)+" each)"}</h3>
             <table style={{ width:"100%", borderCollapse:"collapse" }}>
               <thead><tr>{["Name","Joined","Status","Earned"].map(function(h){return <th key={h} style={{ padding:"8px 10px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#52525b", textAlign:"left", borderBottom:"2px solid rgba(255,255,255,0.08)" }}>{h}</th>})}</tr></thead>
               <tbody>{(u.l1||[]).map(function(r){return <tr key={r.name} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}><td style={{ padding:"10px", fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{r.name}</td><td style={{ padding:"10px", fontSize:12, color:"#52525b" }}>{r.date}</td><td style={{ padding:"10px" }}><Badge s={r.status}/></td><td style={{ padding:"10px", fontSize:13, fontWeight:500, color:"#d4d4d8" }}>{"AED "+r.earned.toFixed(2)}</td></tr>})}</tbody>
             </table>
           </div>
           <div style={{ background:"#131315", borderRadius:14, padding:mob?14:22, border:"1px solid rgba(255,255,255,0.06)", boxSizing:"border-box" }}>
-            <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 14px", color:"#d4d4d8" }}>{"Level 2 - Indirect (5% = $"+(PRICE*L2_RATE).toFixed(2)+" each)"}</h3>
+            <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 14px", color:"#d4d4d8" }}>{"Level 2 - Indirect (5% = AED "+(PRICE*L2_RATE).toFixed(2)+" each)"}</h3>
             <table style={{ width:"100%", borderCollapse:"collapse" }}>
               <thead><tr>{["Name","Via","Joined","Earned"].map(function(h){return <th key={h} style={{ padding:"8px 10px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#52525b", textAlign:"left", borderBottom:"2px solid rgba(255,255,255,0.08)" }}>{h}</th>})}</tr></thead>
               <tbody>{(u.l2||[]).map(function(r){return <tr key={r.name} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}><td style={{ padding:"10px", fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{r.name}</td><td style={{ padding:"10px", fontSize:12, color:"#a1a1aa" }}>{r.from}</td><td style={{ padding:"10px", fontSize:12, color:"#52525b" }}>{r.date}</td><td style={{ padding:"10px", fontSize:13, fontWeight:500, color:"#a78bfa" }}>{"AED "+r.earned.toFixed(2)}</td></tr>})}</tbody>
@@ -2682,7 +2681,7 @@ function UserPortal(props) {
                       </div>
                       <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
                         <span style={{ fontSize:10, color:"#52525b", padding:"1px 6px", borderRadius:4, background:"rgba(248,113,113,0.04)", border:"1px solid rgba(248,113,113,0.06)" }}>Subscription cost</span>
-                        <span style={{ fontSize:11, fontWeight:600, color:"#f87171" }}>{"-$"+(PRICE*12).toFixed(2)}</span>
+                        <span style={{ fontSize:11, fontWeight:600, color:"#f87171" }}>{"-AED "+(PRICE*12).toFixed(2)}</span>
                       </div>
                       <div style={{ display:"flex", justifyContent:"space-between", paddingTop:6, borderTop:"1px solid rgba(255,255,255,0.04)" }}>
                         <span style={{ fontSize:10, fontWeight:600, color:"#71717a", padding:"1px 6px", borderRadius:4, background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.05)" }}>Net annual</span>
@@ -3069,7 +3068,7 @@ function UserPortal(props) {
               <div style={{ background:"rgba(255,255,255,0.03)", borderRadius:10, padding:14, marginBottom:12, border:"1px solid rgba(255,255,255,0.06)" }}>
                 <code style={{ fontSize:14, fontWeight:700, color:"rgb(200,180,140)" }}>{"tutorii.com/ref/"+u.code}</code>
               </div>
-              <p style={{ fontSize:14, color:"#71717a", lineHeight:1.7, marginBottom:16 }}>{"Share this link with friends and contacts. When they subscribe, you earn 40% ($"+(PRICE*L1_RATE).toFixed(2)+") every month. Use the WhatsApp, SMS, and Email buttons at the top of your dashboard to share instantly."}</p>
+              <p style={{ fontSize:14, color:"#71717a", lineHeight:1.7, marginBottom:16 }}>{"Share this link with friends and contacts. When they subscribe, you earn 40% (AED "+(PRICE*L1_RATE).toFixed(2)+") every month. Use the WhatsApp, SMS, and Email buttons at the top of your dashboard to share instantly."}</p>
             </div>}
             {onboard === 2 && <div>
               <div style={{ marginBottom:16, lineHeight:0 }}><Ico name="book" size={48} color="rgb(200,180,140)" /></div>
@@ -3949,7 +3948,16 @@ function AdminPanel(props) {
                   <td style={{ padding:"12px", verticalAlign:"middle" }}>
                     <div style={{ display:"flex", gap:4 }}>
                       <button onClick={function(e){e.stopPropagation();setSelectedUser(selectedUser && selectedUser.name===u.name ? null : u)}} style={{ width:26, height:26, borderRadius:6, border:"1px solid "+(selectedUser && selectedUser.name===u.name?"rgba(200,180,140,0.3)":"rgba(255,255,255,0.06)"), background:selectedUser && selectedUser.name===u.name?"rgba(200,180,140,0.1)":"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0 }}><Ico name="chart" size={11} color={selectedUser && selectedUser.name===u.name?"rgb(200,180,140)":"#52525b"} /></button>
-                      <button onClick={function(e){e.stopPropagation();flash(u.status==="active"?"Suspended "+u.name:"Reactivated "+u.name)}} style={{ width:26, height:26, borderRadius:6, border:"1px solid "+(u.status==="active"?"rgba(248,113,113,0.2)":"rgba(200,180,140,0.2)"), background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0 }}><Ico name={u.status==="active"?"lock":"shield"} size={11} color={u.status==="active"?"#f87171":"rgb(200,180,140)"} /></button>
+                      <button onClick={async function(e){e.stopPropagation();
+                        var isActive = u.status==="active";
+                        try {
+                          if (isActive) { await adminApi.cancelSubscription(u.id); } else { await adminApi.activateSubscription(u.id); }
+                          setAdminUsers(function(p){return p.map(function(x){return x.id===u.id?Object.assign({},x,{status:isActive?"inactive":"active"}):x})});
+                          if (selectedUser && selectedUser.id===u.id) setSelectedUser(function(x){return Object.assign({},x,{status:isActive?"inactive":"active"})});
+                          setAdminStats(function(s){ if(!s) return s; return Object.assign({},s,{active_subscribers:(s.active_subscribers||0)+(isActive?-1:1)}); });
+                          flash((isActive?"Deactivated ":"Reactivated ")+u.name);
+                        } catch(e){ flash("Error: "+(e.message||"Failed")); }
+                      }} style={{ width:26, height:26, borderRadius:6, border:"1px solid "+(u.status==="active"?"rgba(248,113,113,0.2)":"rgba(200,180,140,0.2)"), background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0 }}><Ico name={u.status==="active"?"lock":"shield"} size={11} color={u.status==="active"?"#f87171":"rgb(200,180,140)"} /></button>
                       <button onClick={async function(e){ e.stopPropagation(); if(!window.confirm("Delete "+u.name+"? This cannot be undone.")) return; try { await adminApi.deleteUser(u.id); setAdminUsers(function(p){return p.filter(function(x){return x.id!==u.id})}); if(selectedUser && selectedUser.id===u.id) setSelectedUser(null); flash("Deleted "+u.name); } catch(err){ flash("Error: "+(err.message||"Failed to delete")); } }} style={{ width:26, height:26, borderRadius:6, border:"1px solid rgba(248,113,113,0.2)", background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0 }}><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
                       <button onClick={function(e){e.stopPropagation();flash("Manual payout initiated for "+u.name)}} style={{ width:26, height:26, borderRadius:6, border:"1px solid rgba(200,180,140,0.2)", background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0 }}><Ico name="dollar" size={11} color="rgb(200,180,140)" /></button>
                     </div>
@@ -4007,13 +4015,26 @@ function AdminPanel(props) {
                     var isActive = actionPanel === a[0];
                     return (
                       <button key={a[0]} onClick={async function(){
-                        if (a[0]==="toggleActive") { doAction(a[2], function(){ return (selectedUser.status==="active" ? "Deactivated " : "Reactivated ") + selectedUser.name }); return; }
+                        if (a[0]==="toggleActive") {
+                          setActionLoading(true);
+                          var isActive = selectedUser.status==="active";
+                          try {
+                            if (isActive) { await adminApi.cancelSubscription(selectedUser.id); } else { await adminApi.activateSubscription(selectedUser.id); }
+                            var newStatus = isActive ? "inactive" : "active";
+                            setAdminUsers(function(p){return p.map(function(u){return u.id===selectedUser.id?Object.assign({},u,{status:newStatus}):u})});
+                            setSelectedUser(function(u){return Object.assign({},u,{status:newStatus})});
+                            setAdminStats(function(s){ if(!s) return s; return Object.assign({},s,{active_subscribers:(s.active_subscribers||0)+(isActive?-1:1)}); });
+                            flash((isActive?"Deactivated ":"Reactivated ")+selectedUser.name);
+                          } catch(e){ flash("Error: "+(e.message||"Failed")); }
+                          setActionLoading(false); return;
+                        }
                         if (a[0]==="cancelSub") {
                           setActionLoading(true);
                           try {
                             await adminApi.cancelSubscription(selectedUser.id);
                             setAdminUsers(function(p){return p.map(function(u){return u.id===selectedUser.id?Object.assign({},u,{status:"inactive"}):u})});
                             setSelectedUser(function(u){return Object.assign({},u,{status:"inactive"})});
+                            setAdminStats(function(s){ if(!s) return s; return Object.assign({},s,{active_subscribers:Math.max(0,(s.active_subscribers||0)-1)}); });
                             flash("Subscription cancelled for "+selectedUser.name);
                           } catch(e){ flash("Error: "+(e.message||"Failed")); }
                           setActionLoading(false); return;
@@ -4024,6 +4045,7 @@ function AdminPanel(props) {
                             await adminApi.activateSubscription(selectedUser.id);
                             setAdminUsers(function(p){return p.map(function(u){return u.id===selectedUser.id?Object.assign({},u,{status:"active"}):u})});
                             setSelectedUser(function(u){return Object.assign({},u,{status:"active"})});
+                            setAdminStats(function(s){ if(!s) return s; return Object.assign({},s,{active_subscribers:(s.active_subscribers||0)+1}); });
                             flash("Subscription activated for "+selectedUser.name);
                           } catch(e){ flash("Error: "+(e.message||"Failed")); }
                           setActionLoading(false); return;
@@ -4085,7 +4107,7 @@ function AdminPanel(props) {
                     <div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8", marginBottom:4 }}>Reassign Referrer for {selectedUser.name}</div>
                     <div style={{ fontSize:11, color:"#52525b", marginBottom:4 }}>{"Current referrer: "}<strong style={{color:"#71717a"}}>{selectedUser.referrer || "None"}</strong></div>
                     <p style={{ fontSize:11, color:"#52525b", marginBottom:12 }}>Enter the new referrer's code, or leave blank and click "Remove Referrer" to unlink.</p>
-                    <input value={newRefCode} onChange={function(e){setNewRefCode(e.target.value.toUpperCase())}} placeholder="Referral code (e.g. DAVID2026)" style={{ width:"100%", padding:"10px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", boxSizing:"border-box", marginBottom:10, fontFamily:"monospace", textTransform:"uppercase" }} />
+                    <input value={newRefCode} onChange={function(e){setNewRefCode(e.target.value.toUpperCase())}} placeholder="Referral code (e.g. ABC12345)" style={{ width:"100%", padding:"10px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", boxSizing:"border-box", marginBottom:10, fontFamily:"monospace", textTransform:"uppercase" }} />
                     <div style={{ display:"flex", gap:8 }}>
                       <button onClick={function(){ if(!newRefCode.trim()){flash("Enter a referral code");return;} doAction("Reassign", function(){ return "Referrer changed to "+newRefCode; }) }} disabled={actionLoading} style={{ padding:"8px 18px", borderRadius:8, border:"none", background:"#a78bfa", color:"#fff", fontSize:12, fontWeight:700, cursor:"pointer", opacity:actionLoading?0.6:1 }}>Assign Referrer</button>
                       <button onClick={function(){ doAction("Remove", function(){ return "Referrer removed for "+selectedUser.name; }) }} disabled={actionLoading} style={{ padding:"8px 14px", borderRadius:8, border:"1px solid rgba(248,113,113,0.2)", background:"transparent", color:"#f87171", fontSize:12, fontWeight:600, cursor:"pointer" }}>Remove Referrer</button>

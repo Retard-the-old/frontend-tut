@@ -104,6 +104,7 @@ export const subscriptions = {
   create: () => api.post("/subscriptions/"),
   me: () => api.get("/subscriptions/me"),
   cancel: () => api.post("/subscriptions/cancel"),
+  verifyPayment: () => api.post("/subscriptions/verify-payment"),
 };
 
 // ── Courses ──
