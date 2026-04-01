@@ -1478,42 +1478,44 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
   }
   async function handlePay() {
     if (!termsAgreed) return;
-    setProcessing(true);
-    try {
-      await register(form.name, form.email, form.password, form.ref || null, form.phone);
-      setStep(3);
-    } catch(e) {
-      var msg = e.message || "Something went wrong. Please try again.";
-      if (msg.toLowerCase().includes("already") || msg.toLowerCase().includes("exist") || msg.includes("409")) {
-        msg = "An account with this email already exists. Please log in instead.";
-      }
-      setErrors({ api: msg });
-    } finally {
-      setProcessing(false);
-    }
+    // Don't create account yet — just go to MamoPay
+    // Account is created only after payment is confirmed
+    setStep(3);
   }
 
   function checkAndRedirect() {
-    setChecking(true); setCheckMsg("Checking your payment with MamoPay...");
+    setChecking(true); setCheckMsg("Verifying your payment with MamoPay...");
     var API = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
-    var token = localStorage.getItem("tutorii_access_token");
-    if (!token) { setChecking(false); go("login"); return; }
-    fetch(API + "/subscriptions/verify-payment", {
+
+    // Step 1: Check MamoPay for a payment with this email
+    fetch(API + "/subscriptions/verify-payment-and-register", {
       method: "POST",
-      headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: form.email,
+        full_name: form.name,
+        password: form.password,
+        phone: form.phone || "",
+        referral_code: form.ref || null,
+      })
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (data.activated) {
+        // Store tokens and redirect
+        if (data.access_token) {
+          localStorage.setItem("tutorii_access_token", data.access_token);
+          if (data.refresh_token) localStorage.setItem("refresh_token", data.refresh_token);
+        }
         setCheckMsg("Payment confirmed! Taking you to your dashboard...");
-        setTimeout(function(){ go("userPortal"); }, 1200);
+        setTimeout(function(){ window.location.href = "/portal/overview"; }, 1200);
       } else {
-        setCheckMsg(data.message || "No payment found yet. Make sure you used " + form.email + " on MamoPay, then try again.");
+        setCheckMsg(data.message || "No payment found yet. Make sure you used " + form.email + " on MamoPay, then try again in a moment.");
         setChecking(false);
       }
     })
     .catch(function() {
-      setCheckMsg("Could not reach payment server. Try logging in directly.");
+      setCheckMsg("Could not reach payment server. Please try again.");
       setChecking(false);
     });
   }
