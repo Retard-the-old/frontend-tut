@@ -1167,7 +1167,7 @@ function ForgotPasswordPage(props) {
     if (!email.trim()) { setError("Please enter your email address"); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError("Please enter a valid email address"); return; }
     setLoading(true); setError("");
-    var API = (typeof import !== "undefined" && import.meta && import.meta.env && import.meta.env.VITE_API_URL) || "https://backend-tut-production.up.railway.app/api/v1";
+    var API = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
     fetch(API + "/auth/forgot-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -1182,7 +1182,7 @@ function ForgotPasswordPage(props) {
   function handleResend() {
     if (countdown > 0) return;
     setLoading(true);
-    var API = (typeof import !== "undefined" && import.meta && import.meta.env && import.meta.env.VITE_API_URL) || "https://backend-tut-production.up.railway.app/api/v1";
+    var API = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
     fetch(API + "/auth/forgot-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -1306,7 +1306,7 @@ function ResetPasswordPage(props) {
       setTokenValid(false);
       return;
     }
-    var API = (typeof import !== "undefined" && import.meta && import.meta.env && import.meta.env.VITE_API_URL) || "https://backend-tut-production.up.railway.app/api/v1";
+    var API = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
     fetch(API + "/auth/validate-reset-token?token=" + encodeURIComponent(token))
       .then(function(r) { return r.json(); })
       .then(function(d) {
@@ -1334,7 +1334,7 @@ function ResetPasswordPage(props) {
     setError("");
     if (!validate()) return;
     setLoading(true);
-    var API = (typeof import !== "undefined" && import.meta && import.meta.env && import.meta.env.VITE_API_URL) || "https://backend-tut-production.up.railway.app/api/v1";
+    var API = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
     fetch(API + "/auth/reset-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -1574,7 +1574,7 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
 
             function checkAndRedirect() {
               setChecking(true); setCheckMsg("Checking your payment with MamoPay...");
-              var API = (typeof import !== "undefined" && import.meta && import.meta.env && import.meta.env.VITE_API_URL) || "https://backend-tut-production.up.railway.app/api/v1";
+              var API = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
               var token = localStorage.getItem("tutorii_access_token");
               if (!token) { setChecking(false); go("login"); return; }
 
