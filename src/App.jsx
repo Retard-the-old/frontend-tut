@@ -1459,6 +1459,8 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
   var _err = useState({}); var errors = _err[0]; var setErrors = _err[1];
   var _terms = useState(false); var termsAgreed = _terms[0]; 
   var setTermsAgreed = _terms[1];
+  var _checking = useState(false); var checking = _checking[0]; var setChecking = _checking[1];
+  var _checkMsg = useState(""); var checkMsg = _checkMsg[0]; var setCheckMsg = _checkMsg[1];
   var { register } = useAuth();
 
   function set(k, v) { setForm(function(p) { var n = Object.assign({}, p); n[k] = v; return n; }); setErrors(function(p){ var n=Object.assign({},p); delete n[k]; return n; }); }
@@ -1489,6 +1491,31 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
     } finally {
       setProcessing(false);
     }
+  }
+
+  function checkAndRedirect() {
+    setChecking(true); setCheckMsg("Checking your payment with MamoPay...");
+    var API = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
+    var token = localStorage.getItem("tutorii_access_token");
+    if (!token) { setChecking(false); go("login"); return; }
+    fetch(API + "/subscriptions/verify-payment", {
+      method: "POST",
+      headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.activated) {
+        setCheckMsg("Payment confirmed! Taking you to your dashboard...");
+        setTimeout(function(){ go("userPortal"); }, 1200);
+      } else {
+        setCheckMsg(data.message || "No payment found yet. Make sure you used " + form.email + " on MamoPay, then try again.");
+        setChecking(false);
+      }
+    })
+    .catch(function() {
+      setCheckMsg("Could not reach payment server. Try logging in directly.");
+      setChecking(false);
+    });
   }
 
   return (
@@ -1568,38 +1595,7 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
             </div>
           </div>}
 
-          {step === 3 && (function(){
-            var _checking = useState(false); var checking = _checking[0]; var setChecking = _checking[1];
-            var _checkMsg = useState(""); var checkMsg = _checkMsg[0]; var setCheckMsg = _checkMsg[1];
-
-            function checkAndRedirect() {
-              setChecking(true); setCheckMsg("Checking your payment with MamoPay...");
-              var API = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
-              var token = localStorage.getItem("tutorii_access_token");
-              if (!token) { setChecking(false); go("login"); return; }
-
-              fetch(API + "/subscriptions/verify-payment", {
-                method: "POST",
-                headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" }
-              })
-              .then(function(r) { return r.json(); })
-              .then(function(data) {
-                if (data.activated) {
-                  setCheckMsg("Payment confirmed! Taking you to your dashboard...");
-                  setTimeout(function(){ go("userPortal"); }, 1200);
-                } else {
-                  setCheckMsg(data.message || "No payment found yet. Make sure you used " + form.email + " on MamoPay, then try again.");
-                  setChecking(false);
-                }
-              })
-              .catch(function() {
-                setCheckMsg("Could not reach payment server. Try logging in directly.");
-                setChecking(false);
-              });
-            }
-
-            return (
-              <div style={{ textAlign:"center", padding:"32px 0" }}>
+          {step === 3 && <div style={{ textAlign:"center", padding:"32px 0" }}>
                 <div style={{ width:60, height:60, borderRadius:"50%", background:"rgba(200,180,140,0.1)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px", lineHeight:0 }}><Ico name="bank" size={28} color="rgb(200,180,140)" /></div>
                 <h3 style={{ fontSize:24, fontWeight:700, color:"#d4d4d8", margin:"0 0 10px" }}>Complete Your Payment</h3>
                 <p style={{ fontSize:14, color:"#71717a", marginBottom:20, lineHeight:1.7 }}>Your account has been created. Complete your payment on MamoPay to unlock full access.</p>
@@ -1611,11 +1607,9 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
                 <Btn onClick={checkAndRedirect} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:8, background:"rgba(255,255,255,0.06)", color:"#d4d4d8" }} disabled={checking}>
                   {checking ? "Checking payment..." : "I've paid — take me to my dashboard"}
                 </Btn>
-                {checkMsg && <div style={{ fontSize:12, color: checkMsg.includes("not confirmed") ? "#f87171" : "#a1a1aa", marginTop:8, padding:"8px 12px", borderRadius:6, background:"rgba(255,255,255,0.03)" }}>{checkMsg}</div>}
+                {checkMsg && <div style={{ fontSize:12, color: checkMsg.includes("No payment") ? "#f87171" : "rgb(200,180,140)", marginTop:8, padding:"8px 12px", borderRadius:6, background:"rgba(255,255,255,0.03)" }}>{checkMsg}</div>}
                 <p style={{ fontSize:12, color:"#52525b", marginTop:12 }}>Already have an account? <span onClick={function(){go("login")}} style={{ color:"rgb(200,180,140)", cursor:"pointer", fontWeight:600 }}>Log in here</span></p>
-              </div>
-            );
-          })()}
+              </div>}
         </div>
       </div>
     </div>
