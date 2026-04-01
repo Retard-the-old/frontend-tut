@@ -4978,6 +4978,10 @@ function TutoriiApp() {
   var _chatMinimized = useState(false); var chatMinimized = _chatMinimized[0]; var setChatMinimized = _chatMinimized[1];
   var { user: authUser, loading: authLoading } = useAuth();
   var firstName = authUser && authUser.full_name ? authUser.full_name.split(" ")[0] : "there";
+  var _chatMsgs = useState([{role:"assistant",content:"Hi "+firstName+"! I'm your Tutorii support assistant. I have access to your account details, referrals, earnings, and course progress. How can I help you today?"}]);
+  var chatMsgs = _chatMsgs[0]; var setChatMsgs = _chatMsgs[1];
+  var _chatInput = useState(""); var chatInput = _chatInput[0]; var setChatInput = _chatInput[1];
+  var _chatLoading = useState(false); var chatLoading = _chatLoading[0]; var setChatLoading = _chatLoading[1];
 
   // Don't render portal pages until auth is restored from localStorage
   if (authLoading) {
@@ -4992,10 +4996,6 @@ function TutoriiApp() {
       </div>
     );
   }
-  var _chatMsgs = useState([{role:"assistant",content:"Hi "+firstName+"! I'm your Tutorii support assistant. I have access to your account details, referrals, earnings, and course progress. How can I help you today?"}]);
-  var chatMsgs = _chatMsgs[0]; var setChatMsgs = _chatMsgs[1];
-  var _chatInput = useState(""); var chatInput = _chatInput[0]; var setChatInput = _chatInput[1];
-  var _chatLoading = useState(false); var chatLoading = _chatLoading[0]; var setChatLoading = _chatLoading[1];
 
   return (
     <div style={{ fontFamily:"'DM Sans', -apple-system, sans-serif" }}>
