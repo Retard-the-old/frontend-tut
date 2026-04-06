@@ -1461,7 +1461,8 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
   var setTermsAgreed = _terms[1];
   var _checking = useState(false); var checking = _checking[0]; var setChecking = _checking[1];
   var _checkMsg = useState(""); var checkMsg = _checkMsg[0]; var setCheckMsg = _checkMsg[1];
-  var { register } = useAuth();
+  var { register, user: authUser } = useAuth();
+  useEffect(function() { if (authUser) setStep(3); }, [authUser]);
 
   function set(k, v) { setForm(function(p) { var n = Object.assign({}, p); n[k] = v; return n; }); setErrors(function(p){ var n=Object.assign({},p); delete n[k]; return n; }); }
   function validateStep1() {
@@ -1493,29 +1494,21 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
     }
   }
 
-  function checkAndRedirect() {
+  async function checkAndRedirect() {
     setChecking(true); setCheckMsg("Verifying your payment with MamoPay...");
-    var API = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
-    var token = localStorage.getItem("tutorii_access_token");
-    if (!token) { setChecking(false); go("login"); return; }
-    fetch(API + "/subscriptions/verify-payment", {
-      method: "POST",
-      headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" }
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
+    try {
+      var data = await subscriptionsApi.verifyPayment();
       if (data.activated) {
         setCheckMsg("Payment confirmed! Taking you to your dashboard...");
         setTimeout(function(){ go("userPortal"); }, 1200);
       } else {
-        setCheckMsg(data.message || "No payment found yet for " + form.email + ". Make sure you used this exact email on MamoPay, then try again.");
+        setCheckMsg(data.message || "No payment found yet. Make sure you used the same email you registered with on MamoPay, then try again.");
         setChecking(false);
       }
-    })
-    .catch(function() {
-      setCheckMsg("Could not reach payment server. Please try again.");
+    } catch(e) {
+      setCheckMsg(e.message || "Could not reach payment server. Please try again.");
       setChecking(false);
-    });
+    }
   }
 
   return (
