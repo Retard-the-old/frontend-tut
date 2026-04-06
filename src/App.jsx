@@ -1949,7 +1949,7 @@ function UserPortal(props) {
       // Check subscription — only redirect if we got a valid response
       var sub = results[4].status==="fulfilled" ? results[4].value : null;
       if (results[4].status==="fulfilled" && (!sub || sub.status !== "active")) {
-        go("login");
+        go("subscribe");
         return;
       }
       setDashLoading(false);
@@ -5002,7 +5002,7 @@ function TutoriiApp() {
           </div>
         </div>
       )}
-      {page === "userPortal" && <UserPortal go={go} courses={courses} setCourses={setCourses} chatOpen={chatOpen} setChatOpen={setChatOpen} chatMinimized={chatMinimized} setChatMinimized={setChatMinimized} chatMsgs={chatMsgs} setChatMsgs={setChatMsgs} chatInput={chatInput} setChatInput={setChatInput} chatLoading={chatLoading} setChatLoading={setChatLoading} />}
+      {page === "userPortal" && !authLoading && <UserPortal go={go} courses={courses} setCourses={setCourses} chatOpen={chatOpen} setChatOpen={setChatOpen} chatMinimized={chatMinimized} setChatMinimized={setChatMinimized} chatMsgs={chatMsgs} setChatMsgs={setChatMsgs} chatInput={chatInput} setChatInput={setChatInput} chatLoading={chatLoading} setChatLoading={setChatLoading} />}
       {page === "adminLogin" && <AdminLogin go={go} />}
       {page === "adminPanel" && <AdminPanel go={go} courses={courses} setCourses={setCourses} />}
       {page === "terms" && <TermsPage go={go} />}
