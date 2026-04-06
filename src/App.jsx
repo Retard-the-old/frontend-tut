@@ -1451,18 +1451,17 @@ function ResetPasswordPage(props) {
 function Subscribe(props) {
   var go = props.go;
   var mob = useIsMobile();
-  var _step = useState(1);
+  var { register, user: authUser } = useAuth();
+  var _step = useState(authUser ? 3 : 1);
   var step = _step[0]; var setStep = _step[1];
 var _form = useState({ name:"", email:"", password:"", phone:"", language:"English", ref: props.refCode || "" });  var form = _form[0]; var setForm = _form[1];
   var _proc = useState(false);
   var processing = _proc[0]; var setProcessing = _proc[1];
   var _err = useState({}); var errors = _err[0]; var setErrors = _err[1];
-  var _terms = useState(false); var termsAgreed = _terms[0]; 
+  var _terms = useState(false); var termsAgreed = _terms[0];
   var setTermsAgreed = _terms[1];
   var _checking = useState(false); var checking = _checking[0]; var setChecking = _checking[1];
   var _checkMsg = useState(""); var checkMsg = _checkMsg[0]; var setCheckMsg = _checkMsg[1];
-  var { register, user: authUser } = useAuth();
-  useEffect(function() { if (authUser) setStep(3); }, [authUser]);
 
   function set(k, v) { setForm(function(p) { var n = Object.assign({}, p); n[k] = v; return n; }); setErrors(function(p){ var n=Object.assign({},p); delete n[k]; return n; }); }
   function validateStep1() {
