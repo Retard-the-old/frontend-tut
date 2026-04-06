@@ -3,31 +3,53 @@ import { auth, users, setTokens, clearTokens, getRefreshToken } from "./api";
 
 const AuthContext = createContext(null);
 
+const BASE_URL = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // On mount, try to restore session from stored refresh token
   useEffect(() => {
     async function restore() {
       const rt = getRefreshToken();
       if (!rt) { setLoading(false); return; }
+
+      // Step 1: Refresh the access token.
+      // Only clear tokens if THIS fails — means session is truly expired.
       try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1"}/auth/refresh`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ refresh_token: rt }),
-          }
-        );
-        if (!res.ok) throw new Error("Session expired");
+        const res = await fetch(`${BASE_URL}/auth/refresh`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refresh_token: rt }),
+        });
+        if (!res.ok) {
+          clearTokens();
+          setLoading(false);
+          return;
+        }
         const data = await res.json();
         setTokens(data.access_token, data.refresh_token);
+      } catch {
+        clearTokens();
+        setLoading(false);
+        return;
+      }
+
+      // Step 2: Fetch user profile.
+      // Do NOT clear tokens here — a failure means server is busy (cold start,
+      // transient 5xx), not that the session is invalid. Retry once before giving up.
+      try {
         const me = await users.me();
         setUser(me);
       } catch {
-        clearTokens();
+        await new Promise((r) => setTimeout(r, 1500));
+        try {
+          const me = await users.me();
+          setUser(me);
+        } catch {
+          // Still failed — tokens remain valid in memory.
+          // Portal will re-fetch on mount; user is not force-logged-out.
+        }
       } finally {
         setLoading(false);
       }
