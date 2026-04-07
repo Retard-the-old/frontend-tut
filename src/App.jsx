@@ -1454,6 +1454,7 @@ function Subscribe(props) {
   var { register, user: authUser } = useAuth();
   var _step = useState(authUser ? 3 : 1);
   var step = _step[0]; var setStep = _step[1];
+  useEffect(function() { if (authUser && step === 1) setStep(3); }, [authUser]);
 var _form = useState({ name:"", email:"", password:"", phone:"", language:"English", ref: props.refCode || "" });  var form = _form[0]; var setForm = _form[1];
   var _proc = useState(false);
   var processing = _proc[0]; var setProcessing = _proc[1];
@@ -1590,17 +1591,17 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
           {step === 3 && <div style={{ textAlign:"center", padding:"32px 0" }}>
                 <div style={{ width:60, height:60, borderRadius:"50%", background:"rgba(200,180,140,0.1)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px", lineHeight:0 }}><Ico name="bank" size={28} color="rgb(200,180,140)" /></div>
                 <h3 style={{ fontSize:24, fontWeight:700, color:"#d4d4d8", margin:"0 0 10px" }}>Complete Your Payment</h3>
-                <p style={{ fontSize:14, color:"#71717a", marginBottom:20, lineHeight:1.7 }}>Your account has been created. Complete your payment on MamoPay to unlock full access.</p>
+                <p style={{ fontSize:14, color:"#71717a", marginBottom:20, lineHeight:1.7 }}>{authUser ? "Complete your payment on MamoPay to unlock full access." : "Your account has been created. Complete your payment on MamoPay to unlock full access."}</p>
                 <div style={{ background:"rgba(200,180,140,0.06)", border:"1px solid rgba(200,180,140,0.2)", borderRadius:10, padding:"14px 18px", marginBottom:20, textAlign:"left" }}>
                   <div style={{ fontSize:12, fontWeight:700, color:"rgb(200,180,140)", marginBottom:4 }}>Important</div>
-                  <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.7 }}>{"Use "}<strong style={{ color:"#d4d4d8" }}>{form.email}</strong>{" as your email on MamoPay — this is how we verify and activate your account."}</div>
+                  <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.7 }}>{"Use "}<strong style={{ color:"#d4d4d8" }}>{authUser ? authUser.email : form.email}</strong>{" as your email on MamoPay — this is how we verify and activate your account."}</div>
                 </div>
                 <Btn onClick={function(){ window.open("https://business.mamopay.com/pay/galcofzellc-4b20ab", "_blank"); }} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12 }}>Pay AED {PRICE} on MamoPay ↗</Btn>
                 <Btn onClick={checkAndRedirect} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:8, background:"rgba(255,255,255,0.06)", color:"#d4d4d8" }} disabled={checking}>
                   {checking ? "Checking payment..." : "I've paid — take me to my dashboard"}
                 </Btn>
                 {checkMsg && <div style={{ fontSize:12, color: checkMsg.includes("No payment") ? "#f87171" : "rgb(200,180,140)", marginTop:8, padding:"8px 12px", borderRadius:6, background:"rgba(255,255,255,0.03)" }}>{checkMsg}</div>}
-                <p style={{ fontSize:12, color:"#52525b", marginTop:12 }}>Already have an account? <span onClick={function(){go("login")}} style={{ color:"rgb(200,180,140)", cursor:"pointer", fontWeight:600 }}>Log in here</span></p>
+                {!authUser && <p style={{ fontSize:12, color:"#52525b", marginTop:12 }}>Already have an account? <span onClick={function(){go("login")}} style={{ color:"rgb(200,180,140)", cursor:"pointer", fontWeight:600 }}>Log in here</span></p>}
               </div>}
         </div>
       </div>
