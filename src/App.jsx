@@ -1939,6 +1939,8 @@ function UserPortal(props) {
       if(results[4].status==="fulfilled") setMySub(results[4].value);
       if(results[5].status==="fulfilled" && results[5].value && results[5].value.length > 0) {
         setCourses(results[5].value.map(function(c){ return { id:c.id, module:c.title, icon:c.icon||"book", lessons: (c.lessons||[]).map(function(l){ return { id:l.id, title:l.title, dur:l.duration_minutes?(l.duration_minutes+" min"):"10 min", done:l.completed||false }; }) }; }));
+      } else if(results[5].status==="rejected") {
+        console.error("Failed to load courses:", results[5].reason && results[5].reason.message ? results[5].reason.message : results[5].reason);
       }
       if(results[6].status==="fulfilled") setReferralList(results[6].value);
       // If /users/me failed, user is not logged in — redirect to login
@@ -4970,7 +4972,9 @@ function TutoriiApp() {
       if (Array.isArray(list) && list.length > 0) {
         setCourses(list.map(function(c){ return { id:c.id, module:c.title, icon:c.category||"book", lessons:[] }; }));
       }
-    }).catch(function(){});
+    }).catch(function(err){
+      console.error("Failed to preload courses:", err && err.message ? err.message : err);
+    });
   }, []);
   var _chatOpen = useState(false); var chatOpen = _chatOpen[0]; var setChatOpen = _chatOpen[1];
   var _chatMinimized = useState(false); var chatMinimized = _chatMinimized[0]; var setChatMinimized = _chatMinimized[1];
