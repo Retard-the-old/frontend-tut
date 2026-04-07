@@ -2356,7 +2356,7 @@ function UserPortal(props) {
               <Ico name="globe" size={12} color="#fff" /> Email
             </button>
           </div>
-          <button onClick={function(){go("subscribe",u.code)}} style={{ width:"100%", marginTop:8, padding:"8px 12px", borderRadius:8, border:"1px dashed rgba(200,180,140,0.25)", background:"transparent", color:"#71717a", fontSize:11, fontWeight:600, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:6 }}>
+          <button onClick={function(){ window.open("/ref/"+u.code, "_blank"); }} style={{ width:"100%", marginTop:8, padding:"8px 12px", borderRadius:8, border:"1px dashed rgba(200,180,140,0.25)", background:"transparent", color:"#71717a", fontSize:11, fontWeight:600, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:6 }}>
             <Ico name="link" size={11} color="#71717a" /> Preview what your referral sees
           </button>
         </div>
