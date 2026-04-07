@@ -1459,9 +1459,12 @@ function Subscribe(props) {
   var go = props.go;
   var mob = useIsMobile();
   var { register, user: authUser } = useAuth();
-  var _step = useState(authUser ? 3 : 1);
+  // Only jump to step 3 if there's no refCode — a refCode means this is a
+  // referral landing page for a NEW user, always show registration (step 1)
+  var isReferralLink = !!(props.refCode);
+  var _step = useState(authUser && !isReferralLink ? 3 : 1);
   var step = _step[0]; var setStep = _step[1];
-  useEffect(function() { if (authUser && step === 1) setStep(3); }, [authUser]);
+  useEffect(function() { if (authUser && !isReferralLink && step === 1) setStep(3); }, [authUser]);
 var _form = useState({ name:"", email:"", password:"", phone:"", language:"English", ref: props.refCode || "" });  var form = _form[0]; var setForm = _form[1];
   var _proc = useState(false);
   var processing = _proc[0]; var setProcessing = _proc[1];
