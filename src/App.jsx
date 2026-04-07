@@ -1902,7 +1902,7 @@ function UserPortal(props) {
   var _ticketReply = useState(""); var ticketReply = _ticketReply[0]; var setTicketReply = _ticketReply[1];
   var _ticketMsgs = useState([]);  var ticketMsgs = _ticketMsgs[0]; var setTicketMsgs = _ticketMsgs[1];
   var contentRef = useRef(null);
-  var { user: authUser, logout } = useAuth();
+  var { user: authUser, logout, updateUser } = useAuth();
   var _realUser = useState(null); var realUser = _realUser[0]; var setRealUser = _realUser[1];
   var _referralStats = useState(null); var referralStats = _referralStats[0]; var setReferralStats = _referralStats[1];
   var _referralList = useState(null); var referralList = _referralList[0]; var setReferralList = _referralList[1];
@@ -1924,7 +1924,7 @@ function UserPortal(props) {
       if(results[0].status==="rejected" && results[0].reason && results[0].reason.message === "Session expired") {
         go("login"); return;
       }
-      if(results[0].status==="fulfilled") setRealUser(results[0].value);
+      if(results[0].status==="fulfilled") { setRealUser(results[0].value); updateUser(results[0].value); }
       if(results[1].status==="fulfilled") setReferralStats(results[1].value);
       if(results[2].status==="fulfilled") setMyCommissions(results[2].value || []);
       if(results[3].status==="fulfilled") setMyPayouts(results[3].value || []);

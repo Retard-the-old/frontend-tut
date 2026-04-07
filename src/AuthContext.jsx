@@ -82,8 +82,12 @@ export function AuthProvider({ children }) {
     return users.me().then(setUser);
   }
 
+  function updateUser(userData) {
+    setUser(userData);
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, refreshUser }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, refreshUser, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
