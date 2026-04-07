@@ -1085,7 +1085,14 @@ function UserLogin(props) {
     setLoading(true); setError("");
     try {
       await login(email, pass);
-      go("userPortal");
+      // Check subscription before routing — authUser is guaranteed set here
+      try {
+        var sub = await subscriptionsApi.me();
+        if (sub && sub.status === "active") { go("userPortal"); }
+        else { go("subscribe"); }
+      } catch(subErr) {
+        go("userPortal"); // subscription endpoint failed, portal will handle it
+      }
     } catch(e) {
       setError(e.message || "Invalid credentials");
     } finally {
