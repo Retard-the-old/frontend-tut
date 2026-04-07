@@ -6,6 +6,7 @@ import { LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, X
 const PRICE = 95;
 const L1_RATE = 0.40;
 const L2_RATE = 0.05;
+const MAMOPAY_LINK = "https://business.mamopay.com/pay/galcofzellc-4b20ab";
 
 const INIT_COURSES = [
   { id: "c1", module: "Life in the UAE", icon: "mosque", lessons: [
@@ -1606,7 +1607,7 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
                   <div style={{ fontSize:12, fontWeight:700, color:"rgb(200,180,140)", marginBottom:4 }}>Important</div>
                   <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.7 }}>{"Use "}<strong style={{ color:"#d4d4d8" }}>{authUser ? authUser.email : form.email}</strong>{" as your email on MamoPay — this is how we verify and activate your account."}</div>
                 </div>
-                <Btn onClick={function(){ window.open("https://business.mamopay.com/pay/galcofzellc-4b20ab", "_blank"); }} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12 }}>Pay AED {PRICE} on MamoPay ↗</Btn>
+                <Btn onClick={function(){ window.open(MAMOPAY_LINK, "_blank"); }} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12 }}>Pay AED {PRICE} on MamoPay ↗</Btn>
                 <Btn onClick={checkAndRedirect} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:8, background:"rgba(255,255,255,0.06)", color:"#d4d4d8" }} disabled={checking}>
                   {checking ? "Checking payment..." : "I've paid — take me to my dashboard"}
                 </Btn>
