@@ -143,6 +143,7 @@ export const admin = {
   updateRole: (userId, role) => api.patch("/admin/users/"+userId+"/role", { role }),
   payouts: (limit=200) => api.get("/admin/payouts?limit="+limit),
   triggerPayouts: () => api.post("/admin/payouts/trigger"),
+  verifyPayout: (payoutId) => api.get("/admin/payouts/"+payoutId+"/verify"),
   activateSubscription: (userId) => api.post("/admin/users/"+userId+"/subscription/activate"),
   cancelSubscription: (userId) => api.post("/admin/users/"+userId+"/subscription/cancel"),
   createUser: (data) => api.post("/admin/users/create", data),

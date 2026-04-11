@@ -3456,6 +3456,7 @@ function AdminPanel(props) {
   var _cd = useState(null); var confirmDelete = _cd[0]; var setConfirmDelete = _cd[1];
   var _mm = useState(null); var manageMedia = _mm[0]; var setManageMedia = _mm[1];
   var _confirmPay = useState(false); var confirmPayout = _confirmPay[0]; var setConfirmPayout = _confirmPay[1];
+  var _verifyResult = useState(null); var verifyResult = _verifyResult[0]; var setVerifyResult = _verifyResult[1];
   var _upl = useState(null); var uploading = _upl[0]; var setUploading = _upl[1];
   var _selUser = useState(null); var selectedUser = _selUser[0]; var setSelectedUser = _selUser[1];
   var adminContentRef = useRef(null);
@@ -4464,6 +4465,7 @@ function AdminPanel(props) {
                     <div style={{ display:"flex", gap:4 }}>
                       {p.status === "failed" && <button onClick={function(e){e.stopPropagation(); setPayouts(function(prev){return prev.map(function(x){return x.id===p.id?Object.assign({},x,{status:"processing"}):x})}); setTimeout(function(){setPayouts(function(prev){return prev.map(function(x){return x.id===p.id?Object.assign({},x,{status:"completed"}):x})}); flash("Payout "+p.id+" retried successfully")},1200)}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(200,180,140,0.2)", background:"rgba(200,180,140,0.06)", fontSize:10, fontWeight:600, color:"rgb(200,180,140)", cursor:"pointer", whiteSpace:"nowrap" }}>Retry</button>}
                       {(p.status === "failed" || p.status === "processing") && <button onClick={function(e){e.stopPropagation(); setPayouts(function(prev){return prev.map(function(x){return x.id===p.id?Object.assign({},x,{status:"completed"}):x})}); flash("Payout "+p.id+" marked as completed")}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(16,185,129,0.2)", background:"rgba(16,185,129,0.06)", fontSize:10, fontWeight:600, color:"#10b981", cursor:"pointer", whiteSpace:"nowrap" }}>Mark Done</button>}
+                      <button onClick={async function(e){e.stopPropagation(); try { var r = await adminApi.verifyPayout(p.id); setVerifyResult(r); } catch(err){ flash("Verify failed: "+(err.message||"No MamoPay ID on record")); }}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(139,92,246,0.2)", background:"rgba(139,92,246,0.06)", fontSize:10, fontWeight:600, color:"#a78bfa", cursor:"pointer", whiteSpace:"nowrap" }}>Verify</button>
                       {p.status === "completed" && <span style={{ fontSize:10, color:"#3f3f46" }}>{"\u2014"}</span>}
                       {p.status === "queued" && <span style={{ fontSize:10, color:"#3f3f46" }}>Pending</span>}
                     </div>
@@ -4610,6 +4612,33 @@ function AdminPanel(props) {
                 <button onClick={function(){setConfirmPayout(false)}} style={{ flex:1, padding:"11px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", background:"transparent", color:"#d4d4d8", fontSize:13, fontWeight:600, cursor:"pointer" }}>Cancel</button>
                 <button onClick={function(){setConfirmPayout(false);processPayouts()}} style={{ flex:1, padding:"11px", borderRadius:10, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:13, fontWeight:600, cursor:"pointer" }}>Confirm & Process</button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {verifyResult && (
+          <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.6)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:200 }} onClick={function(){setVerifyResult(null)}}>
+            <div onClick={function(e){e.stopPropagation()}} style={{ background:"#131315", borderRadius:16, padding:32, maxWidth:460, width:"90%", border:"1px solid rgba(255,255,255,0.06)" }}>
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
+                <h3 style={{ fontSize:17, fontWeight:700, color:"#d4d4d8", margin:0 }}>Disbursement Verification</h3>
+                <button onClick={function(){setVerifyResult(null)}} style={{ background:"transparent", border:"none", color:"#52525b", fontSize:18, cursor:"pointer" }}>✕</button>
+              </div>
+              {[
+                ["MamoPay ID", verifyResult.mamopay_id],
+                ["MamoPay Status", verifyResult.mamopay_status],
+                ["Amount", verifyResult.amount ? "AED "+verifyResult.amount : "—"],
+                ["Recipient IBAN", verifyResult.recipient || "—"],
+                ["Method", verifyResult.method || "—"],
+                ["Reason", verifyResult.reason || "—"],
+                ["Created", verifyResult.created_at || "—"],
+                ["Local Status", verifyResult.local_status],
+              ].map(function(row){ return (
+                <div key={row[0]} style={{ display:"flex", justifyContent:"space-between", padding:"8px 0", borderBottom:"1px solid rgba(255,255,255,0.04)", fontSize:13 }}>
+                  <span style={{ color:"#71717a" }}>{row[0]}</span>
+                  <span style={{ color: row[0]==="MamoPay Status" ? (row[1]==="completed"||row[1]==="Completed"?"#10b981":row[1]==="Processing"?"#f59e0b":"#f87171") : "#d4d4d8", fontWeight:500, maxWidth:260, textAlign:"right", wordBreak:"break-all" }}>{row[1]}</span>
+                </div>
+              )})}
+              <button onClick={function(){setVerifyResult(null)}} style={{ marginTop:20, width:"100%", padding:"11px", borderRadius:10, border:"none", background:"rgba(255,255,255,0.06)", color:"#d4d4d8", fontSize:13, fontWeight:600, cursor:"pointer" }}>Close</button>
             </div>
           </div>
         )}
