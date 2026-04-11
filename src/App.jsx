@@ -3942,9 +3942,9 @@ function AdminPanel(props) {
                 {search && <div style={{ fontSize:11, color:"#52525b", marginBottom:10 }}>{"Showing "+filtered.length+" of "+adminUsers.length+" users"+(filtered.length===0 ? " — try a different search" : "")}</div>}
                 <div style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden" }}>
                   <div style={{ overflowX:"auto", WebkitOverflowScrolling:"touch" }}><table style={{ width:"100%", borderCollapse:"collapse", minWidth:mob?700:"auto" }}>
-                    <thead><tr>{["User","Code","Level 1","Level 2","Earned","Status","Actions"].map(function(h){return <th key={h} style={{ padding:"12px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#71717a", textAlign:"left", verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>{h}</th>})}</tr></thead>
+                    <thead><tr>{["User","Code","Level 1","Level 2","Earned","Pending","Status","Actions"].map(function(h){return <th key={h} style={{ padding:"12px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#71717a", textAlign:"left", verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>{h}</th>})}</tr></thead>
                     <tbody>{filtered.length === 0 ? (
-                      <tr><td colSpan={7} style={{ padding:40, textAlign:"center", color:"#3f3f46", fontSize:13 }}>
+                      <tr><td colSpan={8} style={{ padding:40, textAlign:"center", color:"#3f3f46", fontSize:13 }}>
                         <div style={{ marginBottom:8 }}><Ico name="users" size={28} color="#27272a" /></div>
                         {"No users match \u201C"+search+"\u201D"}
                       </td></tr>
@@ -3955,6 +3955,7 @@ function AdminPanel(props) {
                   <td style={{ padding:"12px", fontSize:13, color:"#d4d4d8", verticalAlign:"middle" }}>{u.l1}</td>
                   <td style={{ padding:"12px", fontSize:13, color:"#d4d4d8", verticalAlign:"middle" }}>{u.l2}</td>
                   <td style={{ padding:"12px", fontSize:13, fontWeight:500, color:"#d4d4d8", verticalAlign:"middle" }}>{"AED "+u.earned.toFixed(2)}</td>
+                  <td style={{ padding:"12px", fontSize:13, fontWeight:500, color:"#f59e0b", verticalAlign:"middle" }}>{u.pending>0 ? "AED "+u.pending.toFixed(2) : <span style={{color:"#3f3f46"}}>—</span>}</td>
                   <td style={{ padding:"12px", verticalAlign:"middle" }}><Badge s={u.status}/></td>
                   <td style={{ padding:"12px", verticalAlign:"middle" }}>
                     <div style={{ display:"flex", gap:4 }}>
