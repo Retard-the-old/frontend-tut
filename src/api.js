@@ -155,4 +155,5 @@ export const admin = {
   createLesson: (courseId, data) => api.post("/courses/"+courseId+"/lessons", data),
   updateLesson: (courseId, lessonId, data) => api.patch("/courses/"+courseId+"/lessons/"+lessonId, data),
   deleteLesson: (courseId, lessonId) => api.delete("/courses/"+courseId+"/lessons/"+lessonId),
+  resetPayout: (payoutId) => api.post("/admin/payouts/"+payoutId+"/reset"),
 };
