@@ -1,6 +1,6 @@
 import { useIsMobile, Ico, WaveDivider, BgIllustration, DotGrid, NoiseOverlay, FadeIn, SectionWatermark, ProgressRing, ShimmerText, SpotlightCard } from "../components/UI";
 import { Btn, Logo, SiteNav, SiteFooter, CtaBanner, SLabel } from "../components/Layout";
-import { INIT_COURSES } from "../constants";
+import { INIT_COURSES, PRICE } from "../constants";
 
 function CurriculumPage(props) {
   var go = props.go;

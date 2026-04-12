@@ -2,6 +2,8 @@ import { BgIllustration, DotGrid, FadeIn, GlowLine, Ico } from "../components/UI
 import { useState, useEffect } from "react";
 import { useIsMobile } from "./UI";
 
+import { PRICE } from "../constants";
+
 function Btn(props) {
   var isPrimary = !props.outline && !props.green;
   var bg = props.green ? "#059669" : props.outline ? "transparent" : "rgba(255,255,255,0.06)";

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useIsMobile, Ico, WaveDivider, BgIllustration, DotGrid, NoiseOverlay, FadeIn, SectionWatermark, SpotlightCard } from "../components/UI";
 import { Btn, Logo, SiteNav, SiteFooter, CtaBanner, SLabel } from "../components/Layout";
 
+import { INIT_COURSES, PRICE, L1_RATE, L2_RATE } from "../constants";
+
 function FaqPage(props) {
   var go = props.go;
   var mob = useIsMobile();

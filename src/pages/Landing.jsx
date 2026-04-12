@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useIsMobile, Ico, WaveDivider, BgIllustration, DotGrid, NoiseOverlay, GlowLine, FadeIn, CursorGlow, FloatingParticles, SpotlightCard, TrustMarquee, SectionWatermark, StepConnector, ShimmerText, ProgressRing, DashboardDesktop, DashboardMobile } from "../components/UI";
 import { Btn, Logo, SiteNav, SiteFooter, CtaBanner, GCard, SLabel } from "../components/Layout";
-import { PRICE, L1_RATE, L2_RATE, MAMOPAY_LINK } from "../constants";
+import { PRICE, L1_RATE, L2_RATE, MAMOPAY_LINK, INIT_COURSES } from "../constants";
 
 function Landing(props) {
   var go = props.go;
