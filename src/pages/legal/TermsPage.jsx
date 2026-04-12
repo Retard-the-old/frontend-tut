@@ -1,4 +1,5 @@
 import { SiteNav, SiteFooter } from "../../components/Layout";
+import LegalPage from "./LegalPage";
 
 function TermsPage(props) {
   var go = props.go;

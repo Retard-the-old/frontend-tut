@@ -7,6 +7,8 @@ import { Btn, Logo } from "../../components/Layout";
 import { INIT_PAYOUTS, adminUsers } from "../../constants";
 import CreateAdminForm from "../../components/admin/CreateAdminForm";
 import AdminTicketsTab from "../../components/admin/AdminTicketsTab";
+import CreateUserForm from "../../components/CreateUserForm";
+import LessonEditPanel from "../../components/LessonEditPanel";
 
 function AdminPanel(props) {
   var go = props.go;

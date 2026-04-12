@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Ico, WaveDivider, BgIllustration, DotGrid, NoiseOverlay, FadeIn, SectionWatermark } from "../components/UI";
-import { Btn, Logo, SiteNav, SiteFooter } from "../components/Layout";
+import { useIsMobile, Ico, WaveDivider, BgIllustration, DotGrid, NoiseOverlay, FadeIn, SectionWatermark, SpotlightCard } from "../components/UI";
+import { Btn, Logo, SiteNav, SiteFooter, CtaBanner, SLabel } from "../components/Layout";
 
 function FaqPage(props) {
   var go = props.go;

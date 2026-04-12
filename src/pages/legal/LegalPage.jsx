@@ -1,4 +1,5 @@
-import { SiteNav, SiteFooter } from "../../components/Layout";
+import { SiteNav, SiteFooter, Btn, Logo } from "../../components/Layout";
+import { useIsMobile } from "../../components/UI";
 
 function LegalPage(props) {
   var go = props.go;

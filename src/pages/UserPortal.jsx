@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../AuthContext";
 import { users as usersApi, subscriptions as subscriptionsApi, courses as coursesApi, chat as chatApi, payouts as payoutsApi } from "../api";
-import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Bar, BarChart, Cell, Legend, Pie, PieChart } from "recharts";
 import { useIsMobile, Ico, Badge, StatCard, FadeIn, Skeleton, DashSkeleton, ProgressRing, GlowRow, DashboardDesktop, DashboardMobile } from "../components/UI";
 import { Btn, Logo } from "../components/Layout";
 import { PRICE, L1_RATE, L2_RATE, MAMOPAY_LINK, INIT_COURSES, USER } from "../constants";

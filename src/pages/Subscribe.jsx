@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../AuthContext";
 import { subscriptions as subscriptionsApi } from "../api";
-import { Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from "../components/UI";
+import { useIsMobile, Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from "../components/UI";
 import { Btn, Logo, SiteNav, SiteFooter } from "../components/Layout";
 import { PRICE, MAMOPAY_LINK } from "../constants";
 

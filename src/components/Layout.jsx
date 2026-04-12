@@ -1,4 +1,6 @@
+import { BgIllustration, DotGrid, FadeIn, GlowLine, Ico } from "../components/UI";
 import { useState, useEffect } from "react";
+import { useIsMobile } from "./UI";
 
 function Btn(props) {
   var isPrimary = !props.outline && !props.green;

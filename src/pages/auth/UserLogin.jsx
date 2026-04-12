@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../../AuthContext";
 import { users as usersApi } from "../../api";
-import { Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from "../../components/UI";
+import { useIsMobile, Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from "../../components/UI";
 import { Btn, Logo } from "../../components/Layout";
 
 function UserLogin(props) {

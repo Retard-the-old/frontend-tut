@@ -1,3 +1,4 @@
+import { Badge } from "../UI";
 import { useState, useEffect } from "react";
 import { Btn } from "../Layout";
 

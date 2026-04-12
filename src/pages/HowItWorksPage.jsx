@@ -1,5 +1,5 @@
-import { Ico, WaveDivider, BgIllustration, DotGrid, NoiseOverlay, FadeIn, SectionWatermark } from "../components/UI";
-import { Btn, Logo, SiteNav, SiteFooter, CtaBanner } from "../components/Layout";
+import { useIsMobile, Ico, WaveDivider, BgIllustration, DotGrid, NoiseOverlay, FadeIn, SectionWatermark, GlowLine, GlowRow, ShimmerText, SpotlightCard, StepConnector } from "../components/UI";
+import { Btn, Logo, SiteNav, SiteFooter, CtaBanner, GCard, SLabel } from "../components/Layout";
 import { PRICE, L1_RATE, L2_RATE } from "../constants";
 
 function HowItWorksPage(props) {

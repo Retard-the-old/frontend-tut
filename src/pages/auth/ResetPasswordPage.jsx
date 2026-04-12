@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { users as usersApi } from "../../api";
-import { Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from "../../components/UI";
+import { useIsMobile, Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from "../../components/UI";
 import { Btn, Logo, SiteNav, SiteFooter } from "../../components/Layout";
 
 function ResetPasswordPage(props) {

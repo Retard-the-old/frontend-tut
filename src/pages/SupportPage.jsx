@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Ico, FadeIn } from "../components/UI";
-import { SiteNav, SiteFooter } from "../components/Layout";
+import { SiteNav, SiteFooter, Btn } from "../components/Layout";
+import LegalPage from "./legal/LegalPage";
 
 function SupportPage(props) {
   var go = props.go;
