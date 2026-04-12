@@ -247,29 +247,29 @@ function UserPortal(props) {
       "Payout History:\n" +
       (u.payouts||[]).map(function(p){return "- " + p.date + " 2026: $" + p.amount.toFixed(2) + " (" + p.status + ") - " + p.method}).join("\n") + "\n" +
       "Total Payouts Received: " + (u.payouts||[]).length + " payouts totalling $" + (u.payouts||[]).reduce(function(s,p){return s+p.amount},0).toFixed(2) + "\n" +
-      "Average Payout: $" + ((u.payouts||[]).reduce(function(s,p){return s+p.amount},0) / (u.payouts||[]).length).toFixed(2) + "\n\n" +
+      "Average Payout: $" + ((u.payouts||[]).length > 0 ? ((u.payouts||[]).reduce(function(s,p){return s+p.amount},0) / (u.payouts||[]).length).toFixed(2) : "0.00") + "\n\n" +
 
       "=== LEVEL 1 REFERRALS (Direct, 40% = AED " + (PRICE*L1_RATE).toFixed(2) + "/each/month) ===\n" +
       "Total L1: " + (u.l1||[]).length + " (" + l1active.length + " active, " + l1cancelled.length + " cancelled)\n" +
       (u.l1||[]).map(function(r,i){return (i+1) + ". " + r.name + " - Joined: " + r.date + " 2026, Status: " + r.status.toUpperCase() + ", Total earned you: AED " + r.earned.toFixed(2) + (r.status==="active" ? ", Currently earning AED "+(PRICE*L1_RATE).toFixed(2)+"/month" : ", No longer earning (cancelled)")}).join("\n") + "\n" +
-      "Best performing L1: " + (function(){var best=u.l1.reduce(function(a,b){return a.earned>b.earned?a:b});return best.name+" ($"+best.earned.toFixed(2)+" earned)"})() + "\n" +
-      "Most recent L1: " + u.l1[(u.l1||[]).length-1].name + " (joined " + u.l1[(u.l1||[]).length-1].date + ")\n" +
-      "L1 retention rate: " + Math.round((l1active.length/(u.l1||[]).length)*100) + "% (" + l1active.length + " of " + (u.l1||[]).length + " still active)\n\n" +
+      "Best performing L1: " + ((u.l1||[]).length > 0 ? (function(){var best=(u.l1||[]).reduce(function(a,b){return a.earned>b.earned?a:b});return best.name+" ($"+best.earned.toFixed(2)+" earned)"})() : "None") + "\n" +
+      "Most recent L1: " + ((u.l1||[]).length > 0 ? u.l1[u.l1.length-1].name + " (joined " + u.l1[u.l1.length-1].date + ")" : "None") + "\n" +
+      "L1 retention rate: " + ((u.l1||[]).length > 0 ? Math.round((l1active.length/(u.l1||[]).length)*100) : 0) + "% (" + l1active.length + " of " + (u.l1||[]).length + " still active)\n\n" +
 
       "=== LEVEL 2 REFERRALS (Indirect, 5% = AED " + (PRICE*L2_RATE).toFixed(2) + "/each/month) ===\n" +
       "Total L2: " + (u.l2||[]).length + "\n" +
       (u.l2||[]).map(function(r,i){return (i+1) + ". " + r.name + " - Referred by: " + r.from + ", Joined: " + r.date + " 2026, Earned you: $" + r.earned.toFixed(2)}).join("\n") + "\n" +
       "L2 breakdown by L1 referrer:\n" +
-      (function(){var map={};u.l2.forEach(function(r){if(!map[r.from])map[r.from]=0;map[r.from]++});return Object.keys(map).map(function(k){return "- "+k+": "+map[k]+" L2 referral"+(map[k]>1?"s":"")}).join("\n")})() + "\n" +
-      "Best L1 recruiter (most L2s): " + (function(){var map={};u.l2.forEach(function(r){if(!map[r.from])map[r.from]=0;map[r.from]++});var best="";var max=0;Object.keys(map).forEach(function(k){if(map[k]>max){max=map[k];best=k}});return best+" ("+max+" L2 referrals)"})() + "\n\n" +
+      (function(){var map={};(u.l2||[]).forEach(function(r){if(!map[r.from])map[r.from]=0;map[r.from]++});var keys=Object.keys(map);return keys.length>0?keys.map(function(k){return "- "+k+": "+map[k]+" L2 referral"+(map[k]>1?"s":"")}).join("\n"):"None"})() + "\n" +
+      "Best L1 recruiter (most L2s): " + (function(){var map={};(u.l2||[]).forEach(function(r){if(!map[r.from])map[r.from]=0;map[r.from]++});var best="";var max=0;Object.keys(map).forEach(function(k){if(map[k]>max){max=map[k];best=k}});return best?best+" ("+max+" L2 referrals)":"None"})() + "\n\n" +
 
       "=== NETWORK SUMMARY ===\n" +
       "Total Network Size: " + ((u.l1||[]).length + (u.l2||[]).length) + " people (" + (u.l1||[]).length + " L1 + " + (u.l2||[]).length + " L2)\n" +
       "Active Network: " + (l1active.length + (u.l2||[]).length) + " people generating income\n" +
-      "Total Earned from L1: $" + u.l1.reduce(function(s,r){return s+r.earned},0).toFixed(2) + "\n" +
-      "Total Earned from L2: $" + u.l2.reduce(function(s,r){return s+r.earned},0).toFixed(2) + "\n" +
-      "Average L1 has earned user: $" + (u.l1.reduce(function(s,r){return s+r.earned},0)/(u.l1||[]).length).toFixed(2) + "\n" +
-      "Average L2 has earned user: $" + (u.l2.reduce(function(s,r){return s+r.earned},0)/(u.l2||[]).length).toFixed(2) + "\n\n" +
+      "Total Earned from L1: $" + (u.l1||[]).reduce(function(s,r){return s+r.earned},0).toFixed(2) + "\n" +
+      "Total Earned from L2: $" + (u.l2||[]).reduce(function(s,r){return s+r.earned},0).toFixed(2) + "\n" +
+      "Average L1 has earned user: $" + ((u.l1||[]).length > 0 ? ((u.l1||[]).reduce(function(s,r){return s+r.earned},0)/(u.l1||[]).length).toFixed(2) : "0.00") + "\n" +
+      "Average L2 has earned user: $" + ((u.l2||[]).length > 0 ? ((u.l2||[]).reduce(function(s,r){return s+r.earned},0)/(u.l2||[]).length).toFixed(2) : "0.00") + "\n\n" +
 
       "=== COURSE PROGRESS (DETAILED) ===\n" +
       "Overall: " + completedLessons + "/" + tLessons + " lessons completed (" + (tLessons>0?Math.round(completedLessons/tLessons*100):0) + "%)\n" +
@@ -676,7 +676,7 @@ function UserPortal(props) {
             <StatCard icon="users" label="Level 1 Referrals" value={(u.l1||[]).length} sub={activeL1+" active"} />
             <StatCard icon="link" label="Level 2 Referrals" value={(u.l2||[]).length} sub={"via "+new Set((u.l2||[]).map(function(r){return r.from})).size+" referrers"} />
             <StatCard icon="chart" label="Total Network Size" value={(u.l1||[]).length + (u.l2||[]).length} />
-            <StatCard icon="dollar" label="Total Network Revenue" value={"AED "+(u.l1.reduce(function(s,r){return s+r.earned},0)+u.l2.reduce(function(s,r){return s+r.earned},0)).toFixed(2)} />
+            <StatCard icon="dollar" label="Total Network Revenue" value={"AED "+((u.l1||[]).reduce(function(s,r){return s+r.earned},0)+(u.l2||[]).reduce(function(s,r){return s+r.earned},0)).toFixed(2)} />
           </div>
 
           {/* Network composition + Referral timeline side by side */}

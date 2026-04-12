@@ -32,10 +32,13 @@ function ForgotPasswordPage(props) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email.trim().toLowerCase() })
-    }).finally(function() {
+    }).then(function() {
       setSent(true);
-      setLoading(false);
       setCountdown(60);
+    }).catch(function() {
+      setError("Network error — please check your connection and try again.");
+    }).finally(function() {
+      setLoading(false);
     });
   }
 
@@ -47,9 +50,10 @@ function ForgotPasswordPage(props) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email.trim().toLowerCase() })
-    }).finally(function() {
-      setLoading(false);
+    }).then(function() {
       setCountdown(60);
+    }).catch(function() {}).finally(function() {
+      setLoading(false);
     });
   }
 
