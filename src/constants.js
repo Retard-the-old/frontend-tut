@@ -1,7 +1,3 @@
-import { useState, useEffect, useRef } from "react";
-import { useAuth, AuthProvider } from "./AuthContext";
-import { users as usersApi, subscriptions as subscriptionsApi, courses as coursesApi, chat as chatApi, payouts as payoutsApi, admin as adminApi } from "./api";
-import { LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 const PRICE = 95;
 const L1_RATE = 0.40;
@@ -100,7 +96,5 @@ var CHURN_DATA = [
 var MONTHLY_PAYOUTS = [
   {month:"Oct",amount:3926},{month:"Nov",amount:5506},{month:"Dec",amount:7086},{month:"Jan",amount:9048},{month:"Feb",amount:11203},{month:"Mar",amount:2586},
 ];
-
-// ─── MOBILE DETECTION HOOK ───
 
 export { PRICE, L1_RATE, L2_RATE, MAMOPAY_LINK, INIT_COURSES, USER, adminUsers, INIT_PAYOUTS, GROWTH_DATA, NETWORK_PIE, CHURN_DATA, MONTHLY_PAYOUTS };

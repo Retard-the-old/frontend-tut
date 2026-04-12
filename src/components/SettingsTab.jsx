@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { USER } from "../constants";
 import { useAuth } from "../AuthContext";
 import { users as usersApi, payouts as payoutsApi } from "../api";
 import { Ico, Badge } from "./UI";

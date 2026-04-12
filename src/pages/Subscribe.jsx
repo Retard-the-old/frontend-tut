@@ -3,7 +3,7 @@ import { useAuth } from "../AuthContext";
 import { subscriptions as subscriptionsApi } from "../api";
 import { useIsMobile, Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from "../components/UI";
 import { Btn, Logo, SiteNav, SiteFooter } from "../components/Layout";
-import { PRICE, MAMOPAY_LINK } from "../constants";
+import { PRICE, MAMOPAY_LINK, USER } from "../constants";
 
 function Subscribe(props) {
   var go = props.go;
