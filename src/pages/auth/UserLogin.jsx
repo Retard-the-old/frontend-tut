@@ -71,9 +71,6 @@ function UserLogin(props) {
             <span onClick={function(){go("forgotPassword")}} style={{ fontSize:12, color:"rgb(200,180,140)", cursor:"pointer", fontWeight:500 }}>Forgot password?</span>
           </div>
           <Btn onClick={handleLogin} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12, opacity:loading?0.6:1 }}>{loading ? "Logging in..." : "Log In"}</Btn>
-          <div style={{ textAlign:"center", padding:"8px 12px", borderRadius:8, background:"rgba(200,180,140,0.08)", fontSize:12, color:"rgb(200,180,140)", marginBottom:16 }}>
-
-          </div>
           <div style={{ textAlign:"center", fontSize:13, color:"#71717a" }}>
             {"No account? "}<span onClick={function(){go("subscribe")}} style={{ color:"rgb(200,180,140)", fontWeight:600, cursor:"pointer" }}>Subscribe now</span>
           </div>
