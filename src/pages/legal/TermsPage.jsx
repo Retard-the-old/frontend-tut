@@ -15,7 +15,7 @@ function TermsPage(props) {
       <h2 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px" }}>3. Subscription and Payment</h2>
       <p style={{ marginBottom:10 }}>The Platform operates on a monthly subscription model at the current rate of AED 95 per month. All payments are processed exclusively through MamoPay. By subscribing, you authorize recurring monthly charges to your payment method. You may cancel at any time; cancellation takes effect at the end of your current billing period.</p>
 
-      <h2 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px", color:"#f87171" }}>4. No Refund Policy</h2>
+      <h2 style={{ fontSize:18, fontWeight:700, color:"#f87171", margin:"0 0 12px" }}>4. No Refund Policy</h2>
       <div style={{ background:"rgba(220,38,38,0.1)", border:"1px solid rgba(248,113,113,0.2)", borderRadius:10, padding:"16px 20px", marginBottom:20 }}>
         <p style={{ margin:0, fontWeight:600, color:"#f87171" }}>ALL SALES ARE FINAL. Tutorii operates a strict no-refund policy. Once a payment has been processed, it is non-refundable under any circumstances. This applies to all subscription payments, including the initial payment and all subsequent renewal charges. By subscribing, you acknowledge and accept this no-refund policy. You may cancel your subscription at any time to prevent future charges, but no refund will be issued for any payment already made.</p>
       </div>

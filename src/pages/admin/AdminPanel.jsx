@@ -911,7 +911,7 @@ function AdminPanel(props) {
               <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>Course Management</h2>
               <p style={{ fontSize:13, color:"#71717a", marginTop:4 }}>{courses.length+" modules - "+totalLessons+" total lessons"}</p>
             </div>
-            <button onClick={function(){setShowAddModule(true)}} style={{ background:"rgb(200,180,140)", color:"#fff", border:"none", padding:"10px 20px", borderRadius:10, fontSize:13, fontWeight:600, cursor:"pointer", color:"#d4d4d8" }}>+ Add Module</button>
+            <button onClick={function(){setShowAddModule(true)}} style={{ background:"rgb(200,180,140)", color:"#0a0a0c", border:"none", padding:"10px 20px", borderRadius:10, fontSize:13, fontWeight:600, cursor:"pointer" }}>+ Add Module</button>
           </div>
 
           {showAddModule && (

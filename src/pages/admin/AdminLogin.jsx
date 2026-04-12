@@ -45,11 +45,11 @@ function AdminLogin(props) {
         {error && <div style={{ padding:"10px 14px", borderRadius:8, background:"#7f1d1d", color:"#fca5a5", fontSize:13, marginBottom:16 }}>{error}</div>}
         <div style={{ marginBottom:18 }}>
           <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#52525b", marginBottom:5 }}>Admin Email</label>
-          <input type="email" value={email} onChange={function(e){setEmail(e.target.value);setError("")}} placeholder="admin@tutorii.com" style={{ width:"100%", padding:"12px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#fff", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" }} />
+          <input type="email" value={email} onChange={function(e){setEmail(e.target.value);setError("")}} placeholder="admin@tutorii.com" style={{ width:"100%", padding:"12px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif" }} />
         </div>
         <div style={{ marginBottom:28 }}>
           <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#52525b", marginBottom:5 }}>Password</label>
-          <input type="password" value={pass} onChange={function(e){setPass(e.target.value);setError("")}} placeholder="********" style={{ width:"100%", padding:"12px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#fff", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" }} />
+          <input type="password" value={pass} onChange={function(e){setPass(e.target.value);setError("")}} placeholder="********" style={{ width:"100%", padding:"12px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif" }} />
         </div>
         <button onClick={handleLogin} disabled={loading} style={{ width:"100%", padding:"13px", borderRadius:12, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:15, fontWeight:600, cursor:"pointer", marginBottom:12, opacity:loading?0.6:1 }}>{loading ? "Logging in..." : "Log In to Admin"}</button>
         <div style={{ textAlign:"center", marginTop:12 }}>
