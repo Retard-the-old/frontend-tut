@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../AuthContext";
 import { Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from "../../components/UI";
 import { Btn, Logo } from "../../components/Layout";

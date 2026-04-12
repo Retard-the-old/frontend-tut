@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { users as usersApi } from "../../api";
 import { useIsMobile, Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from "../../components/UI";
 import { Btn, Logo, SiteNav, SiteFooter } from "../../components/Layout";

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useIsMobile, Ico, WaveDivider, BgIllustration, DotGrid, NoiseOverlay, FadeIn, SectionWatermark, GlowLine, GlowRow, ShimmerText, SpotlightCard, StepConnector } from "../components/UI";
 import { Btn, Logo, SiteNav, SiteFooter, CtaBanner, GCard, SLabel } from "../components/Layout";
 import { PRICE, L1_RATE, L2_RATE, INIT_COURSES } from "../constants";
