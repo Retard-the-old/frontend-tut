@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../../AuthContext";
-import { users as usersApi } from "../../api";
+import { users as usersApi, subscriptions as subscriptionsApi } from "../../api";
 import { useIsMobile, Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from "../../components/UI";
 import { Btn, Logo } from "../../components/Layout";
 
