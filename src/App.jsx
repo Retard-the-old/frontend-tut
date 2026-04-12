@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { AuthProvider, useAuth } from "./AuthContext";
+import { courses as coursesApi } from "./api";
+import { CursorGlow, FloatingParticles } from "./components/UI";
 
 import Landing from "./pages/Landing";
 import HowItWorksPage from "./pages/HowItWorksPage";
@@ -21,6 +23,29 @@ import AdminPanel from "./pages/admin/AdminPanel";
 import LegalPage from "./pages/legal/LegalPage";
 import TermsPage from "./pages/legal/TermsPage";
 import PrivacyPage from "./pages/legal/PrivacyPage";
+
+// ═════════════════════════════════════════
+// URL ROUTING HELPERS
+// ═════════════════════════════════════════
+var PAGE_TO_PATH = {
+  landing: "/",
+  howItWorks: "/how-it-works",
+  curriculum: "/curriculum",
+  faq: "/faq",
+  login: "/login",
+  forgotPassword: "/forgot-password",
+  resetPassword: "/reset-password",
+  subscribe: "/subscribe",
+  userPortal: "/portal",
+  adminLogin: "/admin-login",
+  adminPanel: "/admin",
+  terms: "/terms",
+  privacy: "/privacy",
+  contact: "/contact",
+  support: "/support",
+};
+var PATH_TO_PAGE = {};
+Object.keys(PAGE_TO_PATH).forEach(function(k){ PATH_TO_PAGE[PAGE_TO_PATH[k]] = k; });
 
 function getInitialPage() {
   var path = window.location.pathname;
