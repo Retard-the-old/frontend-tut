@@ -329,5 +329,109 @@ function GlowRow(props) {
 // DEVICE MOCKUP SVGs — DASHBOARD PREVIEWS
 // ═══════════════════════════════════════════════
 
+function DashboardDesktop() {
+  return (
+    <svg width="100%" viewBox="0 0 720 440" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display:"block" }}>
+      <rect x="0" y="0" width="720" height="440" rx="12" stroke="rgba(255,255,255,0.28)" strokeWidth="1" fill="rgba(255,255,255,0.09)" />
+      <rect x="0" y="0" width="720" height="36" rx="12" fill="rgba(255,255,255,0.75)" />
+      <rect x="0" y="24" width="720" height="12" fill="rgba(255,255,255,0.75)" />
+      <circle cx="20" cy="18" r="5" fill="rgba(255,255,255,0.55)" />
+      <circle cx="38" cy="18" r="5" fill="rgba(255,255,255,0.55)" />
+      <circle cx="56" cy="18" r="5" fill="rgba(255,255,255,0.55)" />
+      <rect x="200" y="10" width="320" height="16" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.45)" strokeWidth="0.5" />
+      <text x="290" y="22" fill="rgba(255,255,255,0.65)" fontSize="8" fontFamily="sans-serif">tutorii.com/dashboard</text>
+      <rect x="1" y="36" width="160" height="403" fill="rgba(255,255,255,0.09)" />
+      <line x1="160" y1="36" x2="160" y2="440" stroke="rgba(255,255,255,0.45)" strokeWidth="0.5" />
+      <rect x="20" y="52" width="24" height="24" rx="6" stroke="rgba(255,255,255,0.45)" strokeWidth="0.8" fill="none" />
+      <text x="32" y="69" fill="rgba(255,255,255,0.75)" fontSize="10" fontFamily="sans-serif" textAnchor="middle">T</text>
+      <text x="54" y="68" fill="rgba(255,255,255,0.65)" fontSize="11" fontFamily="sans-serif" fontStyle="italic">Tutorii</text>
+      <rect x="16" y="100" width="128" height="28" rx="6" fill="rgba(255,255,255,0.75)" stroke="rgba(255,255,255,0.24)" strokeWidth="0.5" />
+      <text x="36" y="118" fill="rgba(255,255,255,0.85)" fontSize="9" fontFamily="sans-serif">Overview</text>
+      {["My Referrals","Earnings","Payouts","Courses","Settings"].map(function(item, i) {
+        return <text key={item} x="36" y={156 + i * 32} fill="rgba(255,255,255,0.55)" fontSize="9" fontFamily="sans-serif">{item}</text>;
+      })}
+      <text x="184" y="68" fill="rgba(255,255,255,0.75)" fontSize="14" fontFamily="sans-serif" fontWeight="600">Welcome back</text>
+      <text x="184" y="84" fill="rgba(255,255,255,0.75)" fontSize="9" fontFamily="sans-serif">Your account overview</text>
+      {[{x:184,label:"Total Earned",val:"AED 1,186"},{x:318,label:"This Month",val:"AED 418"},{x:452,label:"Referrals",val:"12"},{x:586,label:"Progress",val:"68%"}].map(function(s) {
+        return <g key={s.label}><rect x={s.x} y="100" width="120" height="72" rx="8" stroke="rgba(255,255,255,0.24)" strokeWidth="0.8" fill="rgba(255,255,255,0.08)" /><text x={s.x+12} y="120" fill="rgba(255,255,255,0.75)" fontSize="8" fontFamily="sans-serif">{s.label}</text><text x={s.x+12} y="148" fill="rgba(255,255,255,0.85)" fontSize="18" fontFamily="sans-serif" fontWeight="600">{s.val}</text></g>;
+      })}
+      <rect x="184" y="190" width="390" height="180" rx="8" stroke="rgba(255,255,255,0.24)" strokeWidth="0.8" fill="rgba(255,255,255,0.08)" />
+      <text x="200" y="214" fill="rgba(255,255,255,0.65)" fontSize="10" fontFamily="sans-serif" fontWeight="500">Earnings Overview</text>
+      <polyline points="210,340 250,320 290,330 330,290 370,270 410,240 450,220 490,200 530,210 550,195" stroke="rgba(255,255,255,0.45)" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <polyline points="210,340 250,320 290,330 330,290 370,270 410,240 450,220 490,200 530,210 550,195 550,355 210,355" fill="rgba(255,255,255,0.09)" stroke="none" />
+      {[260,290,320,350].map(function(y){return <line key={y} x1="200" y1={y} x2="560" y2={y} stroke="rgba(255,255,255,0.14)" strokeWidth="0.5" />;})}
+      <rect x="590" y="190" width="116" height="180" rx="8" stroke="rgba(255,255,255,0.24)" strokeWidth="0.8" fill="rgba(255,255,255,0.08)" />
+      <text x="604" y="214" fill="rgba(255,255,255,0.65)" fontSize="9" fontFamily="sans-serif" fontWeight="500">Your Link</text>
+      <rect x="600" y="228" width="96" height="20" rx="4" stroke="rgba(255,255,255,0.45)" strokeWidth="0.5" fill="rgba(255,255,255,0.09)" />
+      <text x="610" y="241" fill="rgba(255,255,255,0.75)" fontSize="7" fontFamily="sans-serif">tutorii.com/r/...</text>
+      <rect x="600" y="256" width="96" height="24" rx="5" stroke="rgba(255,255,255,0.45)" strokeWidth="0.8" fill="rgba(255,255,255,0.08)" />
+      <text x="628" y="272" fill="rgba(255,255,255,0.7)" fontSize="8" fontFamily="sans-serif" textAnchor="middle">Copy Link</text>
+      {["WhatsApp","SMS","Email"].map(function(s,i){return <g key={s}><rect x="600" y={292+i*28} width="96" height="22" rx="5" stroke="rgba(255,255,255,0.45)" strokeWidth="0.5" fill="rgba(255,255,255,0.07)" /><text x="632" y={307+i*28} fill="rgba(255,255,255,0.55)" fontSize="8" fontFamily="sans-serif" textAnchor="middle">{s}</text></g>;})}
+      <rect x="184" y="388" width="522" height="36" rx="8" stroke="rgba(255,255,255,0.28)" strokeWidth="0.5" fill="rgba(255,255,255,0.03)" />
+      <text x="200" y="410" fill="rgba(255,255,255,0.75)" fontSize="8" fontFamily="sans-serif">Next payout: Tuesday · Minimum: AED 50 · Balance: AED 226</text>
+    </svg>
+  );
+}
+
+function DashboardMobile() {
+  return (
+    <svg width="100%" viewBox="0 0 260 520" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display:"block" }}>
+      <rect x="0" y="0" width="260" height="520" rx="28" stroke="rgba(255,255,255,0.45)" strokeWidth="1.2" fill="rgba(255,255,255,0.09)" />
+      <rect x="85" y="0" width="90" height="24" rx="12" fill="rgba(255,255,255,0.08)" />
+      <text x="24" y="18" fill="rgba(255,255,255,0.6)" fontSize="8" fontFamily="sans-serif">9:41</text>
+      <rect x="208" y="10" width="28" height="10" rx="2" stroke="rgba(255,255,255,0.28)" strokeWidth="0.8" fill="none" />
+      <rect x="210" y="12" width="16" height="6" rx="1" fill="rgba(255,255,255,0.55)" />
+      <text x="20" y="58" fill="rgba(255,255,255,0.75)" fontSize="14" fontFamily="sans-serif" fontWeight="600">Dashboard</text>
+      <circle cx="236" cy="52" r="14" stroke="rgba(255,255,255,0.45)" strokeWidth="0.8" fill="rgba(255,255,255,0.09)" />
+      <text x="236" y="56" fill="rgba(255,255,255,0.6)" fontSize="8" fontFamily="sans-serif" textAnchor="middle">PS</text>
+      {[{x:16,y:76,label:"Total Earned",val:"AED 1,186"},{x:138,y:76,label:"This Month",val:"AED 418"},{x:16,y:146,label:"Referrals",val:"12"},{x:138,y:146,label:"Progress",val:"68%"}].map(function(s){return <g key={s.label}><rect x={s.x} y={s.y} width="106" height="56" rx="10" stroke="rgba(255,255,255,0.24)" strokeWidth="0.8" fill="rgba(255,255,255,0.08)" /><text x={s.x+10} y={s.y+18} fill="rgba(255,255,255,0.75)" fontSize="7" fontFamily="sans-serif">{s.label}</text><text x={s.x+10} y={s.y+40} fill="rgba(255,255,255,0.85)" fontSize="16" fontFamily="sans-serif" fontWeight="600">{s.val}</text></g>;})}
+      <rect x="16" y="218" width="228" height="120" rx="10" stroke="rgba(255,255,255,0.24)" strokeWidth="0.8" fill="rgba(255,255,255,0.08)" />
+      <text x="28" y="240" fill="rgba(255,255,255,0.65)" fontSize="9" fontFamily="sans-serif" fontWeight="500">Earnings</text>
+      <polyline points="32,315 62,305 92,310 122,285 152,270 182,250 212,240 228,235" stroke="rgba(255,255,255,0.45)" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <polyline points="32,315 62,305 92,310 122,285 152,270 182,250 212,240 228,235 228,325 32,325" fill="rgba(255,255,255,0.09)" stroke="none" />
+      {[270,290,310].map(function(y){return <line key={y} x1="28" y1={y} x2="236" y2={y} stroke="rgba(255,255,255,0.14)" strokeWidth="0.5" />;})}
+      <rect x="16" y="352" width="228" height="72" rx="10" stroke="rgba(255,255,255,0.24)" strokeWidth="0.8" fill="rgba(255,255,255,0.08)" />
+      <text x="28" y="374" fill="rgba(255,255,255,0.65)" fontSize="9" fontFamily="sans-serif" fontWeight="500">Your Referral Link</text>
+      <rect x="26" y="384" width="148" height="22" rx="5" stroke="rgba(255,255,255,0.45)" strokeWidth="0.5" fill="rgba(255,255,255,0.09)" />
+      <text x="36" y="399" fill="rgba(255,255,255,0.75)" fontSize="7" fontFamily="sans-serif">tutorii.com/r/priya</text>
+      <rect x="180" y="384" width="52" height="22" rx="5" stroke="rgba(255,255,255,0.45)" strokeWidth="0.8" fill="rgba(255,255,255,0.08)" />
+      <text x="206" y="399" fill="rgba(255,255,255,0.7)" fontSize="8" fontFamily="sans-serif" textAnchor="middle">Copy</text>
+      <rect x="26" y="412" width="60" height="20" rx="5" stroke="rgba(255,255,255,0.45)" strokeWidth="0.5" fill="rgba(255,255,255,0.07)" />
+      <text x="40" y="425" fill="rgba(255,255,255,0.55)" fontSize="7" fontFamily="sans-serif">WhatsApp</text>
+      <rect x="94" y="412" width="40" height="20" rx="5" stroke="rgba(255,255,255,0.45)" strokeWidth="0.5" fill="rgba(255,255,255,0.07)" />
+      <text x="103" y="425" fill="rgba(255,255,255,0.55)" fontSize="7" fontFamily="sans-serif">SMS</text>
+      <rect x="142" y="412" width="44" height="20" rx="5" stroke="rgba(255,255,255,0.45)" strokeWidth="0.5" fill="rgba(255,255,255,0.07)" />
+      <text x="152" y="425" fill="rgba(255,255,255,0.55)" fontSize="7" fontFamily="sans-serif">Email</text>
+      <line x1="16" y1="468" x2="244" y2="468" stroke="rgba(255,255,255,0.45)" strokeWidth="0.5" />
+      {["Home","Courses","Earn","Settings"].map(function(t,i){return <text key={t} x={44+i*56} y={490} fill={"rgba(255,255,255,"+(i===0?"0.18":"0.07")+")"} fontSize="8" fontFamily="sans-serif" textAnchor="middle">{t}</text>;})}
+      <rect x="100" y="506" width="60" height="4" rx="2" fill="rgba(255,255,255,0.08)" />
+    </svg>
+  );
+}
+
+function Skeleton(props) {
+  var w = props.w || "100%";
+  var h = props.h || 16;
+  var r = props.r || 6;
+  return <div style={{ width:w, height:h, borderRadius:r, background:"rgba(255,255,255,0.04)", animation:"pulse 1.5s ease-in-out infinite" }} />;
+}
+
+function DashSkeleton() {
+  var mob = useIsMobile();
+  return (
+    <div style={{ padding:28 }}>
+      <div style={{ display:"flex", justifyContent:"space-between", marginBottom:24 }}>
+        <Skeleton w={240} h={28} r={8} />
+        <Skeleton w={160} h={32} r={8} />
+      </div>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:12, marginBottom:20 }}>
+        {[1,2,3,4].map(function(i){return <div key={i} style={{ background:"#131315", borderRadius:14, padding:mob?14:22, border:"1px solid rgba(255,255,255,0.06)", boxSizing:"border-box" }}><Skeleton w={34} h={34} r={9} /><Skeleton w="60%" h={10} r={4} /><Skeleton w="40%" h={20} r={4} /></div>})}
+      </div>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14, marginBottom:14 }}>
+        {[1,2].map(function(i){return <div key={i} style={{ background:"#131315", borderRadius:14, padding:24, border:"1px solid rgba(255,255,255,0.06)", height:200 }}><Skeleton w="50%" h={14} r={4} /><div style={{ marginTop:12 }}><Skeleton h={140} r={8} /></div></div>})}
+      </div>
+    </div>
+  );
+}
 
 export { useIsMobile, Badge, StatCard, Ico, WaveDivider, BgIllustration, DotGrid, NoiseOverlay, GlowLine, FadeIn, CursorGlow, FloatingParticles, SpotlightCard, TrustMarquee, SectionWatermark, StepConnector, ShimmerText, ProgressRing, GlowRow, DashboardDesktop, DashboardMobile, Skeleton, DashSkeleton };
