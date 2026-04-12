@@ -775,7 +775,7 @@ function UserPortal(props) {
                 <CartesianGrid strokeDasharray="4 6" stroke="rgba(255,255,255,0.04)" strokeWidth={0.5} />
                 <XAxis dataKey="week" tick={{fill:"#52525b",fontSize:10}} />
                 <YAxis tick={{fill:"#52525b",fontSize:10}} tickFormatter={function(v){return "AED "+v}} />
-                <Tooltip contentStyle={{background:"#131315",border:"1px solid rgba(255,255,255,0.06)",borderRadius:8,fontSize:12}} formatter={function(v){return "AED "+v.toFixed(2)}} />
+                <Tooltip contentStyle={{background:"#131315",border:"1px solid rgba(200,180,140,0.2)",borderRadius:8,fontSize:12,color:"#d4d4d8"}} labelStyle={{color:"#a1a1aa",marginBottom:4}} itemStyle={{color:"#d4d4d8"}} formatter={function(v){return "AED "+v.toFixed(2)}} />
                 <Area type="monotone" dataKey="l1" stroke="rgb(200,180,140)" fill="url(#uL1)" strokeWidth={2.5} name="Level 1 Income" />
                 <Area type="monotone" dataKey="l2" stroke="#a78bfa" fill="url(#uL2)" strokeWidth={2} name="Level 2 Income" />
                 <Line type="monotone" dataKey="net" stroke="rgb(220,200,160)" strokeWidth={2} dot={{fill:"rgb(200,180,140)",r:4,stroke:"rgba(200,180,140,0.3)",strokeWidth:6}} activeDot={{fill:"rgb(200,180,140)",r:6,stroke:"rgba(200,180,140,0.4)",strokeWidth:8}} name="Net Profit" />
@@ -820,7 +820,7 @@ function UserPortal(props) {
                   <CartesianGrid strokeDasharray="4 6" stroke="rgba(255,255,255,0.04)" strokeWidth={0.5} />
                   <XAxis dataKey="week" tick={{fill:"#52525b",fontSize:9}} interval={3} />
                   <YAxis tick={{fill:"#52525b",fontSize:10}} tickFormatter={function(v){return "AED "+v}} />
-                  <Tooltip contentStyle={{background:"#131315",border:"1px solid rgba(255,255,255,0.06)",borderRadius:8,fontSize:12}} formatter={function(v){return "AED "+v.toFixed(2)}} />
+                  <Tooltip contentStyle={{background:"#131315",border:"1px solid rgba(200,180,140,0.2)",borderRadius:8,fontSize:12,color:"#d4d4d8"}} labelStyle={{color:"#a1a1aa",marginBottom:4}} itemStyle={{color:"#d4d4d8"}} formatter={function(v){return "AED "+v.toFixed(2)}} />
                   <Area type="monotone" dataKey="total" stroke="rgb(200,180,140)" fill="url(#cumGrad)" strokeWidth={2.5} dot={false} activeDot={{fill:"rgb(200,180,140)",r:5,stroke:"rgba(200,180,140,0.3)",strokeWidth:8}} name="Total Earned" />
                 </AreaChart>
               </ResponsiveContainer>
@@ -882,7 +882,7 @@ function UserPortal(props) {
                   <CartesianGrid strokeDasharray="4 6" stroke="rgba(255,255,255,0.04)" strokeWidth={0.5} vertical={false} />
                   <XAxis dataKey="date" tick={{fill:"#52525b",fontSize:9}} axisLine={false} tickLine={false} />
                   <YAxis tick={{fill:"#52525b",fontSize:10}} tickFormatter={function(v){return "AED "+v}} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{background:"#131315",border:"1px solid rgba(255,255,255,0.06)",borderRadius:8,fontSize:12}} formatter={function(v){return "AED "+v.toFixed(2)}} />
+                  <Tooltip contentStyle={{background:"#131315",border:"1px solid rgba(200,180,140,0.2)",borderRadius:8,fontSize:12,color:"#d4d4d8"}} labelStyle={{color:"#a1a1aa",marginBottom:4}} itemStyle={{color:"#d4d4d8"}} formatter={function(v){return ["AED "+v.toFixed(2),"Amount"]}} />
                   <Bar dataKey="amount" radius={[4,4,0,0]} name="Amount">
                     {(u.payouts||[]).map(function(p,i){return <Cell key={i} fill={p.status==="completed"?"rgb(200,180,140)":p.status==="processing"?"rgba(251,191,36,0.5)":"rgba(248,113,113,0.4)"} />})}
                   </Bar>
@@ -907,7 +907,7 @@ function UserPortal(props) {
                   <CartesianGrid strokeDasharray="4 6" stroke="rgba(255,255,255,0.04)" strokeWidth={0.5} />
                   <XAxis dataKey="date" tick={{fill:"#52525b",fontSize:9}} axisLine={false} tickLine={false} />
                   <YAxis tick={{fill:"#52525b",fontSize:10}} tickFormatter={function(v){return "AED "+v}} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{background:"#131315",border:"1px solid rgba(255,255,255,0.06)",borderRadius:8,fontSize:12}} formatter={function(v){return "AED "+v.toFixed(2)}} />
+                  <Tooltip contentStyle={{background:"#131315",border:"1px solid rgba(200,180,140,0.2)",borderRadius:8,fontSize:12,color:"#d4d4d8"}} labelStyle={{color:"#a1a1aa",marginBottom:4}} itemStyle={{color:"#d4d4d8"}} formatter={function(v){return "AED "+v.toFixed(2)}} />
                   <Area type="monotone" dataKey="total" stroke="rgb(200,180,140)" fill="url(#payGrad)" strokeWidth={2} name="Cumulative" />
                 </AreaChart>
               </ResponsiveContainer>
