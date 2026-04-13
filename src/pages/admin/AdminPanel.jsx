@@ -64,7 +64,7 @@ function AdminPanel(props) {
         setAdminUsers(results[0].value.map(function(u){
           return {
             name: u.full_name||u.email, email: u.email, code: u.referral_code||"",
-            l1: u.referral_count||0, l2: 0, earned: u.total_earned||0, pending: u.pending_payout||0,
+            l1: u.referral_count||0, l2: u.l2_referral_count||0, earned: u.total_earned||0, pending: u.pending_payout||0,
             status: u.subscription_status||"inactive", joined: u.created_at ? new Date(u.created_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "",
             referrer: u.referred_by_name||null, l1Names:[], l2Names:[], id: u.id, role: u.role,
             iban: u.payout_iban||"", ibanName: u.payout_name||"",
