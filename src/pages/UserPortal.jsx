@@ -57,11 +57,7 @@ function UserPortal(props) {
   var _chartRange = useState("all"); var chartRange = _chartRange[0]; var setChartRange = _chartRange[1];
   var _dashLoading = useState(true); var dashLoading = _dashLoading[0]; var setDashLoading = _dashLoading[1];
   // Support ticket state
-  var _tickets = useState([
-    { id:"T001", ref:"TK-8291", subject:"Payout not received for February", category:"billing", status:"in_progress", created:"Feb 26, 2026", updated:"Mar 2, 2026", messages:3 },
-    { id:"T002", ref:"TK-8315", subject:"Cannot access module 3 lessons", category:"courses", status:"resolved", created:"Mar 1, 2026", updated:"Mar 3, 2026", messages:5 },
-    { id:"T003", ref:"TK-8402", subject:"Referral code not tracked for Sara", category:"referrals", status:"open", created:"Mar 8, 2026", updated:"Mar 8, 2026", messages:1 },
-  ]);
+  var _tickets = useState([]);
   var tickets = _tickets[0]; var setTickets = _tickets[1];
   var _viewTicket = useState(null); var viewTicket = _viewTicket[0]; var setViewTicket = _viewTicket[1];
   var _newTicket = useState(false); var newTicket = _newTicket[0]; var setNewTicket = _newTicket[1];
@@ -245,7 +241,7 @@ function UserPortal(props) {
       "Minimum Payout: AED 50\n" +
       "Current Pending: $" + u.earn.pending + "\n" +
       "Payout History:\n" +
-      (u.payouts||[]).map(function(p){return "- " + p.date + " 2026: $" + p.amount.toFixed(2) + " (" + p.status + ") - " + p.method}).join("\n") + "\n" +
+      (u.payouts||[]).map(function(p){return "- " + p.date + ": $" + p.amount.toFixed(2) + " (" + p.status + ") - " + p.method}).join("\n") + "\n" +
       "Total Payouts Received: " + (u.payouts||[]).length + " payouts totalling $" + (u.payouts||[]).reduce(function(s,p){return s+p.amount},0).toFixed(2) + "\n" +
       "Average Payout: $" + ((u.payouts||[]).length > 0 ? ((u.payouts||[]).reduce(function(s,p){return s+p.amount},0) / (u.payouts||[]).length).toFixed(2) : "0.00") + "\n\n" +
 
@@ -869,7 +865,7 @@ function UserPortal(props) {
             <StatCard icon="bank" label="Total Paid Out" value={"AED "+u.earn.paid} />
             <StatCard icon="refresh" label="Pending Payout" value={"AED "+u.earn.pending} />
             <StatCard icon="check" label="Total Payouts" value={(u.payouts||[]).length} />
-            <StatCard icon="dollar" label="Avg Payout" value={"AED "+((u.payouts||[]).length>0?((u.payouts||[]).reduce(function(s,p){return s+p.amount},0)/(u.payouts||[]).length).toFixed(2):"0.00")} />
+            <StatCard icon="dollar" label="Avg Payout" value={(function(){ var done=(u.payouts||[]).filter(function(p){return p.status==="completed"||p.status==="paid"}); return "AED "+(done.length>0?(done.reduce(function(s,p){return s+p.amount},0)/done.length).toFixed(2):"0.00"); })()} />
           </div>
 
           {/* Payout amounts bar chart + cumulative */}
@@ -925,7 +921,7 @@ function UserPortal(props) {
             <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 14px", color:"#d4d4d8" }}>Payout History</h3>
             <table style={{ width:"100%", borderCollapse:"collapse" }}>
               <thead><tr>{["Date","Amount","Status"].map(function(h){return <th key={h} style={{ padding:"8px 10px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#52525b", textAlign:"left", borderBottom:"2px solid rgba(255,255,255,0.08)" }}>{h}</th>})}</tr></thead>
-              <tbody>{(u.payouts||[]).map(function(p){return <tr key={p.date} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}><td style={{ padding:"10px", fontSize:13, color:"#a1a1aa" }}>{p.date+", 2026"}</td><td style={{ padding:"10px", fontSize:14, fontWeight:500, color:"#d4d4d8" }}>{"AED "+p.amount.toFixed(2)}</td><td style={{ padding:"10px" }}><Badge s={p.status}/></td></tr>})}</tbody>
+              <tbody>{(u.payouts||[]).map(function(p){return <tr key={p.date} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}><td style={{ padding:"10px", fontSize:13, color:"#a1a1aa" }}>{p.date}</td><td style={{ padding:"10px", fontSize:14, fontWeight:500, color:"#d4d4d8" }}>{"AED "+p.amount.toFixed(2)}</td><td style={{ padding:"10px" }}><Badge s={p.status}/></td></tr>})}</tbody>
             </table>
           </div>
         </div>}
