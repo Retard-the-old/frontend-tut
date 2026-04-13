@@ -127,7 +127,8 @@ function TutoriiApp() {
       )}
       {page === "userPortal" && !authLoading && <UserPortal go={go} courses={courses} setCourses={setCourses} chatOpen={chatOpen} setChatOpen={setChatOpen} chatMinimized={chatMinimized} setChatMinimized={setChatMinimized} chatMsgs={chatMsgs} setChatMsgs={setChatMsgs} chatInput={chatInput} setChatInput={setChatInput} chatLoading={chatLoading} setChatLoading={setChatLoading} />}
       {page === "adminLogin" && <AdminLogin go={go} />}
-      {page === "adminPanel" && <AdminPanel go={go} courses={courses} setCourses={setCourses} />}
+      {page === "adminPanel" && !authLoading && authUser && authUser.role === "admin" && <AdminPanel go={go} courses={courses} setCourses={setCourses} />}
+      {page === "adminPanel" && !authLoading && (!authUser || authUser.role !== "admin") && <AdminLogin go={go} />}
       {page === "terms" && <TermsPage go={go} />}
       {page === "privacy" && <PrivacyPage go={go} />}
       {page === "contact" && <ContactPage go={go} />}
