@@ -738,7 +738,7 @@ function AdminPanel(props) {
                       </div>
                     </div>
                     <div style={{ display:"flex", gap:8 }}>
-                      <button onClick={function(){ if(!newIban.trim()){flash("Enter an IBAN");return;} doAction("Update", function(){ return "IBAN updated for "+selectedUser.name; }) }} disabled={actionLoading} style={{ padding:"8px 18px", borderRadius:8, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:12, fontWeight:700, cursor:"pointer", opacity:actionLoading?0.6:1 }}>Update Payout Info</button>
+                      <button onClick={async function(){ if(!newIban.trim()){flash("Enter an IBAN");return;} setActionLoading(true); try { await adminApi.updatePayoutInfo(selectedUser.id, { payout_iban: newIban, payout_name: newIbanName||undefined }); setAdminUsers(function(p){return p.map(function(u){return u.id===selectedUser.id?Object.assign({},u,{iban:newIban,ibanName:newIbanName||u.ibanName}):u})}); flash("IBAN updated for "+selectedUser.name); clearActionPanel(); } catch(err){ flash("Failed: "+(err.message||"Could not update IBAN")); } finally { setActionLoading(false); } }} disabled={actionLoading} style={{ padding:"8px 18px", borderRadius:8, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:12, fontWeight:700, cursor:"pointer", opacity:actionLoading?0.6:1 }}>{actionLoading?"Saving...":"Update Payout Info"}</button>
                       <button onClick={clearActionPanel} style={{ padding:"8px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#52525b", fontSize:12, cursor:"pointer" }}>Cancel</button>
                     </div>
                   </div>

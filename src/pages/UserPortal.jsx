@@ -858,7 +858,22 @@ function UserPortal(props) {
         </div>}
 
         {tab === "payouts" && <div style={{ maxWidth:"100%", overflow:"hidden" }}>
-          <h2 style={{ fontSize:22, fontWeight:700, margin:"0 0 20px", color:"#d4d4d8" }}>Payouts</h2>
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20, flexWrap:"wrap", gap:10 }}>
+            <h2 style={{ fontSize:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>Payouts</h2>
+            {u.earn.pending >= 50 ? (
+              <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+                <span style={{ fontSize:12, color:"#71717a" }}>{"AED "+u.earn.pending+" available"}</span>
+                <button onClick={function(){ window.open("mailto:support@tutorii.com?subject=Payout Request&body=Hi, I would like to request a payout of AED "+u.earn.pending+". My account email is "+u.email+".","_blank"); }} style={{ padding:"9px 18px", borderRadius:10, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:13, fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center", gap:6 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                  Request Payout
+                </button>
+              </div>
+            ) : (
+              <div style={{ fontSize:12, color:"#52525b", padding:"8px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"rgba(255,255,255,0.02)" }}>
+                {"Payouts every Tuesday · Min AED 50 · " + (u.earn.pending > 0 ? "AED "+(50-u.earn.pending).toFixed(2)+" more to qualify" : "No pending balance")}
+              </div>
+            )}
+          </div>
 
           {/* Payout summary cards */}
           <div style={{ display:"grid", gridTemplateColumns:mob?"1fr 1fr":"repeat(4, 1fr)", gap:mob?10:14, marginBottom:mob?16:20, alignItems:"stretch" }}>
