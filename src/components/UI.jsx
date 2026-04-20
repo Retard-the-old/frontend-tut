@@ -16,7 +16,7 @@ function useIsMobile(breakpoint) {
 // ─── SHARED UI ───
 function Badge(props) {
   var s = props.s;
-  var colors = { active:["rgba(200,180,140,0.1)","rgb(200,180,140)"], completed:["rgba(200,180,140,0.1)","rgb(200,180,140)"], processing:["rgba(251,191,36,0.1)","#fbbf24"], pending:["rgba(251,191,36,0.1)","#fbbf24"], queued:["rgba(167,139,250,0.1)","#a78bfa"], cancelled:["rgba(248,113,113,0.1)","#f87171"], inactive:["rgba(255,255,255,0.04)","#71717a"], failed:["rgba(248,113,113,0.1)","#f87171"] };
+  var colors = { active:["rgba(200,180,140,0.1)","rgb(200,180,140)"], completed:["rgba(200,180,140,0.1)","rgb(200,180,140)"], processing:["rgba(251,191,36,0.1)","#fbbf24"], pending:["rgba(251,191,36,0.1)","#fbbf24"], queued:["rgba(167,139,250,0.1)","#a78bfa"], requested:["rgba(59,130,246,0.1)","#60a5fa"], cancelled:["rgba(248,113,113,0.1)","#f87171"], inactive:["rgba(255,255,255,0.04)","#71717a"], failed:["rgba(248,113,113,0.1)","#f87171"] };
   var v = colors[s] || colors.pending;
   return <span style={{ padding:"3px 10px", borderRadius:20, fontSize:10, fontWeight:700, letterSpacing:0.3, textTransform:"uppercase", background:v[0], color:v[1] }}>{s}</span>;
 }

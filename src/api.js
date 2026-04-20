@@ -129,6 +129,7 @@ export const chat = {
 export const payouts = {
   mine: () => api.get("/payouts/me"),
   commissions: () => api.get("/payouts/me/commissions"),
+  request: (amount) => api.post("/users/me/payout-request", { amount }),
 };
 
 // ── Support ──
@@ -157,4 +158,5 @@ export const admin = {
   deleteLesson: (courseId, lessonId) => api.delete("/courses/"+courseId+"/lessons/"+lessonId),
   resetPayout: (payoutId) => api.post("/admin/payouts/"+payoutId+"/reset"),
   updatePayoutInfo: (userId, data) => api.patch("/admin/users/"+userId+"/payout-info", data),
+  processPayout: (payoutId) => api.post("/admin/payouts/"+payoutId+"/process"),
 };
