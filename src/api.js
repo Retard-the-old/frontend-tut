@@ -119,8 +119,8 @@ export const courses = {
 
 // ── Chat ──
 export const chat = {
-  send: (message, session_id, lesson_id) =>
-    api.post("/chat/messages", { message, session_id, lesson_id }),
+  send: (content, session_id, lesson_id, system) =>
+    api.post("/chat/messages", { content, session_id, lesson_id, system }),
   sessions: () => api.get("/chat/sessions"),
   messages: (sessionId) => api.get(`/chat/sessions/${sessionId}/messages`),
 };

@@ -429,9 +429,9 @@ function UserPortal(props) {
 
     var apiMsgs = newMsgs.map(function(m){return {role:m.role,content:m.content}});
 
-    chatApi.send(chatInput, null, null)
+    chatApi.send(chatInput, null, null, systemPrompt)
     .then(function(data){
-      var reply = data.response || "Sorry, I couldn't process that. Please try again.";
+      var reply = (data.assistant_message && data.assistant_message.content) || "Sorry, I couldn't process that. Please try again.";
       setChatMsgs(function(prev){return prev.concat([{role:"assistant",content:reply}])});
       setChatLoading(false);
     })
@@ -1427,9 +1427,9 @@ function UserPortal(props) {
                     <button key={q} onClick={function(){
                       setChatMsgs(function(prev){return prev.concat([{role:"user",content:q}])});
                       setChatLoading(true);
-                      chatApi.send(q, null, null)
+                      chatApi.send(q, null, null, systemPrompt)
                       .then(function(data){
-                        var reply = data.response || "Sorry, something went wrong.";
+                        var reply = (data.assistant_message && data.assistant_message.content) || "Sorry, something went wrong.";
                         setChatMsgs(function(p){return p.concat([{role:"assistant",content:reply}])});
                         setChatLoading(false);
                       }).catch(function(){
