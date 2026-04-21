@@ -175,25 +175,14 @@ function UserPortal(props) {
   var pct = totalL > 0 ? Math.round((doneL/totalL)*100) : 0;
   var activeL1 = (u.l1||[]).filter(function(r){return r.status==="active"}).length;
 
-  function copyLink() { setCopied(true); setTimeout(function(){setCopied(false)},2000); }
-  function markDone(cid,lid) { setCourses(function(p){return p.map(function(c){return c.id===cid?Object.assign({},c,{lessons:c.lessons.map(function(l){return l.id===lid?Object.assign({},l,{done:true}):l})}):c})}); }
-
-  function sendChat() {
-    if (!chatInput.trim() || chatLoading) return;
-    var userMsg = chatInput.trim();
-    setChatInput("");
-    var newMsgs = chatMsgs.concat([{role:"user",content:userMsg}]);
-    setChatMsgs(newMsgs);
-    setChatLoading(true);
-
-    var l1active = (u.l1||[]).filter(function(r){return r.status==="active"});
-    var l1cancelled = (u.l1||[]).filter(function(r){return r.status==="cancelled"});
-    var monthlyL1 = l1active.length * PRICE * L1_RATE;
-    var monthlyL2 = (u.l2||[]).length * PRICE * L2_RATE;
-    var completedLessons = courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return l.done}).length},0);
-    var tLessons = courses.reduce(function(s,c){return s+c.lessons.length},0);
-
-    var systemPrompt = "You are the Tutorii AI support assistant. Your job is to eliminate the need for human support by answering every possible question a user could have - about their account, billing, referrals, earnings, payouts, courses, and platform policies. Be friendly, accurate, and thorough. ONLY use the data provided below. Never guess or make up information.\n\n" +
+  // Build system prompt at component level so all chat handlers can access it
+  var _l1active = (u.l1||[]).filter(function(r){return r.status==="active"});
+  var _l1cancelled = (u.l1||[]).filter(function(r){return r.status==="cancelled"});
+  var _monthlyL1 = _l1active.length * PRICE * L1_RATE;
+  var _monthlyL2 = (u.l2||[]).length * PRICE * L2_RATE;
+  var _completedLessons = courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return l.done}).length},0);
+  var _tLessons = courses.reduce(function(s,c){return s+c.lessons.length},0);
+  var systemPrompt = "You are the Tutorii AI support assistant. Your job is to eliminate the need for human support by answering every possible question a user could have - about their account, billing, referrals, earnings, payouts, courses, and platform policies. Be friendly, accurate, and thorough. ONLY use the data provided below. Never guess or make up information.\n\n" +
 
       "=== USER PROFILE ===\n" +
       "Full Name: " + u.name + "\n" +
@@ -219,24 +208,24 @@ function UserPortal(props) {
       "Earned This Month: AED " + u.earn.month + "\n" +
       "Pending Payout: AED " + u.earn.pending + " (will be paid next Tuesday if above AED 50 minimum)\n" +
       "Already Paid Out: AED " + u.earn.paid + "\n" +
-      "Monthly L1 Income: AED " + monthlyL1.toFixed(2) + " (" + l1active.length + " active L1 referrals x $" + (PRICE*L1_RATE).toFixed(2) + " each)\n" +
-      "Monthly L2 Income: AED " + monthlyL2.toFixed(2) + " (" + (u.l2||[]).length + " L2 referrals x $" + (PRICE*L2_RATE).toFixed(2) + " each)\n" +
-      "Total Monthly Gross: $" + (monthlyL1 + monthlyL2).toFixed(2) + "\n" +
+      "Monthly L1 Income: AED " + _monthlyL1.toFixed(2) + " (" + _l1active.length + " active L1 referrals x $" + (PRICE*L1_RATE).toFixed(2) + " each)\n" +
+      "Monthly L2 Income: AED " + _monthlyL2.toFixed(2) + " (" + (u.l2||[]).length + " L2 referrals x $" + (PRICE*L2_RATE).toFixed(2) + " each)\n" +
+      "Total Monthly Gross: $" + (_monthlyL1 + _monthlyL2).toFixed(2) + "\n" +
       "Monthly Subscription Cost: -AED " + PRICE + "\n" +
-      "Net Monthly Profit: $" + (monthlyL1 + monthlyL2 - PRICE).toFixed(2) + "\n" +
-      "ROI: " + (((monthlyL1 + monthlyL2 - PRICE) / PRICE) * 100).toFixed(0) + "% return on subscription cost\n" +
-      "Break-even: Achieved (need 1 active L1 referral to cover subscription, user has " + l1active.length + ")\n" +
+      "Net Monthly Profit: $" + (_monthlyL1 + _monthlyL2 - PRICE).toFixed(2) + "\n" +
+      "ROI: " + (((_monthlyL1 + _monthlyL2 - PRICE) / PRICE) * 100).toFixed(0) + "% return on subscription cost\n" +
+      "Break-even: Achieved (need 1 active L1 referral to cover subscription, user has " + _l1active.length + ")\n" +
       "Lifetime Net Profit: $" + (u.earn.total - ((u.billing||[]).length * PRICE)).toFixed(2) + " (total earned minus total subscription payments)\n\n" +
 
       "=== EARNING PROJECTIONS ===\n" +
-      "If user maintains current " + l1active.length + " active L1 and " + (u.l2||[]).length + " L2 referrals:\n" +
-      "- Monthly: $" + (monthlyL1 + monthlyL2 - PRICE).toFixed(2) + " net profit\n" +
-      "- Quarterly: $" + ((monthlyL1 + monthlyL2 - PRICE) * 3).toFixed(2) + " net profit\n" +
-      "- Annually: $" + ((monthlyL1 + monthlyL2 - PRICE) * 12).toFixed(2) + " net profit\n" +
+      "If user maintains current " + _l1active.length + " active L1 and " + (u.l2||[]).length + " L2 referrals:\n" +
+      "- Monthly: $" + (_monthlyL1 + _monthlyL2 - PRICE).toFixed(2) + " net profit\n" +
+      "- Quarterly: $" + ((_monthlyL1 + _monthlyL2 - PRICE) * 3).toFixed(2) + " net profit\n" +
+      "- Annually: $" + ((_monthlyL1 + _monthlyL2 - PRICE) * 12).toFixed(2) + " net profit\n" +
       "Each new L1 referral adds $" + (PRICE*L1_RATE).toFixed(2) + "/month ($" + (PRICE*L1_RATE*12).toFixed(2) + "/year)\n" +
       "Each new L2 referral adds $" + (PRICE*L2_RATE).toFixed(2) + "/month ($" + (PRICE*L2_RATE*12).toFixed(2) + "/year)\n" +
-      "To reach AED 2,400/month net: need ~" + Math.ceil((500 + PRICE - monthlyL2) / (PRICE*L1_RATE)) + " active L1 referrals (currently has " + l1active.length + ")\n" +
-      "To reach AED 5000/month net: need ~" + Math.ceil((1000 + PRICE - monthlyL2) / (PRICE*L1_RATE)) + " active L1 referrals\n\n" +
+      "To reach AED 2,400/month net: need ~" + Math.ceil((500 + PRICE - _monthlyL2) / (PRICE*L1_RATE)) + " active L1 referrals (currently has " + _l1active.length + ")\n" +
+      "To reach AED 5000/month net: need ~" + Math.ceil((1000 + PRICE - _monthlyL2) / (PRICE*L1_RATE)) + " active L1 referrals\n\n" +
 
       "=== PAYOUT DETAILS ===\n" +
       "Payout Method: MamoPay bank transfer\n" +
@@ -250,11 +239,11 @@ function UserPortal(props) {
       "Average Payout: $" + ((u.payouts||[]).length > 0 ? ((u.payouts||[]).reduce(function(s,p){return s+p.amount},0) / (u.payouts||[]).length).toFixed(2) : "0.00") + "\n\n" +
 
       "=== LEVEL 1 REFERRALS (Direct, 40% = AED " + (PRICE*L1_RATE).toFixed(2) + "/each/month) ===\n" +
-      "Total L1: " + (u.l1||[]).length + " (" + l1active.length + " active, " + l1cancelled.length + " cancelled)\n" +
+      "Total L1: " + (u.l1||[]).length + " (" + _l1active.length + " active, " + _l1cancelled.length + " cancelled)\n" +
       (u.l1||[]).map(function(r,i){return (i+1) + ". " + r.name + " - Joined: " + r.date + " 2026, Status: " + r.status.toUpperCase() + ", Total earned you: AED " + r.earned.toFixed(2) + (r.status==="active" ? ", Currently earning AED "+(PRICE*L1_RATE).toFixed(2)+"/month" : ", No longer earning (cancelled)")}).join("\n") + "\n" +
       "Best performing L1: " + ((u.l1||[]).length > 0 ? (function(){var best=(u.l1||[]).reduce(function(a,b){return a.earned>b.earned?a:b});return best.name+" ($"+best.earned.toFixed(2)+" earned)"})() : "None") + "\n" +
       "Most recent L1: " + ((u.l1||[]).length > 0 ? u.l1[u.l1.length-1].name + " (joined " + u.l1[u.l1.length-1].date + ")" : "None") + "\n" +
-      "L1 retention rate: " + ((u.l1||[]).length > 0 ? Math.round((l1active.length/(u.l1||[]).length)*100) : 0) + "% (" + l1active.length + " of " + (u.l1||[]).length + " still active)\n\n" +
+      "L1 retention rate: " + ((u.l1||[]).length > 0 ? Math.round((_l1active.length/(u.l1||[]).length)*100) : 0) + "% (" + _l1active.length + " of " + (u.l1||[]).length + " still active)\n\n" +
 
       "=== LEVEL 2 REFERRALS (Indirect, 5% = AED " + (PRICE*L2_RATE).toFixed(2) + "/each/month) ===\n" +
       "Total L2: " + (u.l2||[]).length + "\n" +
@@ -265,14 +254,14 @@ function UserPortal(props) {
 
       "=== NETWORK SUMMARY ===\n" +
       "Total Network Size: " + ((u.l1||[]).length + (u.l2||[]).length) + " people (" + (u.l1||[]).length + " L1 + " + (u.l2||[]).length + " L2)\n" +
-      "Active Network: " + (l1active.length + (u.l2||[]).length) + " people generating income\n" +
+      "Active Network: " + (_l1active.length + (u.l2||[]).length) + " people generating income\n" +
       "Total Earned from L1: $" + (u.l1||[]).reduce(function(s,r){return s+r.earned},0).toFixed(2) + "\n" +
       "Total Earned from L2: $" + (u.l2||[]).reduce(function(s,r){return s+r.earned},0).toFixed(2) + "\n" +
       "Average L1 has earned user: $" + ((u.l1||[]).length > 0 ? ((u.l1||[]).reduce(function(s,r){return s+r.earned},0)/(u.l1||[]).length).toFixed(2) : "0.00") + "\n" +
       "Average L2 has earned user: $" + ((u.l2||[]).length > 0 ? ((u.l2||[]).reduce(function(s,r){return s+r.earned},0)/(u.l2||[]).length).toFixed(2) : "0.00") + "\n\n" +
 
       "=== COURSE PROGRESS (DETAILED) ===\n" +
-      "Overall: " + completedLessons + "/" + tLessons + " lessons completed (" + (tLessons>0?Math.round(completedLessons/tLessons*100):0) + "%)\n" +
+      "Overall: " + _completedLessons + "/" + _tLessons + " lessons completed (" + (_tLessons>0?Math.round(_completedLessons/_tLessons*100):0) + "%)\n" +
       "Modules Available: " + courses.length + "\n\n" +
       courses.map(function(c){
         var doneCnt = c.lessons.filter(function(l){return l.done}).length;
@@ -291,9 +280,9 @@ function UserPortal(props) {
         return arr;
       },[]).slice(0,5).map(function(l,i){return (i+1)+". "+l.title+" ("+l.module+", "+l.dur+")"+(l.hasVideo?" - has video":"")+(l.hasPdf?" - has PDF":"")}).join("\n") + "\n\n" +
 
-      "Lessons with video available: " + courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return l.video}).length},0) + "/" + tLessons + "\n" +
-      "Lessons with PDF available: " + courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return l.pdf}).length},0) + "/" + tLessons + "\n" +
-      "Lessons with no content yet: " + courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return !l.video&&!l.pdf}).length},0) + "/" + tLessons + "\n\n" +
+      "Lessons with video available: " + courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return l.video}).length},0) + "/" + _tLessons + "\n" +
+      "Lessons with PDF available: " + courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return l.pdf}).length},0) + "/" + _tLessons + "\n" +
+      "Lessons with no content yet: " + courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return !l.video&&!l.pdf}).length},0) + "/" + _tLessons + "\n\n" +
 
       "=== PLATFORM INFO ===\n" +
       "Subscription: $" + PRICE + "/month, cancel anytime, ALL SALES FINAL (no refunds)\n" +
@@ -427,9 +416,17 @@ function UserPortal(props) {
 
       "Keep responses short, friendly, and helpful. Use the user's actual account data when answering personal questions - cite specific numbers and names. For FAQ-type questions, answer directly and naturally without saying 'according to our FAQ'. If you truly don't know something or it is outside the scope of what is documented here, say so and suggest contacting support@tutorii.com.";
 
+  function sendChat() {
+    if (!chatInput.trim()) return;
+    var userMsg = chatInput.trim();
+    setChatInput("");
+    var newMsgs = chatMsgs.concat([{role:"user", content:userMsg}]);
+    setChatMsgs(newMsgs);
+    setChatLoading(true);
+
     var apiMsgs = newMsgs.map(function(m){return {role:m.role,content:m.content}});
 
-    chatApi.send(chatInput, null, null, systemPrompt)
+    chatApi.send(userMsg, null, null, systemPrompt)
     .then(function(data){
       var reply = (data.assistant_message && data.assistant_message.content) || "Sorry, I couldn't process that. Please try again.";
       setChatMsgs(function(prev){return prev.concat([{role:"assistant",content:reply}])});
@@ -449,6 +446,24 @@ function UserPortal(props) {
 
 
 
+  }
+
+  function copyLink() {
+    navigator.clipboard.writeText("tutorii.com/ref/" + u.code);
+    setCopied(true);
+    setTimeout(function(){ setCopied(false); }, 2000);
+  }
+
+  function markDone(course, lessonId) {
+    coursesApi.updateProgress(course.id, lessonId, { completed: true });
+    setCourses(function(prev){
+      return prev.map(function(c){
+        if (c.id !== course.id) return c;
+        return Object.assign({}, c, { lessons: c.lessons.map(function(l){
+          return l.id === lessonId ? Object.assign({}, l, { done: true }) : l;
+        })});
+      });
+    });
   }
 
   var navItems = [
