@@ -293,128 +293,23 @@ function UserPortal(props) {
       "Courses: " + courses.length + " modules, " + courses.reduce(function(s,c){return s+c.lessons.length},0) + " lessons. Modules: " + courses.map(function(c){return c.module + " (" + c.lessons.length + " lessons)"}).join(", ") + "\n" +
       "Today's Date: " + new Date().toLocaleDateString("en-US", {weekday:"long",year:"numeric",month:"long",day:"numeric"}) + "\n\n" +
 
-      "=== FAQ KNOWLEDGE BASE ===\n\n" +
+      "=== KEY POLICIES (non-negotiable, always apply) ===\n" +
+      "No refunds - all sales final. No subscription pause option. One account per person.\n" +
+      "Referrer assignment is permanent - set at signup, never changeable, even on re-subscribe.\n" +
+      "Commissions stop when a referral cancels; resume if they re-subscribe (same referrer retained).\n" +
+      "Pending earnings above AED 50 are still paid if user cancels. Below AED 50 are forfeited.\n" +
+      "Payouts: Tuesdays, AED 50 minimum, MamoPay bank transfer only, 1-3 business days to arrive.\n" +
+      "Failed payout = wrong IBAN. User must fix in Settings; retried next Tuesday automatically.\n" +
+      "Fraud/fake referrals = immediate account termination + forfeiture of all earnings.\n" +
+      "Taxes are the user's responsibility. Tutorii does not withhold taxes or give tax advice.\n" +
+      "Course progress is never lost, even if subscription lapses.\n\n" +
 
-      "SUBSCRIPTION & BILLING:\n" +
-      "Q: How much does Tutorii cost? A: $" + PRICE + "/month. No contracts, no hidden fees, cancel anytime.\n" +
-      "Q: What payment methods are accepted? A: Visa, Mastercard, Apple Pay, and Google Pay via MamoPay secure checkout.\n" +
-      "Q: How do I cancel my subscription? A: Go to Account Settings and click Cancel Subscription. Your access continues until the end of your current billing period. No cancellation fees apply.\n" +
-      "Q: Will I be charged automatically? A: Yes, your card is charged monthly on the same date you first subscribed. You receive an email receipt for each charge.\n" +
-      "Q: Can I pause my subscription? A: We do not currently offer a pause option. You can cancel and re-subscribe at any time without losing your course progress or referral network.\n" +
-      "Q: My payment failed, what do I do? A: Check your card details are up to date in Account Settings. Ensure sufficient funds are available. Try a different payment method. If problems persist, contact support@tutorii.com.\n" +
-      "Q: Do you offer refunds? A: No. All sales are final and non-refundable as stated in our Terms of Service. You can cancel your subscription at any time to stop future charges, but payments already made will not be refunded. Please review our Terms of Service for full details.\n" +
-      "Q: Is my payment information secure? A: Yes. All payments are processed through MamoPay, a CBUAE-licensed payment provider. Tutorii never sees, stores, or has access to your card details.\n" +
-      "Q: Can I change my payment method? A: Yes, go to Account Settings and update your payment method. The new card will be used starting from your next billing cycle.\n" +
-      "Q: What currency am I charged in? A: All charges are in AED (United Arab Emirates Dirham). This is the local currency used across the UAE.\n" +
-      "Q: What happens if my subscription lapses? A: You lose access to courses and your dashboard. Your referral link becomes inactive and you stop earning commissions. Re-subscribe to restore everything.\n" +
-      "Q: Can I upgrade or downgrade my plan? A: Currently there is one plan at $" + PRICE + "/month. All features are included.\n" +
-      "Q: Do you offer annual billing or discounts? A: Not at this time. We may introduce annual plans in the future.\n" +
-      "Q: I was charged twice. A: Contact support@tutorii.com immediately with your email and payment receipt. We will investigate and refund any duplicate charges.\n" +
-      "Q: Can I pay with bank transfer instead of card? A: Subscriptions must be paid via card through MamoPay. Bank transfer is only used for receiving payouts.\n\n" +
+      "=== CONTACT ===\n" +
+      "Support: support@tutorii.com (Sun-Thu, 9am-6pm GST)\n" +
+      "Complaints: complaints@tutorii.com | Compliance/suspension appeals: compliance@tutorii.com\n" +
+      "Partnerships: partnerships@tutorii.com | Content suggestions: content@tutorii.com\n\n" +
 
-      "REFERRAL PROGRAM:\n" +
-      "Q: How does the referral program work? A: Share your unique referral link. When someone subscribes through it, you earn 40% (AED " + (PRICE*L1_RATE).toFixed(2) + ") monthly as long as they stay subscribed (Level 1). You also earn 5% ($" + (PRICE*L2_RATE).toFixed(2) + ") on anyone they refer (Level 2).\n" +
-      "Q: Where is my referral link? A: Your link is displayed at the top of your dashboard and in the Referrals tab: tutorii.com/ref/YOUR_CODE.\n" +
-      "Q: Is there a limit to how many people I can refer? A: No. There is no cap on Level 1 or Level 2 referrals. The more active referrals you have, the more you earn.\n" +
-      "Q: What is Level 1 vs Level 2? A: Level 1 (L1) are people who subscribe directly through YOUR link - you earn 40%. Level 2 (L2) are people who subscribe through THEIR links - you earn 5%.\n" +
-      "Q: Do I earn commissions forever? A: You earn for as long as the referred user remains an active paying subscriber. If they cancel, your commission from them stops. If they re-subscribe, it resumes.\n" +
-      "Q: What happens if my referral cancels? A: Your commission from that referral stops immediately. Their status shows as cancelled in your dashboard. If they re-subscribe later, the original referrer retains credit.\n" +
-      "Q: Can I refer myself or create fake accounts? A: Absolutely not. Self-referrals, fake accounts, and any fraudulent referral activity is strictly prohibited and will result in immediate account termination and forfeiture of all earnings.\n" +
-      "Q: How do I track my referrals? A: Go to the Referrals tab to see all L1 and L2 referrals with their names, join dates, active/cancelled status, and individual earnings.\n" +
-      "Q: Can someone change their referrer after signing up? A: No. Referral credit is permanently and irrevocably assigned at the moment of account creation and cannot be changed, transferred, or reassigned under any circumstances. This applies even if the user cancels and re-subscribes - the original referrer always retains credit.\n" +
-      "Q: Can I change who referred me? A: No. Your referrer was set when you created your account and cannot be changed. This is permanent regardless of circumstances.\n" +
-      "Q: Do referrals need to complete courses for me to earn? A: No. You earn commissions as soon as they subscribe and pay, regardless of whether they use the courses.\n" +
-      "Q: What if someone subscribes without using any referral link? A: They will not be assigned to any referrer. They can still use the platform and earn by referring others.\n" +
-      "Q: Can I share my referral link on social media? A: Yes. You can share your link anywhere - social media, messaging apps, email, in person, etc. There are no restrictions on where you share it.\n" +
-      "Q: Why are there only 2 levels? A: Tutorii uses a simple 2-level structure to keep things fair and transparent. Unlike multi-level schemes, your earnings come from direct referrals and one level below, not from deep downline chains.\n" +
-      "Q: Is the referral program optional? A: Completely optional. You can use Tutorii purely for the courses and never refer anyone. The earning feature is an additional benefit, not a requirement.\n" +
-      "Q: What counts as an active referral? A: Any referred user with a current, paid subscription. Cancelled, expired, or suspended accounts do not count as active.\n" +
-      "Q: Can I see who my referrals have referred (my L2s)? A: Yes. Your L2 referrals are listed in the Referrals tab showing their name, who referred them (your L1), join date, and earnings.\n" +
-      "Q: What if my referral disputes being under me? A: Referral assignments are system-generated based on the link used at signup and are final. Disputes are not entertained as the system is automated.\n\n" +
-
-      "EARNINGS & PAYOUTS:\n" +
-      "Q: When do I get paid? A: Payouts are processed weekly every Tuesday. Earnings must meet the minimum threshold of AED 50 to be included.\n" +
-      "Q: How do I receive my money? A: Via bank transfer through MamoPay to the IBAN registered in your Account Settings.\n" +
-      "Q: What is the minimum payout? A: AED 50. If your pending earnings are below AED 50, they roll over to the next payout cycle until the threshold is met.\n" +
-      "Q: How long does a payout take? A: Once processed, bank transfers typically arrive within 1-3 business days depending on your bank and country.\n" +
-      "Q: What does Pending mean? A: Pending earnings are commissions calculated but not yet included in a weekly payout. They will be paid on the next Tuesday payout cycle.\n" +
-      "Q: What does Processing mean? A: Processing means the payout has been submitted to MamoPay and is in transit to your bank. Allow 1-3 business days.\n" +
-      "Q: What does Completed mean? A: Completed means the funds have been successfully transferred and should be in your bank account.\n" +
-      "Q: What does Failed mean? A: A failed payout means the bank rejected the transfer, usually due to an incorrect IBAN. Update your banking details and the payout will be retried on the next cycle.\n" +
-      "Q: My payout failed, what do I do? A: Check your IBAN is correct in Account Settings. Common issues: wrong IBAN format, closed bank account, bank not accepting international transfers. Fix the issue and your payout retries automatically next Tuesday.\n" +
-      "Q: Is there a fee for payouts? A: Tutorii does not charge any payout fees. Your bank may charge incoming transfer fees depending on your account type.\n" +
-      "Q: Can I receive payouts via any method other than bank transfer? A: No. All payouts are processed exclusively through MamoPay via bank transfer to your registered IBAN. This is the only payout method available.\n" +
-      "Q: Are my earnings taxable? A: You are responsible for reporting and paying taxes on your earnings per the laws of your country of residence. Tutorii does not withhold taxes or provide tax advice. We recommend consulting a qualified tax advisor.\n" +
-      "Q: How is my commission calculated? A: L1 = $" + PRICE + " x 40% = $" + (PRICE*L1_RATE).toFixed(2) + " per active L1 referral per month. L2 = $" + PRICE + " x 5% = $" + (PRICE*L2_RATE).toFixed(2) + " per active L2 referral per month. Total monthly = sum of all active L1 and L2 commissions.\n" +
-      "Q: Do I earn commissions on my own subscription? A: No. You only earn commissions on other people's subscriptions, not your own.\n" +
-      "Q: Can I see a breakdown of my earnings? A: Yes. The Earnings tab shows your total, monthly, pending, and paid amounts, plus a breakdown of L1 vs L2 income.\n" +
-      "Q: Is there a cap on how much I can earn? A: No. There is no earnings cap. Your income grows with every active referral in your network.\n" +
-      "Q: When do commissions start after someone signs up? A: Immediately upon their first successful payment.\n" +
-      "Q: What IBAN format do you accept? A: We accept IBANs from any country. UAE IBANs start with AE followed by 21 digits. Ensure you enter the full IBAN without spaces.\n" +
-      "Q: Can I split payouts between multiple bank accounts? A: No. Payouts go to a single IBAN. You can change your IBAN at any time but only one can be active.\n" +
-      "Q: What happens to my pending earnings if I cancel? A: Pending earnings above the AED 50 minimum will still be paid out on the next cycle. Earnings below AED 50 are forfeited upon cancellation.\n\n" +
-
-      "COURSES & LEARNING:\n" +
-      "Q: How many courses are there? A: There are currently " + courses.length + " modules with " + courses.reduce(function(s,c){return s+c.lessons.length},0) + " lessons total: " + courses.map(function(c){return c.module}).join(", ") + ".\n" +
-      "Q: Do I have to complete courses in order? A: No. You can take any lesson in any module in any order. However, we recommend following the module sequence for the best learning experience.\n" +
-      "Q: How do I mark a lesson complete? A: Open the lesson and click the Mark Complete button at the top right. Your progress is saved automatically.\n" +
-      "Q: Can I undo marking a lesson complete? A: Not currently. Once marked complete, the status is permanent.\n" +
-      "Q: Can I re-watch lessons? A: Yes. Completed lessons remain fully accessible. You can revisit any lesson at any time.\n" +
-      "Q: Are new courses added? A: Yes, we regularly add new modules, lessons, and update existing content. New content appears automatically in your Courses tab.\n" +
-      "Q: Can I download course materials? A: PDF guides can be downloaded where available. Video content is streaming only and cannot be downloaded.\n" +
-      "Q: What format are the lessons? A: Lessons include video content (MP4) and/or downloadable PDF study guides. Some lessons have both, some have one or the other.\n" +
-      "Q: Do I lose my progress if I cancel? A: No. Your course progress is saved permanently. If you re-subscribe, you resume exactly where you left off.\n" +
-      "Q: How long are the lessons? A: Lessons range from 8-25 minutes depending on the topic. Duration is shown next to each lesson title.\n" +
-      "Q: Can I suggest a course topic? A: Yes! Email content@tutorii.com with your suggestion. We actively develop content based on user feedback.\n" +
-      "Q: Is the content available offline? A: PDF guides can be downloaded for offline reading. Video lessons require an internet connection.\n" +
-      "Q: Are the courses accredited? A: Tutorii courses are practical educational content and are not currently accredited by any formal educational body.\n" +
-      "Q: Can I share course content with others? A: Course materials are for your personal use only. Sharing, copying, or distributing content is prohibited under our Terms of Service.\n" +
-      "Q: What if a video is not loading? A: Try refreshing the page, clearing your browser cache, or switching to a different browser. Ensure you have a stable internet connection. If the issue persists, contact support.\n" +
-      "Q: When are new lessons added? A: Content is added on a rolling basis. New lessons typically become available every 2-4 weeks.\n\n" +
-
-      "ACCOUNT & TECHNICAL:\n" +
-      "Q: How do I change my password? A: Go to Account Settings and click Change Password. You will receive an email to confirm the change.\n" +
-      "Q: How do I update my email? A: Go to Account Settings and update your email. You must verify the new email address before the change takes effect.\n" +
-      "Q: How do I update my name? A: Go to Account Settings and edit your name. Changes take effect immediately.\n" +
-      "Q: How do I update my banking/IBAN details? A: Go to the Payouts section in your dashboard and edit your payout details. Changes apply from the next payout cycle.\n" +
-      "Q: Can I use Tutorii on mobile? A: Yes. Tutorii works on all devices including phones, tablets, and computers through your web browser. No app download is needed.\n" +
-      "Q: Is there a mobile app? A: Not currently. Tutorii is fully optimized for mobile browsers and works like a native app on your phone.\n" +
-      "Q: I forgot my password. A: Click Forgot Password on the login page. A reset link will be sent to your registered email.\n" +
-      "Q: I am not receiving emails from Tutorii. A: Check your spam/junk folder. Add support@tutorii.com to your contacts. If still not receiving, contact support with an alternative email.\n" +
-      "Q: Can I have multiple accounts? A: No. One account per person. Multiple accounts are flagged automatically and may result in suspension of all associated accounts.\n" +
-      "Q: How do I delete my account? A: Email support@tutorii.com to request permanent account deletion. This will cancel your subscription, forfeit any pending earnings below AED 50, and permanently remove your data.\n" +
-      "Q: Is my data private? A: Yes. We comply with UAE data protection laws. Your personal data is never sold to third parties. See our Privacy Policy for full details.\n" +
-      "Q: What data does Tutorii collect? A: Name, email, phone number, payment information (processed by MamoPay, not stored by us), course activity, and referral data. This is used solely to provide and improve the service.\n" +
-      "Q: Can I export my data? A: Contact support@tutorii.com to request a data export. We will provide your data within 14 business days.\n" +
-      "Q: My account was suspended. A: Accounts are suspended for Terms of Service violations such as fraud, fake referrals, or multiple accounts. Email compliance@tutorii.com to appeal.\n" +
-      "Q: What browsers are supported? A: Chrome, Safari, Firefox, and Edge. We recommend using the latest version of any major browser.\n" +
-      "Q: The site is loading slowly. A: Try clearing your browser cache, disabling browser extensions, or switching to a different browser. Check your internet connection speed.\n" +
-      "Q: Can I log in on multiple devices? A: Yes. You can be logged in on multiple devices simultaneously. Your progress syncs across all devices.\n" +
-      "Q: How do I log out? A: Click Log Out at the bottom of the left sidebar in your dashboard.\n\n" +
-
-      "ABOUT TUTORII:\n" +
-      "Q: What is Tutorii? A: Tutorii is an education and referral platform built specifically for expatriates in the UAE and GCC. It offers practical courses on Gulf life, work, and finance, combined with an optional referral-based earning model.\n" +
-      "Q: Who is Tutorii for? A: Anyone living or planning to live in the UAE/GCC - workers, professionals, entrepreneurs, families, and students who want to learn practical skills and optionally earn extra income through referrals.\n" +
-      "Q: Where is Tutorii based? A: Tutorii is based in the United Arab Emirates.\n" +
-      "Q: How is Tutorii different from MLM? A: Tutorii has a simple 2-level referral structure, not an unlimited-depth multi-level model. There are only 2 commission levels (L1 direct, L2 indirect). The primary product is educational courses. There are no signup fees, no inventory, no ranks, and no pressure to recruit.\n" +
-      "Q: Is Tutorii legal in the UAE? A: Yes. Tutorii is a fully licensed business operating in the United Arab Emirates. Our referral program complies with UAE commercial regulations.\n" +
-      "Q: How do I contact human support? A: Email support@tutorii.com. Human support is available Sunday through Thursday, 9am to 6pm GST. You can also use the Contact Us form on the website.\n" +
-      "Q: What if I have a complaint? A: Email complaints@tutorii.com with details. We aim to acknowledge complaints within 24 hours and resolve them within 48 hours.\n" +
-      "Q: What are the Terms of Service? A: Full Terms of Service are available on the website footer. Key points: one account per person, no fraud, no content redistribution, subscription auto-renews monthly.\n" +
-      "Q: Does Tutorii have a social media presence? A: Yes. Follow us on Instagram, Twitter, and LinkedIn @TutoriiOfficial for updates, tips, and community content.\n" +
-      "Q: Can I partner with Tutorii or become an ambassador? A: For partnership or ambassador inquiries, email partnerships@tutorii.com.\n" +
-      "Q: I have a suggestion for improving the platform. A: We love user feedback! Email feedback@tutorii.com or use the chat to share your ideas.\n\n" +
-
-      "TROUBLESHOOTING:\n" +
-      "Q: I cannot log in. A: Ensure you are using the correct email and password. Try Forgot Password if unsure. Clear browser cache and cookies. Try a different browser. If still unable, contact support.\n" +
-      "Q: My referral link is not working. A: Ensure your subscription is active - referral links are deactivated if your subscription lapses. Check the link is copied correctly with no extra spaces. Test it in an incognito window.\n" +
-      "Q: My earnings seem incorrect. A: Check the Referrals tab to verify which referrals are active vs cancelled. Only active subscribers generate commissions. If you believe there is an error, contact support with specifics.\n" +
-      "Q: A friend signed up but does not appear in my referrals. A: They must have used your exact referral link when subscribing. If they signed up without a link or used a different link, they cannot be reassigned. Referrer assignment is permanent and automatic.\n" +
-      "Q: Videos are buffering or not playing. A: Check your internet connection. Try lowering video quality if available. Clear browser cache. Disable VPN if using one. Try a different browser or device.\n" +
-      "Q: The dashboard is showing wrong information. A: Try refreshing the page. Data updates may take a few minutes. If the issue persists, clear your browser cache and log in again. Contact support if the problem continues.\n" +
-      "Q: I cannot download a PDF. A: Ensure pop-ups are not blocked in your browser. Try right-clicking the download button and selecting Save As. Not all lessons have PDFs - check if one is available for that lesson.\n\n" +
-
-      "Keep responses short, friendly, and helpful. Use the user's actual account data when answering personal questions - cite specific numbers and names. For FAQ-type questions, answer directly and naturally without saying 'according to our FAQ'. If you truly don't know something or it is outside the scope of what is documented here, say so and suggest contacting support@tutorii.com.";
+      "Be concise and friendly. Use the user's real account data for personal questions. If something is outside what's documented here, say so and direct them to support@tutorii.com.";
 
   function sendChat() {
     if (!chatInput.trim()) return;
