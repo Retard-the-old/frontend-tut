@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { USER } from "../constants";
 import { useAuth } from "../AuthContext";
-import { users as usersApi, payouts as payoutsApi } from "../api";
+import { users as usersApi } from "../api";
 import { Ico, Badge } from "./UI";
 import { Btn } from "./Layout";
 
@@ -19,6 +19,10 @@ function SettingsTab(props) {
   var _profileMsg = useState(null); var profileMsg = _profileMsg[0]; var setProfileMsg = _profileMsg[1];
   var _ibanSaving = useState(false); var ibanSaving = _ibanSaving[0]; var setIbanSaving = _ibanSaving[1];
   var _ibanMsg = useState(null); var ibanMsg = _ibanMsg[0]; var setIbanMsg = _ibanMsg[1];
+  var _newPw = useState(""); var newPw = _newPw[0]; var setNewPw = _newPw[1];
+  var _confirmPw = useState(""); var confirmPw = _confirmPw[0]; var setConfirmPw = _confirmPw[1];
+  var _pwSaving = useState(false); var pwSaving = _pwSaving[0]; var setPwSaving = _pwSaving[1];
+  var _pwMsg = useState(null); var pwMsg = _pwMsg[0]; var setPwMsg = _pwMsg[1];
 
   // Sync inputs when u changes (on first load)
   useEffect(function(){ setName(u.name || ""); }, [u.name]);
@@ -49,6 +53,22 @@ function SettingsTab(props) {
       setIbanMsg({ok:false, msg: e.message || "Failed to save — check IBAN format"});
     } finally {
       setIbanSaving(false);
+    }
+  }
+
+  async function changePassword() {
+    if (!newPw || !confirmPw) { setPwMsg({ok:false, msg:"Please fill in both fields"}); return; }
+    if (newPw !== confirmPw) { setPwMsg({ok:false, msg:"Passwords do not match"}); return; }
+    if (newPw.length < 8) { setPwMsg({ok:false, msg:"Password must be at least 8 characters"}); return; }
+    setPwSaving(true); setPwMsg(null);
+    try {
+      await usersApi.changePassword(newPw, confirmPw);
+      setNewPw(""); setConfirmPw("");
+      setPwMsg({ok:true, msg:"Password updated successfully"});
+    } catch(e) {
+      setPwMsg({ok:false, msg: e.message || "Failed to update password"});
+    } finally {
+      setPwSaving(false);
     }
   }
 
@@ -121,6 +141,26 @@ function SettingsTab(props) {
             <div style={{ fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>SUBSCRIPTION</div>
             <div style={{ fontSize:13, fontWeight:600, color: u.status==="active"?"#10b981":"#f87171" }}>{u.status==="active"?"Active":"Inactive"}</div>
           </div>
+        </div>
+      </div>
+
+      {/* Change Password */}
+      <div style={{ background:"#131315", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:16, boxSizing:"border-box" }}>
+        <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 6px", color:"#d4d4d8" }}>Change Password</h3>
+        <p style={{ fontSize:12, color:"#52525b", marginBottom:16 }}>Set a new password for your account. You will remain logged in on all devices.</p>
+        {pwMsg && <div style={{ padding:"10px 14px", borderRadius:8, background:pwMsg.ok?"rgba(16,185,129,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(pwMsg.ok?"rgba(16,185,129,0.2)":"rgba(248,113,113,0.2)"), color:pwMsg.ok?"#10b981":"#f87171", fontSize:13, fontWeight:600, marginBottom:14 }}>{pwMsg.msg}</div>}
+        <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr", gap:mob?12:16 }}>
+          <div>
+            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>New Password</label>
+            <input type="password" value={newPw} onChange={function(e){setNewPw(e.target.value);setPwMsg(null)}} placeholder="Min. 8 characters" style={inputStyle} />
+          </div>
+          <div>
+            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>Confirm New Password</label>
+            <input type="password" value={confirmPw} onChange={function(e){setConfirmPw(e.target.value);setPwMsg(null)}} onKeyDown={function(e){if(e.key==="Enter") changePassword()}} placeholder="Repeat new password" style={inputStyle} />
+          </div>
+        </div>
+        <div style={{ marginTop:16, display:"flex", justifyContent:"flex-end" }}>
+          <Btn onClick={changePassword} disabled={pwSaving || !newPw || !confirmPw} style={{ fontSize:12, padding:"10px 24px", opacity:(pwSaving||!newPw||!confirmPw)?0.5:1 }}>{pwSaving ? "Updating..." : "Update Password"}</Btn>
         </div>
       </div>
 

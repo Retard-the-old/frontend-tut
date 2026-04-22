@@ -95,6 +95,7 @@ export const auth = {
 export const users = {
   me: () => api.get("/users/me"),
   update: (data) => api.patch("/users/me", data),
+  changePassword: (new_password, confirm_password) => api.post("/users/me/change-password", { new_password, confirm_password }),
   referrals: () => api.get("/users/me/referrals"),
   referralList: () => api.get("/users/me/referrals/list"),
 };
