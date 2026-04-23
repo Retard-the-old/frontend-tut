@@ -72,6 +72,8 @@ function Ico(props) {
     mosque: "M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2zm0 2.83L18.17 11H5.83L12 4.83z",
     scale: "M12 2L4 7v4h16V7l-8-5zm0 2.53L17.74 8H6.26L12 4.53zM4 13v2h16v-2H4zm0 4v4h16v-4H4zm2 2h3v-2H6v2zm5 0h2v-2h-2v2zm5 0h2v-2h-2v2z",
     users: "M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z",
+    eye: "M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z",
+    eyeoff: "M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75C21.27 7.61 17 4.5 12 4.5c-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z",
   };
   var d = paths[props.name] || paths.sparkle;
   return (
@@ -434,4 +436,46 @@ function DashSkeleton() {
   );
 }
 
-export { useIsMobile, Badge, StatCard, Ico, WaveDivider, BgIllustration, DotGrid, NoiseOverlay, GlowLine, FadeIn, CursorGlow, FloatingParticles, SpotlightCard, TrustMarquee, SectionWatermark, StepConnector, ShimmerText, ProgressRing, GlowRow, DashboardDesktop, DashboardMobile, Skeleton, DashSkeleton };
+function PasswordInput(props) {
+  var value = props.value;
+  var onChange = props.onChange;
+  var placeholder = props.placeholder || "Password";
+  var onKeyDown = props.onKeyDown;
+  var style = props.style || {};
+  var _show = useState(false); var show = _show[0]; var setShow = _show[1];
+
+  var inputStyle = Object.assign({
+    width: "100%", padding: "11px 44px 11px 14px", borderRadius: 10,
+    border: "1px solid rgba(255,255,255,0.1)", fontSize: 14, outline: "none",
+    boxSizing: "border-box", fontFamily: "'Plus Jakarta Sans',sans-serif",
+    background: "#0a0a0c", color: "#d4d4d8",
+  }, style);
+
+  return (
+    <div style={{ position: "relative" }}>
+      <input
+        type={show ? "text" : "password"}
+        value={value}
+        onChange={onChange}
+        onKeyDown={onKeyDown}
+        placeholder={placeholder}
+        style={inputStyle}
+      />
+      <button
+        type="button"
+        onClick={function(){ setShow(function(s){ return !s; }); }}
+        style={{
+          position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)",
+          background: "none", border: "none", cursor: "pointer", padding: 2,
+          display: "flex", alignItems: "center", color: "#52525b",
+        }}
+        tabIndex={-1}
+        title={show ? "Hide password" : "Show password"}
+      >
+        <Ico name={show ? "eyeoff" : "eye"} size={18} color="#52525b" />
+      </button>
+    </div>
+  );
+}
+
+export { useIsMobile, Badge, StatCard, Ico, WaveDivider, BgIllustration, DotGrid, NoiseOverlay, GlowLine, FadeIn, CursorGlow, FloatingParticles, SpotlightCard, TrustMarquee, SectionWatermark, StepConnector, ShimmerText, ProgressRing, GlowRow, DashboardDesktop, DashboardMobile, Skeleton, DashSkeleton, PasswordInput };

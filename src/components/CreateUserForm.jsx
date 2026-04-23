@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { admin as adminApi } from "../api";
 import { Btn } from "./Layout";
+import { PasswordInput } from "./UI";
 
 function CreateUserForm(props) {
   var _name = useState(""); var name = _name[0]; var setName = _name[1];
@@ -41,7 +42,7 @@ function CreateUserForm(props) {
         </div>
         <div>
           <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>PASSWORD</label>
-          <input type="password" value={pass} onChange={function(e){setPass(e.target.value);setErr("")}} placeholder="Min 8 characters" style={inputStyle} />
+          <PasswordInput value={pass} onChange={function(e){setPass(e.target.value);setErr("")}} placeholder="Min 8 characters" />
         </div>
         <div>
           <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>ROLE</label>

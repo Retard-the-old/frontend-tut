@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { users as usersApi } from "../../api";
-import { useIsMobile, Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from "../../components/UI";
+import { useIsMobile, Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay, PasswordInput } from "../../components/UI";
 import { Btn, Logo, SiteNav, SiteFooter } from "../../components/Layout";
 
 function ResetPasswordPage(props) {
@@ -133,10 +133,7 @@ function ResetPasswordPage(props) {
               <div style={{ marginBottom:20 }}>
                 <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>New Password</label>
                 <div style={{ position:"relative" }}>
-                  <input type={showPass ? "text" : "password"} value={pass} onChange={function(e){setPass(e.target.value);setError("")}} placeholder="Minimum 8 characters" style={{ width:"100%", padding:"12px 44px 12px 16px", borderRadius:10, border:"1px solid "+(error ? "rgba(248,113,113,0.3)" : "rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8", transition:"border-color 0.3s" }} />
-                  <button onClick={function(){setShowPass(!showPass)}} style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", padding:4, lineHeight:0 }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d={showPass ? "M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" : "M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"} stroke="#52525b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>{!showPass && <circle cx="12" cy="12" r="3" stroke="#52525b" strokeWidth="1.5"/>}</svg>
-                  </button>
+                  <PasswordInput value={pass} onChange={function(e){setPass(e.target.value);setError("")}} placeholder="Minimum 8 characters" style={{ padding:"12px 44px 12px 16px", border:"1px solid "+(error ? "rgba(248,113,113,0.3)" : "rgba(255,255,255,0.1)"), transition:"border-color 0.3s" }} />
                 </div>
                 {pass && <div style={{ display:"flex", gap:4, marginTop:8 }}>
                   {[1,2,3,4].map(function(i){return <div key={i} style={{ flex:1, height:3, borderRadius:2, background:i <= strength ? strengthColor : "rgba(255,255,255,0.06)", transition:"background 0.3s" }} />})}
@@ -149,7 +146,7 @@ function ResetPasswordPage(props) {
 
               <div style={{ marginBottom:28 }}>
                 <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Confirm Password</label>
-                <input type="password" value={confirm} onChange={function(e){setConfirm(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleSubmit()}} placeholder="Re-enter your password" style={{ width:"100%", padding:"12px 16px", borderRadius:10, border:"1px solid "+(error && error.includes("match") ? "rgba(248,113,113,0.3)" : confirm && confirm === pass ? "rgba(200,180,140,0.3)" : "rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8", transition:"border-color 0.3s" }} />
+                <PasswordInput value={confirm} onChange={function(e){setConfirm(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleSubmit()}} placeholder="Re-enter your password" style={{ padding:"12px 44px 12px 16px", border:"1px solid "+(error && error.includes("match") ? "rgba(248,113,113,0.3)" : confirm && confirm === pass ? "rgba(200,180,140,0.3)" : "rgba(255,255,255,0.1)"), transition:"border-color 0.3s" }} />
                 {confirm && confirm === pass && <div style={{ fontSize:11, color:"rgb(200,180,140)", marginTop:4, display:"flex", alignItems:"center", gap:4 }}>{"\u2713"} Passwords match</div>}
               </div>
 

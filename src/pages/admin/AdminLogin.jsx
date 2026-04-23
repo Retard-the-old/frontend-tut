@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../AuthContext";
-import { Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from "../../components/UI";
+import { Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay, PasswordInput } from "../../components/UI";
 import { Btn, Logo } from "../../components/Layout";
 
 function AdminLogin(props) {
@@ -49,7 +49,7 @@ function AdminLogin(props) {
         </div>
         <div style={{ marginBottom:28 }}>
           <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#52525b", marginBottom:5 }}>Password</label>
-          <input type="password" value={pass} onChange={function(e){setPass(e.target.value);setError("")}} placeholder="********" style={{ width:"100%", padding:"12px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif" }} />
+          <PasswordInput value={pass} onChange={function(e){setPass(e.target.value);setError("")}} placeholder="********" style={{ padding:"12px 44px 12px 14px", border:"1px solid rgba(255,255,255,0.06)" }} />
         </div>
         <button onClick={handleLogin} disabled={loading} style={{ width:"100%", padding:"13px", borderRadius:12, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:15, fontWeight:600, cursor:"pointer", marginBottom:12, opacity:loading?0.6:1 }}>{loading ? "Logging in..." : "Log In to Admin"}</button>
         <div style={{ textAlign:"center", marginTop:12 }}>

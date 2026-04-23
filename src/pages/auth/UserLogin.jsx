@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../../AuthContext";
 import { users as usersApi, subscriptions as subscriptionsApi } from "../../api";
-import { useIsMobile, Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from "../../components/UI";
+import { useIsMobile, Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay, PasswordInput } from "../../components/UI";
 import { Btn, Logo } from "../../components/Layout";
 
 function UserLogin(props) {
@@ -65,7 +65,7 @@ function UserLogin(props) {
           </div>
           <div style={{ marginBottom:8 }}>
             <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Password</label>
-            <input type="password" value={pass} onChange={function(e){setPass(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleLogin()}} placeholder="********" style={{ width:"100%", padding:"12px 16px", borderRadius:10, border:"1px solid "+(error ? "rgba(248,113,113,0.3)" : "rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8", transition:"border-color 0.3s" }} />
+            <PasswordInput value={pass} onChange={function(e){setPass(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleLogin()}} placeholder="********" style={{ padding:"12px 44px 12px 16px", border:"1px solid "+(error ? "rgba(248,113,113,0.3)" : "rgba(255,255,255,0.1)"), transition:"border-color 0.3s" }} />
           </div>
           <div style={{ textAlign:"right", marginBottom:24 }}>
             <span onClick={function(){go("forgotPassword")}} style={{ fontSize:12, color:"rgb(200,180,140)", cursor:"pointer", fontWeight:500 }}>Forgot password?</span>

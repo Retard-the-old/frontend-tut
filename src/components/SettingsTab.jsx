@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { USER } from "../constants";
 import { useAuth } from "../AuthContext";
 import { users as usersApi } from "../api";
-import { Ico, Badge } from "./UI";
+import { Ico, Badge, PasswordInput } from "./UI";
 import { Btn } from "./Layout";
 
 function SettingsTab(props) {
@@ -152,11 +152,11 @@ function SettingsTab(props) {
         <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr", gap:mob?12:16 }}>
           <div>
             <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>New Password</label>
-            <input type="password" value={newPw} onChange={function(e){setNewPw(e.target.value);setPwMsg(null)}} placeholder="Min. 8 characters" style={inputStyle} />
+            <PasswordInput value={newPw} onChange={function(e){setNewPw(e.target.value);setPwMsg(null)}} placeholder="Min. 8 characters" />
           </div>
           <div>
             <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>Confirm New Password</label>
-            <input type="password" value={confirmPw} onChange={function(e){setConfirmPw(e.target.value);setPwMsg(null)}} onKeyDown={function(e){if(e.key==="Enter") changePassword()}} placeholder="Repeat new password" style={inputStyle} />
+            <PasswordInput value={confirmPw} onChange={function(e){setConfirmPw(e.target.value);setPwMsg(null)}} onKeyDown={function(e){if(e.key==="Enter") changePassword()}} placeholder="Repeat new password" />
           </div>
         </div>
         <div style={{ marginTop:16, display:"flex", justifyContent:"flex-end" }}>
