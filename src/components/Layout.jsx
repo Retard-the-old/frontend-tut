@@ -56,7 +56,7 @@ function SiteNav(props) {
   )};
   return (
     <div>
-    <nav style={{ position:"fixed", top:mob?0:16, left:mob?"0":"50%", transform:mob?"none":"translateX(-50%)", display:"flex", justifyContent:"space-between", alignItems:"center", width:mob?"100%":"calc(100% - 48px)", maxWidth:1200, padding:mob?"10px 16px":"12px 8px 12px 24px", background:"rgba(17,17,19,0.85)", backdropFilter:"blur(24px) saturate(1.5)", WebkitBackdropFilter:"blur(24px) saturate(1.5)", zIndex:100, borderRadius:mob?0:16, border:mob?"none":"1px solid rgba(255,255,255,0.06)", borderBottom:mob?"1px solid rgba(255,255,255,0.06)":"none" }}>
+    <nav style={{ position:"fixed", top:mob?0:16, left:mob?0:"50%", right:mob?0:"auto", transform:mob?"none":"translateX(-50%)", display:"flex", justifyContent:"space-between", alignItems:"center", width:mob?"auto":"calc(100% - 48px)", maxWidth:1200, padding:mob?"10px 16px":"12px 8px 12px 24px", background:"rgba(17,17,19,0.85)", backdropFilter:"blur(24px) saturate(1.5)", WebkitBackdropFilter:"blur(24px) saturate(1.5)", zIndex:100, borderRadius:mob?0:16, border:mob?"none":"1px solid rgba(255,255,255,0.06)", borderBottom:mob?"1px solid rgba(255,255,255,0.06)":"none" }}>
       <Logo onClick={function(){go("landing")}} />
       {!mob && <div style={{ display:"flex", alignItems:"center", gap:0, padding:"4px 6px", borderRadius:12, background:"#0a0a0c", border:"1px solid rgba(255,255,255,0.06)" }}>
         {nl("landing","Home")}
