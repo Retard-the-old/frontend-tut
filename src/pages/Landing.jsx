@@ -8,7 +8,7 @@ function Landing(props) {
   var mob = useIsMobile();
   var tl = INIT_COURSES.reduce(function(s,c){return s+c.lessons.length},0);
   return (
-    <div style={{ background:"#0a0a0c", color:"#d4d4d8", position:"relative" }}>
+    <div style={{ background:"#0a0a0c", color:"#d4d4d8", position:"relative", width:"100%", overflowX:"hidden" }}>
       <NoiseOverlay />
       <SiteNav go={go} />
 
