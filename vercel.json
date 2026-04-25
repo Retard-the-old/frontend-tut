@@ -1,3 +1,6 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "redirects": [
+    { "source": "/salesguide", "destination": "/salesguide/", "permanent": false }
+  ],
+  "rewrites": [{ "source": "/((?!salesguide/).*)", "destination": "/index.html" }]
 }
