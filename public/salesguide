@@ -1,0 +1,2931 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Earn With Tutorii — Handbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&display=swap');
+
+:root{
+  --ink:#0A1628;
+  --ink-soft:#1F2D44;
+  --accent:#1E5BFF;
+  --accent-soft:#4D82FF;
+  --gold:#D4A574;
+  --gold-soft:#F4E4CC;
+  --gold-deep:#8B6332;
+  --mist:#F5F7FB;
+  --cream:#FAF7F2;
+  --line:#E4E9F2;
+  --success:#00B87A;
+  --paper:#FFFFFF;
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-weight:400;
+  line-height:1.65;
+  color:var(--ink-soft);
+  background:#EEF1F6;
+  -webkit-font-smoothing:antialiased;
+  font-feature-settings:"ss01","cv11";
+}
+
+/* PAGE — A4 portrait. 210mm x 297mm. */
+.page{
+  position:relative;
+  width:210mm;
+  min-height:297mm;
+  margin:24px auto;
+  background:var(--paper);
+  color:var(--ink-soft);
+  overflow:hidden;
+  page-break-after:always;
+  break-after:page;
+  box-shadow:0 24px 64px rgba(10,22,40,0.12), 0 2px 8px rgba(10,22,40,0.06);
+}
+.page:last-of-type{page-break-after:auto;}
+.page-inner{
+  position:relative;
+  z-index:2;
+  padding:22mm 18mm;
+}
+.page--dark{background:var(--ink);color:#E8EEF8;}
+.page--mist{background:linear-gradient(165deg,#F5F7FB 0%,#EDF1F8 50%,#E6ECF6 100%);}
+.page--cream{background:linear-gradient(165deg,#FAF7F2 0%,#F5EFE3 60%,#F1E8D4 100%);}
+.page--gold-tint{background:linear-gradient(180deg, #FBF5EA 0%, #FAF7F2 100%);}
+
+/* Backgrounds layer — absolute, behind .page-inner */
+.bg{position:absolute;inset:0;z-index:1;pointer-events:none;}
+.bg svg{width:100%;height:100%;display:block;}
+
+/* Typography */
+h1,h2,h3,h4,h5{margin:0;color:var(--ink);font-weight:700;letter-spacing:-0.02em;line-height:1.15;}
+.page--dark h1,.page--dark h2,.page--dark h3,.page--dark h4{color:#fff;}
+p{margin:0 0 1em 0;}
+strong{color:var(--ink);font-weight:600;}
+.page--dark strong{color:#fff;}
+
+.eyebrow{
+  font-size:0.72rem;
+  font-weight:600;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin:0 0 14px 0;
+  display:inline-block;
+}
+.eyebrow--gold{color:var(--gold-deep);}
+.eyebrow--white{color:#9DB4DE;}
+
+.deck{
+  font-size:1.125rem;
+  color:var(--ink-soft);
+  max-width:62ch;
+  margin:0 0 28px 0;
+  line-height:1.55;
+}
+.page--dark .deck{color:#B8C7E0;}
+
+h1.section-title{font-size:2.3rem;font-weight:700;margin:0 0 8px 0;letter-spacing:-0.025em;}
+h2.section-title{font-size:1.95rem;font-weight:700;margin:0 0 8px 0;letter-spacing:-0.022em;}
+h3.block-title{font-size:1.35rem;font-weight:700;margin:0 0 14px 0;letter-spacing:-0.015em;}
+h4.mini-title{font-size:0.95rem;font-weight:700;color:var(--ink);margin:0 0 8px 0;letter-spacing:-0.005em;}
+
+.num-tabular{font-variant-numeric:tabular-nums;font-weight:600;}
+
+.fr-quote{font-family:'Fraunces',serif;font-style:italic;font-weight:500;letter-spacing:-0.01em;}
+
+/* PILLS */
+.pill{
+  display:inline-flex;align-items:center;
+  border-radius:999px;
+  padding:6px 14px;
+  font-size:0.78rem;font-weight:600;letter-spacing:0.04em;
+  line-height:1.2;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.pill--blue{background:rgba(30,91,255,0.08);color:var(--accent);border:1px solid rgba(30,91,255,0.2);}
+.pill--gold{background:var(--gold-soft);color:var(--gold-deep);border:1px solid rgba(212,165,116,0.35);}
+.pill--dark{background:var(--ink);color:#fff;border:1px solid var(--ink);}
+.pill--success{background:rgba(0,184,122,0.1);color:var(--success);border:1px solid rgba(0,184,122,0.25);}
+.pill--ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--line);}
+.pill--white{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.25);}
+
+/* GLOW LINE */
+.glow{
+  position:relative;
+  height:1px;
+  width:60%;
+  margin:24px auto;
+  background:linear-gradient(90deg,transparent 0%,var(--accent) 50%,transparent 100%);
+}
+.glow::before{
+  content:"";position:absolute;inset:-3px 0;
+  background:linear-gradient(90deg,transparent 0%,var(--accent) 50%,transparent 100%);
+  filter:blur(6px);opacity:0.7;
+}
+.glow--gold{background:linear-gradient(90deg,transparent 0%,var(--gold) 50%,transparent 100%);}
+.glow--gold::before{background:linear-gradient(90deg,transparent 0%,var(--gold) 50%,transparent 100%);}
+.glow--full{width:100%;}
+.glow--narrow{width:30%;}
+
+/* CARDS */
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:32px;
+  box-shadow:0 1px 3px rgba(10,22,40,0.04), 0 12px 32px rgba(10,22,40,0.06);
+  page-break-inside:avoid;
+}
+.card--tight{padding:24px;}
+.card--flush{padding:0;overflow:hidden;}
+
+/* CALLOUT */
+.callout{
+  border-radius:16px;
+  padding:22px 26px;
+  margin:18px 0;
+  border-left:3px solid var(--gold);
+  background:var(--gold-soft);
+  color:var(--ink);
+  page-break-inside:avoid;
+}
+.callout--blue{background:rgba(30,91,255,0.06);border-left-color:var(--accent);}
+.callout--success{background:rgba(0,184,122,0.07);border-left-color:var(--success);}
+.callout--dark{background:var(--ink);color:#E8EEF8;border-left-color:var(--gold);}
+.callout--dark strong{color:#fff;}
+.callout-label{
+  display:block;
+  font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--gold-deep);margin-bottom:6px;
+}
+.callout--blue .callout-label{color:var(--accent);}
+.callout--success .callout-label{color:var(--success);}
+.callout--dark .callout-label{color:var(--gold);}
+.callout p:last-child{margin-bottom:0;}
+
+/* GRADIENT NUMBER */
+.gnum{
+  font-weight:800;
+  letter-spacing:-0.04em;
+  line-height:0.95;
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-soft) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  font-variant-numeric:tabular-nums;
+}
+.gnum--gold{
+  background:linear-gradient(135deg,var(--gold) 0%, #EBC893 50%, #B8915C 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+
+/* GRID UTILITIES */
+.grid{display:grid;gap:24px;}
+.grid-2{grid-template-columns:1fr 1fr;}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+.flex{display:flex;}
+.flex-row{display:flex;align-items:center;gap:12px;}
+.flex-wrap{flex-wrap:wrap;}
+.gap-8{gap:8px;} .gap-12{gap:12px;} .gap-16{gap:16px;} .gap-24{gap:24px;}
+.mt-8{margin-top:8px;} .mt-16{margin-top:16px;} .mt-24{margin-top:24px;} .mt-32{margin-top:32px;} .mt-48{margin-top:48px;}
+.mb-8{margin-bottom:8px;} .mb-16{margin-bottom:16px;} .mb-24{margin-bottom:24px;} .mb-32{margin-bottom:32px;}
+.text-sm{font-size:0.88rem;}
+.text-xs{font-size:0.78rem;}
+.text-micro{font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:#7A8AA6;}
+.center{text-align:center;}
+.muted{color:#5C6B85;}
+.page--dark .muted{color:#9DB4DE;}
+
+/* CUSTOM BULLETS */
+ul.bullets{list-style:none;padding:0;margin:0;}
+ul.bullets li{position:relative;padding-left:26px;margin-bottom:10px;line-height:1.5;}
+ul.bullets li::before{
+  content:"";position:absolute;left:6px;top:10px;
+  width:6px;height:6px;background:var(--accent);transform:rotate(45deg);
+}
+ul.bullets--gold li::before{background:var(--gold);}
+ul.bullets--check li::before{
+  content:"";left:0;top:7px;width:14px;height:14px;border-radius:50%;
+  background:var(--gold-soft);border:1px solid var(--gold);transform:none;
+}
+ul.bullets--check li::after{
+  content:"";position:absolute;left:4px;top:11px;width:6px;height:3px;
+  border-left:1.5px solid var(--gold-deep);border-bottom:1.5px solid var(--gold-deep);
+  transform:rotate(-45deg);
+}
+ul.bullets--chev li::before{
+  content:"";left:4px;top:8px;width:7px;height:7px;background:transparent;
+  border-right:1.5px solid var(--accent);border-top:1.5px solid var(--accent);
+  transform:rotate(45deg);
+}
+ol.steps{list-style:none;padding:0;margin:0;counter-reset:s;}
+ol.steps li{position:relative;padding-left:38px;margin-bottom:14px;counter-increment:s;line-height:1.55;}
+ol.steps li::before{
+  content:counter(s);position:absolute;left:0;top:1px;
+  width:24px;height:24px;border-radius:50%;
+  background:var(--ink);color:#fff;
+  font-size:0.72rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  font-variant-numeric:tabular-nums;
+}
+
+/* TABLES */
+table.tbl{width:100%;border-collapse:collapse;font-size:0.92rem;}
+table.tbl th{
+  text-align:left;padding:12px 14px;
+  font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  color:#5C6B85;border-bottom:1px solid var(--line);
+}
+table.tbl td{padding:14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.5;}
+table.tbl tr:last-child td{border-bottom:none;}
+table.tbl td.num{font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink);}
+
+/* CHAT BUBBLES */
+.chat{
+  background:#ECEFF4;
+  border-radius:14px;
+  padding:18px 16px 14px;
+  display:flex;flex-direction:column;gap:6px;
+  position:relative;
+  page-break-inside:avoid;
+}
+.chat-header{
+  display:flex;align-items:center;gap:8px;
+  font-size:0.7rem;color:#7A8AA6;font-weight:500;
+  margin-bottom:4px;letter-spacing:0.04em;
+}
+.chat-header .dot{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#B5C8DD,#8DA3C0);}
+.bubble{
+  max-width:78%;
+  padding:10px 14px 8px;
+  border-radius:14px;
+  font-size:0.86rem;
+  line-height:1.5;
+  color:var(--ink);
+  /* Avoid breaking a bubble across two PDF pages */
+  page-break-inside:avoid;
+  break-inside:avoid;
+}
+.bubble--out{
+  background:#DCEFD1;
+  align-self:flex-end;
+  border-bottom-right-radius:4px;
+}
+.bubble--in{
+  background:#fff;
+  align-self:flex-start;
+  border-bottom-left-radius:4px;
+  box-shadow:0 1px 1px rgba(10,22,40,0.05);
+}
+/* Timestamp: floats to the bottom-right of the bubble so message text
+   wraps cleanly around it instead of being overlapped by it. */
+.bubble .ts{
+  float:right;
+  margin:6px 0 0 10px;
+  padding-top:2px;
+  font-size:0.62rem;color:#8B9DB0;font-weight:500;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+/* Clear the float so the next bubble doesn't ride up next to a ts */
+.bubble::after{content:"";display:block;clear:both;}
+
+/* CONVERSATION FLOW DIAGRAM */
+.flow{display:flex;flex-direction:column;align-items:center;gap:0;}
+.flow-node{
+  width:100%;max-width:380px;
+  border-radius:16px;
+  padding:14px 18px 16px;
+  position:relative;
+  page-break-inside:avoid;
+}
+.flow-node--agent{
+  background:rgba(30,91,255,0.06);
+  border:1px solid rgba(30,91,255,0.35);
+}
+.flow-node--prospect{
+  background:var(--mist);
+  border:1px solid var(--line);
+}
+.flow-node--close{
+  background:var(--gold-soft);
+  border:1px solid var(--gold);
+}
+.flow-label{
+  display:inline-block;
+  font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+  padding:3px 9px;border-radius:999px;
+  margin-bottom:8px;
+}
+.flow-node--agent .flow-label{background:rgba(30,91,255,0.12);color:var(--accent);}
+.flow-node--prospect .flow-label{background:var(--ink);color:#fff;}
+.flow-node--close .flow-label{background:var(--gold);color:#fff;}
+.flow-node-text{font-size:0.82rem;line-height:1.4;color:var(--ink);font-weight:500;}
+.flow-arrow{
+  width:1.5px;height:22px;background:var(--accent);
+  position:relative;flex-shrink:0;
+}
+.flow-arrow::after{
+  content:"";position:absolute;bottom:-1px;left:50%;
+  width:8px;height:8px;border-right:1.5px solid var(--accent);border-bottom:1.5px solid var(--accent);
+  transform:translateX(-50%) rotate(45deg);
+}
+.flow-arrow--gold{background:var(--gold);}
+.flow-arrow--gold::after{border-color:var(--gold);}
+
+/* COVER specifics */
+.cover-wordmark{
+  font-weight:800;letter-spacing:0.3em;font-size:0.92rem;color:#fff;
+}
+.cover-title{
+  font-size:4.2rem;font-weight:600;letter-spacing:-0.035em;line-height:1.0;color:#fff;
+}
+.cover-tagline{
+  font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+  font-size:1.4rem;color:#B8C7E0;max-width:18em;line-height:1.4;
+}
+
+/* iPhone mockup — modern edge-to-edge screen, hairline bezel */
+.iphone{
+  width:170px;
+  aspect-ratio:170/348;
+  border-radius:30px;
+  background:var(--ink);
+  padding:3px;
+  position:relative;
+  box-shadow:0 20px 40px rgba(10,22,40,0.18), 0 2px 6px rgba(10,22,40,0.1);
+  flex-shrink:0;
+}
+.p10-mocks .iphone{ width:148px; padding:2.5px; }
+.iphone-screen{
+  width:100%;height:100%;
+  border-radius:27px;
+  overflow:hidden;
+  position:relative;
+  background:#0F1A2E;
+}
+.p10-mocks .iphone-screen{ border-radius:27.5px; }
+.iphone-island{
+  position:absolute;top:8px;left:50%;transform:translateX(-50%);
+  width:54px;height:14px;border-radius:999px;background:#000;z-index:5;
+}
+
+/* Small util */
+.spread{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+
+/* All animations removed — this document is print/PDF first */
+
+/* Print */
+@page { size: A4; margin: 0; }
+@media print{
+  body{background:#fff;}
+  .page{margin:0;box-shadow:none;page-break-after:always;break-after:page;}
+  .card,.callout,.flow-node,.chat{page-break-inside:avoid;}
+}
+
+/* ========================================================
+   MOOD : Editorial   (Fraunces titles, ivory paper, hairline)
+   ======================================================== */
+body.mood-editorial{
+  background:#EFEAE0;
+}
+body.mood-editorial .page{
+  background:#F8F4EA;
+  box-shadow:0 1px 0 rgba(60,40,20,.08), 0 22px 60px rgba(60,40,20,.10);
+}
+body.mood-editorial .page--dark{
+  background:#1A1612;color:#EBE3D1;
+}
+body.mood-editorial .page--mist,
+body.mood-editorial .page--cream{
+  background:#F8F4EA;
+}
+body.mood-editorial h1,
+body.mood-editorial h2,
+body.mood-editorial h3,
+body.mood-editorial .cover-title,
+body.mood-editorial .section-title{
+  font-family:'Fraunces',serif;
+  font-weight:500;
+  letter-spacing:-0.018em;
+}
+body.mood-editorial .cover-title{font-weight:400;font-style:italic;}
+body.mood-editorial .eyebrow{
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-weight:500;
+  letter-spacing:0.06em;
+  text-transform:none;
+  color:#7A6248;
+}
+body.mood-editorial .eyebrow--gold{color:#7A6248;}
+body.mood-editorial .eyebrow--white{color:#D9C9A6;}
+body.mood-editorial .eyebrow::before{display:none;}
+body.mood-editorial .deck{font-family:'Fraunces',serif;font-style:italic;font-weight:400;color:#5C4A36;}
+body.mood-editorial .page--dark .deck{color:#C9B894;}
+body.mood-editorial{--ink:#2A2218;--ink-soft:#4A3D2C;--paper:#F8F4EA;--line:#E0D8C5;}
+body.mood-editorial strong{color:#2A2218;}
+body.mood-editorial .glow,
+body.mood-editorial .glow--gold{
+  background:linear-gradient(90deg,transparent 0%,#9A7D54 50%,transparent 100%) !important;
+  height:1px;opacity:.65;
+}
+body.mood-editorial .glow::before{display:none;}
+body.mood-editorial .pill{border-radius:2px;}
+
+/* ========================================================
+   MOOD : Print       (newspaper, hairlines, no mesh, no skyline)
+   ======================================================== */
+body.mood-print{
+  background:#E8E5DD;
+}
+body.mood-print .page{
+  background:#FBFAF6;
+  box-shadow:0 0 0 1px #DDD8CC;
+}
+body.mood-print .page--dark{
+  background:#1A1A1A;color:#E8E5DD;
+}
+body.mood-print .page--mist,
+body.mood-print .page--cream{background:#FBFAF6;}
+body.mood-print{--ink:#1A1A1A;--ink-soft:#2A2A2A;--accent:#1A1A1A;--accent-soft:#3A3A3A;--gold:#6B5836;--gold-soft:#E8DEC8;--gold-deep:#3A2E1A;--line:#C9C2B0;}
+body.mood-print h1,body.mood-print h2,body.mood-print h3,body.mood-print h4{
+  font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.015em;
+}
+body.mood-print .cover-title{font-family:'Fraunces',serif;font-weight:500;}
+body.mood-print .eyebrow{
+  border-top:1px solid #1A1A1A;
+  padding-top:6px;
+  letter-spacing:0.32em;
+  color:#1A1A1A;
+}
+body.mood-print .eyebrow::before{display:none;}
+body.mood-print .deck{color:#3A3A3A;}
+body.mood-print .glow,
+body.mood-print .glow--gold{
+  background:#1A1A1A !important;height:1px;opacity:1;
+}
+body.mood-print .glow::before{display:none;}
+body.mood-print .card,
+body.mood-print .callout,
+body.mood-print .flow-node{
+  border-radius:0 !important;
+  box-shadow:none !important;
+  border:1px solid #1A1A1A !important;
+}
+body.mood-print .pill{border-radius:0;border:1px solid currentColor;}
+body.mood-print .bubble{border-radius:2px !important;}
+
+/* ========================================================
+   DENSITY (set by JS as --density-scale & --density-pad)
+   ======================================================== */
+body{--density-scale:1;--density-pad:1;}
+.page-inner{padding: calc(22mm * var(--density-pad)) calc(18mm * var(--density-pad));}
+body{font-size: calc(16px * var(--density-scale));}
+
+/* ========================================================
+   FOLIO (page numbers)
+   ======================================================== */
+.folio{
+  position:absolute;
+  bottom:14mm;
+  font-family:'Inter',sans-serif;
+  font-size:0.62rem;
+  font-weight:600;
+  letter-spacing:0.28em;
+  color:#5C6B85;
+  text-transform:uppercase;
+  pointer-events:none;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.folio .folio-rule{
+  width:18mm;height:1px;background:currentColor;opacity:.45;
+}
+.folio--right{right:18mm;flex-direction:row-reverse;}
+.folio--left{left:18mm;}
+.page--dark .folio{color:#9DB4DE;}
+body.mood-editorial .folio{
+  font-family:'Fraunces',serif;font-style:italic;font-weight:400;
+  letter-spacing:0.05em;text-transform:none;color:#7A6248;font-size:0.78rem;
+}
+body.mood-editorial .page--dark .folio{color:#C9B894;}
+body.mood-editorial .folio .folio-rule{display:none;}
+body.mood-print .folio{
+  font-family:'Fraunces',serif;font-weight:500;letter-spacing:0.18em;color:#1A1A1A;font-size:0.66rem;
+}
+body.mood-print .page--dark .folio{color:#E8E5DD;}
+
+/* ========================================================
+   TABLE OF CONTENTS
+   ======================================================== */
+.toc-wrap{display:block;}
+.toc-group{margin-bottom:22px;}
+.toc-group-label{
+  font-family:'Inter',sans-serif;
+  font-size:0.66rem;font-weight:600;letter-spacing:0.32em;text-transform:uppercase;
+  color:#8B6332;margin-bottom:10px;padding-bottom:6px;
+  border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:baseline;
+}
+.toc-group-label .toc-group-num{
+  font-family:'Fraunces',serif;font-style:italic;font-weight:400;
+  letter-spacing:0;text-transform:none;color:#5C6B85;font-size:0.85rem;
+}
+.toc-row{
+  display:grid;
+  grid-template-columns: auto 1fr auto;
+  align-items:baseline;
+  gap:12px;
+  padding:7px 0;
+  font-size:0.95rem;
+}
+.toc-row + .toc-row{border-top:1px dotted #D8DEEA;}
+.toc-row-num{
+  font-family:'Fraunces',serif;font-style:italic;font-weight:400;
+  color:#8B6332;font-size:0.78rem;
+  min-width:1.6em;
+}
+.toc-row-title{color:var(--ink);font-weight:500;letter-spacing:-0.005em;}
+.toc-row-title em{font-family:'Fraunces',serif;font-style:italic;font-weight:400;color:#5C6B85;font-size:0.85rem;display:block;margin-top:1px;letter-spacing:0;}
+.toc-row-page{
+  font-variant-numeric:tabular-nums;
+  font-weight:600;color:var(--ink);font-size:0.95rem;
+  min-width:1.5em;text-align:right;
+}
+.toc-row--lead .toc-row-title{font-weight:600;}
+
+/* Mood: editorial TOC */
+body.mood-editorial .toc-group-label{
+  font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+  letter-spacing:0.04em;text-transform:none;color:#7A6248;font-size:0.95rem;
+  border-bottom:1px solid #C9B894;
+}
+body.mood-editorial .toc-row + .toc-row{border-top:1px dotted #D9CDB5;}
+body.mood-editorial .toc-row-title{font-family:'Fraunces',serif;font-weight:500;}
+body.mood-editorial .toc-row-num{color:#9A7D54;}
+
+/* Mood: print TOC */
+body.mood-print .toc-group-label{
+  font-family:'Fraunces',serif;font-weight:600;letter-spacing:0.06em;
+  text-transform:none;color:#1A1A1A;border-bottom:1px solid #1A1A1A;font-size:0.95rem;
+}
+body.mood-print .toc-row + .toc-row{border-top:1px dotted #1A1A1A;}
+body.mood-print .toc-row-title{font-family:'Fraunces',serif;font-weight:500;}
+
+/* ========================================================
+   A4-FIT — global tightening so each page actually fits 297mm
+   ======================================================== */
+.page{ overflow:hidden; }              /* hard-clip stragglers in screen view too */
+.page-inner{
+  padding:14mm 13mm;
+}
+body{font-size: calc(14.5px * var(--density-scale));}
+
+/* Headers + section opening blocks tighter */
+h1.section-title{font-size:1.7rem;margin-bottom:4px;}
+h2.section-title{font-size:1.5rem;margin-bottom:4px;}
+h3.block-title{font-size:1.05rem;margin-bottom:6px;}
+.deck{font-size:0.88rem;margin-bottom:0.35em;line-height:1.4;}
+.eyebrow{margin-bottom:4px;font-size:0.66rem;}
+
+/* Generic spacing utilities trimmed */
+.mb-16{margin-bottom:10px;}
+.mb-24{margin-bottom:12px;}
+.mb-32{margin-bottom:15px;}
+.mt-16{margin-top:10px;}
+.mt-24{margin-top:12px;}
+.mt-32{margin-top:15px;}
+.mt-48{margin-top:20px;}
+
+/* Cards & callouts compact */
+.card,.callout,.flow-node{padding:9px 12px;}
+.card h3,.callout h3{margin-bottom:4px;font-size:0.95rem;}
+.bullets{margin:6px 0;}
+.bullets li{margin-bottom:3px;line-height:1.35;font-size:0.85rem;}
+.chat{padding:7px 9px;gap:4px;}
+.bubble{padding:5px 8px;font-size:0.78rem;line-height:1.3;}
+.flow-node-text{font-size:0.74rem;line-height:1.3;}
+.flow-label{font-size:0.58rem;}
+.mini-title{font-size:0.78rem;margin-bottom:4px;}
+
+/* Glow rules: thinner */
+.glow{height:2px;margin:8px 0;}
+
+/* Body type tighter */
+body{line-height:1.42;}
+p{margin:0 0 0.5em 0;}
+.text-sm{font-size:0.8rem;}
+.text-xs{font-size:0.7rem;}
+
+/* TOC: balance into 2 columns */
+.toc-wrap{
+  max-height: 200mm;
+  column-fill: balance;
+}
+.toc-group{margin-bottom:8px;}
+.toc-row{padding:3px 0;font-size:0.74rem;}
+.toc-row-title em{font-size:0.7rem;line-height:1.25;}
+.toc-group-label{margin-bottom:5px;padding-bottom:3px;font-size:0.6rem;}
+.toc-row-num{font-size:0.7rem;}
+.toc-row-page{font-size:0.85rem;}
+
+/* Folio inset matches new padding */
+.folio{bottom:9mm;}
+.folio--right{right:13mm;}
+.folio--left{left:13mm;}
+
+/* Responsive — narrow viewports */
+@media (max-width: 760px){
+  .page{width:100%;min-height:0;margin:0;border-radius:0;}
+  .page-inner{padding:32px 22px;}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}
+  .cover-title{font-size:2.6rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     GLOBAL SVG DEFS — reusable Dubai skyline silhouette
+     ============================================================ -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden;" aria-hidden="true">
+  <defs>
+    <!-- Dubai skyline, viewBox 0 0 600 130. Anchored to bottom of consumer SVG. -->
+    <symbol id="dubai-skyline" viewBox="0 0 600 130">
+      <!-- ground line -->
+      <line x1="0" y1="128" x2="600" y2="128" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.5"/>
+      <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+        <!-- Burj Al Arab (sail) -->
+        <path d="M22 128 L34 50 Q56 36 76 50 L76 128 Z"/>
+        <path d="M34 50 Q52 70 76 80"/>
+        <!-- low towers cluster -->
+        <path d="M92 128 L92 92 L104 82 L116 92 L116 128 Z"/>
+        <path d="M124 128 L124 78 L146 78 L146 128"/>
+        <!-- Cayan tower (twisted) -->
+        <path d="M158 128 L160 108 L166 92 L170 76 L176 60 L184 60 L190 76 L194 92 L200 108 L202 128 Z"/>
+        <!-- Princess Tower / generic tall -->
+        <path d="M214 128 L214 70 L222 60 L222 128 Z"/>
+        <!-- Burj Khalifa with antenna -->
+        <path d="M236 128 L236 96 L244 76 L252 56 L259 36 L264 8 L266 -16 L268 8 L273 36 L280 56 L288 76 L296 96 L296 128 Z"/>
+        <line x1="266" y1="-16" x2="266" y2="-44"/>
+        <!-- generic between -->
+        <path d="M308 128 L308 88 L322 78 L336 88 L336 128"/>
+        <!-- Museum of the Future (torus) -->
+        <ellipse cx="362" cy="78" rx="26" ry="34"/>
+        <ellipse cx="362" cy="78" rx="11" ry="16" opacity="0.55"/>
+        <line x1="336" y1="128" x2="388" y2="128"/>
+        <!-- Dubai Frame -->
+        <path d="M408 128 L408 50 L470 50 L470 128"/>
+        <path d="M413 128 L413 55 L465 55 L465 128" opacity="0.5"/>
+        <!-- Emirates Towers (twin slant) -->
+        <path d="M484 128 L484 80 L494 64 L504 80 L504 128"/>
+        <path d="M512 128 L512 88 L520 74 L528 88 L528 128"/>
+        <!-- final towers -->
+        <path d="M540 128 L540 92 L552 84 L552 128"/>
+        <path d="M560 128 L560 100 L572 92 L584 100 L584 128"/>
+      </g>
+    </symbol>
+
+    <!-- Reusable gradient mesh for premium washes -->
+    <radialGradient id="mesh-blue-tl" cx="15%" cy="20%" r="55%">
+      <stop offset="0%" stop-color="#1E5BFF" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#1E5BFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="mesh-gold-br" cx="85%" cy="80%" r="55%">
+      <stop offset="0%" stop-color="#D4A574" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#D4A574" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="mesh-gold-tr" cx="85%" cy="20%" r="50%">
+      <stop offset="0%" stop-color="#D4A574" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#D4A574" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="mesh-blue-bl" cx="15%" cy="80%" r="55%">
+      <stop offset="0%" stop-color="#1E5BFF" stop-opacity="0.09"/>
+      <stop offset="100%" stop-color="#1E5BFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="page-vignette" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0A1628" stop-opacity="0"/>
+      <stop offset="60%" stop-color="#0A1628" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#0A1628" stop-opacity="0.06"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- ============================================================
+     PAGE 1 — COVER
+     ============================================================ -->
+<section class="page page--dark" data-screen-label="01 Cover">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <radialGradient id="vignette" cx="50%" cy="50%" r="75%">
+          <stop offset="0%" stop-color="#0A1628" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#000" stop-opacity="0.55"/>
+        </radialGradient>
+        <radialGradient id="meshBlue" cx="20%" cy="30%" r="50%">
+          <stop offset="0%" stop-color="#1E5BFF" stop-opacity="0.28"/>
+          <stop offset="100%" stop-color="#1E5BFF" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="meshGold" cx="80%" cy="70%" r="45%">
+          <stop offset="0%" stop-color="#D4A574" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#D4A574" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="skyGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3"/>
+        </filter>
+      </defs>
+      <rect width="595" height="842" fill="#0A1628"/>
+      <rect width="595" height="842" fill="url(#meshBlue)"/>
+      <rect width="595" height="842" fill="url(#meshGold)"/>
+      <!-- constellation dots (sparse, upper two-thirds) -->
+      <g fill="#fff">
+        <circle cx="62" cy="120" r="1.2" opacity="0.9"/>
+        <circle cx="118" cy="80" r="0.8" opacity="0.5"/>
+        <circle cx="170" cy="150" r="1.6" opacity="0.85"/>
+        <circle cx="220" cy="100" r="1" opacity="0.6"/>
+        <circle cx="270" cy="170" r="2" opacity="0.95"/>
+        <circle cx="330" cy="110" r="1.2" opacity="0.7"/>
+        <circle cx="390" cy="160" r="1.4" opacity="0.85"/>
+        <circle cx="450" cy="90" r="1" opacity="0.55"/>
+        <circle cx="510" cy="140" r="1.6" opacity="0.85"/>
+        <circle cx="80" cy="220" r="0.9" opacity="0.5"/>
+        <circle cx="140" cy="260" r="1.4" opacity="0.8"/>
+        <circle cx="200" cy="240" r="0.8" opacity="0.45"/>
+        <circle cx="280" cy="280" r="1.6" opacity="0.9"/>
+        <circle cx="350" cy="250" r="1" opacity="0.6"/>
+        <circle cx="420" cy="290" r="1.4" opacity="0.8"/>
+        <circle cx="490" cy="240" r="0.9" opacity="0.55"/>
+        <circle cx="60" cy="340" r="1.2" opacity="0.7"/>
+        <circle cx="130" cy="380" r="0.8" opacity="0.45"/>
+        <circle cx="210" cy="360" r="1.6" opacity="0.85"/>
+        <circle cx="290" cy="400" r="1" opacity="0.6"/>
+        <circle cx="370" cy="380" r="1.2" opacity="0.7"/>
+        <circle cx="450" cy="420" r="1.4" opacity="0.8"/>
+        <circle cx="520" cy="380" r="0.9" opacity="0.5"/>
+        <circle cx="100" cy="460" r="1" opacity="0.5"/>
+        <circle cx="180" cy="500" r="0.8" opacity="0.4"/>
+        <circle cx="260" cy="470" r="1.4" opacity="0.7"/>
+        <circle cx="340" cy="510" r="1" opacity="0.55"/>
+        <circle cx="420" cy="490" r="0.9" opacity="0.5"/>
+        <circle cx="490" cy="520" r="1.2" opacity="0.65"/>
+      </g>
+      <!-- a few hairline constellation strokes (partially connected on cover) -->
+      <g stroke="#fff" stroke-width="0.5" stroke-opacity="0.18" fill="none">
+        <path d="M170 150 L 270 170 L 330 110"/>
+        <path d="M280 280 L 350 250 L 420 290"/>
+        <path d="M210 360 L 290 400 L 370 380"/>
+      </g>
+      <!-- skyline silhouette -->
+      <g transform="translate(0,720)" fill="none" stroke="#1E5BFF" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" filter="url(#skyGlow)" opacity="0.6">
+        <!-- ground line -->
+        <path d="M0 100 L595 100" stroke-width="0.5" stroke-opacity="0.4"/>
+      </g>
+      <g transform="translate(0,720)" fill="none" stroke="#1E5BFF" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
+        <!-- Burj Al Arab (sail) -->
+        <path d="M30 100 L40 30 Q60 15 80 30 L80 100 Z"/>
+        <path d="M40 30 Q55 50 80 60"/>
+        <!-- generic towers -->
+        <path d="M95 100 L95 70 L105 60 L115 70 L115 100 Z"/>
+        <path d="M125 100 L125 55 L145 55 L145 100"/>
+        <!-- Cayan tower (twisted) -->
+        <path d="M160 100 L162 80 L168 65 L172 50 L178 35 L185 35 L191 50 L195 65 L201 80 L203 100 Z"/>
+        <!-- Burj Khalifa with antenna -->
+        <path d="M225 100 L225 70 L235 50 L245 30 L252 10 L258 -25 L260 -45 L262 -25 L268 10 L275 30 L285 50 L295 70 L295 100 Z"/>
+        <line x1="260" y1="-45" x2="260" y2="-72"/>
+        <!-- Museum of the Future (torus) -->
+        <ellipse cx="335" cy="60" rx="32" ry="40" fill="none"/>
+        <ellipse cx="335" cy="60" rx="14" ry="20" fill="none" opacity="0.5"/>
+        <path d="M303 100 L367 100"/>
+        <!-- Dubai Frame -->
+        <path d="M390 100 L390 25 L455 25 L455 100"/>
+        <path d="M395 100 L395 30 L450 30 L450 100" opacity="0.5"/>
+        <!-- generic towers -->
+        <path d="M475 100 L475 60 L490 50 L505 60 L505 100"/>
+        <path d="M515 100 L515 75 L535 75 L535 100"/>
+        <path d="M545 100 L545 65 L555 60 L565 65 L565 100"/>
+      </g>
+      <rect width="595" height="842" fill="url(#vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner" style="display:flex;flex-direction:column;justify-content:space-between;min-height:297mm;">
+    <header class="spread">
+      <span class="pill pill--white">YOUR EARNINGS GUIDE</span>
+    </header>
+
+    <div style="margin-top:60px;">
+      <div class="cover-wordmark">TUTORII</div>
+      <div class="glow glow--gold" style="width:80px;margin:24px 0;"></div>
+      <h1 class="cover-title" id="cover-title">Earn With<br/>Tutorii.</h1>
+      <p class="cover-tagline" id="cover-tagline" style="margin-top:32px;">Read this. Send 3 messages. Get paid.</p>
+    </div>
+
+    <footer style="display:flex;justify-content:space-between;align-items:flex-end;color:#7A8DAE;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;">
+      <span>www.tutorii.com</span>
+      <span>The Earning Handbook · 01 / 12</span>
+    </footer>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 2 — CONTENTS
+     ============================================================ -->
+<section class="page page--mist" data-screen-label="02 Contents">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g transform="translate(60 760)" fill="none" stroke="#1E5BFF" stroke-opacity="0.05">
+        <circle r="120" stroke-width="0.5"/>
+        <circle r="220" stroke-width="0.5"/>
+        <circle r="340" stroke-width="0.5"/>
+        <circle r="480" stroke-width="0.5"/>
+      </g>
+      <g transform="translate(0 760)">
+        <use href="#dubai-skyline" opacity="0.05"/>
+      </g>
+    </svg>
+  </div>
+  <div class="page-inner" style="display:flex;flex-direction:column;">
+    <header style="margin-bottom:28px;">
+      <span class="eyebrow">A guide in twelve sections</span>
+      <h1 class="section-title" style="font-size:2.6rem;margin-top:8px;">Contents</h1>
+      <p class="deck" style="max-width:30em;">Twenty-six pages. Read straight through, or skip to the section you need before a conversation.</p>
+      <div class="glow glow--gold glow--narrow" style="margin-left:0;width:60px;"></div>
+    </header>
+
+    <div class="toc-wrap" style="columns:2;column-gap:36px;column-rule:1px solid #E4E9F2;">
+
+      <div class="toc-group" style="break-inside:avoid;">
+        <div class="toc-group-label"><span>Foundations</span><span class="toc-group-num">i</span></div>
+        <div class="toc-row toc-row--lead">
+          <span class="toc-row-num">01</span>
+          <span class="toc-row-title">Welcome to Tutorii<em>What's on the platform — and how earning from it works</em></span>
+          <span class="toc-row-page">3</span>
+        </div>
+        <div class="toc-row toc-row--lead">
+          <span class="toc-row-num">02</span>
+          <span class="toc-row-title">How earning works<em>The model in plain English. The 3-referrals maths.</em></span>
+          <span class="toc-row-page">4</span>
+        </div>
+        <div class="toc-row toc-row--lead">
+          <span class="toc-row-num">03</span>
+          <span class="toc-row-title">Direct &amp; indirect referrals<em>Two layers. Nothing deeper.</em></span>
+          <span class="toc-row-page">5</span>
+        </div>
+        <div class="toc-row">
+          <span class="toc-row-num"></span>
+          <span class="toc-row-title">The earnings ladder<em>1, 5, 10, 25, 50 referrals</em></span>
+          <span class="toc-row-page">6</span>
+        </div>
+      </div>
+
+      <div class="toc-group" style="break-inside:avoid;">
+        <div class="toc-group-label"><span>Getting started</span><span class="toc-group-num">ii</span></div>
+        <div class="toc-row toc-row--lead">
+          <span class="toc-row-num">04</span>
+          <span class="toc-row-title">Your first 60 minutes<em>If you do nothing else today, do this</em></span>
+          <span class="toc-row-page">7</span>
+        </div>
+        <div class="toc-row toc-row--lead">
+          <span class="toc-row-num">05</span>
+          <span class="toc-row-title">Who to talk to first<em>Start warm. Strangers can wait.</em></span>
+          <span class="toc-row-page">8</span>
+        </div>
+        <div class="toc-row toc-row--lead">
+          <span class="toc-row-num">06</span>
+          <span class="toc-row-title">Where to share<em>Pick 2–3 channels and stay consistent</em></span>
+          <span class="toc-row-page">9</span>
+        </div>
+        <div class="toc-row">
+          <span class="toc-row-num"></span>
+          <span class="toc-row-title">Channels, continued</span>
+          <span class="toc-row-page">10</span>
+        </div>
+      </div>
+
+      <div class="toc-group" style="break-inside:avoid;">
+        <div class="toc-group-label"><span>What to say</span><span class="toc-group-num">iii</span></div>
+        <div class="toc-row toc-row--lead">
+          <span class="toc-row-num">07</span>
+          <span class="toc-row-title">Word-for-word scripts<em>Copy these. Change the name. Send them.</em></span>
+          <span class="toc-row-page">11</span>
+        </div>
+        <div class="toc-row">
+          <span class="toc-row-num"></span>
+          <span class="toc-row-title">Scripts 1B · 2 · 3</span>
+          <span class="toc-row-page">12</span>
+        </div>
+        <div class="toc-row">
+          <span class="toc-row-num"></span>
+          <span class="toc-row-title">Scripts 4 · 5 · 7</span>
+          <span class="toc-row-page">13</span>
+        </div>
+        <div class="toc-row">
+          <span class="toc-row-num"></span>
+          <span class="toc-row-title">Script 6 — full conversation</span>
+          <span class="toc-row-page">14</span>
+        </div>
+        <div class="toc-row">
+          <span class="toc-row-num"></span>
+          <span class="toc-row-title">Script 8 — full conversation</span>
+          <span class="toc-row-page">15</span>
+        </div>
+      </div>
+
+      <div class="toc-group" style="break-inside:avoid;">
+        <div class="toc-group-label"><span>Handling pushback</span><span class="toc-group-num">iv</span></div>
+        <div class="toc-row toc-row--lead">
+          <span class="toc-row-num">08</span>
+          <span class="toc-row-title">Handling objections<em>The top three. They cover most of what you'll face.</em></span>
+          <span class="toc-row-page">16</span>
+        </div>
+        <div class="toc-row">
+          <span class="toc-row-num"></span>
+          <span class="toc-row-title">Objections 2 &amp; 3 — price and commission</span>
+          <span class="toc-row-page">17</span>
+        </div>
+        <div class="toc-row">
+          <span class="toc-row-num"></span>
+          <span class="toc-row-title">Compact objections — four short ones</span>
+          <span class="toc-row-page">18</span>
+        </div>
+        <div class="toc-row">
+          <span class="toc-row-num"></span>
+          <span class="toc-row-title">Twenty more, in one column<em>Quick-reference, part 1</em></span>
+          <span class="toc-row-page">19</span>
+        </div>
+        <div class="toc-row">
+          <span class="toc-row-num"></span>
+          <span class="toc-row-title">Quick reference, part 2</span>
+          <span class="toc-row-page">20</span>
+        </div>
+      </div>
+
+      <div class="toc-group" style="break-inside:avoid;">
+        <div class="toc-group-label"><span>Closing the loop</span><span class="toc-group-num">v</span></div>
+        <div class="toc-row toc-row--lead">
+          <span class="toc-row-num">09</span>
+          <span class="toc-row-title">When someone says yes<em>The next 48 hours matter most</em></span>
+          <span class="toc-row-page">21</span>
+        </div>
+        <div class="toc-row toc-row--lead">
+          <span class="toc-row-num">10</span>
+          <span class="toc-row-title">Your first 7 days<em>A literal day-by-day plan</em></span>
+          <span class="toc-row-page">22</span>
+        </div>
+        <div class="toc-row toc-row--lead">
+          <span class="toc-row-num">11</span>
+          <span class="toc-row-title">How you get paid<em>Tuesdays · MamoPay · IBAN</em></span>
+          <span class="toc-row-page">23</span>
+        </div>
+      </div>
+
+      <div class="toc-group" style="break-inside:avoid;">
+        <div class="toc-group-label"><span>Reference</span><span class="toc-group-num">vi</span></div>
+        <div class="toc-row toc-row--lead">
+          <span class="toc-row-num">12</span>
+          <span class="toc-row-title">One-page cheat sheet<em>Screenshot. Pin in WhatsApp.</em></span>
+          <span class="toc-row-page">24</span>
+        </div>
+        <div class="toc-row">
+          <span class="toc-row-num"></span>
+          <span class="toc-row-title">Closing<em>The people who succeed are the ones who send the message</em></span>
+          <span class="toc-row-page">25</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:auto;padding-top:18px;border-top:1px solid #E4E9F2;display:flex;justify-content:space-between;align-items:baseline;font-size:0.78rem;color:#5C6B85;">
+      <span style="font-family:'Fraunces',serif;font-style:italic;">A handbook for Tutorii sales agents.</span>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">02</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 2 — SECTION 1: WELCOME TO TUTORII
+     ============================================================ -->
+<section class="page page--mist" data-screen-label="03 Welcome">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g transform="translate(540 780)" fill="none" stroke="#1E5BFF" stroke-opacity="0.06">
+        <circle r="120" stroke-width="0.5"/>
+        <circle r="200" stroke-width="0.5"/>
+        <circle r="290" stroke-width="0.5"/>
+        <circle r="380" stroke-width="0.5"/>
+        <circle r="470" stroke-width="0.5"/>
+        <circle r="560" stroke-width="0.5"/>
+      </g>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      
+      <g transform="translate(0 712)" color="#1E5BFF" opacity="0.16">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-32">
+      <span class="eyebrow">Section 01</span>
+      <h1 class="section-title">Welcome to Tutorii</h1>
+      <p class="deck">What Tutorii is. How earning works. Move on.</p>
+      <div class="glow glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="callout callout--blue mb-32">
+      <span class="callout-label">Two things to know</span>
+      <p>Your subscription gives you full access to every course on the platform plus a 24/7 AI tutor.</p>
+      <p>You also have your own referral link — every friend who joins through it pays you <span class="pill pill--gold">AED 38/month</span>. That's what most of this guide is about.</p>
+    </div>
+
+    <div class="grid grid-2 mb-32">
+      <div>
+        <span class="text-micro">What's on the platform</span>
+        <h3 class="block-title mt-8">Six tracks for UAE life</h3>
+        <ul class="bullets">
+          <li><strong>Visa rules &amp; residency</strong> — visas, sponsorships, renewals, visa runs</li>
+          <li><strong>Workers' rights</strong> — contracts, end-of-service, employer disputes</li>
+          <li><strong>Money skills</strong> — banking, savings, sending money home</li>
+          <li><strong>Finding a job</strong> — CV writing, interview prep, recruitment agencies</li>
+          <li><strong>Starting a business</strong> — trade licences, free zones, going independent</li>
+          <li><strong>UAE life</strong> — tenancy, RTA, healthcare, schooling</li>
+        </ul>
+      </div>
+      <div>
+        <span class="text-micro">How to use the platform</span>
+        <h3 class="block-title mt-8">Five steps to get going</h3>
+        <ol class="steps">
+          <li>Log in at <strong>www.tutorii.com</strong></li>
+          <li>Pick one course — most lessons are 10 minutes</li>
+          <li>Use the AI tutor for one-off questions, 24/7</li>
+          <li>Set up your IBAN in Account Settings (Section 8)</li>
+          <li>Find your referral link at the top of your dashboard</li>
+        </ol>
+        <p class="text-sm muted mt-24">Most subscribers find <strong>visa rules</strong> and <strong>workers' rights</strong> the most useful first. Start there.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="callout-label">Optional, but worth doing</span>
+      <p>You don't have to refer anyone — plenty of subscribers never do. But if you do, even casually with 3 friends you trust, your subscription pays for itself and you start earning beyond it. The rest of this guide shows you how.</p>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">03</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 3 — SECTION 2: HOW EARNING WORKS (intro + maths)
+     ============================================================ -->
+<section class="page" data-screen-label="04 How earning works">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g stroke="#0A1628" stroke-opacity="0.04" stroke-width="0.5" fill="none">
+        <path d="M-50 100 L650 -250"/><path d="M-50 200 L650 -150"/><path d="M-50 300 L650 -50"/>
+        <path d="M-50 400 L650 50"/><path d="M-50 500 L650 150"/><path d="M-50 600 L650 250"/>
+        <path d="M-50 700 L650 350"/><path d="M-50 800 L650 450"/><path d="M-50 900 L650 550"/>
+        <path d="M-50 1000 L650 650"/><path d="M-50 1100 L650 750"/>
+        <path d="M-50 -250 L650 100"/><path d="M-50 -150 L650 200"/><path d="M-50 -50 L650 300"/>
+        <path d="M-50 50 L650 400"/><path d="M-50 150 L650 500"/><path d="M-50 250 L650 600"/>
+        <path d="M-50 350 L650 700"/><path d="M-50 450 L650 800"/><path d="M-50 550 L650 900"/>
+      </g>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      
+      <g transform="translate(0 712)" color="#0A1628" opacity="0.09">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow">Section 02</span>
+      <h1 class="section-title">How earning works</h1>
+      <p class="deck">How earning actually works. The maths.  No fluff.</p>
+      <div class="glow glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <p style="max-width:60ch;font-size:1.02rem;">You're now part of a small group of people who get paid every Tuesday for sharing something useful. Here's the model in one paragraph:</p>
+    <p style="max-width:62ch;font-size:1.02rem;">Tutorii costs <span class="pill pill--blue">AED 95/MONTH</span>. When you share your referral link and a friend subscribes through it, you earn 40% per month — <span class="pill pill--gold">AED 38</span> — for as long as they stay subscribed. Your friend gets the same deal: their own link, their own 40% commission.</p>
+
+    <div class="callout mt-24 mb-32">
+      <span class="callout-label">The three-referral threshold</span>
+      <p style="font-size:1.05rem;"><strong>If you refer 3 friends who subscribe, your AED 95/month is fully covered. From the 4th friend onwards, you earn AED 38 every month.</strong></p>
+    </div>
+
+    <div class="glow glow--gold mt-32 mb-24"></div>
+
+    <!-- Mini commission flow as preview -->
+    <div class="card" style="padding:28px;">
+      <div class="text-micro mb-16">Commission flow · simple version</div>
+      <svg viewBox="0 0 770 110" style="width:100%;height:auto;display:block;">
+        <defs>
+          <marker id="ahFlow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0 0 L10 5 L0 10 z" fill="#0A1628"/>
+          </marker>
+        </defs>
+        <!-- Subscriber -->
+        <rect x="2" y="32" width="130" height="48" rx="14" fill="#fff" stroke="#E4E9F2"/>
+        <text x="67" y="52" text-anchor="middle" font-family="Inter" font-size="9" font-weight="600" fill="#5C6B85" letter-spacing="1.2">SUBSCRIBER</text>
+        <text x="67" y="68" text-anchor="middle" font-family="Inter" font-size="11" font-weight="700" fill="#0A1628">pays AED 95</text>
+
+        <line x1="134" y1="56" x2="174" y2="56" stroke="#0A1628" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ahFlow)"/>
+
+        <rect x="176" y="32" width="110" height="48" rx="14" fill="#0A1628"/>
+        <text x="231" y="60" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#fff" letter-spacing="-0.5">Tutorii</text>
+
+        <line x1="288" y1="56" x2="328" y2="56" stroke="#0A1628" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ahFlow)"/>
+
+        <rect x="330" y="22" width="160" height="68" rx="14" fill="#FAF1E0" stroke="#D4A574"/>
+        <text x="410" y="44" text-anchor="middle" font-family="Inter" font-size="9" font-weight="600" fill="#8B6332" letter-spacing="1.2">40% COMMISSION</text>
+        <text x="410" y="68" text-anchor="middle" font-family="Inter" font-size="18" font-weight="800" fill="#8B6332" letter-spacing="-0.5">AED 38</text>
+
+        <line x1="492" y1="56" x2="532" y2="56" stroke="#0A1628" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ahFlow)"/>
+
+        <rect x="534" y="32" width="110" height="48" rx="14" fill="#fff" stroke="#E4E9F2"/>
+        <text x="589" y="52" text-anchor="middle" font-family="Inter" font-size="9" font-weight="600" fill="#5C6B85" letter-spacing="1.2">PAYOUT</text>
+        <text x="589" y="68" text-anchor="middle" font-family="Inter" font-size="11" font-weight="700" fill="#0A1628">MamoPay</text>
+
+        <line x1="646" y1="56" x2="680" y2="56" stroke="#0A1628" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ahFlow)"/>
+        <text x="688" y="60" text-anchor="start" font-family="Inter" font-size="11" font-weight="700" fill="#0A1628">Your IBAN</text>
+      </svg>
+    </div>
+
+    <div class="grid grid-2 mt-32">
+      <div>
+        <span class="text-micro">The maths</span>
+        <ul class="bullets mt-8">
+          <li>3 referrals × AED 38 = <strong>AED 114/month</strong> back</li>
+          <li>You paid AED 95 — already <strong>AED 19 ahead</strong></li>
+          <li>Each additional friend = <strong>+AED 38/month</strong></li>
+        </ul>
+      </div>
+      <div>
+        <span class="text-micro">The honest version</span>
+        <p class="mt-8" style="font-size:0.95rem;">Most people who actively refer get 2–3 friends signed up in their first week — that's your subscription effectively covered. There's no cap, but earnings take consistent effort, not luck.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">04</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 5 — SECTION 3: DIRECT AND INDIRECT REFERRALS
+     ============================================================ -->
+<section class="page" data-screen-label="05 Direct and indirect">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g transform="translate(140 360)" fill="none" stroke="#1E5BFF" stroke-opacity="0.04">
+        <circle r="80" stroke-width="0.5"/>
+        <circle r="140" stroke-width="0.5"/>
+        <circle r="200" stroke-width="0.5"/>
+        <circle r="260" stroke-width="0.5"/>
+        <circle r="320" stroke-width="0.5"/>
+      </g>
+    
+      <rect width="595" height="842" fill="url(#mesh-gold-tr)"/>
+      <rect width="595" height="842" fill="url(#mesh-blue-bl)"/>
+      
+      <g transform="translate(0 712) scale(-1 1) translate(-600 0)" color="#1E5BFF" opacity="0.15">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow">Section 03</span>
+      <h1 class="section-title">Direct and indirect referrals</h1>
+      <p class="deck">Two layers. Direct + indirect. That's it.</p>
+      <div class="glow glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="grid grid-2 mb-32" style="grid-template-columns:1fr 1.05fr;align-items:center;">
+      <!-- Two-tier ring diagram -->
+      <div>
+        <svg viewBox="0 0 360 360" style="width:100%;max-width:340px;display:block;margin:0 auto;">
+          <defs>
+            <linearGradient id="ringFade" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#1E5BFF"/>
+              <stop offset="100%" stop-color="#D4A574"/>
+            </linearGradient>
+          </defs>
+          <!-- ripple rings -->
+          <circle cx="180" cy="180" r="160" fill="none" stroke="#1E5BFF" stroke-opacity="0.08" stroke-width="0.5" stroke-dasharray="2 4"/>
+          <!-- outer dashed ring -->
+          <circle cx="180" cy="180" r="135" fill="none" stroke="#D4A574" stroke-opacity="0.4" stroke-width="1" stroke-dasharray="3 4"/>
+          <!-- inner ring -->
+          <circle cx="180" cy="180" r="80" fill="none" stroke="#1E5BFF" stroke-opacity="0.25" stroke-width="1"/>
+          <!-- connection lines from center to inner -->
+          <g stroke="url(#ringFade)" stroke-width="0.7" opacity="0.55">
+            <line x1="180" y1="180" x2="180" y2="100"/>
+            <line x1="180" y1="180" x2="248" y2="138"/>
+            <line x1="180" y1="180" x2="252" y2="220"/>
+            <line x1="180" y1="180" x2="180" y2="260"/>
+            <line x1="180" y1="180" x2="108" y2="220"/>
+            <line x1="180" y1="180" x2="112" y2="138"/>
+          </g>
+          <!-- inner dots (Direct) -->
+          <g fill="#1E5BFF">
+            <circle cx="180" cy="100" r="6"/>
+            <circle cx="248" cy="138" r="6"/>
+            <circle cx="252" cy="220" r="6"/>
+            <circle cx="180" cy="260" r="6"/>
+            <circle cx="108" cy="220" r="6"/>
+            <circle cx="112" cy="138" r="6"/>
+          </g>
+          <!-- thin lines from inner to outer -->
+          <g stroke="#D4A574" stroke-width="0.5" stroke-dasharray="2 3" opacity="0.55">
+            <line x1="180" y1="100" x2="200" y2="50"/>
+            <line x1="180" y1="100" x2="155" y2="55"/>
+            <line x1="248" y1="138" x2="306" y2="118"/>
+            <line x1="248" y1="138" x2="295" y2="80"/>
+            <line x1="252" y1="220" x2="310" y2="245"/>
+            <line x1="252" y1="220" x2="295" y2="280"/>
+            <line x1="180" y1="260" x2="160" y2="312"/>
+            <line x1="180" y1="260" x2="205" y2="312"/>
+            <line x1="108" y1="220" x2="55" y2="245"/>
+            <line x1="108" y1="220" x2="65" y2="280"/>
+            <line x1="112" y1="138" x2="55" y2="118"/>
+            <line x1="112" y1="138" x2="68" y2="80"/>
+          </g>
+          <!-- outer dots (Indirect) -->
+          <g fill="#D4A574">
+            <circle cx="200" cy="50" r="4"/>
+            <circle cx="155" cy="55" r="4"/>
+            <circle cx="306" cy="118" r="4"/>
+            <circle cx="295" cy="80" r="4"/>
+            <circle cx="310" cy="245" r="4"/>
+            <circle cx="295" cy="280" r="4"/>
+            <circle cx="160" cy="312" r="4"/>
+            <circle cx="205" cy="312" r="4"/>
+            <circle cx="55" cy="245" r="4"/>
+            <circle cx="65" cy="280" r="4"/>
+            <circle cx="55" cy="118" r="4"/>
+            <circle cx="68" cy="80" r="4"/>
+          </g>
+          <!-- you in center -->
+          <circle cx="180" cy="180" r="20" fill="#0A1628"/>
+          <circle cx="180" cy="180" r="24" fill="none" stroke="#D4A574" stroke-width="1"/>
+          <text x="180" y="184" text-anchor="middle" font-family="Inter" font-size="10" font-weight="700" fill="#fff" letter-spacing="1">YOU</text>
+          <!-- labels -->
+          <text x="180" y="40" text-anchor="middle" font-family="Inter" font-size="8" font-weight="600" fill="#8B6332" letter-spacing="2">INDIRECT · 5%</text>
+          <text x="180" y="155" text-anchor="middle" font-family="Inter" font-size="8" font-weight="600" fill="#1E5BFF" letter-spacing="2">DIRECT · 40%</text>
+        </svg>
+      </div>
+
+      <div>
+        <div class="mb-24">
+          <span class="pill pill--blue">DIRECT REFERRALS · 40%</span>
+          <p class="mt-8" style="font-size:0.95rem;">People who subscribe through <strong>your</strong> link. You earn <strong>AED 38/month</strong> for each, for as long as they stay.</p>
+        </div>
+        <div class="mb-24">
+          <span class="pill pill--gold">INDIRECT REFERRALS · 5%</span>
+          <p class="mt-8" style="font-size:0.95rem;">People who subscribe through <strong>your direct referral's</strong> link. You earn <strong>AED 4.75/month</strong> for each.</p>
+        </div>
+        <div>
+          <span class="pill pill--dark">NOTHING DEEPER</span>
+          <p class="mt-8" style="font-size:0.95rem;">No third layer. Two layers, that's the whole structure.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="callout-label">Example: Sarah, Ahmed and Khalid</span>
+      <p>You message Sarah. Sarah subscribes through your link — direct referral, you earn AED 38/month while she stays.</p>
+      <p>Sarah refers her friend Ahmed. Ahmed is Sarah's direct referral, but your indirect — you earn AED 4.75/month while he stays.</p>
+      <p>Ahmed refers Khalid. Too far down the chain — you earn nothing from Khalid. (Sarah does, because Khalid is her indirect.)</p>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">05</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 6 — EARNINGS LADDER
+     ============================================================ -->
+<section class="page page--mist" data-screen-label="06 Earnings ladder">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g stroke="#0A1628" stroke-opacity="0.05" stroke-width="0.5">
+        <line x1="60" y1="200" x2="535" y2="200"/>
+        <line x1="60" y1="260" x2="535" y2="260"/>
+        <line x1="60" y1="320" x2="535" y2="320"/>
+        <line x1="60" y1="380" x2="535" y2="380"/>
+        <line x1="60" y1="440" x2="535" y2="440"/>
+        <line x1="60" y1="500" x2="535" y2="500"/>
+        <line x1="60" y1="560" x2="535" y2="560"/>
+        <line x1="60" y1="620" x2="535" y2="620"/>
+        <!-- tick marks -->
+        <line x1="56" y1="200" x2="62" y2="200" stroke-width="1"/>
+        <line x1="56" y1="320" x2="62" y2="320" stroke-width="1"/>
+        <line x1="56" y1="440" x2="62" y2="440" stroke-width="1"/>
+        <line x1="56" y1="560" x2="62" y2="560" stroke-width="1"/>
+      </g>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      
+      <g transform="translate(0 712)" color="#8B6332" opacity="0.2">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow">What you can actually earn</span>
+      <h2 class="section-title">The earnings ladder</h2>
+      <p class="deck">Quality > volume. Stickiness pays.</p>
+      <div class="glow glow--gold glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="card mb-32" style="padding:36px 28px;">
+      <svg viewBox="0 0 720 380" style="width:100%;height:auto;display:block;">
+        <defs>
+          <linearGradient id="barGrad" x1="0" y1="100%" x2="0" y2="0">
+            <stop offset="0%" stop-color="#1E5BFF"/>
+            <stop offset="100%" stop-color="#D4A574"/>
+          </linearGradient>
+        </defs>
+        <!-- elevation grid -->
+        <g stroke="#0A1628" stroke-opacity="0.06" stroke-width="0.5">
+          <line x1="60" y1="40" x2="700" y2="40"/>
+          <line x1="60" y1="100" x2="700" y2="100"/>
+          <line x1="60" y1="160" x2="700" y2="160"/>
+          <line x1="60" y1="220" x2="700" y2="220"/>
+          <line x1="60" y1="280" x2="700" y2="280"/>
+          <line x1="60" y1="340" x2="700" y2="340"/>
+        </g>
+        <g font-family="Inter" font-size="8" fill="#5C6B85" letter-spacing="1.5" font-weight="600">
+          <text x="50" y="44" text-anchor="end">2,000</text>
+          <text x="50" y="104" text-anchor="end">1,500</text>
+          <text x="50" y="164" text-anchor="end">1,000</text>
+          <text x="50" y="224" text-anchor="end">500</text>
+          <text x="50" y="284" text-anchor="end">250</text>
+          <text x="50" y="344" text-anchor="end">0</text>
+        </g>
+        <line x1="60" y1="340" x2="700" y2="340" stroke="#0A1628" stroke-opacity="0.2"/>
+
+        <!-- bars: 1 ref AED 38 (h ~12), 5 AED 190 (h ~62), 10 AED 380 (h ~125), 25 AED 950 (h ~310), 50 AED 1900 — capped near top -->
+        <!-- scale: 2000 = 300px. -->
+        <g>
+          <!-- 1 ref -->
+          <rect x="98" y="334" width="74" height="6" rx="2" fill="url(#barGrad)"/>
+          <text x="135" y="328" text-anchor="middle" font-family="Inter" font-size="9" font-weight="700" fill="#0A1628">AED 38</text>
+          <text x="135" y="362" text-anchor="middle" font-family="Inter" font-size="9" font-weight="600" fill="#5C6B85" letter-spacing="1">1 REF</text>
+
+          <!-- 5 ref -->
+          <rect x="218" y="312" width="74" height="28" rx="2" fill="url(#barGrad)"/>
+          <text x="255" y="306" text-anchor="middle" font-family="Inter" font-size="10" font-weight="700" fill="#0A1628">AED 190</text>
+          <text x="255" y="362" text-anchor="middle" font-family="Inter" font-size="9" font-weight="600" fill="#5C6B85" letter-spacing="1">5 REFS</text>
+
+          <!-- 10 ref AED 380 -->
+          <rect x="338" y="283" width="74" height="57" rx="2" fill="url(#barGrad)"/>
+          <text x="375" y="276" text-anchor="middle" font-family="Inter" font-size="10" font-weight="700" fill="#0A1628">AED 380</text>
+          <text x="375" y="362" text-anchor="middle" font-family="Inter" font-size="9" font-weight="600" fill="#5C6B85" letter-spacing="1">10 REFS</text>
+
+          <!-- 25 ref AED 950 -->
+          <rect x="458" y="198" width="74" height="142" rx="2" fill="url(#barGrad)"/>
+          <text x="495" y="191" text-anchor="middle" font-family="Inter" font-size="10" font-weight="700" fill="#0A1628">AED 950</text>
+          <text x="495" y="362" text-anchor="middle" font-family="Inter" font-size="9" font-weight="600" fill="#5C6B85" letter-spacing="1">25 REFS</text>
+
+          <!-- 50 ref AED 1900 -->
+          <rect x="578" y="55" width="74" height="285" rx="2" fill="url(#barGrad)"/>
+          <text x="615" y="48" text-anchor="middle" font-family="Inter" font-size="11" font-weight="800" fill="#8B6332">AED 1,900</text>
+          <text x="615" y="362" text-anchor="middle" font-family="Inter" font-size="9" font-weight="600" fill="#5C6B85" letter-spacing="1">50 REFS</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="card" style="padding:0;">
+      <table class="tbl" style="font-size:0.95rem;">
+        <thead>
+          <tr><th style="padding:18px 28px;">If you have…</th><th style="padding:18px 28px;">You earn per month</th><th style="padding:18px 28px;">Per year</th></tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:18px 28px;">3 active direct referrals</td><td class="num" style="padding:18px 28px;">AED 114</td><td class="num" style="padding:18px 28px;">AED 1,368</td></tr>
+          <tr><td style="padding:18px 28px;">10 active direct referrals</td><td class="num" style="padding:18px 28px;">AED 380</td><td class="num" style="padding:18px 28px;">AED 4,560</td></tr>
+          <tr><td style="padding:18px 28px;">25 active direct referrals</td><td class="num" style="padding:18px 28px;">AED 950</td><td class="num" style="padding:18px 28px;">AED 11,400</td></tr>
+          <tr><td style="padding:18px 28px;">50 active direct referrals</td><td class="num" style="padding:18px 28px;">AED 1,900</td><td class="num" style="padding:18px 28px;">AED 22,800</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-sm muted mt-24">Figures assume your referrals stay subscribed. If someone cancels, you stop earning from them that month. Quality referrals — people who'll actually use the platform — beat volume.</p>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">06</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 7 — SECTION 4: YOUR FIRST 60 MINUTES
+     ============================================================ -->
+<section class="page" data-screen-label="07 First 60 minutes">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g stroke="#0A1628" stroke-opacity="0.04" stroke-width="0.5" fill="none">
+        <path d="M-50 100 L650 -250"/><path d="M-50 250 L650 -100"/><path d="M-50 400 L650 50"/>
+        <path d="M-50 550 L650 200"/><path d="M-50 700 L650 350"/>
+        <path d="M-50 -100 L650 250"/><path d="M-50 50 L650 400"/><path d="M-50 200 L650 550"/>
+        <path d="M-50 350 L650 700"/><path d="M-50 500 L650 850"/>
+      </g>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-bl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-tr)"/>
+      
+      <g transform="translate(0 712)" color="#1E5BFF" opacity="0.14">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow">Section 04</span>
+      <h1 class="section-title">Your first 60 minutes</h1>
+      <p class="deck">Do this in the next 60 minutes. Nothing else.</p>
+      <div class="glow glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="grid grid-3 mb-24">
+      <div class="card center" style="padding:20px 20px;">
+        <div class="gnum" style="font-size:3rem;">5<span style="font-size:1.2rem;font-weight:600;-webkit-text-fill-color:initial;background:none;color:#5C6B85;">min</span></div>
+        <div class="text-micro mt-8">Find your link</div>
+      </div>
+      <div class="card center" style="padding:20px 20px;">
+        <div class="gnum" style="font-size:3rem;">10<span style="font-size:1.2rem;font-weight:600;-webkit-text-fill-color:initial;background:none;color:#5C6B85;">min</span></div>
+        <div class="text-micro mt-8">Write 3 names</div>
+      </div>
+      <div class="card center" style="padding:20px 20px;">
+        <div class="gnum" style="font-size:3rem;">15<span style="font-size:1.2rem;font-weight:600;-webkit-text-fill-color:initial;background:none;color:#5C6B85;">min</span></div>
+        <div class="text-micro mt-8">Send the message</div>
+      </div>
+    </div>
+
+    <div class="mb-24">
+      <h4 class="mini-title">Step 1 — Find your link</h4>
+      <p class="text-sm">Log in to <strong>www.tutorii.com</strong>. At the top of your dashboard you'll see your referral link — it looks like <code style="font-family:ui-monospace,monospace;background:#F5F7FB;padding:2px 6px;border-radius:4px;">tutorii.com/ref/YOUR_CODE</code>. Pin it in a WhatsApp message to yourself.</p>
+    </div>
+    <div class="mb-24">
+      <h4 class="mini-title">Step 2 — Write down 3 names</h4>
+      <p class="text-sm">Not 20. Just 3. The three people you'd feel most comfortable telling about anything. A close friend. A cousin. Someone you grew up with. Don't pick people you're trying to impress. Don't pick your boss. Pick low-stakes.</p>
+    </div>
+
+    <h4 class="mini-title">Step 3 — Send this exact message</h4>
+    <div class="card mt-16" style="padding:20px;">
+      <div class="text-micro mb-16" style="color:var(--accent);">Conversation map — your first message</div>
+      <div class="grid" style="grid-template-columns:1.05fr 1fr;gap:32px;align-items:start;">
+        <!-- Flow diagram -->
+        <div class="flow">
+          <div class="flow-node flow-node--agent">
+            <span class="flow-label">AGENT</span>
+            <div class="flow-node-text">Open with curiosity hook — 'found something I think you'd want to know about'</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent">
+            <span class="flow-label">AGENT</span>
+            <div class="flow-node-text">Earning hook first: AED 38/month per friend</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent">
+            <span class="flow-label">AGENT</span>
+            <div class="flow-node-text">Product context: visa, workers' rights, money, jobs</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent">
+            <span class="flow-label">AGENT</span>
+            <div class="flow-node-text">Reframe price: AED 95 → 3 referrals covers it</div>
+          </div>
+          <div class="flow-arrow flow-arrow--gold"></div>
+          <div class="flow-node flow-node--close">
+            <span class="flow-label">CLOSE</span>
+            <div class="flow-node-text">Disclose commission · Ask: 'Worth a 2-minute look?'</div>
+          </div>
+        </div>
+
+        <!-- Bubbles -->
+        <div>
+          <div class="chat">
+            <div class="chat-header"><span class="dot"></span><span>You · to [Name]</span></div>
+            <div class="bubble bubble--out">Hey [Name] — quick one. Found something I think you'd want to know about.<span class="ts">10:42</span></div>
+            <div class="bubble bubble--out">There's a UAE platform called Tutorii where you earn AED 38/month for every friend who joins through your link. It's mainly courses on visa rules, workers' rights, finding jobs, money — the practical stuff nobody teaches you here.<span class="ts">10:42</span></div>
+            <div class="bubble bubble--out">It costs AED 95/month, but 3 referrals covers it. Above 3, you earn AED 38 per friend, every month they stay.<span class="ts">10:42</span></div>
+            <div class="bubble bubble--out">I get 40% commission if you sign up through me — wanted you to know. Worth a 2-minute look?<span class="ts">10:42</span></div>
+          </div>
+          <p class="fr-quote text-sm mt-16" style="color:#5C6B85;"><em>Why this works:</em> Send it to 3 people. Don't overthink. Don't add emojis. The honesty does the work.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-24">
+      <h4 class="mini-title">Step 4 — Stop</h4>
+      <p class="text-sm">Close WhatsApp. Make a coffee. The hardest part is done. <strong>Most people take a day or two to reply. Some won't reply at all. That's normal.</strong> Use the next sections after the first 60 minutes are done.</p>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">07</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 8 — SECTION 5: WHO TO TALK TO FIRST
+     ============================================================ -->
+<section class="page page--mist" data-screen-label="08 Who to talk to">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g transform="translate(60 760)" fill="none" stroke="#1E5BFF" stroke-opacity="0.05">
+        <circle r="60" stroke-width="0.5"/>
+        <circle r="120" stroke-width="0.5"/>
+        <circle r="180" stroke-width="0.5"/>
+        <circle r="240" stroke-width="0.5"/>
+      </g>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      
+      <g transform="translate(0 712)" color="#0A1628" opacity="0.12">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow">Section 05</span>
+      <h1 class="section-title">Who to talk to first</h1>
+      <p class="deck">Don't message strangers. Message friends first.</p>
+      <div class="glow glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="card mb-32" style="padding:0;">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th style="padding:16px 24px;">Tier</th>
+            <th style="padding:16px 24px;">Who they are</th>
+            <th style="padding:16px 24px;">Effort</th>
+            <th style="padding:16px 24px;">Conversion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:18px 24px;"><span class="pill pill--success">TIER 1 · WARM</span></td>
+            <td style="padding:18px 24px;">Close friends, family in the UAE, colleagues you trust. People who'd take your call at 10pm.</td>
+            <td style="padding:18px 24px;">Low</td>
+            <td style="padding:18px 24px;" class="num"><strong>1 in 3</strong> to 1 in 5</td>
+          </tr>
+          <tr>
+            <td style="padding:18px 24px;"><span class="pill pill--blue">TIER 2 · WARM-ISH</span></td>
+            <td style="padding:18px 24px;">Acquaintances. Gym contacts. Neighbours. Ex-colleagues. People in WhatsApp groups you're already in.</td>
+            <td style="padding:18px 24px;">Medium</td>
+            <td style="padding:18px 24px;" class="num"><strong>1 in 10</strong> to 1 in 15</td>
+          </tr>
+          <tr>
+            <td style="padding:18px 24px;"><span class="pill pill--ghost">TIER 3 · COLD</span></td>
+            <td style="padding:18px 24px;">Strangers in Facebook groups, Reddit, broader expat communities.</td>
+            <td style="padding:18px 24px;">Higher (volume)</td>
+            <td style="padding:18px 24px;" class="num"><strong>1 in 30</strong> to 1 in 50</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-sm mb-32">Start with Tier 1. Always. Tier 1 conversations teach you what works — by Tier 3 you'll know which lines land.</p>
+
+    <div class="grid grid-2 mb-24">
+      <div class="card">
+        <h4 class="mini-title">Who responds well in the UAE</h4>
+        <ul class="bullets text-sm">
+          <li>New arrivals — want to learn how things work here</li>
+          <li>People between/changing jobs — want extra income</li>
+          <li>Parents — want kids to know UAE basics + side income</li>
+          <li>Students and recent graduates — need both</li>
+          <li>People who post about side hustles or freelancing</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left:3px solid #A8344A;">
+        <h4 class="mini-title" style="color:#A8344A;">Who NOT to message first</h4>
+        <ul class="bullets text-sm">
+          <li>Your boss or senior management at your job</li>
+          <li>Anyone you're trying to impress professionally</li>
+          <li>People who'll judge you for asking</li>
+          <li>People going through a hard time financially</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="callout-label">The rule</span>
+      <p>Start where the stakes are low. If a Tier 1 contact says no, you'll laugh about it next week. If your boss says no, it's awkward for months.</p>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">08</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 9-10 — SECTION 6: WHERE TO SHARE
+     ============================================================ -->
+<section class="page" data-screen-label="09 Where to share — A">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <pattern id="dotgrid" x="0" y="0" width="18" height="18" patternUnits="userSpaceOnUse">
+        <circle cx="2" cy="2" r="0.7" fill="#0A1628" fill-opacity="0.08"/>
+      </pattern>
+      <rect width="595" height="842" fill="url(#dotgrid)"/>
+    
+      <rect width="595" height="842" fill="url(#mesh-gold-tr)"/>
+      <rect width="595" height="842" fill="url(#mesh-blue-bl)"/>
+      
+      <g transform="translate(0 712) scale(-1 1) translate(-600 0)" color="#1E5BFF" opacity="0.16">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow">Section 06</span>
+      <h1 class="section-title">Where to share</h1>
+      <p class="deck">Pick 2–3 channels. Stick with them. Done.</p>
+      <div class="glow glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="card mb-24">
+      <div class="flex-row mb-16" style="justify-content:space-between;">
+        <div>
+          <span class="pill pill--blue">CHANNEL 1</span>
+          <h3 class="block-title mt-8" style="margin-bottom:6px;">WhatsApp groups — your best channel</h3>
+        </div>
+        <span class="pill pill--gold">HIGHEST CONVERSION</span>
+      </div>
+      <div class="grid grid-2" style="grid-template-columns:1fr 1fr;gap:28px;">
+        <div>
+          <p class="text-sm"><strong>Where:</strong> family groups, nationality-based groups (Indian, Filipino, Pakistani, Arab, Egyptian, Nigerian expats), neighbourhood groups, school parent groups, hobby groups (football, hiking, book clubs).</p>
+          <p class="text-sm"><strong>How:</strong> Don't paste your link as a first message. Be a person first. Wait for a relevant moment (visas, jobs, money) — or post a short personal share. Never share the same message in 5 groups in one day.</p>
+        </div>
+        <div>
+          <div class="text-micro mb-8">Sample group post</div>
+          <div class="chat">
+            <div class="bubble bubble--out">Quick share for anyone interested — there's a UAE platform called Tutorii where you earn AED 38/month per friend you refer.<span class="ts">11:18</span></div>
+            <div class="bubble bubble--out">It's AED 95/month for the platform itself (courses on visa rules, workers' rights, money, jobs), but 3 referrals covers your subscription. Above that, you earn.<span class="ts">11:18</span></div>
+            <div class="bubble bubble--out">Drop me a DM if you want my link. I get 40% commission if you sign up through me — wanted to be upfront. Anyone curious?<span class="ts">11:18</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flex-row mb-12">
+        <span class="pill pill--blue">CHANNEL 2</span>
+        <h3 class="block-title" style="margin:0;">Facebook groups</h3>
+      </div>
+      <p class="text-sm" style="margin-bottom:6px;"><strong>Where:</strong> "Indians in Dubai", "Filipinos in Abu Dhabi" (search nationality + city), Mums groups, Jobs groups, "New to Dubai" type groups.</p>
+      <p class="text-sm">Read the group rules first — many ban referral links. If a group bans links, post a useful comment and offer the link in DM.</p>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">09</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<section class="page" data-screen-label="10 Where to share — B">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <pattern id="dotgrid2" x="0" y="0" width="18" height="18" patternUnits="userSpaceOnUse">
+        <circle cx="2" cy="2" r="0.7" fill="#0A1628" fill-opacity="0.08"/>
+      </pattern>
+      <rect width="595" height="842" fill="url(#dotgrid2)"/>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      
+      <g transform="translate(0 712)" color="#1E5BFF" opacity="0.16">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow">Section 06 · continued</span>
+      <h2 class="section-title">More channels — tighter plays</h2>
+      <div class="glow glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="card mb-12">
+      <div class="flex-row mb-8"><span class="pill pill--blue">CHANNEL 3</span><h4 class="mini-title" style="margin:0;">Instagram</h4></div>
+      <p class="text-sm" style="margin:0;">Works if you have UAE followers. Story shares about specific lessons (visa runs, end-of-service gratuity), posts with "DM me" close. Hashtags: #DubaiExpats #LifeInDubai #UAEExpats #DubaiJobs.</p>
+    </div>
+    <div class="card mb-12">
+      <div class="flex-row mb-8"><span class="pill pill--blue">CHANNEL 4</span><h4 class="mini-title" style="margin:0;">Reddit</h4></div>
+      <p class="text-sm" style="margin:0;">r/dubai, r/abudhabi, r/UAE, r/sharjah ban referral links — posting one will get you banned. Answer questions helpfully (visa rules, end-of-service, jobs), mention Tutorii in passing without a link. If anyone DMs you, that's where the link goes.</p>
+    </div>
+    <div class="card mb-12">
+      <div class="flex-row mb-8"><span class="pill pill--blue">CHANNEL 5</span><h4 class="mini-title" style="margin:0;">In person</h4></div>
+      <p class="text-sm" style="margin:0;">Often the highest-converting channel — trust is already there. Gym between sets, school gates, weekend brunches, building lobbies. Don't pitch. Mention what you do. If they ask, send the link by WhatsApp afterwards — much higher follow-up rate than handing over a link in person.</p>
+    </div>
+    <div class="card mb-12">
+      <div class="flex-row mb-8"><span class="pill pill--blue">CHANNEL 6</span><h4 class="mini-title" style="margin:0;">LinkedIn</h4></div>
+      <p class="text-sm" style="margin:0;">Use carefully — can hurt your professional reputation. Don't DM strangers your link. Do post occasionally about UAE topics (workers' rights, visa rules) and mention you're working with Tutorii at the bottom. Connections who reach out are the warm ones to follow up with.</p>
+    </div>
+
+    <div class="callout">
+      <span class="callout-label">Pick 2 or 3 channels. Not all of them.</span>
+      <p>The people who do well pick 2 or 3 channels and post in them consistently for weeks. People who fail try 8 channels for 3 days each, then quit. Consistency beats spread.</p>
+    </div>
+
+    <!-- What to post — device mockups -->
+    <div class="mt-12">
+      <span class="eyebrow">What to post</span>
+      <h3 class="block-title" style="margin-bottom:0;font-size:1.25rem;">Three formats that work — adapt to your platform.</h3>
+    </div>
+
+    <div class="flex p10-mocks" style="justify-content:center;align-items:flex-end;gap:14px;margin-top:8px;">
+      <!-- Story-style mockup -->
+      <div class="iphone" style="transform:rotate(-5deg);">
+        <div class="iphone-island"></div>
+        <div class="iphone-screen" style="background:linear-gradient(160deg,#1E5BFF 0%, #4D82FF 50%, #D4A574 100%);">
+          <div style="position:absolute;top:18px;left:8px;right:8px;display:flex;gap:3px;">
+            <div style="flex:1;height:2px;background:rgba(255,255,255,0.85);border-radius:2px;"></div>
+            <div style="flex:1;height:2px;background:rgba(255,255,255,0.4);border-radius:2px;"></div>
+            <div style="flex:1;height:2px;background:rgba(255,255,255,0.4);border-radius:2px;"></div>
+          </div>
+          <div style="position:absolute;top:30px;left:8px;display:flex;align-items:center;gap:6px;">
+            <div style="width:18px;height:18px;border-radius:50%;background:#fff;border:1.5px solid #fff;"></div>
+            <div style="font-size:9px;color:#fff;font-weight:600;">@your_username</div>
+          </div>
+          <div style="position:absolute;top:50%;left:10px;right:10px;transform:translateY(-50%);text-align:center;">
+            <div style="color:#fff;font-size:14px;font-weight:800;line-height:1.15;letter-spacing:-0.5px;">Earn AED 38/mo per referral</div>
+            <div style="margin-top:14px;display:inline-block;background:rgba(255,255,255,0.95);color:#0A1628;padding:6px 10px;border-radius:8px;font-size:9px;font-weight:600;">🔗 tutorii.com/ref/...</div>
+          </div>
+          <div style="position:absolute;bottom:14px;left:10px;right:10px;color:#fff;font-size:8px;opacity:0.85;">Tap to learn more →</div>
+        </div>
+      </div>
+
+      <!-- Chat / status mockup -->
+      <div class="iphone">
+        <div class="iphone-island"></div>
+        <div class="iphone-screen" style="background:#ECEFF4;">
+          <div style="position:absolute;top:30px;left:0;right:0;background:#3A6B5C;padding:8px 10px;color:#fff;font-size:9px;font-weight:600;">Tutorii UAE 🇦🇪</div>
+          <div style="position:absolute;top:62px;left:8px;right:8px;display:flex;flex-direction:column;gap:6px;">
+            <div style="background:#DCEFD1;padding:6px 8px;border-radius:8px;font-size:8px;color:#0A1628;align-self:flex-end;max-width:85%;">3 referrals = free 💸<div style="font-size:6px;color:#7A8AA6;text-align:right;">11:23</div></div>
+            <div style="background:#fff;padding:6px;border-radius:8px;align-self:flex-start;width:90%;border:1px solid #E4E9F2;">
+              <div style="height:36px;border-radius:4px;background:linear-gradient(135deg,#0A1628,#1E5BFF);display:flex;align-items:center;justify-content:center;color:#D4A574;font-size:8px;font-weight:700;">AED 38 × 3 = FREE</div>
+              <div style="font-size:7px;font-weight:700;color:#0A1628;margin-top:4px;">tutorii.com</div>
+              <div style="font-size:6px;color:#7A8AA6;">Earn With Tutorii — UAE</div>
+            </div>
+            <div style="background:#DCEFD1;padding:6px 8px;border-radius:8px;font-size:8px;color:#0A1628;align-self:flex-end;max-width:85%;">DM me for my link 👇<div style="font-size:6px;color:#7A8AA6;text-align:right;">11:24</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vertical video mockup -->
+      <div class="iphone" style="transform:rotate(5deg);">
+        <div class="iphone-island"></div>
+        <div class="iphone-screen" style="background:linear-gradient(180deg,#0A1628 0%,#1F2D44 100%);">
+          <div style="position:absolute;top:50%;left:8px;right:32px;transform:translateY(-50%);color:#fff;">
+            <div style="font-size:13px;font-weight:800;line-height:1.15;letter-spacing:-0.4px;">How I earn AED 1,900/mo passively in Dubai</div>
+            <div style="font-size:8px;color:#D4A574;margin-top:8px;font-weight:600;">↳ Link in bio</div>
+          </div>
+          <!-- engagement icons -->
+          <div style="position:absolute;right:6px;bottom:42px;display:flex;flex-direction:column;gap:10px;align-items:center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M21 12a8 8 0 1 1-3-6.2L21 4l-1 4-4 1"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v14"/></svg>
+          </div>
+          <div style="position:absolute;bottom:8px;left:8px;right:8px;font-size:7px;color:#9DB4DE;">@your_username · #DubaiExpats #UAEjobs</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">10</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+<!-- ============================================================
+     PAGE 11 — SECTION 7 INTRO + SCRIPT 1A
+     ============================================================ -->
+<section class="page page--cream" data-screen-label="11 Scripts intro + 1A">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect x="14" y="14" width="567" height="814" fill="none" stroke="#D4A574" stroke-opacity="0.25" stroke-width="0.5"/>
+      <rect x="22" y="22" width="551" height="798" fill="none" stroke="#D4A574" stroke-opacity="0.12" stroke-width="0.5"/>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      
+      <g transform="translate(0 712)" color="#8B6332" opacity="0.18">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow eyebrow--gold">Section 07</span>
+      <h1 class="section-title">Word-for-word scripts</h1>
+      <p class="deck">Copy. Paste. Send. End with a question.</p>
+      <div class="glow glow--gold glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <p class="text-sm mb-32">Every script follows the same shape — lead with what's in it for them, give the product context, frame the price so it disappears, end with a question. The 3 most important scripts (1, 6, 8) include conversation maps. The others are just bubbles.</p>
+
+    <div class="card" style="background:#fff;">
+      <div class="flex-row mb-16" style="justify-content:space-between;">
+        <div>
+          <span class="pill pill--blue">SCRIPT 01 · OPENING</span>
+          <h3 class="block-title mt-8" style="margin-bottom:4px;">Opening to a close friend</h3>
+          <p class="text-sm muted" style="margin:0;">For close friends. Three lines: hook, frame, ask.</p>
+        </div>
+        <span class="pill pill--gold">VERSION A — DIRECT</span>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1fr 1.1fr;gap:28px;align-items:start;">
+        <div class="flow">
+          <div class="flow-node flow-node--agent">
+            <span class="flow-label">AGENT</span>
+            <div class="flow-node-text">Brief opener: 'found something I think you should know'</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent">
+            <span class="flow-label">AGENT</span>
+            <div class="flow-node-text">Earning hook: AED 38/month per friend</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent">
+            <span class="flow-label">AGENT</span>
+            <div class="flow-node-text">Price reframe: AED 95/month, 3 covers it</div>
+          </div>
+          <div class="flow-arrow flow-arrow--gold"></div>
+          <div class="flow-node flow-node--close">
+            <span class="flow-label">CLOSE</span>
+            <div class="flow-node-text">Disclose 40% · Ask: 'Want a look?'</div>
+          </div>
+        </div>
+        <div class="chat">
+          <div class="chat-header"><span class="dot"></span><span>You · to [Name]</span></div>
+          <div class="bubble bubble--out">Hey [Name] — found something I think you should know about.<span class="ts">10:42</span></div>
+          <div class="bubble bubble--out">There's a UAE platform called Tutorii where you earn AED 38/month for every friend who joins through your link. AED 95/month for the subscription, but 3 referrals covers it.<span class="ts">10:42</span></div>
+          <div class="bubble bubble--out">I get 40% commission if you sign up through me — wanted you to know. Want a look?<span class="ts">10:42</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">11</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 12 — SCRIPTS 1B, 2, 3
+     ============================================================ -->
+<section class="page page--cream" data-screen-label="12 Scripts 1B-2-3">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect x="14" y="14" width="567" height="814" fill="none" stroke="#D4A574" stroke-opacity="0.25" stroke-width="0.5"/>
+      <rect x="22" y="22" width="551" height="798" fill="none" stroke="#D4A574" stroke-opacity="0.12" stroke-width="0.5"/>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      
+      <g transform="translate(0 712) scale(-1 1) translate(-600 0)" color="#8B6332" opacity="0.18">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow eyebrow--gold">Section 07 · continued</span>
+      <h2 class="section-title">More openers</h2>
+      <div class="glow glow--gold glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="card mb-16">
+      <div class="flex-row mb-12" style="justify-content:space-between;">
+        <div>
+          <span class="pill pill--blue">SCRIPT 01</span>
+          <h4 class="mini-title mt-8" style="margin-bottom:2px;">Close friend (softer version)</h4>
+          <p class="text-xs muted" style="margin:0;">Same structure, softer entrance. Better when the relationship hasn't been recently active.</p>
+        </div>
+        <span class="pill pill--ghost">VERSION B — SOFTER</span>
+      </div>
+      <div class="chat">
+        <div class="bubble bubble--out">Hey [Name], hope you're good. Quick one.<span class="ts">10:42</span></div>
+        <div class="bubble bubble--out">Been using a UAE platform called Tutorii — courses on visa rules, workers' rights, money basics — and what's actually interesting is the referral side. They pay AED 38/month per friend who joins through your link. 3 referrals covers the AED 95 subscription, anything above earns.<span class="ts">10:42</span></div>
+        <div class="bubble bubble--out">I'd get 40% commission if you sign up through me, just being open about it. Worth a 2-minute look?<span class="ts">10:42</span></div>
+      </div>
+    </div>
+
+    <div class="card mb-16">
+      <div class="flex-row mb-12" style="justify-content:space-between;">
+        <div>
+          <span class="pill pill--blue">SCRIPT 02</span>
+          <h4 class="mini-title mt-8" style="margin-bottom:2px;">Opening to an acquaintance</h4>
+          <p class="text-xs muted" style="margin:0;">More setup. Establish you thought of them specifically.</p>
+        </div>
+      </div>
+      <div class="chat">
+        <div class="bubble bubble--out">Hi [Name] — hope you're well. Wanted to share something that might be useful.<span class="ts">14:08</span></div>
+        <div class="bubble bubble--out">There's a UAE platform called Tutorii that pays AED 38/month for every friend who joins through your link. The platform itself is AED 95/month — courses on visa rules, workers' rights, finding jobs, money — but 3 referrals covers your subscription, and above that you earn.<span class="ts">14:08</span></div>
+        <div class="bubble bubble--out">I'm reaching out to people I know who'd actually use the courses. I get 40% commission if you sign up through me. Want me to send the link?<span class="ts">14:08</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flex-row mb-12" style="justify-content:space-between;">
+        <div>
+          <span class="pill pill--blue">SCRIPT 03</span>
+          <h4 class="mini-title mt-8" style="margin-bottom:2px;">WhatsApp group post</h4>
+          <p class="text-xs muted" style="margin:0;">Cold-ish. Funnels interest into DMs.</p>
+        </div>
+      </div>
+      <div class="chat">
+        <div class="bubble bubble--out">Sharing something for anyone interested — there's a UAE platform called Tutorii where you earn AED 38/month for every friend who joins through your link.<span class="ts">19:30</span></div>
+        <div class="bubble bubble--out">Subscription is AED 95/month (courses on visa rules, workers' rights, money, jobs), but 3 referrals covers it. Above that, you earn.<span class="ts">19:30</span></div>
+        <div class="bubble bubble--out">DM me if you want my link. I get 40% commission if you sign up through me — being upfront. Anyone curious?<span class="ts">19:30</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">12</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 13 — SCRIPTS 4, 5, 7
+     ============================================================ -->
+<section class="page page--cream" data-screen-label="13 Scripts 4-5-7">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect x="14" y="14" width="567" height="814" fill="none" stroke="#D4A574" stroke-opacity="0.25" stroke-width="0.5"/>
+      <rect x="22" y="22" width="551" height="798" fill="none" stroke="#D4A574" stroke-opacity="0.12" stroke-width="0.5"/>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      
+      <g transform="translate(0 712)" color="#8B6332" opacity="0.18">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow eyebrow--gold">Section 07 · follow-ups &amp; the link</span>
+      <h2 class="section-title">Follow-up &amp; sharing</h2>
+      <div class="glow glow--gold glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="card mb-16">
+      <div class="flex-row mb-12" style="justify-content:space-between;">
+        <div>
+          <span class="pill pill--blue">SCRIPT 04</span>
+          <h4 class="mini-title mt-8" style="margin-bottom:2px;">24-hour follow-up</h4>
+          <p class="text-xs muted" style="margin:0;">One line, one question. Don't re-explain.</p>
+        </div>
+      </div>
+      <div class="chat">
+        <div class="bubble bubble--out">Hey — bumping this in case it got buried. Worth a quick look?<span class="ts">10:42 +1d</span></div>
+      </div>
+    </div>
+
+    <div class="card mb-16">
+      <div class="flex-row mb-12" style="justify-content:space-between;">
+        <div>
+          <span class="pill pill--blue">SCRIPT 05</span>
+          <h4 class="mini-title mt-8" style="margin-bottom:2px;">3–4 day follow-up</h4>
+          <p class="text-xs muted" style="margin:0;">Re-prompts the value. Binary close.</p>
+        </div>
+      </div>
+      <div class="chat">
+        <div class="bubble bubble--out">Hey [Name] — circling back once. Quick recap: AED 38/month per friend who joins through your link, 3 referrals covers the AED 95 subscription. Most people who look at it take about 2 minutes to decide.<span class="ts">10:42 +4d</span></div>
+        <div class="bubble bubble--out">Want me to send the link, or is now not the right time?<span class="ts">10:42 +4d</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flex-row mb-12" style="justify-content:space-between;">
+        <div>
+          <span class="pill pill--blue">SCRIPT 07</span>
+          <h4 class="mini-title mt-8" style="margin-bottom:2px;">Sharing the link</h4>
+          <p class="text-xs muted" style="margin:0;">When they say yes — give the link plus 2 lines that orient them.</p>
+        </div>
+        <span class="pill pill--gold">WITH CONTEXT (PREFERRED)</span>
+      </div>
+      <div class="chat mb-16">
+        <div class="bubble bubble--out">Here you go: [your link]<span class="ts">11:08</span></div>
+        <div class="bubble bubble--out">When you sign up, the visa rules and workers' rights courses are the most useful to start with. Once you're in, your own referral link is at the top of your dashboard — that's the one to share with friends. Need anything?<span class="ts">11:08</span></div>
+      </div>
+      <div class="text-micro mb-8">Version B — without context (when they just asked for the link)</div>
+      <div class="chat">
+        <div class="bubble bubble--out">[your link] — give me a shout if any questions.<span class="ts">11:08</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">13</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 14 — SCRIPT 6 (FULL with flow diagram)
+     ============================================================ -->
+<section class="page page--cream" data-screen-label="14 Script 6">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect x="14" y="14" width="567" height="814" fill="none" stroke="#D4A574" stroke-opacity="0.25" stroke-width="0.5"/>
+      <rect x="22" y="22" width="551" height="798" fill="none" stroke="#D4A574" stroke-opacity="0.12" stroke-width="0.5"/>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      
+      <g transform="translate(0 712) scale(-1 1) translate(-600 0)" color="#8B6332" opacity="0.18">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow eyebrow--gold">Section 07 · the most important script</span>
+      <h2 class="section-title">"What is it actually?"</h2>
+      <div class="glow glow--gold glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="card">
+      <div class="flex-row mb-16" style="justify-content:space-between;">
+        <div>
+          <span class="pill pill--blue">SCRIPT 06</span>
+          <h3 class="block-title mt-8" style="margin-bottom:4px;">When they ask "what is it actually?"</h3>
+          <p class="text-sm muted" style="margin:0;">The most important script. They're curious. Don't blow it with a wall of text.</p>
+        </div>
+        <span class="pill pill--dark">CRITICAL</span>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1fr 1.05fr;gap:28px;align-items:start;">
+        <div class="flow">
+          <div class="flow-node flow-node--prospect">
+            <span class="flow-label">PROSPECT</span>
+            <div class="flow-node-text">Asks: 'what is it actually?'</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent">
+            <span class="flow-label">AGENT</span>
+            <div class="flow-node-text">Set structure: 'two parts'</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent">
+            <span class="flow-label">AGENT</span>
+            <div class="flow-node-text">Part 1 — platform: courses + AI tutor + AED 95</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent">
+            <span class="flow-label">AGENT</span>
+            <div class="flow-node-text">Part 2 — referral side: AED 38/month per friend</div>
+          </div>
+          <div class="flow-arrow flow-arrow--gold"></div>
+          <div class="flow-node flow-node--close">
+            <span class="flow-label">CLOSE</span>
+            <div class="flow-node-text">Close: 'Want me to send the link?'</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="chat">
+            <div class="bubble bubble--in">what is it actually?<span class="ts">11:04</span></div>
+            <div class="bubble bubble--out">Two parts.<span class="ts">11:05</span></div>
+            <div class="bubble bubble--out">First, the platform: courses on the practical UAE stuff — visa rules, workers' rights, end-of-service gratuity, finding better jobs, money management. Plus a 24/7 AI tutor for one-off questions. AED 95/month.<span class="ts">11:05</span></div>
+            <div class="bubble bubble--out">Second, the referral side (this is what makes it interesting): when you subscribe, you get your own referral link. Every friend who joins through it pays you AED 38/month, for as long as they stay. So 3 friends and your subscription is covered. After that, every friend = AED 38/month profit. No cap.<span class="ts">11:05</span></div>
+            <div class="bubble bubble--out">Want me to send the link?<span class="ts">11:05</span></div>
+          </div>
+          <p class="fr-quote text-sm mt-16" style="color:#5C6B85;"><em>Why this works:</em> Always end with a question — gives them something easy to reply to.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">14</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 15 — SCRIPT 8 (FULL with flow diagram)
+     ============================================================ -->
+<section class="page page--cream" data-screen-label="15 Script 8">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect x="14" y="14" width="567" height="814" fill="none" stroke="#D4A574" stroke-opacity="0.25" stroke-width="0.5"/>
+      <rect x="22" y="22" width="551" height="798" fill="none" stroke="#D4A574" stroke-opacity="0.12" stroke-width="0.5"/>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      
+      <g transform="translate(0 712)" color="#8B6332" opacity="0.18">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow eyebrow--gold">Section 07 · the activation script</span>
+      <h2 class="section-title">After they subscribe</h2>
+      <div class="glow glow--gold glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <p class="text-sm mb-24" style="max-width:62ch;">This next script is where most people lose money. They get a customer, say thanks, and move on. The customer's link sits unused — and every friend they don't refer is AED 4.75/month you're missing as their indirect referral.</p>
+
+    <div class="card">
+      <div class="flex-row mb-16" style="justify-content:space-between;">
+        <div>
+          <span class="pill pill--blue">SCRIPT 08</span>
+          <h3 class="block-title mt-8" style="margin-bottom:4px;">After they subscribe — activate them</h3>
+          <p class="text-sm muted" style="margin:0;">Convert a passive subscriber into an active one. Ask in the first message after they join.</p>
+        </div>
+        <span class="pill pill--gold">ACTIVATION</span>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1fr 1.05fr;gap:28px;align-items:start;">
+        <div class="flow">
+          <div class="flow-node flow-node--agent">
+            <span class="flow-label">AGENT</span>
+            <div class="flow-node-text">Welcome them · keep tone genuine</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent">
+            <span class="flow-label">AGENT</span>
+            <div class="flow-node-text">Tip 1: which courses to start with</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent">
+            <span class="flow-label">AGENT</span>
+            <div class="flow-node-text">Tip 2: their own referral link · same maths applies</div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent">
+            <span class="flow-label">AGENT</span>
+            <div class="flow-node-text">Concrete first move: think of 3 people</div>
+          </div>
+          <div class="flow-arrow flow-arrow--gold"></div>
+          <div class="flow-node flow-node--close">
+            <span class="flow-label">CLOSE</span>
+            <div class="flow-node-text">Offer to help write the message</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="chat">
+            <div class="bubble bubble--out">Welcome to Tutorii [Name]! Two quick tips while it's fresh.<span class="ts">08:30 +1d</span></div>
+            <div class="bubble bubble--out">1) The visa rules and workers' rights courses are the best place to start — most useful for most people.<span class="ts">08:30</span></div>
+            <div class="bubble bubble--out">2) Your own referral link is at the top of your dashboard. The maths works the same way for you — 3 friends covers your AED 95, anything above is profit.<span class="ts">08:30</span></div>
+            <div class="bubble bubble--out">Easiest first move: think of 3 people you know who'd find the courses useful. Want me to help you write the message to send them?<span class="ts">08:30</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">15</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+<!-- ============================================================
+     PAGE 16 — SECTION 8 INTRO + OBJECTION 1 (Scam)
+     ============================================================ -->
+<section class="page" data-screen-label="16 Objection 1 — Scam">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g stroke="#0A1628" stroke-opacity="0.04" stroke-width="0.5">
+        <line x1="0" y1="120" x2="595" y2="120"/><line x1="0" y1="240" x2="595" y2="240"/>
+        <line x1="0" y1="360" x2="595" y2="360"/><line x1="0" y1="480" x2="595" y2="480"/>
+        <line x1="0" y1="600" x2="595" y2="600"/><line x1="0" y1="720" x2="595" y2="720"/>
+        <line x1="120" y1="0" x2="120" y2="842"/><line x1="240" y1="0" x2="240" y2="842"/>
+        <line x1="360" y1="0" x2="360" y2="842"/><line x1="480" y1="0" x2="480" y2="842"/>
+      </g>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-bl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-tr)"/>
+      
+      <g transform="translate(0 712)" color="#0A1628" opacity="0.1">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow">Section 08</span>
+      <h1 class="section-title">Handling objections</h1>
+      <p class="deck">Learn these 3 answers. They cover 80%.</p>
+      <div class="glow glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="card">
+      <div class="flex-row mb-16" style="justify-content:space-between;">
+        <div>
+          <span class="pill pill--dark">OBJECTION 01</span>
+          <h3 class="block-title mt-8" style="margin-bottom:0;">"Is this a scam?"</h3>
+        </div>
+      </div>
+      <div class="grid" style="grid-template-columns:1fr 1.1fr;gap:28px;align-items:start;">
+        <div class="flow">
+          <div class="flow-node flow-node--prospect"><span class="flow-label">PROSPECT</span><div class="flow-node-text">Asks: 'is this a scam?'</div></div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent"><span class="flow-label">AGENT</span><div class="flow-node-text">Validate: 'fair question'</div></div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent"><span class="flow-label">AGENT</span><div class="flow-node-text">Concrete proof + payment legitimacy (MamoPay)</div></div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent"><span class="flow-label">AGENT</span><div class="flow-node-text">Address the 'too good' feeling: only 2 layers</div></div>
+          <div class="flow-arrow flow-arrow--gold"></div>
+          <div class="flow-node flow-node--close"><span class="flow-label">CLOSE</span><div class="flow-node-text">Invite verification · Ask the question</div></div>
+        </div>
+        <div>
+          <div class="chat">
+            <div class="bubble bubble--in">Is this a scam?<span class="ts">15:11</span></div>
+            <div class="bubble bubble--out">Fair question. It's not. Tutorii is a real education platform — actual courses, an AI tutor, a UAE company behind it. Payouts go through MamoPay, which is a UAE-licensed payment company.<span class="ts">15:12</span></div>
+            <div class="bubble bubble--out">The reason it sounds too good is the referral side. But there are only two layers — your direct referrals, and one layer below them. Nothing deeper. Real product, transparent payouts. Have a look at www.tutorii.com — does it look legit to you?<span class="ts">15:12</span></div>
+          </div>
+          <p class="fr-quote text-sm mt-16" style="color:#5C6B85;"><em>Why this works:</em> Acknowledge the question, give concrete things they can verify, end with a question that pulls them into checking.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">16</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 17 — OBJECTION 2 (Price) + OBJECTION 3 (Commission)
+     ============================================================ -->
+<section class="page" data-screen-label="17 Objections 2-3">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g stroke="#0A1628" stroke-opacity="0.04" stroke-width="0.5">
+        <line x1="0" y1="120" x2="595" y2="120"/><line x1="0" y1="240" x2="595" y2="240"/>
+        <line x1="0" y1="360" x2="595" y2="360"/><line x1="0" y1="480" x2="595" y2="480"/>
+        <line x1="0" y1="600" x2="595" y2="600"/><line x1="0" y1="720" x2="595" y2="720"/>
+        <line x1="120" y1="0" x2="120" y2="842"/><line x1="240" y1="0" x2="240" y2="842"/>
+        <line x1="360" y1="0" x2="360" y2="842"/><line x1="480" y1="0" x2="480" y2="842"/>
+      </g>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      
+      <g transform="translate(0 712)" color="#0A1628" opacity="0.1">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <div class="card mb-24">
+      <div class="flex-row mb-16" style="justify-content:space-between;">
+        <div>
+          <span class="pill pill--dark">OBJECTION 02</span>
+          <h4 class="mini-title mt-8" style="margin-bottom:0;font-size:1.15rem;">"AED 95/month is too expensive."</h4>
+        </div>
+      </div>
+      <div class="grid" style="grid-template-columns:1fr 1.1fr;gap:28px;align-items:start;">
+        <div class="flow">
+          <div class="flow-node flow-node--prospect"><span class="flow-label">PROSPECT</span><div class="flow-node-text">Says: 'too expensive'</div></div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent"><span class="flow-label">AGENT</span><div class="flow-node-text">Validate: 'I hear you'</div></div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent"><span class="flow-label">AGENT</span><div class="flow-node-text">Reframe: AED 95 is sticker, not real cost</div></div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent"><span class="flow-label">AGENT</span><div class="flow-node-text">Maths: 3 referrals = AED 114/month back</div></div>
+          <div class="flow-arrow flow-arrow--gold"></div>
+          <div class="flow-node flow-node--close"><span class="flow-label">CLOSE</span><div class="flow-node-text">Test the bar: 'Can you think of 3 people?'</div></div>
+        </div>
+        <div>
+          <div class="chat">
+            <div class="bubble bubble--in">AED 95/month is too expensive.<span class="ts">16:02</span></div>
+            <div class="bubble bubble--out">I hear you. Here's the way to think about it: AED 95 is the sticker price, but if you refer 3 friends who join, you get AED 114/month back. So your real cost is zero — actually you're AED 19 ahead.<span class="ts">16:03</span></div>
+            <div class="bubble bubble--out">Can you think of 3 people who'd find the courses useful?<span class="ts">16:03</span></div>
+          </div>
+          <p class="fr-quote text-sm mt-16" style="color:#5C6B85;"><em>Why this works:</em> Don't argue with the price — reframe it as temporary, then test whether they can clear the bar.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flex-row mb-16" style="justify-content:space-between;">
+        <div>
+          <span class="pill pill--dark">OBJECTION 03</span>
+          <h4 class="mini-title mt-8" style="margin-bottom:0;font-size:1.15rem;">"Are you getting commission?"</h4>
+        </div>
+      </div>
+      <div class="grid" style="grid-template-columns:1fr 1.1fr;gap:28px;align-items:start;">
+        <div class="flow">
+          <div class="flow-node flow-node--prospect"><span class="flow-label">PROSPECT</span><div class="flow-node-text">Asks: 'are you getting commission?'</div></div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent"><span class="flow-label">AGENT</span><div class="flow-node-text">Confirm immediately: 'Yes — 40%'</div></div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent"><span class="flow-label">AGENT</span><div class="flow-node-text">Specifics: AED 38/month, recurring</div></div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node flow-node--agent"><span class="flow-label">AGENT</span><div class="flow-node-text">Frame as transparency</div></div>
+          <div class="flow-arrow flow-arrow--gold"></div>
+          <div class="flow-node flow-node--close"><span class="flow-label">CLOSE</span><div class="flow-node-text">Equalise: same applies to them</div></div>
+        </div>
+        <div>
+          <div class="chat">
+            <div class="bubble bubble--in">Are you getting commission?<span class="ts">16:18</span></div>
+            <div class="bubble bubble--out">Yes — 40%. AED 38/month for as long as you stay subscribed. Wanted to be upfront so you knew. The exact same commission applies to you when you refer people. Does that change anything for you?<span class="ts">16:19</span></div>
+          </div>
+          <p class="fr-quote text-sm mt-16" style="color:#5C6B85;"><em>Why this works:</em> Honesty wins. Trying to dodge this kills the deal. Owning it builds trust.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">17</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- PAGE 18 (MLM objection) removed per request -->
+<!-- Page 18 (MLM / pyramid scheme objection) removed per request -->
+
+<!-- ============================================================
+     PAGE 19 — COMPACT OBJECTIONS (4)
+     ============================================================ -->
+<section class="page" data-screen-label="18 Compact objections">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g stroke="#0A1628" stroke-opacity="0.04" stroke-width="0.5">
+        <line x1="0" y1="120" x2="595" y2="120"/><line x1="0" y1="240" x2="595" y2="240"/>
+        <line x1="0" y1="360" x2="595" y2="360"/><line x1="0" y1="480" x2="595" y2="480"/>
+        <line x1="0" y1="600" x2="595" y2="600"/>
+        <line x1="120" y1="0" x2="120" y2="842"/><line x1="240" y1="0" x2="240" y2="842"/>
+        <line x1="360" y1="0" x2="360" y2="842"/><line x1="480" y1="0" x2="480" y2="842"/>
+      </g>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-bl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-tr)"/>
+      
+      <g transform="translate(0 712)" color="#0A1628" opacity="0.1">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow">Section 08 · compact objections</span>
+      <h2 class="section-title">Four more, faster</h2>
+      <div class="glow glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="grid grid-2">
+      <div class="card card--tight">
+        <h4 class="mini-title">Past burn</h4>
+        <p class="text-xs muted" style="margin:0 0 10px 0;">"I tried something like this before and lost money."</p>
+        <div class="chat">
+          <div class="bubble bubble--out" style="font-size:0.78rem;">Totally understand. Most schemes that go wrong need you to buy stock or pay a joining fee upfront — sometimes thousands of dirhams of products you then have to sell. Tutorii has nothing like that. No inventory. No joining fee. No upfront cost beyond AED 95/month, which you can cancel any time.<span class="ts">—</span></div>
+          <div class="bubble bubble--out" style="font-size:0.78rem;">The most you can ever lose here is one month's subscription. Worth a look on those terms?<span class="ts">—</span></div>
+        </div>
+      </div>
+
+      <div class="card card--tight">
+        <h4 class="mini-title">Information delay</h4>
+        <p class="text-xs muted" style="margin:0 0 10px 0;">"Send me more info first."</p>
+        <div class="chat">
+          <div class="bubble bubble--out" style="font-size:0.78rem;">Sure — easiest thing is to look at www.tutorii.com directly. The dashboard shows the courses, the referral page shows how the commission works.<span class="ts">—</span></div>
+          <div class="bubble bubble--out" style="font-size:0.78rem;">What's the main thing you want to know? I can answer it now and save you the time.<span class="ts">—</span></div>
+        </div>
+        <p class="fr-quote text-xs mt-12" style="color:#5C6B85;"><em>Why this works:</em> "Send me info" is often a polite delay. The follow-up question gets you the real objection.</p>
+      </div>
+
+      <div class="card card--tight">
+        <h4 class="mini-title">Stalling</h4>
+        <p class="text-xs muted" style="margin:0 0 10px 0;">"I need to think about it."</p>
+        <div class="chat">
+          <div class="bubble bubble--out" style="font-size:0.78rem;">Of course. Mind if I ask — what's the main thing you're weighing? Sometimes I can answer it in one message and save you the homework.<span class="ts">—</span></div>
+        </div>
+      </div>
+
+      <div class="card card--tight">
+        <h4 class="mini-title">Brand awareness</h4>
+        <p class="text-xs muted" style="margin:0 0 10px 0;">"Why haven't I heard of Tutorii before?"</p>
+        <div class="chat">
+          <div class="bubble bubble--out" style="font-size:0.78rem;">It's still fairly new and growing through word of mouth — that's part of why the referral commission is so high. They'd rather pay people like us 40% than spend it on Instagram ads. Means we get in early. Want a look?<span class="ts">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">18</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 20 — QUICK-REFERENCE TABLE PART 1
+     ============================================================ -->
+<section class="page page--mist" data-screen-label="19 Quick reference A">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      <g transform="translate(0 712) scale(0.99)" color="#1E5BFF" opacity="0.16">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow">Section 08 · quick reference</span>
+      <h2 class="section-title">Twenty more, in one column</h2>
+      <p class="deck">Quick answers. Skim before big chats.</p>
+      <div class="glow glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="card" style="padding:0;">
+      <table class="tbl" style="font-size:0.86rem;">
+        <thead><tr><th style="padding:14px 22px;width:34%;">Objection</th><th style="padding:14px 22px;">Short response</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:14px 22px;"><strong>"I don't have time for courses."</strong></td><td style="padding:14px 22px;">The courses are short — most lessons are 10 minutes. You don't need to do them to earn — the referral pays whether you study or not.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"What's the catch?"</strong></td><td style="padding:14px 22px;">No catch. The product is real, the commission is real. The only "catch" is you only earn if your referrals stay subscribed — pick people who'll actually use it.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"Can I see what's inside before paying?"</strong></td><td style="padding:14px 22px;">The course list is on www.tutorii.com — module titles and lesson breakdowns. Full content unlocks after subscribing.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"What if I cancel?"</strong></td><td style="padding:14px 22px;">Cancel any time from your dashboard. You won't be charged the next month. Withdraw any earnings before cancelling — anything below AED 50 is forfeited.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"I don't trust online platforms with my card."</strong></td><td style="padding:14px 22px;">Payment is through MamoPay, licensed by the UAE Central Bank. Tutorii never sees your card details.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"Is the content actually any good?"</strong></td><td style="padding:14px 22px;">Honest answer — visa rules and workers' rights modules are the most useful, money one is solid too. AI tutor is genuinely helpful for one-off questions.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"My friends won't be interested."</strong></td><td style="padding:14px 22px;">You'd be surprised who is. New arrivals, people changing jobs, parents, anyone who's mentioned wanting extra income — that's most people. Try 3 and see.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"I'm bad at sales."</strong></td><td style="padding:14px 22px;">You don't have to be a salesperson. Just send people the link with a note. The platform does the explaining. Most people who succeed never "sell" — they share.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"How do I know the company won't disappear?"</strong></td><td style="padding:14px 22px;">Tutorii is a registered UAE business. Payouts processed weekly through MamoPay (UAE Central Bank licensed). Subscription is month-to-month — your risk is one month at most.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"I don't have many friends here / I'm new to the UAE."</strong></td><td style="padding:14px 22px;">Then this might suit you. Referral link works on social media, in groups, in person. Plenty of people started with no UAE network and built one.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">19</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 21 — QUICK-REFERENCE TABLE PART 2
+     ============================================================ -->
+<section class="page page--mist" data-screen-label="20 Quick reference B">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="595" height="842" fill="url(#mesh-gold-tr)"/>
+      <rect width="595" height="842" fill="url(#mesh-blue-bl)"/>
+      <g transform="translate(0 712) scale(0.99) scale(-1 1) translate(-600 0)" color="#1E5BFF" opacity="0.16">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow">Section 08 · continued</span>
+      <h2 class="section-title">…ten more.</h2>
+      <div class="glow glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="card" style="padding:0;">
+      <table class="tbl" style="font-size:0.86rem;">
+        <thead><tr><th style="padding:14px 22px;width:34%;">Objection</th><th style="padding:14px 22px;">Short response</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:14px 22px;"><strong>"Can I just buy the courses without the referral thing?"</strong></td><td style="padding:14px 22px;">The referral side comes with every subscription — you can ignore it. Plenty of subscribers never refer anyone. But if you do, the maths starts working.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"What if my referral cancels?"</strong></td><td style="padding:14px 22px;">You stop earning from them that month. If they re-subscribe later, you keep credit — they're permanently linked to you. Pick people who'll actually use it.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"Do I have to pay tax on the earnings?"</strong></td><td style="padding:14px 22px;">UAE residents aren't subject to personal income tax on this. If you're tax-resident in another country, speak to a tax adviser. Tutorii doesn't withhold or issue tax documents.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"How long until I get paid?"</strong></td><td style="padding:14px 22px;">Payouts every Tuesday via bank transfer. Minimum AED 50 — anything below rolls to the next week. Funds usually arrive 1–3 business days after Tuesday.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"Will I be chasing my friends for money?"</strong></td><td style="padding:14px 22px;">No. Payments go through Tutorii directly — your friends pay AED 95/month to the platform, not to you. You never handle their money.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"What happens if I'm too busy that month?"</strong></td><td style="padding:14px 22px;">Nothing. There are no monthly minimums, no quotas, no penalties. Your existing referrals keep paying you whether you message anyone new or not.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"Is my data safe?"</strong></td><td style="padding:14px 22px;">Tutorii follows UAE data protection law. Card details handled by MamoPay, never stored by Tutorii. Personal data isn't sold to third parties.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"Does my referral need to finish the courses for me to earn?"</strong></td><td style="padding:14px 22px;">No. You earn the moment they subscribe and pay, whether they use the courses or not. You keep earning every month they stay subscribed.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"Can I refer my family? My spouse?"</strong></td><td style="padding:14px 22px;">Yes — anyone you know, as long as they're a real person with their own subscription. Self-referrals or fake accounts aren't allowed and will result in account termination.</td></tr>
+          <tr><td style="padding:14px 22px;"><strong>"What if I want to talk to a human at Tutorii?"</strong></td><td style="padding:14px 22px;">Email support@tutorii.com — human support runs Sunday–Thursday, 9am to 6pm GST.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">20</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+<!-- ============================================================
+     PAGE 22 — SECTION 9: WHEN SOMEONE SAYS YES
+     ============================================================ -->
+<section class="page" data-screen-label="21 When someone says yes">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g transform="translate(540 80)" fill="none" stroke="#D4A574" stroke-opacity="0.18">
+        <path d="M0 0 A 60 60 0 0 1 -60 60" stroke-width="0.5"/>
+        <path d="M0 0 A 90 90 0 0 1 -90 90" stroke-width="0.5"/>
+        <path d="M0 0 A 120 120 0 0 1 -120 120" stroke-width="0.5"/>
+      </g>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      
+      <g transform="translate(0 712)" color="#1E5BFF" opacity="0.14">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow">Section 09</span>
+      <h1 class="section-title">When someone says yes</h1>
+      <p class="deck">Next 48 hours = double earnings. Don't waste them.</p>
+      <div class="glow glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <p class="text-sm mb-24">This is where most people fumble. They get a yes, send the link, and disappear. The 5-step sequence that actually works:</p>
+
+    <div class="card card--tight mb-16">
+      <div class="flex-row mb-12"><span class="pill pill--blue">STEP 01</span><h4 class="mini-title" style="margin:0;">Send the link immediately</h4></div>
+      <div class="chat"><div class="bubble bubble--out">Amazing — here you go: [your link]. Sign-up takes 2 minutes. Let me know once you're in?<span class="ts">—</span></div></div>
+    </div>
+
+    <div class="card card--tight mb-16">
+      <div class="flex-row mb-12"><span class="pill pill--blue">STEP 02</span><h4 class="mini-title" style="margin:0;">Confirm they actually subscribed (24h nudge if not)</h4></div>
+      <div class="chat"><div class="bubble bubble--out">Hey — looks like you might've got distracted before signing up. Link's still here if you want to give it another go: [your link]. Need anything?<span class="ts">—</span></div></div>
+    </div>
+
+    <div class="card card--tight mb-16">
+      <div class="flex-row mb-12"><span class="pill pill--blue">STEP 03</span><h4 class="mini-title" style="margin:0;">Welcome them once they're in</h4></div>
+      <div class="chat">
+        <div class="bubble bubble--out">Welcome aboard! Two quick tips:<span class="ts">—</span></div>
+        <div class="bubble bubble--out">1) Visa rules and workers' rights courses are the best place to start.<span class="ts">—</span></div>
+        <div class="bubble bubble--out">2) Your own referral link is at the top of your dashboard. Refer 3 friends and your subscription is covered.<span class="ts">—</span></div>
+        <div class="bubble bubble--out">I'm here for any questions.<span class="ts">—</span></div>
+      </div>
+    </div>
+
+    <div class="card card--tight mb-16">
+      <div class="flex-row mb-12"><span class="pill pill--blue">STEP 04</span><h4 class="mini-title" style="margin:0;">Ask for their referrals after 7 days</h4></div>
+      <div class="chat">
+        <div class="bubble bubble--out">Hey — how's Tutorii going? Found anything useful? Now you've had a look, this is the bit where the maths starts working — 3 friends and your AED 95 is covered.<span class="ts">—</span></div>
+        <div class="bubble bubble--out">Want me to help you think through who to send your link to?<span class="ts">—</span></div>
+      </div>
+    </div>
+
+    <div class="card card--tight mb-24">
+      <div class="flex-row mb-12"><span class="pill pill--blue">STEP 05</span><h4 class="mini-title" style="margin:0;">Stay in touch monthly</h4></div>
+      <p class="text-sm" style="margin:0;">Check in once a month. Share a course you found useful. Friends who feel looked after stay subscribed — every cancelled subscriber is lost income for you.</p>
+    </div>
+
+    <div class="callout">
+      <span class="callout-label">The indirect referral prize</span>
+      <p>When you help your friends refer their own friends, you earn AED 4.75/month from each. If your 10 direct referrals each refer 3 friends, that's 30 indirect × AED 4.75 = <strong>AED 142.50/month</strong> on top of your direct earnings.</p>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">21</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 23 — SECTION 10: YOUR FIRST 7 DAYS
+     ============================================================ -->
+<section class="page page--mist" data-screen-label="22 First 7 days">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      <g transform="translate(0 712)" color="#1E5BFF" opacity="0.18">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow">Section 10</span>
+      <h1 class="section-title">Your first 7 days</h1>
+      <p class="deck">7 days. In order. No skipping.</p>
+      <div class="glow glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="card" style="padding:0;">
+      <table class="tbl">
+        <thead><tr><th style="padding:14px 22px;width:18%;">Day</th><th style="padding:14px 22px;">What to do</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:18px 22px;"><span class="pill pill--dark">DAY 1</span></td><td style="padding:18px 22px;">Find your referral link. Write down 20 names — friends, family, colleagues, neighbours, anyone you've messaged in the last 6 months. Don't message anyone yet.</td></tr>
+          <tr><td style="padding:18px 22px;"><span class="pill pill--dark">DAY 2</span></td><td style="padding:18px 22px;">Send Script 1 (warm opener) to your 5 warmest contacts. That's it. Watch for replies.</td></tr>
+          <tr><td style="padding:18px 22px;"><span class="pill pill--dark">DAY 3</span></td><td style="padding:18px 22px;">Reply to anyone who got back. Don't chase non-responders yet — give them another day. If anyone said "send me more info," use Script 6.</td></tr>
+          <tr><td style="padding:18px 22px;"><span class="pill pill--dark">DAY 4</span></td><td style="padding:18px 22px;">Send Script 4 (24h follow-up) to anyone from Day 2 who hasn't replied. Send Script 1 to your next 5 warmest contacts.</td></tr>
+          <tr><td style="padding:18px 22px;"><span class="pill pill--dark">DAY 5</span></td><td style="padding:18px 22px;">Pick one WhatsApp group you're already in. Post Script 3. Just one group. Reply to anyone interested via DM.</td></tr>
+          <tr><td style="padding:18px 22px;"><span class="pill pill--dark">DAY 6</span></td><td style="padding:18px 22px;">Follow up on stalled-but-warm conversations using Script 5. Send Script 1 to 5 more warm contacts.</td></tr>
+          <tr><td style="padding:18px 22px;"><span class="pill pill--dark">DAY 7</span></td><td style="padding:18px 22px;">Close any open conversations. For anyone who's signed up, send the welcome message (Section 9). Plan week 2 — write down 20 more names.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout mt-32">
+      <span class="callout-label">Realistic week 1 outcome</span>
+      <p>Following this exactly: <strong>15 messages sent, 5–8 replies, 2–3 paying subscribers.</strong> That's AED 76–114/month locked in.</p>
+      <p>Some weeks will be better, some worse. People who hit AED 1,000+/month did this exact loop for 8–12 weeks straight. Boring, repetitive, and it works.</p>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">22</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 24 — SECTION 11: HOW YOU GET PAID
+     ============================================================ -->
+<section class="page page--gold-tint" data-screen-label="23 How you get paid">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <pattern id="cal" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="80" stroke="#D4A574" stroke-opacity="0.15" stroke-width="0.5"/>
+      </pattern>
+      <rect width="595" height="842" fill="url(#cal)"/>
+      <rect x="160" y="0" width="80" height="842" fill="#D4A574" fill-opacity="0.04"/>
+    
+      <rect width="595" height="842" fill="url(#mesh-gold-tr)"/>
+      
+      <g transform="translate(0 712)" color="#8B6332" opacity="0.22">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow eyebrow--gold">Section 11</span>
+      <h1 class="section-title">How you get paid</h1>
+      <p class="deck">Tuesdays. MamoPay. Your IBAN. Done.</p>
+      <div class="glow glow--gold glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="card mb-32">
+      <div class="text-micro mb-16">Commission flow · full path</div>
+      <svg viewBox="0 0 720 130" style="width:100%;height:auto;display:block;">
+        <defs>
+          <marker id="ahPay" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0 0 L10 5 L0 10 z" fill="#0A1628"/>
+          </marker>
+        </defs>
+        <rect x="2" y="40" width="120" height="50" rx="14" fill="#fff" stroke="#E4E9F2"/>
+        <text x="62" y="60" text-anchor="middle" font-family="Inter" font-size="9" font-weight="600" fill="#5C6B85" letter-spacing="1.2">SUBSCRIBER</text>
+        <text x="62" y="76" text-anchor="middle" font-family="Inter" font-size="11" font-weight="700" fill="#0A1628">pays AED 95</text>
+        <line x1="124" y1="65" x2="160" y2="65" stroke="#0A1628" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ahPay)"/>
+        <rect x="162" y="40" width="100" height="50" rx="14" fill="#0A1628"/>
+        <text x="212" y="70" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#fff" letter-spacing="-0.5">Tutorii</text>
+        <line x1="264" y1="65" x2="300" y2="65" stroke="#0A1628" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ahPay)"/>
+        <rect x="302" y="30" width="160" height="70" rx="14" fill="#FAF1E0" stroke="#D4A574"/>
+        <text x="382" y="52" text-anchor="middle" font-family="Inter" font-size="9" font-weight="600" fill="#8B6332" letter-spacing="1.2">40% COMMISSION</text>
+        <text x="382" y="78" text-anchor="middle" font-family="Inter" font-size="18" font-weight="800" fill="#8B6332" letter-spacing="-0.5">AED 38</text>
+        <line x1="464" y1="65" x2="500" y2="65" stroke="#0A1628" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ahPay)"/>
+        <rect x="502" y="40" width="100" height="50" rx="14" fill="#fff" stroke="#E4E9F2"/>
+        <text x="552" y="60" text-anchor="middle" font-family="Inter" font-size="9" font-weight="600" fill="#5C6B85" letter-spacing="1.2">PAYOUT</text>
+        <text x="552" y="76" text-anchor="middle" font-family="Inter" font-size="11" font-weight="700" fill="#0A1628">MamoPay</text>
+        <line x1="604" y1="65" x2="640" y2="65" stroke="#0A1628" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ahPay)"/>
+        <rect x="642" y="40" width="76" height="50" rx="14" fill="#0A1628"/>
+        <text x="680" y="63" text-anchor="middle" font-family="Inter" font-size="9" font-weight="600" fill="#D4A574" letter-spacing="1.2">YOUR</text>
+        <text x="680" y="78" text-anchor="middle" font-family="Inter" font-size="11" font-weight="700" fill="#fff">IBAN</text>
+        <text x="360" y="120" text-anchor="middle" font-family="Inter" font-size="9" font-weight="600" fill="#5C6B85" letter-spacing="2">EVERY TUESDAY · MINIMUM AED 50 · ARRIVES 1–3 BUSINESS DAYS</text>
+      </svg>
+    </div>
+
+    <div class="grid grid-2 mb-32">
+      <div>
+        <span class="text-micro">Setting up your IBAN</span>
+        <ol class="steps mt-12">
+          <li>Log in to www.tutorii.com</li>
+          <li>Go to Account Settings</li>
+          <li>Enter your UAE IBAN (payouts are made in AED to UAE bank accounts only)</li>
+          <li>Save. You're set.</li>
+        </ol>
+      </div>
+      <div>
+        <span class="text-micro">When you get paid</span>
+        <ul class="bullets bullets--gold mt-12 text-sm">
+          <li>Payouts every Tuesday</li>
+          <li>Minimum payout: AED 50 (rolls over if below)</li>
+          <li>Funds arrive 1–3 business days after Tuesday</li>
+          <li>AED only — your bank converts if needed</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Weekly payout strip -->
+    <div class="card mb-32">
+      <div class="text-micro mb-16">Weekly payout · Tuesday is payday</div>
+      <svg viewBox="0 0 720 90" style="width:100%;height:auto;display:block;">
+        <g font-family="Inter" font-size="10" font-weight="600" letter-spacing="1.5">
+          <rect x="2" y="14" width="92" height="60" rx="12" fill="#fff" stroke="#E4E9F2"/>
+          <text x="48" y="40" text-anchor="middle" fill="#5C6B85">SUN</text>
+          <text x="48" y="60" text-anchor="middle" fill="#0A1628" font-weight="700">—</text>
+
+          <rect x="100" y="14" width="92" height="60" rx="12" fill="#fff" stroke="#E4E9F2"/>
+          <text x="146" y="40" text-anchor="middle" fill="#5C6B85">MON</text>
+          <text x="146" y="60" text-anchor="middle" fill="#0A1628" font-weight="700">—</text>
+
+          <rect x="198" y="6" width="92" height="76" rx="12" fill="#D4A574"/>
+          <text x="244" y="32" text-anchor="middle" fill="#0A1628" font-weight="700">TUE</text>
+          <!-- banknote icon -->
+          <g transform="translate(228 40)" fill="none" stroke="#0A1628" stroke-width="1.5">
+            <rect x="0" y="0" width="32" height="18" rx="2"/>
+            <circle cx="16" cy="9" r="4"/>
+          </g>
+          <text x="244" y="74" text-anchor="middle" fill="#0A1628" font-weight="800" font-size="9">PAYDAY</text>
+
+          <rect x="296" y="14" width="92" height="60" rx="12" fill="#fff" stroke="#E4E9F2"/>
+          <text x="342" y="40" text-anchor="middle" fill="#5C6B85">WED</text>
+          <text x="342" y="60" text-anchor="middle" fill="#0A1628" font-weight="700">—</text>
+
+          <rect x="394" y="14" width="92" height="60" rx="12" fill="#fff" stroke="#E4E9F2"/>
+          <text x="440" y="40" text-anchor="middle" fill="#5C6B85">THU</text>
+          <text x="440" y="60" text-anchor="middle" fill="#0A1628" font-weight="700">—</text>
+
+          <rect x="492" y="14" width="92" height="60" rx="12" fill="#fff" stroke="#E4E9F2"/>
+          <text x="538" y="40" text-anchor="middle" fill="#5C6B85">FRI</text>
+          <text x="538" y="60" text-anchor="middle" fill="#0A1628" font-weight="700">—</text>
+
+          <rect x="590" y="14" width="92" height="60" rx="12" fill="#fff" stroke="#E4E9F2"/>
+          <text x="636" y="40" text-anchor="middle" fill="#5C6B85">SAT</text>
+          <text x="636" y="60" text-anchor="middle" fill="#0A1628" font-weight="700">—</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="grid grid-2 mb-24">
+      <div>
+        <h4 class="mini-title">If a payout fails</h4>
+        <p class="text-sm">Usually means your IBAN is wrong. Update it in Account Settings — payout retries on the next Tuesday. Email support@tutorii.com if it keeps failing.</p>
+      </div>
+      <div>
+        <h4 class="mini-title">Tax</h4>
+        <p class="text-sm">UAE residents aren't subject to personal income tax on this. If you're tax-resident elsewhere, speak to a tax adviser. Tutorii doesn't withhold or issue tax documents.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="callout-label">Important — withdraw before you cancel</span>
+      <p>If you cancel your Tutorii subscription, any pending earnings below the AED 50 minimum are forfeited. Always make sure your balance is paid out before cancelling.</p>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">23</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 25 — SECTION 12: ONE-PAGE CHEAT SHEET
+     ============================================================ -->
+<section class="page" data-screen-label="24 Cheat sheet">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g transform="translate(40 760)" fill="none" stroke="#1E5BFF" stroke-opacity="0.05">
+        <circle r="50" stroke-width="0.5"/><circle r="100" stroke-width="0.5"/><circle r="150" stroke-width="0.5"/>
+      </g>
+    
+      <rect width="595" height="842" fill="url(#mesh-blue-tl)"/>
+      <rect width="595" height="842" fill="url(#mesh-gold-br)"/>
+      
+      <g transform="translate(0 712)" color="#0A1628" opacity="0.1">
+        <use href="#dubai-skyline" width="600" height="130"/>
+      </g>
+      <rect width="595" height="842" fill="url(#page-vignette)"/>
+    </svg>
+  </div>
+  <div class="page-inner">
+    <header class="mb-24">
+      <span class="eyebrow">Section 12</span>
+      <h1 class="section-title">One-page cheat sheet</h1>
+      <p class="deck">Screenshot. Pin. Read before every chat.</p>
+      <div class="glow glow--narrow" style="margin-left:0;"></div>
+    </header>
+
+    <div class="callout callout--blue mb-24">
+      <span class="callout-label">The 3 sentences that explain Tutorii</span>
+      <ol class="steps mt-8" style="margin-bottom:0;">
+        <li>Tutorii is a UAE learning platform — courses on visa rules, workers' rights, money, jobs. AED 95/month.</li>
+        <li>When you subscribe, you get a referral link. Every friend who joins pays you AED 38/month, for as long as they stay.</li>
+        <li>Refer 3 friends and your AED 95 is covered. Above 3, you earn.</li>
+      </ol>
+    </div>
+
+    <div class="callout mb-24" style="text-align:center;">
+      <span class="callout-label">The closing line</span>
+      <p class="fr-quote" style="font-size:1.4rem;color:var(--ink);margin:8px 0 0 0;">"3 referrals and it's free. Above 3, you earn AED 38 per friend, every month."</p>
+    </div>
+
+    <div class="card mb-24" style="padding:0;">
+      <div style="padding:18px 24px 4px;"><span class="text-micro">Top 3 objection handlers</span></div>
+      <table class="tbl" style="font-size:0.9rem;">
+        <thead><tr><th style="padding:12px 24px;">If they say…</th><th style="padding:12px 24px;">You say…</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:14px 24px;"><strong>"Is this a scam?"</strong></td><td style="padding:14px 24px;">Real platform, real courses, payouts via MamoPay (UAE-licensed). Only two referral layers. Check www.tutorii.com.</td></tr>
+          <tr><td style="padding:14px 24px;"><strong>"AED 95 is expensive."</strong></td><td style="padding:14px 24px;">Refer 3 friends and you get AED 114/month back. Real cost is zero.</td></tr>
+          <tr><td style="padding:14px 24px;"><strong>"Are you getting commission?"</strong></td><td style="padding:14px 24px;">Yes, 40%. Wanted to be upfront. Same applies to you when you refer.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid grid-2">
+      <div>
+        <span class="text-micro">Top 3 places to share</span>
+        <ol class="steps mt-12">
+          <li>WhatsApp groups you're already in (family, nationality, neighbourhood)</li>
+          <li>Direct messages to your warmest contacts</li>
+          <li>In-person, when the topic comes up naturally (gym, school, work)</li>
+        </ol>
+      </div>
+      <div>
+        <span class="text-micro">If you're stuck</span>
+        <p class="text-sm mt-12">Re-read Section 4 (Your first 60 minutes). Send Script 1 to one person you trust. Don't wait for the perfect moment — there isn't one. The people who succeed are the ones who send the message.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio folio--right"><span class="folio-num">24</span><span class="folio-rule"></span><span class="folio-of">of 25</span></div>
+</section>
+
+<!-- ============================================================
+     PAGE 26 — CLOSING
+     ============================================================ -->
+<section class="page page--dark" data-screen-label="25 Closing">
+  <div class="bg">
+    <svg viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <radialGradient id="meshBlue2" cx="20%" cy="30%" r="50%">
+          <stop offset="0%" stop-color="#1E5BFF" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#1E5BFF" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="meshGold2" cx="80%" cy="70%" r="45%">
+          <stop offset="0%" stop-color="#D4A574" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#D4A574" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="skyGlow2" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3"/>
+        </filter>
+      </defs>
+      <rect width="595" height="842" fill="#0A1628"/>
+      <rect width="595" height="842" fill="url(#meshBlue2)"/>
+      <rect width="595" height="842" fill="url(#meshGold2)"/>
+      <!-- fully-connected constellation -->
+      <g fill="#fff">
+        <circle cx="62" cy="120" r="1.4"/><circle cx="118" cy="80" r="1.1"/>
+        <circle cx="170" cy="150" r="1.6"/><circle cx="220" cy="100" r="1.2"/>
+        <circle cx="270" cy="170" r="2"/><circle cx="330" cy="110" r="1.4"/>
+        <circle cx="390" cy="160" r="1.5"/><circle cx="450" cy="90" r="1.2"/>
+        <circle cx="510" cy="140" r="1.6"/>
+        <circle cx="80" cy="220" r="1.1"/><circle cx="140" cy="260" r="1.4"/>
+        <circle cx="200" cy="240" r="1"/><circle cx="280" cy="280" r="1.6"/>
+        <circle cx="350" cy="250" r="1.2"/><circle cx="420" cy="290" r="1.4"/>
+        <circle cx="490" cy="240" r="1.1"/>
+        <circle cx="60" cy="340" r="1.3"/><circle cx="130" cy="380" r="1.1"/>
+        <circle cx="210" cy="360" r="1.5"/><circle cx="290" cy="400" r="1.2"/>
+        <circle cx="370" cy="380" r="1.3"/><circle cx="450" cy="420" r="1.4"/>
+        <circle cx="520" cy="380" r="1.1"/>
+      </g>
+      <g stroke="#D4A574" stroke-width="0.5" stroke-opacity="0.45" fill="none">
+        <path d="M62 120 L118 80 L170 150 L220 100 L270 170 L330 110 L390 160 L450 90 L510 140"/>
+        <path d="M80 220 L140 260 L200 240 L280 280 L350 250 L420 290 L490 240"/>
+        <path d="M60 340 L130 380 L210 360 L290 400 L370 380 L450 420 L520 380"/>
+        <path d="M118 80 L80 220 L60 340" opacity="0.4"/>
+        <path d="M270 170 L280 280 L290 400" opacity="0.4"/>
+        <path d="M450 90 L490 240 L520 380" opacity="0.4"/>
+      </g>
+      <!-- skyline silhouette small at bottom -->
+      <g transform="translate(0,760) scale(1)" fill="none" stroke="#1E5BFF" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" filter="url(#skyGlow2)" opacity="0.5">
+        <path d="M40 60 L48 20 Q60 12 72 20 L72 60 Z"/>
+        <path d="M85 60 L85 35 L100 35 L100 60"/>
+        <path d="M130 60 L132 45 L138 32 L142 22 L146 12 L150 -2 L152 -14 L154 -2 L158 12 L162 22 L166 32 L172 45 L172 60 Z"/>
+        <line x1="152" y1="-14" x2="152" y2="-30"/>
+        <ellipse cx="220" cy="35" rx="22" ry="28"/>
+        <path d="M270 60 L270 8 L320 8 L320 60"/>
+        <path d="M345 60 L345 30 L360 22 L375 30 L375 60"/>
+        <path d="M395 60 L395 38 L410 32 L425 38 L425 60"/>
+        <path d="M445 60 L445 28 L460 22 L475 28 L475 60"/>
+        <path d="M495 60 L495 40 L510 35 L525 40 L525 60"/>
+        <path d="M540 60 L540 30 L555 22 L555 60"/>
+      </g>
+    </svg>
+  </div>
+  <div class="page-inner" style="display:flex;flex-direction:column;justify-content:space-between;min-height:297mm;">
+    <header class="spread">
+      <span class="pill pill--white">END OF GUIDE</span>
+    </header>
+
+    <div style="text-align:center;max-width:34em;margin:0 auto;">
+      <div class="glow glow--gold" style="width:200px;margin:0 auto 36px;"></div>
+      <p class="fr-quote" style="font-size:1.85rem;color:#fff;line-height:1.3;letter-spacing:-0.012em;font-weight:400;">"Success = sending the message. Send it."</p>
+      <div class="glow glow--gold" style="width:200px;margin:36px auto;"></div>
+      <p class="fr-quote" style="font-size:1.05rem;color:#B8C7E0;margin-top:24px;">Welcome to Tutorii. Get started.</p>
+    </div>
+
+    <footer style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;">
+      <span class="pill pill--white">support@tutorii.com</span>
+      <span class="pill pill--white">www.tutorii.com</span>
+      <span class="pill pill--white">Sun–Thu · 9am–6pm GST</span>
+    </footer>
+  </div>
+</section>
+
+</body>
+</html>
