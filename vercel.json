@@ -1,6 +1,7 @@
 {
   "redirects": [
-    { "source": "/salesguide", "destination": "/salesguide/", "permanent": false }
+    { "source": "/salesguide", "destination": "/salesguide/", "permanent": false },
+    { "source": "/confirmation", "destination": "/confirmation/", "permanent": false }
   ],
-  "rewrites": [{ "source": "/((?!salesguide/).*)", "destination": "/index.html" }]
+  "rewrites": [{ "source": "/((?!salesguide/|confirmation/).*)", "destination": "/index.html" }]
 }
