@@ -1075,6 +1075,7 @@ function UserLogin(props) {
   var pass = _pass[0]; var setPass = _pass[1];
   var _err = useState("");
   var error = _err[0]; var setError = _err[1];
+  var _showPass = useState(false); var showPass = _showPass[0]; var setShowPass = _showPass[1];
 
   var _loading = useState(false);
   var loading = _loading[0]; var setLoading = _loading[1];
@@ -1127,7 +1128,13 @@ function UserLogin(props) {
           </div>
           <div style={{ marginBottom:8 }}>
             <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Password</label>
-            <input type="password" value={pass} onChange={function(e){setPass(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleLogin()}} placeholder="********" style={{ width:"100%", padding:"12px 16px", borderRadius:10, border:"1px solid "+(error ? "rgba(248,113,113,0.3)" : "rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8", transition:"border-color 0.3s" }} />
+            <div style={{ position:"relative" }}>
+              <input type={showPass?"text":"password"} value={pass} onChange={function(e){setPass(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleLogin()}} placeholder="********" style={{ width:"100%", padding:"12px 40px 12px 16px", borderRadius:10, border:"1px solid "+(error ? "rgba(248,113,113,0.3)" : "rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8", transition:"border-color 0.3s" }} />
+              <button type="button" onClick={function(){setShowPass(function(v){return !v})}} style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", padding:0, lineHeight:0 }}>
+                {showPass ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>}
+              </button>
+            </div>
           </div>
           <div style={{ textAlign:"right", marginBottom:24 }}>
             <span onClick={function(){go("forgotPassword")}} style={{ fontSize:12, color:"rgb(200,180,140)", cursor:"pointer", fontWeight:500 }}>Forgot password?</span>
@@ -1300,6 +1307,7 @@ function ResetPasswordPage(props) {
   var _pass = useState(""); var pass = _pass[0]; var setPass = _pass[1];
   var _confirm = useState(""); var confirm = _confirm[0]; var setConfirm = _confirm[1];
   var _loading = useState(false); var loading = _loading[0]; var setLoading = _loading[1];
+  var _showConfirm = useState(false); var showConfirm = _showConfirm[0]; var setShowConfirm = _showConfirm[1];
   var _error = useState(""); var error = _error[0]; var setError = _error[1];
   var _done = useState(false); var done = _done[0]; var setDone = _done[1];
   var _validating = useState(true); var validating = _validating[0]; var setValidating = _validating[1];
@@ -1436,7 +1444,13 @@ function ResetPasswordPage(props) {
 
               <div style={{ marginBottom:28 }}>
                 <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Confirm Password</label>
-                <input type="password" value={confirm} onChange={function(e){setConfirm(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleSubmit()}} placeholder="Re-enter your password" style={{ width:"100%", padding:"12px 16px", borderRadius:10, border:"1px solid "+(error && error.includes("match") ? "rgba(248,113,113,0.3)" : confirm && confirm === pass ? "rgba(200,180,140,0.3)" : "rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8", transition:"border-color 0.3s" }} />
+                <div style={{ position:"relative" }}>
+                  <input type={showConfirm?"text":"password"} value={confirm} onChange={function(e){setConfirm(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleSubmit()}} placeholder="Re-enter your password" style={{ width:"100%", padding:"12px 40px 12px 16px", borderRadius:10, border:"1px solid "+(error && error.includes("match") ? "rgba(248,113,113,0.3)" : confirm && confirm === pass ? "rgba(200,180,140,0.3)" : "rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8", transition:"border-color 0.3s" }} />
+                  <button type="button" onClick={function(){setShowConfirm(function(v){return !v})}} style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", padding:0, lineHeight:0 }}>
+                    {showConfirm ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>}
+                  </button>
+                </div>
                 {confirm && confirm === pass && <div style={{ fontSize:11, color:"rgb(200,180,140)", marginTop:4, display:"flex", alignItems:"center", gap:4 }}>{"\u2713"} Passwords match</div>}
               </div>
 
@@ -1741,6 +1755,14 @@ function SettingsTab(props) {
   var _profileMsg = useState(null); var profileMsg = _profileMsg[0]; var setProfileMsg = _profileMsg[1];
   var _ibanSaving = useState(false); var ibanSaving = _ibanSaving[0]; var setIbanSaving = _ibanSaving[1];
   var _ibanMsg = useState(null); var ibanMsg = _ibanMsg[0]; var setIbanMsg = _ibanMsg[1];
+  var _currPass = useState(""); var currPass = _currPass[0]; var setCurrPass = _currPass[1];
+  var _newPass = useState(""); var newPass = _newPass[0]; var setNewPass = _newPass[1];
+  var _confPass = useState(""); var confPass = _confPass[0]; var setConfPass = _confPass[1];
+  var _passSaving = useState(false); var passSaving = _passSaving[0]; var setPassSaving = _passSaving[1];
+  var _passMsg = useState(null); var passMsg = _passMsg[0]; var setPassMsg = _passMsg[1];
+  var _showCurr = useState(false); var showCurr = _showCurr[0]; var setShowCurr = _showCurr[1];
+  var _showNew = useState(false); var showNew = _showNew[0]; var setShowNew = _showNew[1];
+  var _showConf = useState(false); var showConf = _showConf[0]; var setShowConf = _showConf[1];
 
   // Sync inputs when u changes (on first load)
   useEffect(function(){ setName(u.name || ""); }, [u.name]);
@@ -1771,6 +1793,22 @@ function SettingsTab(props) {
       setIbanMsg({ok:false, msg: e.message || "Failed to save — check IBAN format"});
     } finally {
       setIbanSaving(false);
+    }
+  }
+
+  async function changePassword() {
+    if (!newPass || !confPass) { setPassMsg({ok:false, msg:"Please enter and confirm your new password"}); return; }
+    if (newPass.length < 8) { setPassMsg({ok:false, msg:"New password must be at least 8 characters"}); return; }
+    if (newPass !== confPass) { setPassMsg({ok:false, msg:"Passwords do not match"}); return; }
+    setPassSaving(true); setPassMsg(null);
+    try {
+      await usersApi.changePassword(newPass, confPass);
+      setPassMsg({ok:true, msg:"Password changed successfully"});
+      setCurrPass(""); setNewPass(""); setConfPass("");
+    } catch(e) {
+      setPassMsg({ok:false, msg: e.message || "Failed to change password"});
+    } finally {
+      setPassSaving(false);
     }
   }
 
@@ -1824,6 +1862,30 @@ function SettingsTab(props) {
         </div>
         <div style={{ marginTop:16, display:"flex", justifyContent:"flex-end" }}>
           <Btn onClick={saveIban} disabled={ibanSaving} style={{ fontSize:12, padding:"10px 24px", opacity:ibanSaving?0.6:1 }}>{ibanSaving ? "Saving..." : "Save Payout Details"}</Btn>
+        </div>
+      </div>
+
+      {/* Change Password */}
+      <div style={{ background:"#131315", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:16, boxSizing:"border-box" }}>
+        <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 6px", color:"#d4d4d8" }}>Change Password</h3>
+        <p style={{ fontSize:12, color:"#52525b", marginBottom:16 }}>Enter your current password, then choose a new one.</p>
+        {passMsg && <div style={{ padding:"10px 14px", borderRadius:8, background:passMsg.ok?"rgba(16,185,129,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(passMsg.ok?"rgba(16,185,129,0.2)":"rgba(248,113,113,0.2)"), color:passMsg.ok?"#10b981":"#f87171", fontSize:13, fontWeight:600, marginBottom:14 }}>{passMsg.msg}</div>}
+        {(function(){
+          function EyeBtn(p) { return <button type="button" onClick={p.toggle} style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", padding:0, lineHeight:0 }}>{p.show ? <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg> : <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>}</button>; }
+          return <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr", gap:mob?12:16 }}>
+            <div>
+              <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>New Password</label>
+              <div style={{ position:"relative" }}><input type={showNew?"text":"password"} value={newPass} onChange={function(e){setNewPass(e.target.value);setPassMsg(null)}} placeholder="Min 8 characters" style={Object.assign({},inputStyle,{paddingRight:38})} /><EyeBtn show={showNew} toggle={function(){setShowNew(function(v){return !v})}} /></div>
+            </div>
+            <div>
+              <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>Confirm New Password</label>
+              <div style={{ position:"relative" }}><input type={showConf?"text":"password"} value={confPass} onChange={function(e){setConfPass(e.target.value);setPassMsg(null)}} placeholder="Re-enter new password" style={Object.assign({},inputStyle,{paddingRight:38, borderColor: confPass && confPass===newPass ? "rgba(200,180,140,0.3)" : undefined})} /><EyeBtn show={showConf} toggle={function(){setShowConf(function(v){return !v})}} /></div>
+              {confPass && confPass===newPass && <div style={{ fontSize:11, color:"rgb(200,180,140)", marginTop:4 }}>✓ Passwords match</div>}
+            </div>
+          </div>;
+        })()}
+        <div style={{ marginTop:16, display:"flex", justifyContent:"flex-end" }}>
+          <Btn onClick={changePassword} disabled={passSaving} style={{ fontSize:12, padding:"10px 24px", opacity:passSaving?0.6:1 }}>{passSaving ? "Saving..." : "Change Password"}</Btn>
         </div>
       </div>
 
@@ -3295,6 +3357,7 @@ function AdminLogin(props) {
   var _p = useState(""); var pass = _p[0]; var setPass = _p[1];
   var _er = useState(""); var error = _er[0]; var setError = _er[1];
   var _loading = useState(false); var loading = _loading[0]; var setLoading = _loading[1];
+  var _showPass = useState(false); var showPass = _showPass[0]; var setShowPass = _showPass[1];
   var { login, logout } = useAuth();
 
   // Always log out any existing session when admin login page loads
@@ -3335,7 +3398,13 @@ function AdminLogin(props) {
         </div>
         <div style={{ marginBottom:28 }}>
           <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#52525b", marginBottom:5 }}>Password</label>
-          <input type="password" value={pass} onChange={function(e){setPass(e.target.value);setError("")}} placeholder="********" style={{ width:"100%", padding:"12px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#fff", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" }} />
+          <div style={{ position:"relative" }}>
+            <input type={showPass?"text":"password"} value={pass} onChange={function(e){setPass(e.target.value);setError("")}} placeholder="********" style={{ width:"100%", padding:"12px 40px 12px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.06)", background:"#0a0a0c", color:"#d4d4d8", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif" }} />
+            <button type="button" onClick={function(){setShowPass(function(v){return !v})}} style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", padding:0, lineHeight:0 }}>
+              {showPass ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>}
+            </button>
+          </div>
         </div>
         <button onClick={handleLogin} disabled={loading} style={{ width:"100%", padding:"13px", borderRadius:12, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:15, fontWeight:600, cursor:"pointer", marginBottom:12, opacity:loading?0.6:1 }}>{loading ? "Logging in..." : "Log In to Admin"}</button>
         <div style={{ textAlign:"center", marginTop:12 }}>
