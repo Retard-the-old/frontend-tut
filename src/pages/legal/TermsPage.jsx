@@ -22,7 +22,7 @@ function TermsPage(props) {
       </div>
 
       <h2 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px" }}>5. Referral Program</h2>
-      <p style={{ marginBottom:10 }}>Subscribers may earn commissions through the referral program. Level 1 (direct referrals) earn 40% of the subscription fee. Level 2 (indirect referrals) earn 5%. Commissions are calculated monthly and paid weekly via MamoPay bank transfer to your registered IBAN, subject to a AED 50 minimum payout threshold.</p>
+      <p style={{ marginBottom:10 }}>Subscribers may earn commissions through the referral program. Level 1 (direct referrals) earn 40% of the subscription fee. Level 2 (indirect referrals) earn 5%. Commissions are calculated monthly and paid weekly via MamoPay bank transfer to your registered IBAN, subject to a AED 50 minimum payout threshold. Once approved, payouts typically take up to 5 business days to appear in your account. Please note that additional delays may occur depending on your bank's processing times. Kindly check with your bank for the accurate timeline.</p>
       <p style={{ marginBottom:20 }}>Referral assignments are permanent and irrevocable. Once a user is assigned to a referrer at account creation, this assignment cannot be changed, transferred, or reassigned under any circumstances. Self-referrals, fraudulent referrals, and manipulation of the referral system are strictly prohibited and will result in immediate account termination and forfeiture of all earnings.</p>
 
       <h2 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px" }}>6. User Accounts</h2>
