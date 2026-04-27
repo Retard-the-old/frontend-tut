@@ -1,8 +1,11 @@
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { useAuth, AuthProvider } from "./AuthContext";
-const TermsPage = lazy(function() { return import("./pages/legal/TermsPage"); });
+const TermsPage    = lazy(function() { return import("./pages/legal/TermsPage"); });
+const PrivacyPage  = lazy(function() { return import("./pages/legal/PrivacyPage"); });
+const ContactPage  = lazy(function() { return import("./pages/legal/ContactPage"); });
+const SupportPage  = lazy(function() { return import("./pages/legal/SupportPage"); });
 import { users as usersApi, subscriptions as subscriptionsApi, courses as coursesApi, chat as chatApi, payouts as payoutsApi, admin as adminApi } from "./api";
-import { LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+// recharts loaded dynamically inside UserPortal and AdminPanel
 
 const PRICE = 95;
 const L1_RATE = 0.40;
@@ -1931,10 +1934,33 @@ function SettingsTab(props) {
 // ═════════════════════════════════════════
 // USER PORTAL (Dashboard + LMS)
 // ═════════════════════════════════════════
+function useRecharts() {
+  var _Rc = useState(null); var Rc = _Rc[0]; var setRc = _Rc[1];
+  useEffect(function(){ import("recharts").then(function(m){ setRc(m); }); }, []);
+  var N = function(){ return null; };
+  return {
+    AreaChart: Rc ? Rc.AreaChart : N, Area: Rc ? Rc.Area : N,
+    BarChart:  Rc ? Rc.BarChart  : N, Bar:  Rc ? Rc.Bar  : N,
+    LineChart: Rc ? Rc.LineChart : N, Line: Rc ? Rc.Line : N,
+    PieChart:  Rc ? Rc.PieChart  : N, Pie:  Rc ? Rc.Pie  : N,
+    Cell: Rc ? Rc.Cell : N, XAxis: Rc ? Rc.XAxis : N, YAxis: Rc ? Rc.YAxis : N,
+    CartesianGrid: Rc ? Rc.CartesianGrid : N, Tooltip: Rc ? Rc.Tooltip : N,
+    ResponsiveContainer: Rc ? Rc.ResponsiveContainer : N, Legend: Rc ? Rc.Legend : N,
+  };
+}
+
 function UserPortal(props) {
   var go = props.go;
   var courses = props.courses;
   var setCourses = props.setCourses;
+  var _rc = useRecharts();
+  var AreaChart = _rc.AreaChart; var Area = _rc.Area;
+  var BarChart = _rc.BarChart;   var Bar = _rc.Bar;
+  var LineChart = _rc.LineChart; var Line = _rc.Line;
+  var PieChart = _rc.PieChart;   var Pie = _rc.Pie;
+  var Cell = _rc.Cell; var XAxis = _rc.XAxis; var YAxis = _rc.YAxis;
+  var CartesianGrid = _rc.CartesianGrid; var Tooltip = _rc.Tooltip;
+  var ResponsiveContainer = _rc.ResponsiveContainer; var Legend = _rc.Legend;
   var _tab = useState(function(){
     var parts = window.location.pathname.split("/");
     var sub = parts[2];
@@ -3528,6 +3554,14 @@ function AdminPanel(props) {
   var courses = props.courses;
   var setCourses = props.setCourses;
   var mob = useIsMobile();
+  var _rc = useRecharts();
+  var AreaChart = _rc.AreaChart; var Area = _rc.Area;
+  var BarChart = _rc.BarChart;   var Bar = _rc.Bar;
+  var LineChart = _rc.LineChart; var Line = _rc.Line;
+  var PieChart = _rc.PieChart;   var Pie = _rc.Pie;
+  var Cell = _rc.Cell; var XAxis = _rc.XAxis; var YAxis = _rc.YAxis;
+  var CartesianGrid = _rc.CartesianGrid; var Tooltip = _rc.Tooltip;
+  var ResponsiveContainer = _rc.ResponsiveContainer; var Legend = _rc.Legend;
   var _tab = useState("dash"); var tab = _tab[0]; var setTab = _tab[1];
   var _search = useState(""); var search = _search[0]; var setSearch = _search[1];
   var _pay = useState([]); var payouts = _pay[0]; var setPayouts = _pay[1];
@@ -4830,180 +4864,6 @@ function LegalPage(props) {
 // ═════════════════════════════════════════
 // PRIVACY POLICY
 // ═════════════════════════════════════════
-function PrivacyPage(props) {
-  var go = props.go;
-  return (
-    <LegalPage go={go} title="Privacy Policy">
-      <p style={{ fontSize:12, color:"#52525b", marginBottom:24 }}>Last updated: March 1, 2026</p>
-
-      <h2 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px" }}>1. Information We Collect</h2>
-      <p style={{ marginBottom:10 }}>We collect the following information when you use Tutorii:</p>
-      <p style={{ marginBottom:10 }}><strong>Account Information:</strong> Full name, email address, phone number, and preferred language provided during registration.</p>
-      <p style={{ marginBottom:10 }}><strong>Payment Information:</strong> All payment data is processed by MamoPay. Tutorii does not store, access, or have visibility into your card numbers, CVVs, or banking credentials. We store only your IBAN for the purpose of commission payouts.</p>
-      <p style={{ marginBottom:10 }}><strong>Usage Data:</strong> Course progress, lesson completion status, login activity, and referral data.</p>
-      <p style={{ marginBottom:20 }}><strong>Referral Data:</strong> Your referral code, referral link, the identity of users you have referred, and commission earnings.</p>
-
-      <h2 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px" }}>2. How We Use Your Information</h2>
-      <p style={{ marginBottom:10 }}>Your information is used to: provide and maintain the Platform and your account; process subscription payments via MamoPay; calculate and disburse referral commissions; track and display your course progress; communicate service updates, billing notifications, and support responses; prevent fraud and enforce our Terms of Service.</p>
-      <p style={{ marginBottom:20 }}>We do not use your data for advertising. We do not sell or rent your personal information to third parties.</p>
-
-      <h2 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px" }}>3. Data Sharing</h2>
-      <p style={{ marginBottom:10 }}>We share data only with: <strong>MamoPay</strong> for payment processing and commission disbursement; <strong>hosting providers</strong> for infrastructure; <strong>law enforcement</strong> when required by UAE law.</p>
-      <p style={{ marginBottom:20 }}>Your referral network data (names of your referrals) is visible only to you in your dashboard. Referrals cannot see who referred them beyond what is displayed in their own account.</p>
-
-      <h2 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px" }}>4. Data Security</h2>
-      <p style={{ marginBottom:20 }}>We implement industry-standard security measures including encrypted data transmission (TLS/SSL), secure server infrastructure, and access controls. Payment processing is handled entirely by MamoPay, a CBUAE-licensed payment provider with PCI DSS compliance.</p>
-
-      <h2 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px" }}>5. Data Retention</h2>
-      <p style={{ marginBottom:20 }}>We retain your account data for as long as your account is active. Upon account deletion, personal data is permanently removed within 30 days, except where retention is required by law (e.g., financial records may be retained for up to 5 years per UAE regulations).</p>
-
-      <h2 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px" }}>6. Your Rights</h2>
-      <p style={{ marginBottom:20 }}>You have the right to: access your personal data at any time through your dashboard; request a complete export of your data by contacting support; request correction of inaccurate information; request deletion of your account and associated data; withdraw consent for non-essential data processing. To exercise these rights, email <strong>support@tutorii.com</strong>.</p>
-
-      <h2 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px" }}>7. Cookies and Tracking</h2>
-      <p style={{ marginBottom:20 }}>Tutorii uses essential cookies required for authentication and session management. We do not use advertising cookies or third-party tracking pixels. No data is shared with advertising networks.</p>
-
-      <h2 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px" }}>8. Children</h2>
-      <p style={{ marginBottom:20 }}>Tutorii is not intended for users under the age of 18. We do not knowingly collect data from minors. If we become aware of data collected from a minor, we will delete it promptly.</p>
-
-      <h2 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px" }}>9. Changes to This Policy</h2>
-      <p style={{ marginBottom:20 }}>We may update this Privacy Policy periodically. Changes will be posted on this page with an updated revision date. Continued use of the Platform after changes constitutes acceptance.</p>
-
-      <h2 style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px" }}>10. Contact</h2>
-      <p>For privacy-related questions or requests, contact us at <strong>support@tutorii.com</strong>.</p>
-    </LegalPage>
-  );
-}
-
-// ═════════════════════════════════════════
-// CONTACT US
-// ═════════════════════════════════════════
-function ContactPage(props) {
-  var go = props.go;
-  var mob = useIsMobile();
-  return (
-    <LegalPage go={go} title="Contact Us">
-      <p style={{ marginBottom:28, fontSize:15, color:"#a1a1aa" }}>We are here to help. Reach out to us through any of the channels below.</p>
-
-      <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr", gap:20, marginBottom:32 }}>
-        <div style={{ background:"rgba(255,255,255,0.03)", borderRadius:12, padding:24, border:"1px solid rgba(255,255,255,0.06)" }}>
-          <div style={{ marginBottom:10, lineHeight:0 }}><Ico name="chat" size={24} color="rgb(200,180,140)" /></div>
-          <h3 style={{ fontSize:16, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>General Support</h3>
-          <p style={{ fontSize:13, color:"#71717a", marginBottom:8 }}>For account help, billing questions, technical issues, and general enquiries.</p>
-          <a style={{ fontSize:14, fontWeight:700, color:"rgb(200,180,140)", textDecoration:"none" }}>support@tutorii.com</a>
-          <p style={{ fontSize:11, color:"#52525b", marginTop:6 }}>Response time: Within 24 hours</p>
-        </div>
-        <div style={{ background:"rgba(255,255,255,0.03)", borderRadius:12, padding:24, border:"1px solid rgba(255,255,255,0.06)" }}>
-          <div style={{ marginBottom:10, lineHeight:0 }}><Ico name="book" size={24} color="rgb(200,180,140)" /></div>
-          <h3 style={{ fontSize:16, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>Complaints</h3>
-          <p style={{ fontSize:13, color:"#71717a", marginBottom:8 }}>For formal complaints that require escalation or investigation.</p>
-          <a style={{ fontSize:14, fontWeight:700, color:"rgb(200,180,140)", textDecoration:"none" }}>complaints@tutorii.com</a>
-          <p style={{ fontSize:11, color:"#52525b", marginTop:6 }}>Acknowledged within 24hrs, resolved within 48hrs</p>
-        </div>
-        <div style={{ background:"rgba(255,255,255,0.03)", borderRadius:12, padding:24, border:"1px solid rgba(255,255,255,0.06)" }}>
-          <div style={{ marginBottom:10, lineHeight:0 }}><Ico name="users" size={24} color="rgb(200,180,140)" /></div>
-          <h3 style={{ fontSize:16, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>Partnerships</h3>
-          <p style={{ fontSize:13, color:"#71717a", marginBottom:8 }}>For business partnerships, ambassador programs, and collaboration proposals.</p>
-          <a style={{ fontSize:14, fontWeight:700, color:"rgb(200,180,140)", textDecoration:"none" }}>partnerships@tutorii.com</a>
-        </div>
-        <div style={{ background:"rgba(255,255,255,0.03)", borderRadius:12, padding:24, border:"1px solid rgba(255,255,255,0.06)" }}>
-          <div style={{ marginBottom:10, lineHeight:0 }}><Ico name="lightbulb" size={24} color="rgb(200,180,140)" /></div>
-          <h3 style={{ fontSize:16, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>Feedback & Content</h3>
-          <p style={{ fontSize:13, color:"#71717a", marginBottom:8 }}>Suggest new courses, report content issues, or share ideas for improvement.</p>
-          <a style={{ fontSize:14, fontWeight:700, color:"rgb(200,180,140)", textDecoration:"none" }}>feedback@tutorii.com</a>
-        </div>
-      </div>
-
-      <div style={{ background:"rgba(200,180,140,0.06)", borderRadius:12, padding:24, border:"1px solid rgba(200,180,140,0.15)" }}>
-        <h3 style={{ fontSize:16, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>Business Hours</h3>
-        <p style={{ fontSize:14, color:"#71717a", margin:0 }}>Our support team is available <strong>Sunday through Thursday, 9:00 AM to 6:00 PM GST</strong> (Gulf Standard Time, UTC+4). Emails received outside business hours will be responded to on the next business day.</p>
-      </div>
-    </LegalPage>
-  );
-}
-
-// ═════════════════════════════════════════
-// SUPPORT / TICKET SUBMISSION
-// ═════════════════════════════════════════
-function SupportPage(props) {
-  var go = props.go;
-  var _form = useState({name:"",email:"",category:"general",subject:"",message:""});
-  var form = _form[0]; var setForm = _form[1];
-  var _submitted = useState(false);
-  var submitted = _submitted[0]; var setSubmitted = _submitted[1];
-  var _ticket = useState("");
-  var ticket = _ticket[0]; var setTicket = _ticket[1];
-
-  function set(k,v) { setForm(function(p){var n=Object.assign({},p);n[k]=v;return n}); }
-  function submit() {
-    if (!form.name||!form.email||!form.subject||!form.message) return;
-    setTicket("TK-" + Date.now().toString().slice(-6));
-    setSubmitted(true);
-  }
-
-  return (
-    <LegalPage go={go} title="Submit a Support Ticket">
-      {submitted ? (
-        <div style={{ textAlign:"center", padding:"32px 0" }}>
-          <div style={{ marginBottom:16, lineHeight:0 }}><Ico name="shield" size={48} color="rgb(200,180,140)" /></div>
-          <h2 style={{ fontSize:24, fontWeight:700, color:"#d4d4d8", margin:"0 0 12px" }}>Ticket Submitted</h2>
-          <p style={{ fontSize:15, color:"#71717a", marginBottom:8 }}>Your support ticket has been received.</p>
-          <div style={{ background:"rgba(255,255,255,0.03)", borderRadius:10, padding:16, display:"inline-block", marginBottom:20, border:"1px solid rgba(255,255,255,0.06)" }}>
-            <div style={{ fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>TICKET REFERENCE</div>
-            <div style={{ fontSize:22, fontWeight:800, color:"#d4d4d8", fontFamily:"monospace" }}>{ticket}</div>
-          </div>
-          <p style={{ fontSize:13, color:"#71717a", marginBottom:6 }}>A confirmation has been sent to <strong>{form.email}</strong>.</p>
-          <p style={{ fontSize:13, color:"#71717a", marginBottom:24 }}>You can also reach us directly at <strong>support@tutorii.com</strong> and reference your ticket number.</p>
-          <p style={{ fontSize:12, color:"#52525b" }}>Our team will respond within 24 hours during business hours (Sun-Thu 9AM-6PM GST).</p>
-          <div style={{ marginTop:24 }}>
-            <Btn onClick={function(){go("landing")}} outline style={{ fontSize:13 }}>Back to Home</Btn>
-          </div>
-        </div>
-      ) : (
-        <div>
-          <p style={{ marginBottom:24 }}>Fill out the form below and our support team will get back to you within 24 hours. You can also email us directly at <strong>support@tutorii.com</strong>.</p>
-
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16, marginBottom:16, alignItems:"stretch" }}>
-            <div>
-              <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Full Name *</label>
-              <input value={form.name} onChange={function(e){set("name",e.target.value)}} style={{ width:"100%", padding:"11px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" }} />
-            </div>
-            <div>
-              <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Email Address *</label>
-              <input type="email" value={form.email} onChange={function(e){set("email",e.target.value)}} style={{ width:"100%", padding:"11px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" }} />
-            </div>
-          </div>
-
-          <div style={{ marginBottom:16 }}>
-            <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Category</label>
-            <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
-              {[["general","General"],["billing","Billing & Payment"],["referrals","Referrals & Earnings"],["courses","Courses & Content"],["technical","Technical Issue"],["account","Account"]].map(function(c){ return (
-                <button key={c[0]} onClick={function(){set("category",c[0])}} style={{ padding:"8px 14px", borderRadius:8, border:"2px solid "+(form.category===c[0]?"rgb(200,180,140)":"#27272a"), background:form.category===c[0]?"rgba(200,180,140,0.1)":"transparent", fontSize:12, fontWeight:600, color:form.category===c[0]?"rgb(200,180,140)":"#71717a", cursor:"pointer" }}>{c[1]}</button>
-              )})}
-            </div>
-          </div>
-
-          <div style={{ marginBottom:16 }}>
-            <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Subject *</label>
-            <input value={form.subject} onChange={function(e){set("subject",e.target.value)}} placeholder="Brief description of your issue" style={{ width:"100%", padding:"11px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" }} />
-          </div>
-
-          <div style={{ marginBottom:24 }}>
-            <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Message *</label>
-            <textarea value={form.message} onChange={function(e){set("message",e.target.value)}} rows={6} placeholder="Please describe your issue in detail. Include any relevant information such as dates, amounts, or error messages." style={{ width:"100%", padding:"11px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", fontSize:14, outline:"none", boxSizing:"border-box", resize:"vertical", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" }} />
-          </div>
-
-          <Btn onClick={submit} full style={{ padding:"14px", fontSize:15, borderRadius:12 }}>Submit Ticket</Btn>
-
-          <div style={{ marginTop:20, background:"rgba(255,255,255,0.03)", borderRadius:10, padding:16, border:"1px solid rgba(255,255,255,0.06)" }}>
-            <p style={{ fontSize:12, color:"#52525b", margin:0 }}>Prefer email? Send your enquiry directly to <strong style={{ color:"rgb(200,180,140)" }}>support@tutorii.com</strong>. Our team is available Sunday through Thursday, 9AM to 6PM GST.</p>
-          </div>
-        </div>
-      )}
-    </LegalPage>
-  );
-}
-
 // ═════════════════════════════════════════
 // MAIN APP
 // ═════════════════════════════════════════
@@ -5112,9 +4972,9 @@ function TutoriiApp() {
       {page === "adminLogin" && <AdminLogin go={go} />}
       {page === "adminPanel" && <AdminPanel go={go} courses={courses} setCourses={setCourses} />}
       {page === "terms" && <Suspense fallback={<div style={{minHeight:"100vh",background:"#0a0a0c"}}/>}><TermsPage go={go} /></Suspense>}
-      {page === "privacy" && <PrivacyPage go={go} />}
-      {page === "contact" && <ContactPage go={go} />}
-      {page === "support" && <SupportPage go={go} />}
+      {page === "privacy" && <Suspense fallback={<div style={{minHeight:"100vh",background:"#0a0a0c"}}/>}><PrivacyPage go={go} /></Suspense>}
+      {page === "contact" && <Suspense fallback={<div style={{minHeight:"100vh",background:"#0a0a0c"}}/>}><ContactPage go={go} /></Suspense>}
+      {page === "support" && <Suspense fallback={<div style={{minHeight:"100vh",background:"#0a0a0c"}}/>}><SupportPage go={go} /></Suspense>}
     </div>
   );
 }
