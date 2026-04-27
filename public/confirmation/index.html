@@ -459,15 +459,15 @@
         <div>
           <span class="eyebrow">Subscription confirmed</span>
           <h1>Your Tutorii plan is now active and ready to use</h1>
-          <p class="hero-copy">A premium post-purchase experience for Tutorii, designed as a clean confirmation landing page that reassures the buyer, surfaces the order details instantly, and keeps the next step obvious.</p>
+          <p class="hero-copy" id="hero-name-copy">Welcome! Your account is live and your courses are waiting.</p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#order-details">View order details</a>
-            <a class="btn btn-secondary" href="https://www.tutorii.com/" target="_blank" rel="noopener noreferrer">Back to Tutorii</a>
+            <a class="btn btn-primary" href="https://www.tutorii.com/portal">Go to your dashboard</a>
+            <a class="btn btn-secondary" href="#order-details">View order details</a>
           </div>
           <div class="trust-row" aria-label="confirmation highlights">
-            <span class="trust-pill">Secure checkout complete</span>
-            <span class="trust-pill">Email receipt ready</span>
-            <span class="trust-pill">Instant access enabled</span>
+            <span class="trust-pill">✓ Secure checkout complete</span>
+            <span class="trust-pill">✓ Instant access enabled</span>
+            <span class="trust-pill">✓ Referral link active</span>
           </div>
         </div>
 
@@ -477,24 +477,24 @@
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <path d="M3.5 8.2L6.2 10.9L12.5 4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              Order confirmed
+              Payment confirmed
             </div>
             <div class="order-id">
-              Order no.<br><strong>#TTR-95001</strong>
+              Order no.<br><strong id="order-number">—</strong>
             </div>
           </div>
           <div class="card-body">
-            <div class="card-title">Thank you for subscribing</div>
-            <p class="card-subtitle">Your Tutorii purchase has been successfully processed. Below is a polished summary of the selected package and billing details.</p>
+            <div class="card-title" id="card-thank-you">Thank you for subscribing</div>
+            <p class="card-subtitle">Your Tutorii subscription has been successfully processed. Here is your order summary.</p>
 
             <div class="detail-grid">
               <div class="detail-box">
                 <div class="label">Package</div>
-                <div class="value">Tutorii Subscription</div>
+                <div class="value">Tutorii Monthly</div>
               </div>
               <div class="detail-box">
                 <div class="label">Billing status</div>
-                <div class="value">Paid successfully</div>
+                <div class="value" style="color:var(--color-success)">Paid ✓</div>
               </div>
             </div>
 
@@ -507,26 +507,26 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Quantity</td>
-                  <td>1</td>
+                  <td>Subscription</td>
+                  <td>Monthly plan</td>
                 </tr>
                 <tr>
                   <td>Currency</td>
-                  <td>USD</td>
+                  <td>AED</td>
                 </tr>
                 <tr>
-                  <td>Unit price</td>
-                  <td>$95.00</td>
+                  <td>Date</td>
+                  <td id="order-date">—</td>
                 </tr>
                 <tr class="total-row">
-                  <td>Total value</td>
-                  <td>USD 95.00</td>
+                  <td>Total charged</td>
+                  <td id="order-amount">AED 95.00</td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="card-footer">
-            <div class="support-copy">A confirmation email and receipt can be referenced alongside this page design for a complete post-purchase experience.</div>
+            <div class="support-copy">Questions? Our team is available Sunday–Thursday, 9am–6pm GST.</div>
             <a class="btn btn-primary" href="mailto:support@tutorii.com">Contact support</a>
           </div>
         </article>
@@ -537,69 +537,71 @@
       <div class="container info-grid">
         <section class="panel" aria-labelledby="next-steps-title">
           <h2 id="next-steps-title">What happens next</h2>
-          <p>This side explains the ideal sequence after payment so the customer feels guided instead of abandoned.</p>
+          <p>You're all set. Here's what you can do right now.</p>
           <div class="timeline">
             <div class="timeline-item">
               <span class="dot" aria-hidden="true"></span>
               <div>
-                <div class="item-title">Confirmation arrives immediately</div>
-                <div class="item-copy">The user sees a success state first, then order details, then their action options in the same visual flow.</div>
+                <div class="item-title">Access your courses immediately</div>
+                <div class="item-copy">All modules are unlocked. Head to your dashboard and start learning at your own pace.</div>
               </div>
             </div>
             <div class="timeline-item">
               <span class="dot" aria-hidden="true"></span>
               <div>
-                <div class="item-title">Receipt and account access follow</div>
-                <div class="item-copy">This layout leaves clear space for login, activation, or onboarding links if you want to add them next.</div>
+                <div class="item-title">Share your referral link</div>
+                <div class="item-copy">Your unique referral link is live. Every person who subscribes through it earns you 40% monthly — forever.</div>
               </div>
             </div>
             <div class="timeline-item">
               <span class="dot" aria-hidden="true"></span>
               <div>
-                <div class="item-title">Support stays close to the CTA</div>
-                <div class="item-copy">Customers should not search the whole site for help after purchase, so support is attached directly to the confirmation module.</div>
+                <div class="item-title">Set up your payout details</div>
+                <div class="item-copy">Add your IBAN in Account Settings so you're ready to receive weekly payouts every Tuesday.</div>
               </div>
             </div>
           </div>
         </section>
 
-        <section class="panel" aria-labelledby="design-notes-title">
-          <h2 id="design-notes-title">Why this design works</h2>
-          <p>The structure is intentionally premium, minimal, and conversion-safe for a tutoring brand.</p>
+        <section class="panel" aria-labelledby="earning-title">
+          <h2 id="earning-title">Start earning from day one</h2>
+          <p>Your subscription is both a learning tool and an income stream.</p>
           <div class="bullet-list">
             <div class="bullet-item">
               <span class="bullet-icon" aria-hidden="true">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M4 12H20" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-                  <path d="M12 4V20" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
                 </svg>
               </span>
               <div>
-                <div class="item-title">Fast visual scanning</div>
-                <div class="item-copy">The buyer can find package name, quantity, currency, and total value in seconds.</div>
+                <div class="item-title">40% on every direct referral</div>
+                <div class="item-copy">Refer one person and earn AED 38/month. Refer ten and earn AED 380/month — passively.</div>
               </div>
             </div>
             <div class="bullet-item">
               <span class="bullet-icon" aria-hidden="true">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 3L19 7V12C19 16.4183 15.866 20.1538 12 21C8.13401 20.1538 5 16.4183 5 12V7L12 3Z" stroke="currentColor" stroke-width="1.7"/>
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                  <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.7"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
                 </svg>
               </span>
               <div>
-                <div class="item-title">Trust-building hierarchy</div>
-                <div class="item-copy">The success badge, order number, and top progress bar reinforce payment completion without visual clutter.</div>
+                <div class="item-title">5% on level 2 referrals</div>
+                <div class="item-copy">When your referrals refer others, you earn 5% on their subscriptions too.</div>
               </div>
             </div>
             <div class="bullet-item">
               <span class="bullet-icon" aria-hidden="true">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 19L19 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-                  <path d="M7 7H19V19" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/>
+                  <path d="M2 10h20" stroke="currentColor" stroke-width="1.7"/>
                 </svg>
               </span>
               <div>
-                <div class="item-title">Brand-flexible system</div>
-                <div class="item-copy">This page can easily be expanded with invoice download, onboarding steps, or referral prompts later.</div>
+                <div class="item-title">Paid every Tuesday</div>
+                <div class="item-copy">Earnings above AED 50 are transferred to your registered IBAN every week automatically.</div>
               </div>
             </div>
           </div>
@@ -609,31 +611,45 @@
   </main>
 
   <footer class="site-footer">
-    <div class="container">Concept page for Tutorii order confirmation flow.</div>
+    <div class="container">© 2026 Tutorii · <a href="https://www.tutorii.com/support" style="color:inherit">Support</a> · <a href="https://www.tutorii.com/terms" style="color:inherit">Terms</a> · <a href="https://www.tutorii.com/privacy" style="color:inherit">Privacy</a></div>
   </footer>
 
   <script>
     (function () {
+      // Theme toggle
       const root = document.documentElement;
       const toggle = document.querySelector('[data-theme-toggle]');
       let current = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-
       const icons = {
         dark: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
         light: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
       };
-
       function renderTheme(theme) {
         root.setAttribute('data-theme', theme);
         toggle.innerHTML = theme === 'dark' ? icons.light : icons.dark;
         toggle.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
       }
-
       renderTheme(current);
       toggle.addEventListener('click', function () {
         current = current === 'dark' ? 'light' : 'dark';
         renderTheme(current);
       });
+
+      // Populate order details from URL params
+      const p = new URLSearchParams(window.location.search);
+      const order = p.get('order');
+      const name = p.get('name');
+      const amount = p.get('amount');
+      const date = p.get('date');
+
+      if (order) document.getElementById('order-number').textContent = '#' + order;
+      if (amount) document.getElementById('order-amount').textContent = amount;
+      if (date) document.getElementById('order-date').textContent = date;
+      if (name) {
+        const firstName = name.split(' ')[0];
+        document.getElementById('hero-name-copy').textContent = 'Welcome, ' + firstName + '! Your account is live and your courses are waiting.';
+        document.getElementById('card-thank-you').textContent = 'Thank you, ' + firstName + '!';
+      }
     }());
   </script>
 </body>

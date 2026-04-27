@@ -1525,7 +1525,14 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
       var data = await subscriptionsApi.verifyPayment();
       if (data.activated) {
         setCheckMsg("Payment confirmed! Taking you to your dashboard...");
-        setTimeout(function(){ go("userPortal"); }, 1200);
+        var authUser = JSON.parse(localStorage.getItem("tutorii_user") || "{}");
+        var params = new URLSearchParams({
+          order: data.order_number || "",
+          name: authUser.full_name || "",
+          amount: "AED 95.00",
+          date: new Date().toLocaleDateString("en-US", {year:"numeric",month:"long",day:"numeric"}),
+        });
+        setTimeout(function(){ window.location.href = "/confirmation?" + params.toString(); }, 1200);
       } else {
         setCheckMsg(data.message || "No payment found yet. Make sure you used the same email you registered with on MamoPay, then try again.");
         setChecking(false);
