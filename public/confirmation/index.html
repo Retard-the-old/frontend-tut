@@ -672,20 +672,61 @@
         renderTheme(current);
       });
 
-      // Populate order details from URL params
+      const API = 'https://backend-tut-production.up.railway.app/api/v1';
+
+      function populate(order, name, amount, date) {
+        if (order) document.getElementById('order-number').textContent = '#' + order;
+        if (amount) document.getElementById('order-amount').textContent = amount;
+        if (date) document.getElementById('order-date').textContent = date;
+        if (name) {
+          const firstName = name.split(' ')[0];
+          document.getElementById('hero-name-copy').textContent = 'Welcome, ' + firstName + '! Your account is live and your courses are waiting.';
+          document.getElementById('card-thank-you').textContent = 'Thank you, ' + firstName + '!';
+        }
+      }
+
+      // Try URL params first (set by the "I've paid" flow)
       const p = new URLSearchParams(window.location.search);
       const order = p.get('order');
       const name = p.get('name');
       const amount = p.get('amount');
       const date = p.get('date');
 
-      if (order) document.getElementById('order-number').textContent = '#' + order;
-      if (amount) document.getElementById('order-amount').textContent = amount;
-      if (date) document.getElementById('order-date').textContent = date;
-      if (name) {
-        const firstName = name.split(' ')[0];
-        document.getElementById('hero-name-copy').textContent = 'Welcome, ' + firstName + '! Your account is live and your courses are waiting.';
-        document.getElementById('card-thank-you').textContent = 'Thank you, ' + firstName + '!';
+      if (order) {
+        populate(order, name, amount, date);
+      } else {
+        // No URL params — user arrived directly from MamoPay redirect.
+        // Auto-verify payment using stored auth token.
+        const token = localStorage.getItem('tutorii_access_token');
+        if (token) {
+          const heroEl = document.getElementById('hero-name-copy');
+          heroEl.textContent = 'Verifying your payment…';
+          let attempts = 0;
+          const maxAttempts = 6;
+          function verify() {
+            fetch(API + '/subscriptions/verify-payment', {
+              method: 'POST',
+              headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+              if (data.activated) {
+                const user = JSON.parse(localStorage.getItem('tutorii_user') || '{}');
+                const today = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+                populate(data.order_number, user.full_name, 'AED 95.00', today);
+              } else if (attempts < maxAttempts) {
+                attempts++;
+                setTimeout(verify, 3000);
+              } else {
+                heroEl.textContent = 'Your account is live and your courses are waiting.';
+              }
+            })
+            .catch(function() {
+              if (attempts < maxAttempts) { attempts++; setTimeout(verify, 3000); }
+            });
+          }
+          verify();
+        }
       }
     }());
   </script>
