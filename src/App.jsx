@@ -1630,6 +1630,7 @@ function CreateUserForm(props) {
   var _role = useState("user"); var role = _role[0]; var setRole = _role[1];
   var _loading = useState(false); var loading = _loading[0]; var setLoading = _loading[1];
   var _err = useState(""); var err = _err[0]; var setErr = _err[1];
+  var _showPass = useState(false); var showPass = _showPass[0]; var setShowPass = _showPass[1];
   var inputStyle = { width:"100%", padding:"9px 12px", borderRadius:8, border:"1px solid rgba(255,255,255,0.08)", background:"#0a0a0c", color:"#d4d4d8", fontSize:13, outline:"none", boxSizing:"border-box", fontFamily:"inherit" };
 
   async function handleCreate() {
@@ -1662,7 +1663,15 @@ function CreateUserForm(props) {
         </div>
         <div>
           <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>PASSWORD</label>
-          <input type="password" value={pass} onChange={function(e){setPass(e.target.value);setErr("")}} placeholder="Min 8 characters" style={inputStyle} />
+          <div style={{ position:"relative" }}>
+            <input type={showPass?"text":"password"} value={pass} onChange={function(e){setPass(e.target.value);setErr("")}} placeholder="Min 8 characters" style={Object.assign({},inputStyle,{paddingRight:36})} />
+            <button type="button" onClick={function(){setShowPass(function(v){return !v})}} style={{ position:"absolute", right:8, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", padding:0, lineHeight:0 }}>
+              {showPass
+                ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              }
+            </button>
+          </div>
         </div>
         <div>
           <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>ROLE</label>
