@@ -10,7 +10,7 @@ import { users as usersApi, subscriptions as subscriptionsApi, courses as course
 const PRICE = 95;
 const L1_RATE = 0.40;
 const L2_RATE = 0.05;
-const MAMOPAY_LINK = "https://business.mamopay.com/pay/galcofzellc-4b20ab";
+const MAMOPAY_LINK = "https://business.mamopay.com/pay/galcofzellc-6064fd066371";
 
 const INIT_COURSES = [
   { id: "c1", module: "Life in the UAE", icon: "mosque", lessons: [
