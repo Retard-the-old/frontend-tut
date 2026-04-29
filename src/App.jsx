@@ -2565,7 +2565,7 @@ function UserPortal(props) {
                       </div>
                       <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:8 }}>
                         <div style={{ width:8, height:8, borderRadius:2, background:"rgba(248,113,113,0.4)" }} />
-                        <span style={{ fontSize:10, color:"#71717a", padding:"2px 8px", borderRadius:5, background:"rgba(248,113,113,0.05)", border:"1px solid rgba(248,113,113,0.1)" }}>{"Subscription -AED "+PRICE}</span>
+                        <span style={{ fontSize:10, color:"#71717a", padding:"2px 8px", borderRadius:5, background:"rgba(248,113,113,0.05)", border:"1px solid rgba(248,113,113,0.1)" }}>{"Subscription AED "+PRICE}</span>
                       </div>
                     </div>
                   </div>
