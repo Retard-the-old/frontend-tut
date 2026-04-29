@@ -2555,8 +2555,8 @@ function UserPortal(props) {
                     <svg width="96" height="96" viewBox="0 0 96 96" style={{ flexShrink:0 }}><defs><filter id="glowRing" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
                       <circle cx="48" cy="48" r={r} stroke="rgba(248,113,113,0.15)" strokeWidth="7" fill="none" />
                       <circle cx="48" cy="48" r={r} stroke="rgb(200,180,140)" strokeWidth="7" fill="none" strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" transform="rotate(-90 48 48)" filter="url(#glowRing)" style={{ transition:"stroke-dashoffset 1s ease-out" }} />
-                      <text x="48" y="44" textAnchor="middle" fill="#d4d4d8" fontSize="16" fontFamily="sans-serif" fontWeight="500">{"AED "+monthlyNet.toFixed(0)}</text>
-                      <text x="48" y="58" textAnchor="middle" fill="#52525b" fontSize="8" fontFamily="sans-serif">PROFIT</text>
+                      <text x="48" y="44" textAnchor="middle" fill="#d4d4d8" fontSize="16" fontFamily="sans-serif" fontWeight="500">{"AED "+monthlyGross.toFixed(0)}</text>
+                      <text x="48" y="58" textAnchor="middle" fill="#52525b" fontSize="8" fontFamily="sans-serif">EARNED</text>
                     </svg>
                     <div>
                       <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:6 }}>
@@ -2567,7 +2567,6 @@ function UserPortal(props) {
                         <div style={{ width:8, height:8, borderRadius:2, background:"rgba(248,113,113,0.4)" }} />
                         <span style={{ fontSize:10, color:"#71717a", padding:"2px 8px", borderRadius:5, background:"rgba(248,113,113,0.05)", border:"1px solid rgba(248,113,113,0.1)" }}>{"Subscription -AED "+PRICE}</span>
                       </div>
-                      <div style={{ display:"inline-block", fontSize:13, fontWeight:600, color:monthlyNet>=0?"rgb(200,180,140)":"#f87171", padding:"4px 12px", borderRadius:8, background:monthlyNet>=0?"rgba(200,180,140,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(monthlyNet>=0?"rgba(200,180,140,0.15)":"rgba(248,113,113,0.15)"), marginTop:4 }}>{"Net Profit AED "+monthlyNet.toFixed(2)}</div>
                     </div>
                   </div>
                 );
