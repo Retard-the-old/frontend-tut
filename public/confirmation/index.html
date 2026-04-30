@@ -1,30 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-T4P7MGS6');</script>
-<!-- End Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-T4P7MGS6');</script>
+  <!-- End Google Tag Manager -->
 
-  
   <title>Tutorii Order Confirmation</title>
+  <meta name="theme-color" content="#0a0a0c" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    :root, [data-theme="light"] {
-      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
-      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
-      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
-      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
-      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
-      --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
+    :root {
+      --text-xs: clamp(0.75rem, 0.7rem + 0.2vw, 0.8125rem);
+      --text-sm: clamp(0.8125rem, 0.78rem + 0.25vw, 0.9375rem);
+      --text-base: clamp(0.9375rem, 0.9rem + 0.25vw, 1rem);
+      --text-md: clamp(1rem, 0.95rem + 0.4vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.7vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.25rem + 1.25vw, 2.25rem);
+      --text-2xl: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+
       --space-1: 0.25rem;
       --space-2: 0.5rem;
       --space-3: 0.75rem;
@@ -36,70 +39,89 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       --space-12: 3rem;
       --space-16: 4rem;
       --space-20: 5rem;
-      --radius-sm: 0.375rem;
-      --radius-md: 0.5rem;
-      --radius-lg: 0.75rem;
-      --radius-xl: 1rem;
-      --radius-full: 9999px;
-      --color-bg: #f7f6f2;
-      --color-surface: #fbfbf8;
-      --color-surface-2: #f1efe9;
-      --color-border: rgba(40, 37, 29, 0.12);
-      --color-divider: rgba(40, 37, 29, 0.08);
-      --color-text: #28251d;
-      --color-text-muted: #6f6c64;
-      --color-text-faint: #9e9b94;
-      --color-text-inverse: #f9f8f4;
-      --color-primary: #01696f;
-      --color-primary-hover: #0c4e54;
-      --color-primary-soft: rgba(1, 105, 111, 0.08);
-      --color-success: #437a22;
-      --color-success-soft: rgba(67, 122, 34, 0.12);
-      --shadow-sm: 0 1px 2px rgba(24, 22, 17, 0.06);
-      --shadow-md: 0 10px 30px rgba(24, 22, 17, 0.08);
-      --shadow-lg: 0 24px 64px rgba(24, 22, 17, 0.12);
-      --content-wide: 1180px;
-      --font-display: 'Instrument Serif', Georgia, serif;
-      --font-body: 'Work Sans', Arial, sans-serif;
-      --transition-interactive: 180ms cubic-bezier(0.16, 1, 0.3, 1);
-    }
 
-    [data-theme="dark"] {
-      --color-bg: #171614;
-      --color-surface: #1d1b19;
-      --color-surface-2: #24221f;
-      --color-border: rgba(205, 204, 202, 0.14);
-      --color-divider: rgba(205, 204, 202, 0.08);
-      --color-text: #cdccca;
-      --color-text-muted: #9a9892;
-      --color-text-faint: #73716d;
-      --color-text-inverse: #11110f;
-      --color-primary: #4f98a3;
-      --color-primary-hover: #66aeb7;
-      --color-primary-soft: rgba(79, 152, 163, 0.12);
-      --color-success: #7fb35b;
-      --color-success-soft: rgba(127, 179, 91, 0.14);
-      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
-      --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.32);
-      --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.4);
+      --radius-sm: 10px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+
+      /* Tutorii dark palette */
+      --bg: #0a0a0c;
+      --bg-elevated: #111113;
+      --bg-card: #131315;
+      --hairline: rgba(255, 255, 255, 0.06);
+      --hairline-strong: rgba(255, 255, 255, 0.10);
+      --hairline-soft: rgba(255, 255, 255, 0.04);
+
+      --text: #d4d4d8;
+      --text-strong: #e4e4e7;
+      --text-soft: #a1a1aa;
+      --text-muted: #71717a;
+      --text-faint: #52525b;
+      --text-fainter: #3f3f46;
+
+      --gold: rgb(200, 180, 140);
+      --gold-soft: rgba(200, 180, 140, 0.12);
+      --gold-glow: rgba(200, 180, 140, 0.18);
+
+      --success: #4ade80;
+      --success-soft: rgba(74, 222, 128, 0.10);
+
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.45);
+      --shadow-lg: 0 24px 80px rgba(0, 0, 0, 0.55), 0 0 80px rgba(200, 180, 140, 0.04);
+
+      --content-wide: 1180px;
+      --font-display: 'DM Sans', system-ui, sans-serif;
+      --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-italic: Georgia, 'Times New Roman', serif;
+      --transition: 240ms cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
     body {
       margin: 0;
       min-height: 100vh;
       font-family: var(--font-body);
       font-size: var(--text-base);
-      line-height: 1.6;
-      color: var(--color-text);
-      background:
-        radial-gradient(circle at top left, rgba(1,105,111,0.09), transparent 34%),
-        radial-gradient(circle at bottom right, rgba(67,122,34,0.08), transparent 26%),
-        var(--color-bg);
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+      position: relative;
+      overflow-x: hidden;
     }
+
+    /* Ambient layers — match Tutorii's NoiseOverlay + DotGrid + radial glow */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.035;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 600px 400px at 12% -5%, rgba(200, 180, 140, 0.07), transparent 70%),
+        radial-gradient(ellipse 800px 500px at 95% 15%, rgba(255, 255, 255, 0.025), transparent 65%);
+    }
+
+    main, header, footer { position: relative; z-index: 1; }
+
     img, svg { display: block; max-width: 100%; }
-    a, button { transition: all var(--transition-interactive); }
+    a, button { transition: all var(--transition); }
     button {
       font: inherit;
       color: inherit;
@@ -107,21 +129,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       border: none;
       cursor: pointer;
     }
+
+    ::selection { background: rgba(200, 180, 140, 0.25); color: var(--text-strong); }
+
     .container {
-      width: min(calc(100% - 2rem), var(--content-wide));
+      width: min(calc(100% - 2.5rem), var(--content-wide));
       margin-inline: auto;
     }
+
     .skip-link {
       position: absolute;
       left: 1rem;
       top: -3rem;
-      background: var(--color-primary);
-      color: var(--color-text-inverse);
+      background: var(--bg-elevated);
+      color: var(--text-strong);
       padding: var(--space-3) var(--space-4);
       border-radius: var(--radius-md);
-      z-index: 10;
+      border: 1px solid var(--hairline-strong);
+      z-index: 100;
+      text-decoration: none;
+      font-size: var(--text-sm);
     }
     .skip-link:focus { top: 1rem; }
+
+    /* ── Header ─────────────────────────────────────────── */
     .site-header {
       padding: var(--space-5) 0;
     }
@@ -140,64 +171,106 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       min-height: 44px;
     }
     .brand-mark {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, var(--color-primary-soft), rgba(255,255,255,0));
-      border: 1px solid var(--color-border);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.02));
+      border: 1px solid var(--hairline-strong);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--text-strong);
+      line-height: 1;
     }
     .brand-word {
+      font-family: var(--font-display);
       font-weight: 600;
+      font-style: italic;
+      font-size: 19px;
       letter-spacing: -0.02em;
+      color: var(--text-strong);
     }
-    .theme-toggle {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 1px solid var(--color-border);
-      background: var(--color-surface);
-      display: grid;
-      place-items: center;
-      box-shadow: var(--shadow-sm);
-    }
-    .theme-toggle:hover { background: var(--color-surface-2); }
-
-    .hero {
-      padding: clamp(var(--space-8), 7vw, var(--space-16)) 0 var(--space-16);
-    }
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: var(--space-8);
+    .header-meta {
+      display: inline-flex;
       align-items: center;
+      gap: var(--space-2);
+      padding: 7px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--hairline);
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
     }
+    .header-meta .pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px rgba(74, 222, 128, 0.7);
+      animation: pulseDot 2.4s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(0.85); }
+    }
+
+    /* ── SLabel-style eyebrow ───────────────────────────── */
     .eyebrow {
       display: inline-flex;
       align-items: center;
       gap: var(--space-2);
-      padding: 0.45rem 0.8rem;
+      padding: 8px 16px;
       border-radius: var(--radius-full);
-      background: var(--color-primary-soft);
-      color: var(--color-primary);
-      font-size: var(--text-xs);
-      font-weight: 600;
-      letter-spacing: 0.06em;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-soft);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
     }
+    .eyebrow svg {
+      filter:
+        drop-shadow(0 2px 4px rgba(255, 255, 255, 0.06))
+        drop-shadow(0 0 8px var(--gold-glow));
+    }
+
+    /* ── Hero ───────────────────────────────────────────── */
+    .hero {
+      padding: clamp(var(--space-8), 6vw, var(--space-16)) 0 var(--space-16);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(var(--space-6), 4vw, var(--space-12));
+      align-items: center;
+    }
     h1 {
-      margin: var(--space-5) 0 var(--space-4);
+      margin: var(--space-5) 0 var(--space-5);
       font-family: var(--font-display);
       font-size: var(--text-2xl);
-      line-height: 0.98;
-      letter-spacing: -0.04em;
-      max-width: 12ch;
+      font-weight: 600;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      color: #c8c8cc;
+      max-width: 14ch;
+    }
+    h1 .accent {
+      font-family: var(--font-italic);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--gold);
+      letter-spacing: -0.02em;
     }
     .hero-copy {
-      color: var(--color-text-muted);
-      max-width: 58ch;
-      margin-bottom: var(--space-8);
+      color: var(--text-muted);
+      max-width: 50ch;
+      margin: 0 0 var(--space-8);
+      font-size: var(--text-md);
+      line-height: 1.65;
     }
     .hero-actions {
       display: flex;
@@ -207,33 +280,54 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
     .btn {
       min-height: 48px;
-      padding: 0.9rem 1.15rem;
-      border-radius: var(--radius-full);
+      padding: 13px 26px;
+      border-radius: 12px;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: var(--space-2);
-      font-size: var(--text-sm);
-      font-weight: 600;
-      border: 1px solid transparent;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      border: 1px solid var(--hairline-strong);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     .btn-primary {
-      color: var(--color-text-inverse);
-      background: var(--color-primary);
-      box-shadow: var(--shadow-md);
+      color: #fafafa;
+      background: rgba(255, 255, 255, 0.06);
     }
-    .btn-primary:hover { background: var(--color-primary-hover); }
+    .btn-primary:hover {
+      background: rgba(255, 255, 255, 0.10);
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-1px);
+    }
+    .btn-primary .arrow {
+      font-size: 16px;
+      line-height: 1;
+      transition: transform var(--transition);
+    }
+    .btn-primary:hover .arrow {
+      transform: translate(2px, -2px);
+    }
     .btn-secondary {
-      background: var(--color-surface);
-      color: var(--color-text);
-      border-color: var(--color-border);
+      color: var(--text-soft);
+      background: transparent;
+      border-color: var(--hairline);
     }
+    .btn-secondary:hover {
+      color: var(--text-strong);
+      background: rgba(255, 255, 255, 0.03);
+      border-color: var(--hairline-strong);
+    }
+
     .trust-row {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--space-4);
-      color: var(--color-text-muted);
+      gap: var(--space-4) var(--space-5);
+      color: var(--text-muted);
       font-size: var(--text-sm);
     }
     .trust-pill {
@@ -241,22 +335,33 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       align-items: center;
       gap: var(--space-2);
     }
+    .trust-pill svg { color: var(--gold); flex-shrink: 0; }
 
+    /* ── Confirmation card (GCard treatment) ────────────── */
     .confirmation-card {
       position: relative;
-      background: linear-gradient(180deg, var(--color-surface), color-mix(in srgb, var(--color-surface) 82%, var(--color-primary-soft)));
-      border: 1px solid var(--color-border);
-      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
+      border-radius: 20px;
+      padding: 1px;
       box-shadow: var(--shadow-lg);
-      overflow: hidden;
     }
-    .confirmation-card::before {
+    .confirmation-card-inner {
+      background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-elevated) 100%);
+      border-radius: 19px;
+      overflow: hidden;
+      position: relative;
+    }
+    .confirmation-card-inner::before {
       content: "";
       position: absolute;
-      inset: 0 0 auto;
-      height: 5px;
-      background: linear-gradient(90deg, var(--color-primary), var(--color-success));
+      top: 0;
+      left: 18%;
+      right: 18%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-glow), transparent);
+      pointer-events: none;
     }
+
     .card-header,
     .card-body,
     .card-footer {
@@ -267,467 +372,742 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       align-items: center;
       justify-content: space-between;
       gap: var(--space-4);
-      border-bottom: 1px solid var(--color-divider);
+      border-bottom: 1px solid var(--hairline);
     }
     .success-badge {
       display: inline-flex;
       align-items: center;
       gap: var(--space-2);
-      background: var(--color-success-soft);
-      color: var(--color-success);
-      padding: 0.5rem 0.85rem;
+      background: var(--success-soft);
+      color: var(--success);
+      padding: 7px 14px;
       border-radius: var(--radius-full);
-      font-size: var(--text-xs);
-      font-weight: 700;
-      letter-spacing: 0.05em;
+      border: 1px solid rgba(74, 222, 128, 0.20);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
     }
     .order-id {
-      font-size: var(--text-sm);
-      color: var(--color-text-muted);
-      text-align: right;
-    }
-    .card-title {
-      font-size: var(--text-xl);
-      font-family: var(--font-display);
-      letter-spacing: -0.03em;
-      margin-bottom: var(--space-2);
-    }
-    .card-subtitle {
-      color: var(--color-text-muted);
-      margin-bottom: var(--space-6);
-    }
-    .detail-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: var(--space-4);
-      margin-bottom: var(--space-6);
-    }
-    .detail-box {
-      background: var(--color-surface-2);
-      border: 1px solid var(--color-border);
-      border-radius: 22px;
-      padding: var(--space-4);
-    }
-    .label {
       font-size: var(--text-xs);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--color-text-faint);
-      margin-bottom: var(--space-2);
+      color: var(--text-faint);
+      text-align: right;
+      letter-spacing: 0.04em;
     }
-    .value {
+    .order-id .label {
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+      color: var(--text-fainter);
+    }
+    .order-id strong {
+      display: block;
+      margin-top: 4px;
+      font-family: var(--font-display);
+      font-size: var(--text-md);
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
       font-size: var(--text-lg);
       font-weight: 600;
       letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: var(--space-2);
     }
+    .card-title .accent {
+      font-family: var(--font-italic);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--gold);
+    }
+    .card-subtitle {
+      color: var(--text-muted);
+      font-size: var(--text-sm);
+      margin: 0 0 var(--space-6);
+      line-height: 1.6;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+    .detail-box {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+    }
+    .detail-box .label {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-faint);
+      margin-bottom: 6px;
+    }
+    .detail-box .value {
+      font-family: var(--font-display);
+      font-size: var(--text-md);
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      color: var(--text);
+    }
+    .detail-box .value.is-success {
+      color: var(--success);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .detail-box .value.is-success svg { flex-shrink: 0; }
+
     .order-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: var(--space-5);
     }
     .order-table th,
     .order-table td {
       text-align: left;
-      padding: var(--space-3) 0;
-      border-bottom: 1px solid var(--color-divider);
+      padding: 12px 0;
+      border-bottom: 1px solid var(--hairline);
       font-size: var(--text-sm);
     }
-    .order-table th { color: var(--color-text-muted); font-weight: 500; }
+    .order-table th {
+      color: var(--text-fainter);
+      font-weight: 500;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding-bottom: 10px;
+    }
+    .order-table td { color: var(--text-soft); }
+    .order-table td:first-child { color: var(--text-muted); }
     .order-table td:last-child,
     .order-table th:last-child { text-align: right; }
     .total-row td {
       border-bottom: none;
-      padding-top: var(--space-4);
+      padding-top: 16px;
       font-size: var(--text-base);
-      font-weight: 700;
     }
+    .total-row td:first-child {
+      color: var(--text);
+      font-weight: 500;
+    }
+    .total-row td:last-child {
+      color: var(--text-strong);
+      font-weight: 600;
+      font-family: var(--font-display);
+      letter-spacing: -0.01em;
+    }
+
     .card-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: var(--space-4);
-      border-top: 1px solid var(--color-divider);
-      background: color-mix(in srgb, var(--color-surface-2) 70%, transparent);
+      border-top: 1px solid var(--hairline);
+      background: rgba(255, 255, 255, 0.015);
     }
     .support-copy {
-      color: var(--color-text-muted);
+      color: var(--text-muted);
       font-size: var(--text-sm);
-      max-width: 34ch;
+      max-width: 32ch;
+      line-height: 1.55;
     }
 
+    /* ── Info strip ─────────────────────────────────────── */
     .info-strip {
-      padding-bottom: var(--space-16);
+      padding-bottom: clamp(var(--space-12), 8vw, var(--space-20));
+      position: relative;
+    }
+    .info-strip::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(80%, 600px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
     }
     .info-grid {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: var(--space-8);
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(var(--space-4), 2vw, var(--space-6));
+      margin-top: clamp(var(--space-8), 5vw, var(--space-12));
     }
     .panel {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: 28px;
-      padding: var(--space-6);
-      box-shadow: var(--shadow-md);
+      position: relative;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.015) 100%);
+      border-radius: 20px;
+      padding: 1px;
+      height: 100%;
+    }
+    .panel-inner {
+      background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-elevated) 100%);
+      border-radius: 19px;
+      padding: clamp(var(--space-5), 3vw, var(--space-8));
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .panel-inner::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 15%;
+      right: 15%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+      pointer-events: none;
+    }
+    .panel-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-faint);
+      margin-bottom: var(--space-4);
+    }
+    .panel-eyebrow .dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 8px var(--gold-glow);
     }
     .panel h2 {
       font-family: var(--font-display);
-      font-size: var(--text-xl);
-      letter-spacing: -0.03em;
-      margin-bottom: var(--space-3);
+      font-size: clamp(1.25rem, 1rem + 1vw, 1.625rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      color: var(--text);
+      margin: 0 0 var(--space-3);
     }
-    .panel p {
-      color: var(--color-text-muted);
-      margin: 0 0 var(--space-5);
+    .panel h2 .accent {
+      font-family: var(--font-italic);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--gold);
     }
+    .panel > .panel-inner > p {
+      color: var(--text-muted);
+      font-size: var(--text-sm);
+      margin: 0 0 var(--space-6);
+      line-height: 1.65;
+    }
+
     .timeline,
     .bullet-list {
       display: grid;
-      gap: var(--space-4);
+      gap: var(--space-5);
     }
     .timeline-item,
     .bullet-item {
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: var(--space-3);
+      gap: var(--space-4);
       align-items: start;
     }
-    .dot {
-      width: 12px;
-      height: 12px;
-      margin-top: 0.5rem;
-      border-radius: 50%;
-      background: var(--color-primary);
-      box-shadow: 0 0 0 6px var(--color-primary-soft);
-    }
-    .bullet-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
+
+    /* Numbered timeline marker */
+    .step-marker {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
       display: grid;
       place-items: center;
-      background: var(--color-surface-2);
-      border: 1px solid var(--color-border);
-    }
-    .item-title {
+      font-family: var(--font-display);
+      font-size: 13px;
       font-weight: 600;
-      margin-bottom: 0.2rem;
-    }
-    .item-copy {
-      color: var(--color-text-muted);
-      font-size: var(--text-sm);
-    }
-    .site-footer {
-      padding: 0 0 var(--space-8);
-      color: var(--color-text-faint);
-      font-size: var(--text-sm);
+      color: var(--gold);
+      background: linear-gradient(135deg, rgba(200, 180, 140, 0.10), rgba(200, 180, 140, 0.02));
+      border: 1px solid rgba(200, 180, 140, 0.18);
+      letter-spacing: -0.01em;
+      flex-shrink: 0;
     }
 
+    .bullet-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+      border: 1px solid var(--hairline-strong);
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .bullet-icon svg {
+      filter:
+        drop-shadow(0 2px 4px rgba(255, 255, 255, 0.05))
+        drop-shadow(0 0 8px var(--gold-glow));
+    }
+
+    .item-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: var(--text-base);
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .item-copy {
+      color: var(--text-muted);
+      font-size: var(--text-sm);
+      line-height: 1.6;
+    }
+    .item-copy strong { color: var(--text-soft); font-weight: 500; }
+
+    /* ── Footer ─────────────────────────────────────────── */
+    .site-footer {
+      border-top: 1px solid var(--hairline);
+      padding: var(--space-12) 0 var(--space-6);
+      background: rgba(255, 255, 255, 0.012);
+    }
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-8);
+      padding-bottom: var(--space-8);
+      border-bottom: 1px solid var(--hairline);
+      flex-wrap: wrap;
+    }
+    .footer-brand-block { max-width: 300px; }
+    .footer-brand-block .brand { margin-bottom: var(--space-4); }
+    .footer-brand-block p {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      margin: 0 0 var(--space-3);
+      line-height: 1.65;
+    }
+    .footer-brand-block a {
+      font-size: var(--text-sm);
+      color: var(--text-soft);
+      text-decoration: none;
+    }
+    .footer-brand-block a:hover { color: var(--gold); }
+
+    .footer-cols {
+      display: flex;
+      gap: clamp(var(--space-8), 5vw, var(--space-16));
+      flex-wrap: wrap;
+    }
+    .footer-col-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-fainter);
+      margin-bottom: var(--space-4);
+    }
+    .footer-links {
+      display: grid;
+      gap: var(--space-3);
+    }
+    .footer-links a {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .footer-links a:hover { color: var(--text-strong); }
+
+    .footer-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-5) 0 0;
+      font-size: var(--text-xs);
+      color: var(--text-fainter);
+    }
+    .footer-meta a {
+      color: var(--text-fainter);
+      text-decoration: none;
+    }
+    .footer-meta a:hover { color: var(--text-muted); }
+
+    /* ── Reveal animation ──────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .reveal-1 { animation-delay: 0.05s; }
+    .reveal-2 { animation-delay: 0.15s; }
+    .reveal-3 { animation-delay: 0.25s; }
+    .reveal-4 { animation-delay: 0.35s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ── Responsive ─────────────────────────────────────── */
     @media (max-width: 960px) {
       .hero-grid,
-      .info-grid { grid-template-columns: 1fr; }
-      h1 { max-width: 14ch; }
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+      h1 { max-width: 18ch; }
       .card-header,
-      .card-footer { flex-direction: column; align-items: flex-start; }
+      .card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
       .order-id { text-align: left; }
     }
 
     @media (max-width: 640px) {
-      .container { width: min(calc(100% - 1.25rem), var(--content-wide)); }
+      .container { width: min(calc(100% - 1.5rem), var(--content-wide)); }
       .hero { padding-top: var(--space-4); }
       .detail-grid { grid-template-columns: 1fr; }
-      .card-header, .card-body, .card-footer, .panel { padding: var(--space-5); }
-      .hero-actions { flex-direction: column; }
+      .card-header,
+      .card-body,
+      .card-footer { padding: var(--space-5); }
+      .hero-actions { flex-direction: column; align-items: stretch; }
       .btn { width: 100%; }
       .trust-row { flex-direction: column; gap: var(--space-3); }
+      .header-meta { display: none; }
+      .footer-grid { gap: var(--space-6); }
     }
   </style>
 </head>
 <body>
   <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T4P7MGS6"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T4P7MGS6"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
   <a class="skip-link" href="#main">Skip to content</a>
+
   <header class="site-header">
     <div class="container header-row">
       <a class="brand" href="https://www.tutorii.com/" target="_blank" rel="noopener noreferrer" aria-label="Tutorii home">
-        <span class="brand-mark" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5 7.5C5 6.11929 6.11929 5 7.5 5H16.5C17.8807 5 19 6.11929 19 7.5V16.5C19 17.8807 17.8807 19 16.5 19H7.5C6.11929 19 5 17.8807 5 16.5V7.5Z" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M8 9.5H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M8 12H13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M8 14.5H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </span>
+        <span class="brand-mark" aria-hidden="true">T</span>
         <span class="brand-word">Tutorii</span>
       </a>
-      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme"></button>
+      <span class="header-meta" aria-hidden="true">
+        <span class="pulse"></span>
+        Account active
+      </span>
     </div>
   </header>
 
   <main id="main">
+    <!-- ── HERO ─────────────────────────────────────────── -->
     <section class="hero">
       <div class="container hero-grid">
         <div>
-          <span class="eyebrow">Subscription confirmed</span>
-          <h1>Your Tutorii plan is now active and ready to use</h1>
-          <p class="hero-copy" id="hero-name-copy">Welcome! Your account is live and your courses are waiting.</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="https://www.tutorii.com/portal">Go to your dashboard</a>
+          <span class="eyebrow reveal reveal-1">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12.5L10 17L19 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Subscription confirmed
+          </span>
+          <h1 class="reveal reveal-2">
+            Your Tutorii plan is now <span class="accent">active</span> &amp; ready to use
+          </h1>
+          <p class="hero-copy reveal reveal-3" id="hero-name-copy">
+            Welcome! Your account is live and your courses are waiting.
+          </p>
+          <div class="hero-actions reveal reveal-3">
+            <a class="btn btn-primary" href="https://www.tutorii.com/portal">
+              Go to your dashboard
+              <span class="arrow" aria-hidden="true">↗</span>
+            </a>
             <a class="btn btn-secondary" href="#order-details">View order details</a>
           </div>
-          <div class="trust-row" aria-label="confirmation highlights">
-            <span class="trust-pill">✓ Secure checkout complete</span>
-            <span class="trust-pill">✓ Instant access enabled</span>
-            <span class="trust-pill">✓ Referral link active</span>
+          <div class="trust-row reveal reveal-4" aria-label="confirmation highlights">
+            <span class="trust-pill">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12.5L10 17L19 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Secure checkout complete
+            </span>
+            <span class="trust-pill">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12.5L10 17L19 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Instant access enabled
+            </span>
+            <span class="trust-pill">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12.5L10 17L19 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Referral link active
+            </span>
           </div>
         </div>
 
-        <article class="confirmation-card" id="order-details" aria-label="Order confirmation details">
-          <div class="card-header">
-            <div class="success-badge">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M3.5 8.2L6.2 10.9L12.5 4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Payment confirmed
-            </div>
-            <div class="order-id">
-              Order no.<br><strong id="order-number">—</strong>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="card-title" id="card-thank-you">Thank you for subscribing</div>
-            <p class="card-subtitle">Your Tutorii subscription has been successfully processed. Here is your order summary.</p>
-
-            <div class="detail-grid">
-              <div class="detail-box">
-                <div class="label">Package</div>
-                <div class="value">Tutorii Monthly</div>
+        <article class="confirmation-card reveal reveal-3" id="order-details" aria-label="Order confirmation details">
+          <div class="confirmation-card-inner">
+            <div class="card-header">
+              <div class="success-badge">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3.5 8.2L6.2 10.9L12.5 4.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Payment confirmed
               </div>
-              <div class="detail-box">
-                <div class="label">Billing status</div>
-                <div class="value" style="color:var(--color-success)">Paid ✓</div>
+              <div class="order-id">
+                <span class="label">Order no.</span>
+                <strong id="order-number">—</strong>
               </div>
             </div>
 
-            <table class="order-table" aria-label="Order summary table">
-              <thead>
-                <tr>
-                  <th>Order details</th>
-                  <th>Value</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Subscription</td>
-                  <td>Monthly plan</td>
-                </tr>
-                <tr>
-                  <td>Currency</td>
-                  <td>AED</td>
-                </tr>
-                <tr>
-                  <td>Date</td>
-                  <td id="order-date">—</td>
-                </tr>
-                <tr class="total-row">
-                  <td>Total charged</td>
-                  <td id="order-amount">AED 95.00</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="card-footer">
-            <div class="support-copy">Questions? Our team is available Sunday–Thursday, 9am–6pm GST.</div>
-            <a class="btn btn-primary" href="mailto:support@tutorii.com">Contact support</a>
+            <div class="card-body">
+              <div class="card-title" id="card-thank-you">
+                Thank you for <span class="accent">subscribing</span>
+              </div>
+              <p class="card-subtitle">
+                Your Tutorii subscription has been successfully processed. Here is your order summary.
+              </p>
+
+              <div class="detail-grid">
+                <div class="detail-box">
+                  <div class="label">Package</div>
+                  <div class="value">Tutorii Monthly</div>
+                </div>
+                <div class="detail-box">
+                  <div class="label">Billing status</div>
+                  <div class="value is-success">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M5 12.5L10 17L19 8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Paid
+                  </div>
+                </div>
+              </div>
+
+              <table class="order-table" aria-label="Order summary table">
+                <thead>
+                  <tr>
+                    <th scope="col">Order details</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Subscription</td>
+                    <td>Monthly plan</td>
+                  </tr>
+                  <tr>
+                    <td>Currency</td>
+                    <td>AED</td>
+                  </tr>
+                  <tr>
+                    <td>Date</td>
+                    <td id="order-date">—</td>
+                  </tr>
+                  <tr class="total-row">
+                    <td>Total charged</td>
+                    <td id="order-amount">AED 95.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="card-footer">
+              <div class="support-copy">
+                Questions? Our team is available Sunday–Thursday, 9am–6pm GST.
+              </div>
+              <a class="btn btn-primary" href="mailto:support@tutorii.com">
+                Contact support
+                <span class="arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
           </div>
         </article>
       </div>
     </section>
 
+    <!-- ── INFO STRIP ───────────────────────────────────── -->
     <section class="info-strip">
       <div class="container info-grid">
-        <section class="panel" aria-labelledby="next-steps-title">
-          <h2 id="next-steps-title">What happens next</h2>
-          <p>You're all set. Here's what you can do right now.</p>
-          <div class="timeline">
-            <div class="timeline-item">
-              <span class="dot" aria-hidden="true"></span>
-              <div>
-                <div class="item-title">Access your courses immediately</div>
-                <div class="item-copy">All modules are unlocked. Head to your dashboard and start learning at your own pace.</div>
-              </div>
-            </div>
-            <div class="timeline-item">
-              <span class="dot" aria-hidden="true"></span>
-              <div>
-                <div class="item-title">Share your referral link</div>
-                <div class="item-copy">Your unique referral link is live. Every person who subscribes through it earns you 40% monthly — forever.</div>
-              </div>
-            </div>
-            <div class="timeline-item">
-              <span class="dot" aria-hidden="true"></span>
-              <div>
-                <div class="item-title">Set up your payout details</div>
-                <div class="item-copy">Add your IBAN in Account Settings so you're ready to receive weekly payouts every Tuesday.</div>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        <section class="panel" aria-labelledby="earning-title">
-          <h2 id="earning-title">Start earning from day one</h2>
-          <p>Your subscription is both a learning tool and an income stream.</p>
-          <div class="bullet-list">
-            <div class="bullet-item">
-              <span class="bullet-icon" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <div>
-                <div class="item-title">40% on every direct referral</div>
-                <div class="item-copy">Refer one person and earn AED 38/month. Refer ten and earn AED 380/month — passively.</div>
-              </div>
+        <div class="panel" aria-labelledby="next-steps-title">
+          <div class="panel-inner">
+            <div class="panel-eyebrow">
+              <span class="dot"></span>
+              Next steps
             </div>
-            <div class="bullet-item">
-              <span class="bullet-icon" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-                  <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.7"/>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-                </svg>
-              </span>
-              <div>
-                <div class="item-title">5% on level 2 referrals</div>
-                <div class="item-copy">When your referrals refer others, you earn 5% on their subscriptions too.</div>
+            <h2 id="next-steps-title">What <span class="accent">happens next</span></h2>
+            <p>You're all set. Here's what you can do right now.</p>
+            <div class="timeline">
+              <div class="timeline-item">
+                <span class="step-marker" aria-hidden="true">01</span>
+                <div>
+                  <div class="item-title">Access your courses immediately</div>
+                  <div class="item-copy">All modules are unlocked. Head to your dashboard and start learning at your own pace.</div>
+                </div>
               </div>
-            </div>
-            <div class="bullet-item">
-              <span class="bullet-icon" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/>
-                  <path d="M2 10h20" stroke="currentColor" stroke-width="1.7"/>
-                </svg>
-              </span>
-              <div>
-                <div class="item-title">Paid every Tuesday</div>
-                <div class="item-copy">Earnings above AED 50 are transferred to your registered IBAN every week automatically.</div>
+              <div class="timeline-item">
+                <span class="step-marker" aria-hidden="true">02</span>
+                <div>
+                  <div class="item-title">Share your referral link</div>
+                  <div class="item-copy">Your unique referral link is live. Every person who subscribes through it earns you <strong>40% monthly</strong> — for as long as they stay subscribed.</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <span class="step-marker" aria-hidden="true">03</span>
+                <div>
+                  <div class="item-title">Set up your payout details</div>
+                  <div class="item-copy">Add your IBAN in Account Settings so you're ready to receive weekly payouts every Tuesday.</div>
+                </div>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+
+        <div class="panel" aria-labelledby="earning-title">
+          <div class="panel-inner">
+            <div class="panel-eyebrow">
+              <span class="dot"></span>
+              Earning model
+            </div>
+            <h2 id="earning-title">Start earning <span class="accent">from day one</span></h2>
+            <p>Your subscription is both a learning tool and an income stream.</p>
+            <div class="bullet-list">
+              <div class="bullet-item">
+                <span class="bullet-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93V18h-2v1.93C7.06 19.43 4 16.07 4 12c0-4.42 3.58-8 8-8s8 3.58 8 8c0 4.07-3.06 7.43-7 7.93zM13 9h-2v2h2V9zm0 4h-2v2h2v-2z" fill-opacity="0.85"/>
+                  </svg>
+                </span>
+                <div>
+                  <div class="item-title">40% on every direct referral</div>
+                  <div class="item-copy">Refer one person and earn AED 38/month. Refer ten and earn <strong>AED 380/month</strong> — passively.</div>
+                </div>
+              </div>
+              <div class="bullet-item">
+                <span class="bullet-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" fill-opacity="0.85"/>
+                  </svg>
+                </span>
+                <div>
+                  <div class="item-title">5% on level 2 referrals</div>
+                  <div class="item-copy">When your referrals refer others, you earn 5% on their subscriptions too.</div>
+                </div>
+              </div>
+              <div class="bullet-item">
+                <span class="bullet-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M4 10h3v7H4v-7zm6 0h3v7h-3v-7zm8-4L12 2 6 6H2v2h20V6h-4zm-6-1.5L16.55 6H7.45L12 4.5zM2 19v2h20v-2H2zm14-9h3v7h-3v-7z" fill-opacity="0.85"/>
+                  </svg>
+                </span>
+                <div>
+                  <div class="item-title">Paid every Tuesday</div>
+                  <div class="item-copy">Earnings above AED 50 are transferred to your registered IBAN every week — automatically.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
-
   </main>
 
-  <footer style="background:var(--color-surface); border-top:1px solid var(--color-border); padding:48px 0 0; margin-top:32px;">
+  <footer class="site-footer">
     <div class="container">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:32px; padding-bottom:40px; border-bottom:1px solid var(--color-divider); flex-wrap:wrap;">
-        <div style="max-width:280px;">
-          <a href="https://www.tutorii.com/" class="brand" style="margin-bottom:16px; display:inline-flex;">
-            <span class="brand-mark">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 7.5C5 6.11929 6.11929 5 7.5 5H16.5C17.8807 5 19 6.11929 19 7.5V16.5C19 17.8807 17.8807 19 16.5 19H7.5C6.11929 19 5 17.8807 5 16.5V7.5Z" stroke="currentColor" stroke-width="1.5"/><path d="M8 9.5H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M8 12H13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M8 14.5H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            </span>
+      <div class="footer-grid">
+        <div class="footer-brand-block">
+          <a href="https://www.tutorii.com/" class="brand">
+            <span class="brand-mark" aria-hidden="true">T</span>
             <span class="brand-word">Tutorii</span>
           </a>
-          <p style="font-size:var(--text-sm); color:var(--color-text-muted); margin:0 0 12px; line-height:1.6;">The education and income platform built for expatriates in the UAE and GCC.</p>
-          <a href="mailto:support@tutorii.com" style="font-size:var(--text-sm); color:var(--color-text-muted); text-decoration:none;">support@tutorii.com</a>
+          <p>The education and income platform built for expatriates in the UAE and GCC.</p>
+          <a href="mailto:support@tutorii.com">support@tutorii.com</a>
         </div>
-        <div style="display:flex; gap:64px; flex-wrap:wrap;">
+        <div class="footer-cols">
           <div>
-            <div style="font-size:var(--text-xs); font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-text-faint); margin-bottom:16px;">Platform</div>
-            <div style="display:grid; gap:12px;">
-              <a href="https://www.tutorii.com/how-it-works" style="font-size:var(--text-sm); color:var(--color-text-muted); text-decoration:none;">How It Works</a>
-              <a href="https://www.tutorii.com/curriculum" style="font-size:var(--text-sm); color:var(--color-text-muted); text-decoration:none;">Curriculum</a>
-              <a href="https://www.tutorii.com/faq" style="font-size:var(--text-sm); color:var(--color-text-muted); text-decoration:none;">FAQ</a>
+            <div class="footer-col-title">Platform</div>
+            <div class="footer-links">
+              <a href="https://www.tutorii.com/how-it-works">How It Works</a>
+              <a href="https://www.tutorii.com/curriculum">Curriculum</a>
+              <a href="https://www.tutorii.com/faq">FAQ</a>
             </div>
           </div>
           <div>
-            <div style="font-size:var(--text-xs); font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-text-faint); margin-bottom:16px;">Legal</div>
-            <div style="display:grid; gap:12px;">
-              <a href="https://www.tutorii.com/terms" style="font-size:var(--text-sm); color:var(--color-text-muted); text-decoration:none;">Terms of Service</a>
-              <a href="https://www.tutorii.com/privacy" style="font-size:var(--text-sm); color:var(--color-text-muted); text-decoration:none;">Privacy Policy</a>
-              <a href="https://www.tutorii.com/contact" style="font-size:var(--text-sm); color:var(--color-text-muted); text-decoration:none;">Contact Us</a>
-              <a href="https://www.tutorii.com/support" style="font-size:var(--text-sm); color:var(--color-text-muted); text-decoration:none;">Support</a>
+            <div class="footer-col-title">Legal</div>
+            <div class="footer-links">
+              <a href="https://www.tutorii.com/terms">Terms of Service</a>
+              <a href="https://www.tutorii.com/privacy">Privacy Policy</a>
+              <a href="https://www.tutorii.com/contact">Contact Us</a>
+              <a href="https://www.tutorii.com/support">Support</a>
             </div>
           </div>
         </div>
       </div>
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:20px 0; font-size:var(--text-xs); color:var(--color-text-faint);">
+      <div class="footer-meta">
         <span>© 2026 Tutorii.com</span>
-        <a href="https://www.tutorii.com/admin-login" style="color:var(--color-text-faint); text-decoration:none;">Admin</a>
+        <a href="https://www.tutorii.com/admin-login">Admin</a>
       </div>
     </div>
   </footer>
 
   <script>
     (function () {
-      // Theme toggle
-      const root = document.documentElement;
-      const toggle = document.querySelector('[data-theme-toggle]');
-      let current = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      const icons = {
-        dark: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
-        light: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
-      };
-      function renderTheme(theme) {
-        root.setAttribute('data-theme', theme);
-        toggle.innerHTML = theme === 'dark' ? icons.light : icons.dark;
-        toggle.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
-      }
-      renderTheme(current);
-      toggle.addEventListener('click', function () {
-        current = current === 'dark' ? 'light' : 'dark';
-        renderTheme(current);
-      });
-
-      const API = 'https://backend-tut-production.up.railway.app/api/v1';
+      var API = 'https://backend-tut-production.up.railway.app/api/v1';
 
       function populate(order, name, amount, date) {
         if (order) document.getElementById('order-number').textContent = '#' + order;
         if (amount) document.getElementById('order-amount').textContent = amount;
         if (date) document.getElementById('order-date').textContent = date;
         if (name) {
-          const firstName = name.split(' ')[0];
-          document.getElementById('hero-name-copy').textContent = 'Welcome, ' + firstName + '! Your account is live and your courses are waiting.';
-          document.getElementById('card-thank-you').textContent = 'Thank you, ' + firstName + '!';
+          var firstName = name.split(' ')[0];
+          document.getElementById('hero-name-copy').textContent =
+            'Welcome, ' + firstName + '! Your account is live and your courses are waiting.';
+          document.getElementById('card-thank-you').innerHTML =
+            'Thank you, ' + firstName + ', for <span class="accent">subscribing</span>';
         }
       }
 
       // Try URL params first (set by the "I've paid" flow)
-      const p = new URLSearchParams(window.location.search);
-      const order = p.get('order');
-      const name = p.get('name');
-      const amount = p.get('amount');
-      const date = p.get('date');
+      var p = new URLSearchParams(window.location.search);
+      var order = p.get('order');
+      var name = p.get('name');
+      var amount = p.get('amount');
+      var date = p.get('date');
 
       if (order) {
         populate(order, name, amount, date);
       } else {
         // No URL params — user arrived directly from MamoPay redirect.
         // Auto-verify payment using stored auth token.
-        const token = localStorage.getItem('tutorii_access_token');
+        var token = localStorage.getItem('tutorii_access_token');
         if (token) {
-          const heroEl = document.getElementById('hero-name-copy');
+          var heroEl = document.getElementById('hero-name-copy');
           heroEl.textContent = 'Verifying your payment…';
-          let attempts = 0;
-          const maxAttempts = 6;
+          var attempts = 0;
+          var maxAttempts = 6;
           function verify() {
             fetch(API + '/subscriptions/verify-payment', {
               method: 'POST',
               headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }
             })
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
               if (data.activated) {
-                const user = JSON.parse(localStorage.getItem('tutorii_user') || '{}');
-                const today = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+                var user = JSON.parse(localStorage.getItem('tutorii_user') || '{}');
+                var today = new Date().toLocaleDateString('en-US', {
+                  year: 'numeric', month: 'long', day: 'numeric'
+                });
                 populate(data.order_number, user.full_name, 'AED 95.00', today);
               } else if (attempts < maxAttempts) {
                 attempts++;
@@ -736,7 +1116,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 heroEl.textContent = 'Your account is live and your courses are waiting.';
               }
             })
-            .catch(function() {
+            .catch(function () {
               if (attempts < maxAttempts) { attempts++; setTimeout(verify, 3000); }
             });
           }
