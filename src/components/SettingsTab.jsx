@@ -19,6 +19,7 @@ function SettingsTab(props) {
   var _profileMsg = useState(null); var profileMsg = _profileMsg[0]; var setProfileMsg = _profileMsg[1];
   var _ibanSaving = useState(false); var ibanSaving = _ibanSaving[0]; var setIbanSaving = _ibanSaving[1];
   var _ibanMsg = useState(null); var ibanMsg = _ibanMsg[0]; var setIbanMsg = _ibanMsg[1];
+  var _currentPw = useState(""); var currentPw = _currentPw[0]; var setCurrentPw = _currentPw[1];
   var _newPw = useState(""); var newPw = _newPw[0]; var setNewPw = _newPw[1];
   var _confirmPw = useState(""); var confirmPw = _confirmPw[0]; var setConfirmPw = _confirmPw[1];
   var _pwSaving = useState(false); var pwSaving = _pwSaving[0]; var setPwSaving = _pwSaving[1];
@@ -57,13 +58,16 @@ function SettingsTab(props) {
   }
 
   async function changePassword() {
-    if (!newPw || !confirmPw) { setPwMsg({ok:false, msg:"Please fill in both fields"}); return; }
+    if (!currentPw || !newPw || !confirmPw) { setPwMsg({ok:false, msg:"Please fill in all password fields"}); return; }
     if (newPw !== confirmPw) { setPwMsg({ok:false, msg:"Passwords do not match"}); return; }
     if (newPw.length < 8) { setPwMsg({ok:false, msg:"Password must be at least 8 characters"}); return; }
+    if (!/[A-Z]/.test(newPw)) { setPwMsg({ok:false, msg:"Password must contain at least one uppercase letter"}); return; }
+    if (!/[a-z]/.test(newPw)) { setPwMsg({ok:false, msg:"Password must contain at least one lowercase letter"}); return; }
+    if (!/[0-9]/.test(newPw)) { setPwMsg({ok:false, msg:"Password must contain at least one digit"}); return; }
     setPwSaving(true); setPwMsg(null);
     try {
-      await usersApi.changePassword(newPw, confirmPw);
-      setNewPw(""); setConfirmPw("");
+      await usersApi.changePassword(currentPw, newPw, confirmPw);
+      setCurrentPw(""); setNewPw(""); setConfirmPw("");
       setPwMsg({ok:true, msg:"Password updated successfully"});
     } catch(e) {
       setPwMsg({ok:false, msg: e.message || "Failed to update password"});
@@ -149,7 +153,11 @@ function SettingsTab(props) {
         <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 6px", color:"#d4d4d8" }}>Change Password</h3>
         <p style={{ fontSize:12, color:"#52525b", marginBottom:16 }}>Set a new password for your account. You will remain logged in on all devices.</p>
         {pwMsg && <div style={{ padding:"10px 14px", borderRadius:8, background:pwMsg.ok?"rgba(16,185,129,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(pwMsg.ok?"rgba(16,185,129,0.2)":"rgba(248,113,113,0.2)"), color:pwMsg.ok?"#10b981":"#f87171", fontSize:13, fontWeight:600, marginBottom:14 }}>{pwMsg.msg}</div>}
-        <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr", gap:mob?12:16 }}>
+        <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr 1fr", gap:mob?12:16 }}>
+          <div>
+            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>Current Password</label>
+            <PasswordInput value={currentPw} onChange={function(e){setCurrentPw(e.target.value);setPwMsg(null)}} placeholder="Current password" />
+          </div>
           <div>
             <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>New Password</label>
             <PasswordInput value={newPw} onChange={function(e){setNewPw(e.target.value);setPwMsg(null)}} placeholder="Min. 8 characters" />
@@ -160,7 +168,7 @@ function SettingsTab(props) {
           </div>
         </div>
         <div style={{ marginTop:16, display:"flex", justifyContent:"flex-end" }}>
-          <Btn onClick={changePassword} disabled={pwSaving || !newPw || !confirmPw} style={{ fontSize:12, padding:"10px 24px", opacity:(pwSaving||!newPw||!confirmPw)?0.5:1 }}>{pwSaving ? "Updating..." : "Update Password"}</Btn>
+          <Btn onClick={changePassword} disabled={pwSaving || !currentPw || !newPw || !confirmPw} style={{ fontSize:12, padding:"10px 24px", opacity:(pwSaving||!currentPw||!newPw||!confirmPw)?0.5:1 }}>{pwSaving ? "Updating..." : "Update Password"}</Btn>
         </div>
       </div>
 
