@@ -65,8 +65,8 @@ async function request(method, path, body, retry = true) {
     let detail = err.detail;
     if (Array.isArray(detail)) {
       detail = detail.map(d => d.msg || JSON.stringify(d)).join(", ");
-    } else if (typeof detail === "object") {
-      detail = JSON.stringify(detail);
+    } else if (detail && typeof detail === "object") {
+      detail = Object.values(detail).flat().join(", ");
     }
     throw new Error(detail || "Request failed");
   }
@@ -95,7 +95,7 @@ export const auth = {
 export const users = {
   me: () => api.get("/users/me"),
   update: (data) => api.patch("/users/me", data),
-  changePassword: (new_password, confirm_password) => api.post("/users/me/change-password", { new_password, confirm_password }),
+  changePassword: (current_password, new_password, confirm_password) => api.post("/users/me/change-password", { current_password, new_password, confirm_password }),
   referrals: () => api.get("/users/me/referrals"),
   referralList: () => api.get("/users/me/referrals/list"),
 };
