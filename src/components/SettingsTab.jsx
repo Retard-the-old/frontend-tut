@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { USER } from "../constants";
-import { useAuth } from "../AuthContext";
-import { users as usersApi } from "../api";
+import { users as usersApi, setTokens } from "../api";
 import { Ico, Badge, PasswordInput } from "./UI";
 import { Btn } from "./Layout";
 
@@ -66,9 +65,10 @@ function SettingsTab(props) {
     if (!/[0-9]/.test(newPw)) { setPwMsg({ok:false, msg:"Password must contain at least one digit"}); return; }
     setPwSaving(true); setPwMsg(null);
     try {
-      await usersApi.changePassword(currentPw, newPw, confirmPw);
+      var tokens = await usersApi.changePassword(currentPw, newPw, confirmPw);
+      setTokens(tokens.access_token, tokens.refresh_token);
       setCurrentPw(""); setNewPw(""); setConfirmPw("");
-      setPwMsg({ok:true, msg:"Password updated successfully"});
+      setPwMsg({ok:true, msg:"Password updated successfully. Other sessions will need to log in again."});
     } catch(e) {
       setPwMsg({ok:false, msg: e.message || "Failed to update password"});
     } finally {
@@ -151,7 +151,7 @@ function SettingsTab(props) {
       {/* Change Password */}
       <div style={{ background:"#131315", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:16, boxSizing:"border-box" }}>
         <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 6px", color:"#d4d4d8" }}>Change Password</h3>
-        <p style={{ fontSize:12, color:"#52525b", marginBottom:16 }}>Set a new password for your account. You will remain logged in on all devices.</p>
+        <p style={{ fontSize:12, color:"#52525b", marginBottom:16 }}>Set a new password for your account. This device stays signed in; other sessions will need to log in again.</p>
         {pwMsg && <div style={{ padding:"10px 14px", borderRadius:8, background:pwMsg.ok?"rgba(16,185,129,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(pwMsg.ok?"rgba(16,185,129,0.2)":"rgba(248,113,113,0.2)"), color:pwMsg.ok?"#10b981":"#f87171", fontSize:13, fontWeight:600, marginBottom:14 }}>{pwMsg.msg}</div>}
         <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr 1fr", gap:mob?12:16 }}>
           <div>
