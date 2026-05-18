@@ -57,14 +57,18 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
   }
 
   async function checkAndRedirect() {
-    setChecking(true); setCheckMsg("Verifying your payment with MamoPay...");
+    setChecking(true); setCheckMsg("Checking your payment status...");
     try {
       var data = await subscriptionsApi.verifyPayment();
       if (data.activated) {
         setCheckMsg("Payment confirmed! Taking you to your dashboard...");
         setTimeout(function(){ go("userPortal"); }, 1200);
       } else {
-        setCheckMsg(data.message || "No confirmed payment has reached Tutorii yet. If you just paid, please wait a moment and try again.");
+        if (data.status === "not_found") {
+          setCheckMsg(data.message || "Start checkout first, then return here after payment.");
+        } else {
+          setCheckMsg(data.message || "Your payment is still processing. If you just paid, please wait a moment and try again.");
+        }
         setChecking(false);
       }
     } catch(e) {
@@ -178,7 +182,7 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
                 </div>
                 <Btn onClick={function(){ if (!checkoutLoading) openCheckout(); }} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12, opacity:checkoutLoading?0.7:1, cursor:checkoutLoading?"wait":"pointer" }}>{checkoutLoading ? "Creating checkout..." : "Pay AED "+PRICE+" on MamoPay ↗"}</Btn>
                 <Btn onClick={checkAndRedirect} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:8, background:"rgba(255,255,255,0.06)", color:"#d4d4d8" }} disabled={checking}>
-                  {checking ? "Checking payment..." : "I've paid — take me to my dashboard"}
+                  {checking ? "Checking payment..." : "I've paid — check status"}
                 </Btn>
                 {checkoutMsg && <div style={{ fontSize:12, color: checkoutMsg.includes("Could not") ? "#f87171" : "rgb(200,180,140)", marginTop:8, padding:"8px 12px", borderRadius:6, background:"rgba(255,255,255,0.03)" }}>{checkoutMsg}</div>}
                 {checkMsg && <div style={{ fontSize:12, color: checkMsg.includes("No payment") ? "#f87171" : "rgb(200,180,140)", marginTop:8, padding:"8px 12px", borderRadius:6, background:"rgba(255,255,255,0.03)" }}>{checkMsg}</div>}
