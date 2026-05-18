@@ -64,7 +64,7 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
         setCheckMsg("Payment confirmed! Taking you to your dashboard...");
         setTimeout(function(){ go("userPortal"); }, 1200);
       } else {
-        setCheckMsg(data.message || "No payment found yet. Make sure you used the same email you registered with on MamoPay, then try again.");
+        setCheckMsg(data.message || "No confirmed payment has reached Tutorii yet. If you just paid, please wait a moment and try again.");
         setChecking(false);
       }
     } catch(e) {
@@ -143,8 +143,8 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
             <div style={{ background:"rgba(200,180,140,0.06)", borderRadius:10, padding:"12px 16px", marginBottom:16, border:"1px solid rgba(200,180,140,0.2)", display:"flex", gap:10, alignItems:"flex-start" }}>
               <Ico name="shield" size={16} color="rgb(200,180,140)" />
               <div>
-                <div style={{ fontSize:13, fontWeight:700, color:"rgb(200,180,140)", marginBottom:3 }}>Important — use your Tutorii email</div>
-                <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.6 }}>{"When MamoPay asks for your email, use "}<strong style={{ color:"#d4d4d8" }}>{form.email}</strong>{" — the same email you just registered with. This is how we verify your payment and activate your account."}</div>
+                <div style={{ fontSize:13, fontWeight:700, color:"rgb(200,180,140)", marginBottom:3 }}>Secure Tutorii checkout</div>
+                <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.6 }}>{"Your checkout is created from your Tutorii account. Complete payment on MamoPay, then return here so we can confirm it."}</div>
               </div>
             </div>
             <div style={{ background:"#131315", borderRadius:12, border:"2px dashed rgba(255,255,255,0.1)", padding:36, textAlign:"center", marginBottom:24 }}>
@@ -173,8 +173,8 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
                 <h3 style={{ fontSize:24, fontWeight:700, color:"#d4d4d8", margin:"0 0 10px" }}>Complete Your Payment</h3>
                 <p style={{ fontSize:14, color:"#71717a", marginBottom:20, lineHeight:1.7 }}>{authUser ? "Complete your payment on MamoPay to unlock full access." : "Your account has been created. Complete your payment on MamoPay to unlock full access."}</p>
                 <div style={{ background:"rgba(200,180,140,0.06)", border:"1px solid rgba(200,180,140,0.2)", borderRadius:10, padding:"14px 18px", marginBottom:20, textAlign:"left" }}>
-                  <div style={{ fontSize:12, fontWeight:700, color:"rgb(200,180,140)", marginBottom:4 }}>Important</div>
-                  <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.7 }}>{"Use "}<strong style={{ color:"#d4d4d8" }}>{authUser ? authUser.email : form.email}</strong>{" as your email on MamoPay — this is how we verify and activate your account."}</div>
+                  <div style={{ fontSize:12, fontWeight:700, color:"rgb(200,180,140)", marginBottom:4 }}>Secure checkout</div>
+                  <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.7 }}>{"This checkout is linked to your Tutorii account. After payment, come back here and we’ll confirm it for you."}</div>
                 </div>
                 <Btn onClick={function(){ if (!checkoutLoading) openCheckout(); }} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12, opacity:checkoutLoading?0.7:1, cursor:checkoutLoading?"wait":"pointer" }}>{checkoutLoading ? "Creating checkout..." : "Pay AED "+PRICE+" on MamoPay ↗"}</Btn>
                 <Btn onClick={checkAndRedirect} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:8, background:"rgba(255,255,255,0.06)", color:"#d4d4d8" }} disabled={checking}>
