@@ -1113,7 +1113,7 @@
                 attempts++;
                 setTimeout(verify, 3000);
               } else {
-                heroEl.textContent = 'Your account is live and your courses are waiting.';
+                heroEl.textContent = data.message || 'Your payment is still processing. Please return to Tutorii and check again in a moment.';
               }
             })
             .catch(function () {
