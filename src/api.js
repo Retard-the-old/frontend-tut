@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
+export const API_BASE_URL = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
 
 // Token storage in memory
 let accessToken = null;
@@ -22,9 +22,9 @@ export function getRefreshToken() {
   return refreshToken;
 }
 
-async function refreshAccessToken() {
+export async function refreshAccessToken() {
   if (!refreshToken) throw new Error("No refresh token");
-  const res = await fetch(`${BASE_URL}/auth/refresh`, {
+  const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ refresh_token: refreshToken }),
@@ -42,7 +42,7 @@ async function request(method, path, body, retry = true) {
   const headers = { "Content-Type": "application/json" };
   if (accessToken) headers["Authorization"] = `Bearer ${accessToken}`;
 
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${API_BASE_URL}${path}`, {
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,
