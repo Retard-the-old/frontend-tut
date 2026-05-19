@@ -1,8 +1,7 @@
 {
   "redirects": [
     { "source": "/salesguide", "destination": "/salesguide/", "permanent": false },
-    { "source": "/confirmation", "destination": "/confirmation/", "permanent": false },
     { "source": "/handbook", "destination": "/handbook.html", "permanent": false }
   ],
-  "rewrites": [{ "source": "/((?!salesguide/|confirmation/|handbook).*)", "destination": "/index.html" }]
+  "rewrites": [{ "source": "/((?!salesguide/|handbook).*)", "destination": "/index.html" }]
 }
