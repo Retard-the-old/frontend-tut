@@ -2,7 +2,6 @@
 const PRICE = 95;
 const L1_RATE = 0.40;
 const L2_RATE = 0.05;
-const MAMOPAY_LINK = "https://business.mamopay.com/pay/galcofzellc-6064fd066371";
 
 const INIT_COURSES = [
   { id: "c1", module: "Life in the UAE", icon: "mosque", lessons: [
@@ -97,4 +96,4 @@ var MONTHLY_PAYOUTS = [
   {month:"Oct",amount:3926},{month:"Nov",amount:5506},{month:"Dec",amount:7086},{month:"Jan",amount:9048},{month:"Feb",amount:11203},{month:"Mar",amount:2586},
 ];
 
-export { PRICE, L1_RATE, L2_RATE, MAMOPAY_LINK, INIT_COURSES, USER, adminUsers, INIT_PAYOUTS, GROWTH_DATA, NETWORK_PIE, CHURN_DATA, MONTHLY_PAYOUTS };
+export { PRICE, L1_RATE, L2_RATE, INIT_COURSES, USER, adminUsers, INIT_PAYOUTS, GROWTH_DATA, NETWORK_PIE, CHURN_DATA, MONTHLY_PAYOUTS };

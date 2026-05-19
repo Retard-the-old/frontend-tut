@@ -4,7 +4,7 @@ import { users as usersApi, subscriptions as subscriptionsApi, courses as course
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Bar, BarChart, Cell, Legend, Pie, PieChart } from "recharts";
 import { useIsMobile, Ico, Badge, StatCard, FadeIn, Skeleton, DashSkeleton, ProgressRing, GlowRow, DashboardDesktop, DashboardMobile } from "../components/UI";
 import { Btn, Logo } from "../components/Layout";
-import { PRICE, L1_RATE, L2_RATE, MAMOPAY_LINK, INIT_COURSES, USER } from "../constants";
+import { PRICE, L1_RATE, L2_RATE, INIT_COURSES, USER } from "../constants";
 import SettingsTab from "../components/SettingsTab";
 
 function UserPortal(props) {
