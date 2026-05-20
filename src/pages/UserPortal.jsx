@@ -57,7 +57,6 @@ function UserPortal(props) {
   var _chartRange = useState("all"); var chartRange = _chartRange[0]; var setChartRange = _chartRange[1];
   var _dashLoading = useState(true); var dashLoading = _dashLoading[0]; var setDashLoading = _dashLoading[1];
   var _withdrawOpen = useState(false); var withdrawOpen = _withdrawOpen[0]; var setWithdrawOpen = _withdrawOpen[1];
-  var _withdrawAmt = useState(""); var withdrawAmt = _withdrawAmt[0]; var setWithdrawAmt = _withdrawAmt[1];
   var _withdrawLoading = useState(false); var withdrawLoading = _withdrawLoading[0]; var setWithdrawLoading = _withdrawLoading[1];
   var _withdrawError = useState(""); var withdrawError = _withdrawError[0]; var setWithdrawError = _withdrawError[1];
   // Support ticket state
@@ -169,6 +168,19 @@ function UserPortal(props) {
   };
 
   var mob = useIsMobile();
+  function PayoutStatusBadge(props) {
+    var s = props.s || "pending";
+    var labels = { requested:"Requested", processing:"Processing", completed:"Paid", paid:"Paid", failed:"Failed" };
+    var colors = {
+      requested:["rgba(59,130,246,0.1)","#60a5fa"],
+      processing:["rgba(251,191,36,0.1)","#fbbf24"],
+      completed:["rgba(200,180,140,0.1)","rgb(200,180,140)"],
+      paid:["rgba(200,180,140,0.1)","rgb(200,180,140)"],
+      failed:["rgba(248,113,113,0.1)","#f87171"],
+    };
+    var v = colors[s] || colors.processing;
+    return <span style={{ padding:"3px 10px", borderRadius:20, fontSize:10, fontWeight:700, letterSpacing:0.3, textTransform:"uppercase", background:v[0], color:v[1] }}>{labels[s] || s}</span>;
+  }
 
   var totalL = courses.reduce(function(s,c){return s+c.lessons.length},0);
   var doneL = courses.reduce(function(s,c){return s+c.lessons.filter(function(l){return l.done}).length},0);
@@ -774,62 +786,52 @@ function UserPortal(props) {
         {tab === "payouts" && <div style={{ maxWidth:"100%", overflow:"hidden" }}>
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20, flexWrap:"wrap", gap:10 }}>
             <h2 style={{ fontSize:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>Payouts</h2>
-            {u.earn.total >= 50 ? (
-              <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-                <span style={{ fontSize:12, color:"#71717a" }}>{"AED "+u.earn.pending.toFixed(2)+" available"}</span>
-                <button onClick={function(){ setWithdrawAmt(""); setWithdrawError(""); setWithdrawOpen(true); }} style={{ padding:"9px 18px", borderRadius:10, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:13, fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center", gap:6 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:10, flexWrap:"wrap", justifyContent:mob?"flex-start":"flex-end" }}>
+              <span style={{ fontSize:12, color:u.earn.pending >= 50 ? "#71717a" : "#52525b" }}>
+                {u.earn.pending >= 50 ? "AED "+u.earn.pending.toFixed(2)+" available" : "AED "+u.earn.pending.toFixed(2)+" available · AED "+Math.max(0, 50-u.earn.pending).toFixed(2)+" more needed"}
+              </span>
+              <span title={u.earn.pending >= 50 ? "Request your full available payout" : "Minimum payout is AED 50"} style={{ display:"inline-flex" }}>
+                <button disabled={u.earn.pending < 50} onClick={function(){ if (u.earn.pending < 50) return; setWithdrawError(""); setWithdrawOpen(true); }} style={{ padding:"9px 18px", borderRadius:10, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:13, fontWeight:700, cursor:u.earn.pending >= 50?"pointer":"not-allowed", display:"flex", alignItems:"center", gap:6, opacity:u.earn.pending >= 50 ? 1 : 0.45 }}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-                  Request Payout
+                  Request payout
                 </button>
-              </div>
-            ) : (
-              <div style={{ fontSize:12, color:"#52525b", padding:"8px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"rgba(255,255,255,0.02)" }}>
-                {"Min AED 50 to request · " + (u.earn.total > 0 ? "AED "+(50-u.earn.total).toFixed(2)+" more needed" : "Earn by referring friends")}
-              </div>
-            )}
+              </span>
+            </div>
           </div>
 
           {/* Withdrawal modal */}
           {withdrawOpen && (
             <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:16 }} onClick={function(e){if(e.target===e.currentTarget)setWithdrawOpen(false)}}>
               <div style={{ background:"#131315", border:"1px solid rgba(255,255,255,0.08)", borderRadius:16, padding:28, width:"100%", maxWidth:400 }}>
-                <div style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", marginBottom:4 }}>Request a Payout</div>
-                <div style={{ fontSize:13, color:"#71717a", marginBottom:20 }}>{"Available: AED "+u.earn.pending.toFixed(2)+" · Min AED 50"}</div>
-                <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:6, textTransform:"uppercase", letterSpacing:0.5 }}>Amount (AED)</label>
-                <div style={{ position:"relative", marginBottom:16 }}>
-                  <span style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", fontSize:14, color:"#71717a", fontWeight:600 }}>AED</span>
-                  <input
-                    type="number" min="50" max={u.earn.pending} step="1"
-                    value={withdrawAmt}
-                    onChange={function(e){ setWithdrawAmt(e.target.value); setWithdrawError(""); }}
-                    placeholder={"50 – "+Math.floor(u.earn.pending)}
-                    style={{ width:"100%", padding:"12px 14px 12px 52px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", background:"#0a0a0c", color:"#d4d4d8", fontSize:16, outline:"none", boxSizing:"border-box", fontWeight:600 }}
-                  />
-                  <button onClick={function(){ setWithdrawAmt(String(Math.floor(u.earn.pending))); }} style={{ position:"absolute", right:10, top:"50%", transform:"translateY(-50%)", padding:"3px 8px", borderRadius:5, border:"1px solid rgba(200,180,140,0.3)", background:"transparent", color:"rgb(200,180,140)", fontSize:10, fontWeight:700, cursor:"pointer" }}>MAX</button>
+                <div style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", marginBottom:4 }}>Request payout</div>
+                <div style={{ fontSize:13, color:"#71717a", marginBottom:20 }}>{"AED "+u.earn.pending.toFixed(2)+" will be paid to your registered IBAN."}</div>
+                <div style={{ marginBottom:16, padding:"14px 16px", borderRadius:10, border:"1px solid rgba(200,180,140,0.16)", background:"rgba(200,180,140,0.07)" }}>
+                  <div style={{ fontSize:11, color:"#71717a", fontWeight:700, textTransform:"uppercase", letterSpacing:0.5, marginBottom:6 }}>Full available payout</div>
+                  <div style={{ fontSize:24, color:"#d4d4d8", fontWeight:700 }}>{"AED "+u.earn.pending.toFixed(2)}</div>
                 </div>
                 {withdrawError && <div style={{ fontSize:12, color:"#f87171", marginBottom:12, padding:"8px 12px", borderRadius:8, background:"rgba(248,113,113,0.08)", border:"1px solid rgba(248,113,113,0.15)" }}>{withdrawError}</div>}
                 <div style={{ fontSize:11, color:"#52525b", marginBottom:20, padding:"10px 12px", borderRadius:8, background:"rgba(255,255,255,0.02)", border:"1px solid rgba(255,255,255,0.04)" }}>
+                  <div style={{ marginBottom:5 }}>{"Your payout request will be reviewed and processed by the admin team."}</div>
                   {"Payout will be sent to your registered IBAN via MamoPay. Processing takes 1–3 business days."}
                 </div>
                 <div style={{ display:"flex", gap:10 }}>
                   <button onClick={async function(){
-                    var amt = parseFloat(withdrawAmt);
-                    if (!withdrawAmt || isNaN(amt) || amt < 50) { setWithdrawError("Minimum withdrawal is AED 50"); return; }
-                    if (amt > u.earn.pending) { setWithdrawError("Amount exceeds your available balance of AED "+u.earn.pending.toFixed(2)); return; }
+                    var amt = u.earn.pending;
+                    if (amt < 50) { setWithdrawError("Minimum withdrawal is AED 50"); return; }
                     if (!u.iban) { setWithdrawError("Please add your IBAN in Settings before requesting a payout"); return; }
                     setWithdrawLoading(true); setWithdrawError("");
                     try {
-                      await payoutsApi.request(amt);
+                      var payout = await payoutsApi.request();
+                      var payoutAmount = payout && payout.amount_aed ? payout.amount_aed : amt;
                       setWithdrawOpen(false);
-                      setMyPayouts(function(prev){ return [{ created_at: new Date().toISOString(), amount_aed: amt, status:"requested" }].concat(prev); });
+                      setMyPayouts(function(prev){ return [{ created_at: new Date().toISOString(), amount_aed: payoutAmount, status:"requested" }].concat(prev); });
                       // Optimistically mark commissions as approved so pending balance updates immediately
                       setMyCommissions(function(prev){
-                        var remaining = amt; var updated = [];
+                        var updated = [];
                         for (var i = 0; i < prev.length; i++) {
                           var c = prev[i];
-                          if (c.status === "pending" && remaining > 0) {
+                          if (c.status === "pending") {
                             updated.push(Object.assign({}, c, { status: "approved" }));
-                            remaining -= c.amount_aed;
                           } else { updated.push(c); }
                         }
                         return updated;
@@ -837,7 +839,7 @@ function UserPortal(props) {
                     } catch(err){ setWithdrawError(err.message || "Request failed — please try again"); }
                     finally { setWithdrawLoading(false); }
                   }} disabled={withdrawLoading} style={{ flex:1, padding:"12px", borderRadius:10, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:14, fontWeight:700, cursor:"pointer", opacity:withdrawLoading?0.6:1 }}>
-                    {withdrawLoading ? "Submitting…" : "Confirm Request"}
+                    {withdrawLoading ? "Submitting…" : "Confirm request"}
                   </button>
                   <button onClick={function(){ setWithdrawOpen(false); }} style={{ padding:"12px 18px", borderRadius:10, border:"1px solid rgba(255,255,255,0.08)", background:"transparent", color:"#71717a", fontSize:14, cursor:"pointer" }}>Cancel</button>
                 </div>
@@ -857,7 +859,7 @@ function UserPortal(props) {
           <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr", gap:14, marginBottom:16, alignItems:"stretch" }}>
             <div style={{ background:"#131315", borderRadius:14, padding:mob?14:22, border:"1px solid rgba(255,255,255,0.06)", boxSizing:"border-box" }}>
               <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 4px", color:"#d4d4d8" }}>Weekly Payout History</h3>
-              <p style={{ fontSize:11, color:"#52525b", margin:"0 0 16px" }}>Amount paid out to your bank each Tuesday</p>
+              <p style={{ fontSize:11, color:"#52525b", margin:"0 0 16px" }}>Requested and completed payout amounts</p>
               <ResponsiveContainer width="100%" height={220}>
                 <BarChart margin={{top:5,right:5,left:mob?-25:-10,bottom:5}} data={(u.payouts||[]).map(function(p){return {date:p.date,amount:p.amount,status:p.status}})}>
                   <CartesianGrid strokeDasharray="4 6" stroke="rgba(255,255,255,0.04)" strokeWidth={0.5} vertical={false} />
@@ -903,10 +905,11 @@ function UserPortal(props) {
             </div>
           </div>
           <div style={{ background:"#131315", borderRadius:14, padding:mob?14:22, border:"1px solid rgba(255,255,255,0.06)", boxSizing:"border-box" }}>
-            <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 14px", color:"#d4d4d8" }}>Payout History</h3>
+            <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 4px", color:"#d4d4d8" }}>Payout History</h3>
+            <p style={{ fontSize:11, color:"#52525b", margin:"0 0 14px" }}>Requested payouts are reviewed and processed by the admin team.</p>
             <table style={{ width:"100%", borderCollapse:"collapse" }}>
               <thead><tr>{["Date","Amount","Status"].map(function(h){return <th key={h} style={{ padding:"8px 10px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#52525b", textAlign:"left", borderBottom:"2px solid rgba(255,255,255,0.08)" }}>{h}</th>})}</tr></thead>
-              <tbody>{(u.payouts||[]).map(function(p){return <tr key={p.date} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}><td style={{ padding:"10px", fontSize:13, color:"#a1a1aa" }}>{p.date}</td><td style={{ padding:"10px", fontSize:14, fontWeight:500, color:"#d4d4d8" }}>{"AED "+p.amount.toFixed(2)}</td><td style={{ padding:"10px" }}><Badge s={p.status}/></td></tr>})}</tbody>
+              <tbody>{(u.payouts||[]).map(function(p){return <tr key={p.date} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}><td style={{ padding:"10px", fontSize:13, color:"#a1a1aa" }}>{p.date}</td><td style={{ padding:"10px", fontSize:14, fontWeight:500, color:"#d4d4d8" }}>{"AED "+p.amount.toFixed(2)}</td><td style={{ padding:"10px" }}><PayoutStatusBadge s={p.status}/></td></tr>})}</tbody>
             </table>
           </div>
         </div>}

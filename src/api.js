@@ -130,7 +130,7 @@ export const chat = {
 export const payouts = {
   mine: () => api.get("/payouts/me"),
   commissions: () => api.get("/payouts/me/commissions"),
-  request: (amount) => api.post("/users/me/payout-request", { amount }),
+  request: () => api.post("/users/me/payout-request", {}),
 };
 
 // ── Support ──
