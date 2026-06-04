@@ -85,34 +85,39 @@ function AdminPanel(props) {
   var active = adminUsers.filter(function(u){return u.status==="active"}).length;
   var mrr = adminStats ? adminStats.total_revenue_aed : active * PRICE;
   var totalLessons = courses.reduce(function(s,c){return s+c.lessons.length},0);
+  function isProcessablePayout(p) { return p && p.status === "requested"; }
+  function payoutAmount(p) { return Number((p && p.amount) || 0); }
 
   function flash(msg) { setToast(msg); setTimeout(function(){setToast(null)},3000); }
 
   async function processPayouts() {
-    // Mark relevant payouts as "processing" immediately so the UI reflects in-flight state
+    var targetIds = sel.length > 0 ? sel : payouts.filter(isProcessablePayout).map(function(p){return p.id});
+    if (targetIds.length === 0) {
+      flash("No requested payouts to process");
+      setConfirmPayout(false);
+      return;
+    }
     setPayouts(function(prev) {
       return prev.map(function(x) {
-        var targeted = sel.length > 0 ? sel.includes(x.id) : x.status === "queued";
+        var targeted = targetIds.includes(x.id);
         return targeted ? Object.assign({}, x, {status: "processing"}) : x;
       });
     });
     try {
-      var result = await adminApi.triggerPayouts();
-      var details = result.details || [];
-      var completed = details.filter(function(d){ return d.status === "completed"; }).length;
-      var failed = details.filter(function(d){ return d.status === "failed"; }).length;
-      var skipped = details.length - completed - failed;
+      var results = await Promise.allSettled(targetIds.map(function(id){ return adminApi.processPayout(id); }));
+      var submitted = results.filter(function(r){ return r.status === "fulfilled"; }).length;
+      var failed = results.length - submitted;
       if (failed > 0) {
-        flash("Payouts: " + completed + " completed, " + failed + " failed" + (skipped > 0 ? ", " + skipped + " skipped" : "") + " — check Railway logs for details");
-      } else if (completed > 0) {
-        flash("Payouts processed: " + completed + " sent to MamoPay");
+        flash("Payouts submitted: " + submitted + ", failed: " + failed);
+      } else if (submitted > 0) {
+        flash("Payouts submitted to MamoPay: " + submitted);
       } else {
-        flash("No payouts processed — " + (skipped > 0 ? skipped + " below minimum or missing IBAN" : "nothing queued"));
+        flash("No payouts submitted");
       }
     } catch(e) {
       flash("Error: " + (e.message || "Failed to process payouts"));
     }
-    // Always re-fetch true status from server after trigger attempt
+    // Always re-fetch true status from server after payout submission attempts
     try {
       var updated = await adminApi.payouts();
       if (Array.isArray(updated)) setPayouts(updated);
@@ -1038,30 +1043,29 @@ function AdminPanel(props) {
         {tab === "payouts" && <div style={{ maxWidth:"100%", overflow:"hidden" }}>
           <div style={{ display:"flex", flexDirection:mob?"column":"row", justifyContent:"space-between", alignItems:mob?"flex-start":"center", gap:mob?10:0, marginBottom:20 }}>
             <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>Payouts</h2>
-            <button onClick={function(){setConfirmPayout(true)}} style={{ background:"rgb(200,180,140)", color:"#0a0a0c", border:"none", padding:mob?"8px 16px":"10px 22px", borderRadius:10, fontSize:mob?12:13, fontWeight:600, cursor:"pointer" }}>{"Process "+(sel.length>0?"("+sel.length+")":"All Queued")}</button>
+            <button onClick={function(){setConfirmPayout(true)}} style={{ background:"rgb(200,180,140)", color:"#0a0a0c", border:"none", padding:mob?"8px 16px":"10px 22px", borderRadius:10, fontSize:mob?12:13, fontWeight:600, cursor:"pointer" }}>{"Process "+(sel.length>0?"("+sel.length+")":"All Requested")}</button>
           </div>
           <div style={{ background:"#131315", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden" }}>
             <div style={{ overflowX:"auto", WebkitOverflowScrolling:"touch" }}><table style={{ width:"100%", borderCollapse:"collapse", minWidth:mob?750:"auto" }}>
               <thead><tr>
-                <th style={{ padding:"12px", width:40, verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)" }}><input type="checkbox" onChange={function(e){setSel(e.target.checked ? payouts.filter(function(p){return p.status==="queued"}).map(function(p){return p.id}) : [])}} /></th>
+                <th style={{ padding:"12px", width:40, verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)" }}><input type="checkbox" onChange={function(e){setSel(e.target.checked ? payouts.filter(isProcessablePayout).map(function(p){return p.id}) : [])}} /></th>
                 {["User","IBAN","Amount","Status","Date","Actions"].map(function(h){return <th key={h} style={{ padding:"12px", fontSize:10, fontWeight:700, textTransform:"uppercase", color:"#71717a", textAlign:"left", verticalAlign:"middle", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>{h}</th>})}
               </tr></thead>
               <tbody>{payouts.map(function(p){ return (
                 <tr key={p.id} style={{ borderBottom:"1px solid rgba(255,255,255,0.06)", background:sel.includes(p.id)?"rgba(200,180,140,0.12)":"transparent" }}>
-                  <td style={{ padding:"12px", verticalAlign:"middle" }}><input type="checkbox" checked={sel.includes(p.id)} disabled={p.status!=="queued"} onChange={function(e){setSel(function(v){return e.target.checked ? v.concat([p.id]) : v.filter(function(x){return x!==p.id})})}} /></td>
+                  <td style={{ padding:"12px", verticalAlign:"middle" }}><input type="checkbox" checked={sel.includes(p.id)} disabled={!isProcessablePayout(p)} onChange={function(e){setSel(function(v){return e.target.checked ? v.concat([p.id]) : v.filter(function(x){return x!==p.id})})}} /></td>
                   <td style={{ padding:"12px", fontSize:13, fontWeight:600, color:"#d4d4d8", verticalAlign:"middle" }}>{p.user}</td>
                   <td style={{ padding:"12px", verticalAlign:"middle" }}><code style={{ fontSize:11, color:"#52525b" }}>{p.iban}</code></td>
-                  <td style={{ padding:"12px", fontSize:14, fontWeight:500, color:"#d4d4d8", verticalAlign:"middle" }}>{"AED "+p.amount.toFixed(2)}</td>
+                  <td style={{ padding:"12px", fontSize:14, fontWeight:500, color:"#d4d4d8", verticalAlign:"middle" }}>{"AED "+payoutAmount(p).toFixed(2)}</td>
                   <td style={{ padding:"12px", verticalAlign:"middle" }}><Badge s={p.status}/></td>
                   <td style={{ padding:"12px", fontSize:12, color:"#71717a", verticalAlign:"middle" }}>{p.date}</td>
                   <td style={{ padding:"12px", verticalAlign:"middle" }}>
                     <div style={{ display:"flex", gap:4 }}>
-                      {p.status === "requested" && <button onClick={async function(e){e.stopPropagation(); if(!window.confirm("Process this payout of AED "+p.amount_aed.toFixed(2)+" via MamoPay?")) return; try { var r = await adminApi.processPayout(p.id); setPayouts(function(prev){return prev.map(function(x){return x.id===p.id?Object.assign({},x,{status:"processing",mamopay_transfer_id:r.transfer_id}):x})}); flash("Payout submitted to MamoPay"); } catch(err){ flash("Process failed: "+(err.message||"MamoPay error")); }}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(200,180,140,0.3)", background:"rgba(200,180,140,0.1)", fontSize:10, fontWeight:700, color:"rgb(200,180,140)", cursor:"pointer", whiteSpace:"nowrap" }}>Process</button>}
-                      {(p.status === "failed" || p.status === "processing") && <button onClick={function(e){e.stopPropagation(); setPayouts(function(prev){return prev.map(function(x){return x.id===p.id?Object.assign({},x,{status:"completed"}):x})}); flash("Payout "+p.id+" marked as completed")}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(16,185,129,0.2)", background:"rgba(16,185,129,0.06)", fontSize:10, fontWeight:600, color:"#10b981", cursor:"pointer", whiteSpace:"nowrap" }}>Mark Done</button>}
-                      {(p.status === "failed" || (p.status === "completed" && !p.mamopay_transfer_id)) && <button onClick={async function(e){e.stopPropagation(); if (!window.confirm("Reset this payout? Commissions will return to pending so it can be re-processed.")) return; try { await adminApi.resetPayout(p.id); var updated = await adminApi.payouts(); if (Array.isArray(updated)) setPayouts(updated); flash("Payout reset \u2014 click \u2018Process All Queued\u2019 to retry"); } catch(err) { flash("Reset failed: "+(err.message||"unknown error")); }}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(239,68,68,0.2)", background:"rgba(239,68,68,0.06)", fontSize:10, fontWeight:600, color:"#f87171", cursor:"pointer", whiteSpace:"nowrap" }}>Reset</button>}
-                      <button onClick={async function(e){e.stopPropagation(); try { var r = await adminApi.verifyPayout(p.id); setVerifyResult(r); if (r && r.local_status) { setPayouts(function(prev){ return prev.map(function(x){ return x.id===p.id ? Object.assign({},x,{status:r.local_status}) : x; }); }); } } catch(err){ flash("Verify failed: "+(err.message||"No MamoPay ID on record")); }}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(139,92,246,0.2)", background:"rgba(139,92,246,0.06)", fontSize:10, fontWeight:600, color:"#a78bfa", cursor:"pointer", whiteSpace:"nowrap" }}>Verify</button>
+                      {isProcessablePayout(p) && <button onClick={async function(e){e.stopPropagation(); if(!window.confirm("Process this payout of AED "+payoutAmount(p).toFixed(2)+" via MamoPay?")) return; try { var r = await adminApi.processPayout(p.id); setPayouts(function(prev){return prev.map(function(x){return x.id===p.id?Object.assign({},x,{status:"processing",mamopay_transfer_id:r.transfer_id}):x})}); setSel(function(v){return v.filter(function(x){return x!==p.id})}); flash("Payout submitted to MamoPay"); } catch(err){ flash("Process failed: "+(err.message||"MamoPay error")); }}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(200,180,140,0.3)", background:"rgba(200,180,140,0.1)", fontSize:10, fontWeight:700, color:"rgb(200,180,140)", cursor:"pointer", whiteSpace:"nowrap" }}>Process</button>}
+                      {(p.status === "failed" || (p.status === "completed" && !p.mamopay_transfer_id)) && <button onClick={async function(e){e.stopPropagation(); if (!window.confirm("Reset this payout? Commissions will return to pending so the user can request again.")) return; try { await adminApi.resetPayout(p.id); var updated = await adminApi.payouts(); if (Array.isArray(updated)) setPayouts(updated); flash("Payout reset. Amount returned to user's pending balance."); } catch(err) { flash("Reset failed: "+(err.message||"unknown error")); }}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(239,68,68,0.2)", background:"rgba(239,68,68,0.06)", fontSize:10, fontWeight:600, color:"#f87171", cursor:"pointer", whiteSpace:"nowrap" }}>Reset</button>}
+                      {p.mamopay_transfer_id && <button onClick={async function(e){e.stopPropagation(); try { var r = await adminApi.verifyPayout(p.id); setVerifyResult(r); if (r && r.local_status) { setPayouts(function(prev){ return prev.map(function(x){ return x.id===p.id ? Object.assign({},x,{status:r.local_status}) : x; }); }); } } catch(err){ flash("Verify failed: "+(err.message||"No MamoPay ID on record")); }}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(139,92,246,0.2)", background:"rgba(139,92,246,0.06)", fontSize:10, fontWeight:600, color:"#a78bfa", cursor:"pointer", whiteSpace:"nowrap" }}>Verify</button>}
                       {p.status === "completed" && <span style={{ fontSize:10, color:"#3f3f46" }}>{"\u2014"}</span>}
-                      {p.status === "queued" && <span style={{ fontSize:10, color:"#3f3f46" }}>Pending</span>}
+                      {p.status === "processing" && <span style={{ fontSize:10, color:"#3f3f46" }}>Use Verify</span>}
                     </div>
                   </td>
                 </tr>
@@ -1194,11 +1198,11 @@ function AdminPanel(props) {
               <div style={{ background:"rgba(255,255,255,0.03)", borderRadius:10, padding:16, marginBottom:16, border:"1px solid rgba(255,255,255,0.06)" }}>
                 <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8 }}>
                   <div style={{ fontSize:13, color:"#71717a" }}>{"Payouts to process"}</div>
-                  <div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{sel.length > 0 ? sel.length : payouts.filter(function(p){return p.status==="queued"}).length}</div>
+                  <div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{sel.length > 0 ? sel.length : payouts.filter(isProcessablePayout).length}</div>
                 </div>
                 <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8 }}>
                   <div style={{ fontSize:13, color:"#71717a" }}>Total amount</div>
-                  <div style={{ fontSize:20, fontWeight:500, color:"#d4d4d8" }}>{"AED "+(sel.length > 0 ? payouts.filter(function(p){return sel.includes(p.id)}).reduce(function(s,p){return s+p.amount},0).toFixed(2) : payouts.filter(function(p){return p.status==="queued"}).reduce(function(s,p){return s+p.amount},0).toFixed(2))}</div>
+                  <div style={{ fontSize:20, fontWeight:500, color:"#d4d4d8" }}>{"AED "+(sel.length > 0 ? payouts.filter(function(p){return sel.includes(p.id)}).reduce(function(s,p){return s+payoutAmount(p)},0).toFixed(2) : payouts.filter(isProcessablePayout).reduce(function(s,p){return s+payoutAmount(p)},0).toFixed(2))}</div>
                 </div>
                 <div style={{ fontSize:11, color:"#52525b", padding:"4px 10px", borderRadius:5, background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.04)", display:"inline-block" }}>Via MamoPay bank transfer to registered IBANs</div>
               </div>

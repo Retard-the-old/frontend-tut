@@ -4,6 +4,18 @@ import { users as usersApi, subscriptions as subscriptionsApi } from "../../api"
 import { useIsMobile, Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay, PasswordInput } from "../../components/UI";
 import { Btn, Logo } from "../../components/Layout";
 
+function subscriptionHasAccess(sub) {
+  if (!sub) return false;
+  if (sub.has_access === true) return true;
+  if (sub.status === "active") {
+    return !sub.current_period_end || new Date(sub.current_period_end).getTime() > Date.now();
+  }
+  if (sub.status === "cancelled" && sub.current_period_end) {
+    return new Date(sub.current_period_end).getTime() > Date.now();
+  }
+  return false;
+}
+
 function UserLogin(props) {
   var go = props.go;
   var mob = useIsMobile();
@@ -27,7 +39,7 @@ function UserLogin(props) {
       // Check subscription before routing — authUser is guaranteed set here
       try {
         var sub = await subscriptionsApi.me();
-        if (sub && sub.status === "active") { go("userPortal"); }
+        if (subscriptionHasAccess(sub)) { go("userPortal"); }
         else { go("subscribe"); }
       } catch(subErr) {
         go("userPortal"); // subscription endpoint failed, portal will handle it

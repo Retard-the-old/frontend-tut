@@ -143,7 +143,7 @@ function SettingsTab(props) {
           </div>
           <div style={{ padding:14, background:"rgba(255,255,255,0.03)", borderRadius:10, textAlign:"center" }}>
             <div style={{ fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>SUBSCRIPTION</div>
-            <div style={{ fontSize:13, fontWeight:600, color: u.status==="active"?"#10b981":"#f87171" }}>{u.status==="active"?"Active":"Inactive"}</div>
+            <div style={{ fontSize:13, fontWeight:600, color: u.status==="active"?"#10b981":"#f87171" }}>{u.billingStatus==="cancelled"?"Cancelled - access active":(u.status==="active"?"Active":"Inactive")}</div>
           </div>
         </div>
       </div>

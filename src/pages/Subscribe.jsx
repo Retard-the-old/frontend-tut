@@ -3,7 +3,19 @@ import { useAuth } from "../AuthContext";
 import { subscriptions as subscriptionsApi } from "../api";
 import { useIsMobile, Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from "../components/UI";
 import { Btn, Logo, SiteNav, SiteFooter } from "../components/Layout";
-import { PRICE, MAMOPAY_LINK, USER } from "../constants";
+import { PRICE, USER } from "../constants";
+
+function subscriptionHasAccess(sub) {
+  if (!sub) return false;
+  if (sub.has_access === true) return true;
+  if (sub.status === "active") {
+    return !sub.current_period_end || new Date(sub.current_period_end).getTime() > Date.now();
+  }
+  if (sub.status === "cancelled" && sub.current_period_end) {
+    return new Date(sub.current_period_end).getTime() > Date.now();
+  }
+  return false;
+}
 
 function Subscribe(props) {
   var go = props.go;
@@ -23,6 +35,14 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
   var setTermsAgreed = _terms[1];
   var _checking = useState(false); var checking = _checking[0]; var setChecking = _checking[1];
   var _checkMsg = useState(""); var checkMsg = _checkMsg[0]; var setCheckMsg = _checkMsg[1];
+  var _checkout = useState(false); var checkoutLoading = _checkout[0]; var setCheckoutLoading = _checkout[1];
+  var _checkoutMsg = useState(""); var checkoutMsg = _checkoutMsg[0]; var setCheckoutMsg = _checkoutMsg[1];
+  var _existingSub = useState(null); var existingSub = _existingSub[0]; var setExistingSub = _existingSub[1];
+
+  useEffect(function() {
+    if (!authUser || isReferralLink) return;
+    subscriptionsApi.me().then(function(sub){ setExistingSub(sub); }).catch(function(){});
+  }, [authUser, isReferralLink]);
 
   function set(k, v) { setForm(function(p) { var n = Object.assign({}, p); n[k] = v; return n; }); setErrors(function(p){ var n=Object.assign({},p); delete n[k]; return n; }); }
   function validateStep1() {
@@ -55,19 +75,46 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
   }
 
   async function checkAndRedirect() {
-    setChecking(true); setCheckMsg("Verifying your payment with MamoPay...");
+    setChecking(true); setCheckMsg("Checking your payment status...");
     try {
       var data = await subscriptionsApi.verifyPayment();
       if (data.activated) {
-        setCheckMsg("Payment confirmed! Taking you to your dashboard...");
+        setCheckMsg(data.already_active ? "Your access is active. Taking you to your dashboard..." : "Payment confirmed! Taking you to your dashboard...");
         setTimeout(function(){ go("userPortal"); }, 1200);
       } else {
-        setCheckMsg(data.message || "No payment found yet. Make sure you used the same email you registered with on MamoPay, then try again.");
+        if (data.status === "not_found") {
+          setCheckMsg(data.message || "Start checkout first, then return here after payment.");
+        } else {
+          setCheckMsg(data.message || "Your payment is still processing. If you just paid, please wait a moment and try again.");
+        }
         setChecking(false);
       }
     } catch(e) {
       setCheckMsg(e.message || "Could not reach payment server. Please try again.");
       setChecking(false);
+    }
+  }
+
+  async function openCheckout() {
+    if (subscriptionHasAccess(existingSub)) {
+      var until = existingSub && existingSub.current_period_end ? existingSub.current_period_end.slice(0, 10) : "";
+      setCheckoutMsg("You already have paid access" + (until ? " until " + until : "") + ". You can resubscribe after it ends.");
+      return;
+    }
+    setCheckoutLoading(true);
+    setCheckoutMsg("");
+    var checkoutWindow = window.open("", "_blank");
+    try {
+      var data = await subscriptionsApi.create();
+      if (!data.payment_link) throw new Error("Could not create checkout link. Please try again.");
+      if (checkoutWindow) checkoutWindow.location.href = data.payment_link;
+      else window.location.href = data.payment_link;
+      setCheckoutMsg("MamoPay checkout opened. Complete payment there, then come back here.");
+    } catch(e) {
+      if (checkoutWindow) checkoutWindow.close();
+      setCheckoutMsg(e.message || "Could not create secure checkout right now. Please try again in a moment.");
+    } finally {
+      setCheckoutLoading(false);
     }
   }
 
@@ -123,8 +170,8 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
             <div style={{ background:"rgba(200,180,140,0.06)", borderRadius:10, padding:"12px 16px", marginBottom:16, border:"1px solid rgba(200,180,140,0.2)", display:"flex", gap:10, alignItems:"flex-start" }}>
               <Ico name="shield" size={16} color="rgb(200,180,140)" />
               <div>
-                <div style={{ fontSize:13, fontWeight:700, color:"rgb(200,180,140)", marginBottom:3 }}>Important — use your Tutorii email</div>
-                <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.6 }}>{"When MamoPay asks for your email, use "}<strong style={{ color:"#d4d4d8" }}>{form.email}</strong>{" — the same email you just registered with. This is how we verify your payment and activate your account."}</div>
+                <div style={{ fontSize:13, fontWeight:700, color:"rgb(200,180,140)", marginBottom:3 }}>Secure Tutorii checkout</div>
+                <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.6 }}>{"Your checkout is created from your Tutorii account. Complete payment on MamoPay, then return here so we can confirm it."}</div>
               </div>
             </div>
             <div style={{ background:"#131315", borderRadius:12, border:"2px dashed rgba(255,255,255,0.1)", padding:36, textAlign:"center", marginBottom:24 }}>
@@ -153,13 +200,14 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
                 <h3 style={{ fontSize:24, fontWeight:700, color:"#d4d4d8", margin:"0 0 10px" }}>Complete Your Payment</h3>
                 <p style={{ fontSize:14, color:"#71717a", marginBottom:20, lineHeight:1.7 }}>{authUser ? "Complete your payment on MamoPay to unlock full access." : "Your account has been created. Complete your payment on MamoPay to unlock full access."}</p>
                 <div style={{ background:"rgba(200,180,140,0.06)", border:"1px solid rgba(200,180,140,0.2)", borderRadius:10, padding:"14px 18px", marginBottom:20, textAlign:"left" }}>
-                  <div style={{ fontSize:12, fontWeight:700, color:"rgb(200,180,140)", marginBottom:4 }}>Important</div>
-                  <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.7 }}>{"Use "}<strong style={{ color:"#d4d4d8" }}>{authUser ? authUser.email : form.email}</strong>{" as your email on MamoPay — this is how we verify and activate your account."}</div>
+                  <div style={{ fontSize:12, fontWeight:700, color:"rgb(200,180,140)", marginBottom:4 }}>Secure checkout</div>
+                  <div style={{ fontSize:12, color:"#a1a1aa", lineHeight:1.7 }}>{"This checkout is linked to your Tutorii account. After payment, come back here and we’ll confirm it for you."}</div>
                 </div>
-                <Btn onClick={function(){ window.open(MAMOPAY_LINK, "_blank"); }} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12 }}>Pay AED {PRICE} on MamoPay ↗</Btn>
+                <Btn onClick={function(){ if (!checkoutLoading) openCheckout(); }} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12, opacity:checkoutLoading?0.7:1, cursor:checkoutLoading?"wait":"pointer" }}>{checkoutLoading ? "Creating checkout..." : "Pay AED "+PRICE+" on MamoPay ↗"}</Btn>
                 <Btn onClick={checkAndRedirect} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:8, background:"rgba(255,255,255,0.06)", color:"#d4d4d8" }} disabled={checking}>
-                  {checking ? "Checking payment..." : "I've paid — take me to my dashboard"}
+                  {checking ? "Checking payment..." : "I've paid — check status"}
                 </Btn>
+                {checkoutMsg && <div style={{ fontSize:12, color: checkoutMsg.includes("Could not") ? "#f87171" : "rgb(200,180,140)", marginTop:8, padding:"8px 12px", borderRadius:6, background:"rgba(255,255,255,0.03)" }}>{checkoutMsg}</div>}
                 {checkMsg && <div style={{ fontSize:12, color: checkMsg.includes("No payment") ? "#f87171" : "rgb(200,180,140)", marginTop:8, padding:"8px 12px", borderRadius:6, background:"rgba(255,255,255,0.03)" }}>{checkMsg}</div>}
                 {!authUser && <p style={{ fontSize:12, color:"#52525b", marginTop:12 }}>Already have an account? <span onClick={function(){go("login")}} style={{ color:"rgb(200,180,140)", cursor:"pointer", fontWeight:600 }}>Log in here</span></p>}
               </div>}
