@@ -12,6 +12,7 @@ const UserLogin         = lazy(function() { return import("./pages/auth/UserLogi
 const ForgotPasswordPage = lazy(function() { return import("./pages/auth/ForgotPasswordPage"); });
 const ResetPasswordPage = lazy(function() { return import("./pages/auth/ResetPasswordPage"); });
 const Subscribe         = lazy(function() { return import("./pages/Subscribe"); });
+const ConfirmationPage  = lazy(function() { return import("./pages/ConfirmationPage"); });
 const UserPortal        = lazy(function() { return import("./pages/UserPortal"); });
 const AdminLogin        = lazy(function() { return import("./pages/admin/AdminLogin"); });
 const AdminPanel        = lazy(function() { return import("./pages/admin/AdminPanel"); });
@@ -30,6 +31,7 @@ var PAGE_TO_PATH = {
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password",
   subscribe: "/subscribe",
+  confirmation: "/confirmation",
   userPortal: "/portal",
   adminLogin: "/admin-login",
   adminPanel: "/admin",
@@ -41,8 +43,14 @@ var PAGE_TO_PATH = {
 var PATH_TO_PAGE = {};
 Object.keys(PAGE_TO_PATH).forEach(function(k){ PATH_TO_PAGE[PAGE_TO_PATH[k]] = k; });
 
+function normalizePath(path) {
+  if (path === "/confirmation/" || path === "/confirmation/index.html") return "/confirmation";
+  if (path.length > 1 && path.endsWith("/")) return path.slice(0, -1);
+  return path;
+}
+
 function getInitialPage() {
-  var path = window.location.pathname;
+  var path = normalizePath(window.location.pathname);
   // Handle /ref/:code
   var refMatch = path.match(/^\/ref\/(.+)$/);
   if (refMatch) return { page: "subscribe", refCode: refMatch[1] };
@@ -72,7 +80,7 @@ function TutoriiApp() {
   // Handle browser back/forward buttons
   useEffect(function() {
     function onPop() {
-      var path = window.location.pathname;
+      var path = normalizePath(window.location.pathname);
       var refMatch = path.match(/^\/ref\/(.+)$/);
       if (refMatch) { setPage("subscribe"); setRefCode(refMatch[1]); }
       else { setPage(PATH_TO_PAGE[path] || "landing"); }
@@ -119,6 +127,7 @@ function TutoriiApp() {
         {page === "forgotPassword" && <ForgotPasswordPage go={go} />}
         {page === "resetPassword" && <ResetPasswordPage go={go} />}
         {page === "subscribe" && <Subscribe go={go} refCode={refCode} />}
+        {page === "confirmation" && <ConfirmationPage go={go} />}
         {page === "userPortal" && !authLoading && <UserPortal go={go} courses={courses} setCourses={setCourses} chatOpen={chatOpen} setChatOpen={setChatOpen} chatMinimized={chatMinimized} setChatMinimized={setChatMinimized} chatMsgs={chatMsgs} setChatMsgs={setChatMsgs} chatInput={chatInput} setChatInput={setChatInput} chatLoading={chatLoading} setChatLoading={setChatLoading} />}
         {page === "adminLogin" && <AdminLogin go={go} />}
         {page === "adminPanel" && <AdminPanel go={go} courses={courses} setCourses={setCourses} />}

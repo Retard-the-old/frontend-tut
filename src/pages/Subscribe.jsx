@@ -89,7 +89,7 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
       setCheckoutMsg("MamoPay checkout opened. Complete payment there, then come back here.");
     } catch(e) {
       if (checkoutWindow) checkoutWindow.close();
-      setCheckoutMsg(e.message || "Could not create checkout link. Please try again.");
+      setCheckoutMsg(e.message || "Could not create secure checkout right now. Please try again in a moment.");
     } finally {
       setCheckoutLoading(false);
     }

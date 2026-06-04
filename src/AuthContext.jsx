@@ -1,9 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { auth, users, setTokens, clearTokens, getRefreshToken } from "./api";
+import { API_BASE_URL, auth, users, setTokens, clearTokens, getRefreshToken } from "./api";
 
 const AuthContext = createContext(null);
-
-const BASE_URL = import.meta.env.VITE_API_URL || "https://backend-tut-production.up.railway.app/api/v1";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -17,7 +15,7 @@ export function AuthProvider({ children }) {
       // Step 1: Refresh the access token.
       // Only clear tokens if THIS fails — means session is truly expired.
       try {
-        const res = await fetch(`${BASE_URL}/auth/refresh`, {
+        const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ refresh_token: rt }),
