@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { API_BASE_URL, auth, users, setTokens, clearTokens, getRefreshToken } from "./api";
+import { auth, users, setTokens, clearTokens, getRefreshToken, refreshAccessToken } from "./api";
 
 const AuthContext = createContext(null);
 
@@ -15,20 +15,9 @@ export function AuthProvider({ children }) {
       // Step 1: Refresh the access token.
       // Only clear tokens if THIS fails — means session is truly expired.
       try {
-        const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ refresh_token: rt }),
-        });
-        if (!res.ok) {
-          clearTokens();
-          setLoading(false);
-          return;
-        }
-        const data = await res.json();
-        setTokens(data.access_token, data.refresh_token);
-      } catch {
-        clearTokens();
+        await refreshAccessToken();
+      } catch (err) {
+        if (err && err.sessionExpired) clearTokens();
         setLoading(false);
         return;
       }

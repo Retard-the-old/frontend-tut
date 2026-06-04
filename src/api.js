@@ -3,6 +3,14 @@ export const API_BASE_URL = import.meta.env.VITE_API_URL || "https://backend-tut
 // Token storage in memory
 let accessToken = null;
 let refreshToken = localStorage.getItem("refresh_token") || null;
+let refreshPromise = null;
+
+function makeApiError(message, status) {
+  const err = new Error(message);
+  err.status = status;
+  err.sessionExpired = status === 401 || status === 403;
+  return err;
+}
 
 export function setTokens(access, refresh) {
   accessToken = access;
@@ -24,21 +32,41 @@ export function getRefreshToken() {
 
 export async function refreshAccessToken() {
   if (!refreshToken) throw new Error("No refresh token");
-  const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ refresh_token: refreshToken }),
-  });
-  if (!res.ok) {
-    clearTokens();
-    throw new Error("Session expired");
+  if (refreshPromise) return refreshPromise;
+
+  refreshPromise = (async function () {
+    const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh_token: refreshToken }),
+    });
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) {
+        clearTokens();
+        throw makeApiError("Session expired", res.status);
+      }
+      if (res.status === 429) {
+        throw makeApiError("Too many session refresh attempts. Please wait a moment and try again.", res.status);
+      }
+      throw makeApiError("Could not refresh session. Please try again.", res.status);
+    }
+    const data = await res.json();
+    setTokens(data.access_token, data.refresh_token);
+    return data.access_token;
+  })();
+
+  try {
+    return await refreshPromise;
+  } finally {
+    refreshPromise = null;
   }
-  const data = await res.json();
-  setTokens(data.access_token, data.refresh_token);
-  return data.access_token;
 }
 
 async function request(method, path, body, retry = true) {
+  if (!accessToken && refreshToken && retry) {
+    await refreshAccessToken();
+  }
+
   const headers = { "Content-Type": "application/json" };
   if (accessToken) headers["Authorization"] = `Bearer ${accessToken}`;
 
@@ -52,10 +80,12 @@ async function request(method, path, body, retry = true) {
     try {
       await refreshAccessToken();
       return request(method, path, body, false);
-    } catch {
-      clearTokens();
-      window.location.href = "/";
-      throw new Error("Session expired");
+    } catch (err) {
+      if (err && err.sessionExpired) {
+        clearTokens();
+        window.location.href = "/";
+      }
+      throw err;
     }
   }
 

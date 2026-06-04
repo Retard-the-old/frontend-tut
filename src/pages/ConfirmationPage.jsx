@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { getRefreshToken, refreshAccessToken, subscriptions } from "../api";
+import { getRefreshToken, subscriptions } from "../api";
 import { useAuth } from "../AuthContext";
 
 const PRICE_LABEL = "AED 95.00";
@@ -128,7 +128,6 @@ export default function ConfirmationPage({ go }) {
     async function verify(attempt) {
       setView(checkingState(attempt > 0 ? "Payment not confirmed yet. Checking again in a moment..." : "Verifying your payment with Tutorii..."));
       try {
-        await refreshAccessToken();
         const data = await subscriptions.verifyPayment();
         if (cancelled) return;
         if (data && data.activated) {
