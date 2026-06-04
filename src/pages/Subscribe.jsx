@@ -5,6 +5,18 @@ import { useIsMobile, Ico, FadeIn, BgIllustration, DotGrid, NoiseOverlay } from 
 import { Btn, Logo, SiteNav, SiteFooter } from "../components/Layout";
 import { PRICE, USER } from "../constants";
 
+function subscriptionHasAccess(sub) {
+  if (!sub) return false;
+  if (sub.has_access === true) return true;
+  if (sub.status === "active") {
+    return !sub.current_period_end || new Date(sub.current_period_end).getTime() > Date.now();
+  }
+  if (sub.status === "cancelled" && sub.current_period_end) {
+    return new Date(sub.current_period_end).getTime() > Date.now();
+  }
+  return false;
+}
+
 function Subscribe(props) {
   var go = props.go;
   var mob = useIsMobile();
@@ -25,6 +37,12 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
   var _checkMsg = useState(""); var checkMsg = _checkMsg[0]; var setCheckMsg = _checkMsg[1];
   var _checkout = useState(false); var checkoutLoading = _checkout[0]; var setCheckoutLoading = _checkout[1];
   var _checkoutMsg = useState(""); var checkoutMsg = _checkoutMsg[0]; var setCheckoutMsg = _checkoutMsg[1];
+  var _existingSub = useState(null); var existingSub = _existingSub[0]; var setExistingSub = _existingSub[1];
+
+  useEffect(function() {
+    if (!authUser || isReferralLink) return;
+    subscriptionsApi.me().then(function(sub){ setExistingSub(sub); }).catch(function(){});
+  }, [authUser, isReferralLink]);
 
   function set(k, v) { setForm(function(p) { var n = Object.assign({}, p); n[k] = v; return n; }); setErrors(function(p){ var n=Object.assign({},p); delete n[k]; return n; }); }
   function validateStep1() {
@@ -61,7 +79,7 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
     try {
       var data = await subscriptionsApi.verifyPayment();
       if (data.activated) {
-        setCheckMsg("Payment confirmed! Taking you to your dashboard...");
+        setCheckMsg(data.already_active ? "Your access is active. Taking you to your dashboard..." : "Payment confirmed! Taking you to your dashboard...");
         setTimeout(function(){ go("userPortal"); }, 1200);
       } else {
         if (data.status === "not_found") {
@@ -78,6 +96,11 @@ var _form = useState({ name:"", email:"", password:"", phone:"", language:"Engli
   }
 
   async function openCheckout() {
+    if (subscriptionHasAccess(existingSub)) {
+      var until = existingSub && existingSub.current_period_end ? existingSub.current_period_end.slice(0, 10) : "";
+      setCheckoutMsg("You already have paid access" + (until ? " until " + until : "") + ". You can resubscribe after it ends.");
+      return;
+    }
     setCheckoutLoading(true);
     setCheckoutMsg("");
     var checkoutWindow = window.open("", "_blank");

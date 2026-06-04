@@ -7,6 +7,22 @@ import { Btn, Logo } from "../components/Layout";
 import { PRICE, L1_RATE, L2_RATE, INIT_COURSES, USER } from "../constants";
 import SettingsTab from "../components/SettingsTab";
 
+function subscriptionHasAccess(sub) {
+  if (!sub) return false;
+  if (sub.has_access === true) return true;
+  if (sub.status === "active") {
+    return !sub.current_period_end || new Date(sub.current_period_end).getTime() > Date.now();
+  }
+  if (sub.status === "cancelled" && sub.current_period_end) {
+    return new Date(sub.current_period_end).getTime() > Date.now();
+  }
+  return false;
+}
+
+function subscriptionIsCancelled(sub) {
+  return !!(sub && sub.status === "cancelled");
+}
+
 function UserPortal(props) {
   var go = props.go;
   var courses = props.courses;
@@ -47,7 +63,8 @@ function UserPortal(props) {
   async function doCancel() {
     setCancelling(true); setCancelErr("");
     try {
-      await subscriptionsApi.cancel();
+      var cancelledSub = await subscriptionsApi.cancel();
+      setMySub(cancelledSub);
       setCancelled(true); setShowCancel(false);
     } catch(e) {
       setCancelErr(e.message || "Failed to cancel. Please try again.");
@@ -108,13 +125,16 @@ function UserPortal(props) {
       }
       // Check subscription — only redirect if we got a valid response
       var sub = results[4].status==="fulfilled" ? results[4].value : null;
-      if (results[4].status==="fulfilled" && (!sub || sub.status !== "active")) {
+      if (results[4].status==="fulfilled" && !subscriptionHasAccess(sub)) {
         go("subscribe");
         return;
       }
       setDashLoading(false);
     });
   }, []);
+
+  var hasPaidAccess = subscriptionHasAccess(mySub);
+  var subscriptionCancelled = cancelled || subscriptionIsCancelled(mySub);
 
   // Build u object from real data, falling back to USER mock for missing fields
   var u = realUser ? {
@@ -123,12 +143,14 @@ function UserPortal(props) {
     phone: realUser.phone || "",
     code: realUser.referral_code || "",
     avatar: (realUser.full_name||"U").split(" ").map(function(n){return n[0]}).join("").slice(0,2).toUpperCase(),
-    status: mySub && mySub.status === "active" ? "active" : "inactive",
+    status: hasPaidAccess ? "active" : "inactive",
+    billingStatus: mySub && mySub.status ? mySub.status : "inactive",
     plan: "Tutorii Monthly",
     paymentMethod: "MamoPay",
     joined: realUser.created_at ? new Date(realUser.created_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "",
     lastLogin: "Today",
     nextBilling: mySub && mySub.current_period_end ? new Date(mySub.current_period_end).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "N/A",
+    billingDateLabel: subscriptionIsCancelled(mySub) ? "Access Until" : "Next Billing Date",
     referredBy: referralStats && referralStats.referred_by ? referralStats.referred_by : "Direct",
     iban: realUser.payout_iban || "",
     ibanName: realUser.payout_name || "",
@@ -161,8 +183,8 @@ function UserPortal(props) {
     name: authUser ? (authUser.full_name || authUser.email) : "Loading...",
     email: authUser ? authUser.email : "",
     phone: "", code: "", avatar: authUser ? (authUser.full_name||"U").split(" ").map(function(n){return n[0]}).join("").slice(0,2).toUpperCase() : "?",
-    status: "inactive", plan: "Tutorii Monthly", paymentMethod: "MamoPay",
-    joined: "", lastLogin: "", nextBilling: "N/A", referredBy: "Direct",
+    status: "inactive", billingStatus: "inactive", plan: "Tutorii Monthly", paymentMethod: "MamoPay",
+    joined: "", lastLogin: "", nextBilling: "N/A", billingDateLabel: "Next Billing Date", referredBy: "Direct",
     iban: "", ibanName: "", billing: [], earn: { total:0, month:0, pending:0, paid:0 },
     l1: [], l2: [], payouts: [], earningsHistory: [],
   };
@@ -209,8 +231,9 @@ function UserPortal(props) {
 
       "=== SUBSCRIPTION & BILLING ===\n" +
       "Plan: " + u.plan + "\n" +
+      "Billing Status: " + u.billingStatus + "\n" +
       "Payment Method: " + u.paymentMethod + " (via MamoPay)\n" +
-      "Next Billing Date: " + u.nextBilling + "\n" +
+      u.billingDateLabel + ": " + u.nextBilling + "\n" +
       "Billing History:\n" +
       (u.billing||[]).map(function(b){return "- " + b.date + ": $" + b.amount.toFixed(2) + " (" + b.status + ") via " + b.method}).join("\n") + "\n" +
       "Total Spent on Subscription: AED " + ((u.billing||[]).length * PRICE).toFixed(2) + " (" + (u.billing||[]).length + " payments)\n\n" +
@@ -1178,11 +1201,11 @@ function UserPortal(props) {
           )}
         </div>}
 
-        {tab === "settings" && <SettingsTab u={u} mob={mob} setShowCancel={setShowCancel} cancelled={cancelled} setRealUser={setRealUser} />}
+        {tab === "settings" && <SettingsTab u={u} mob={mob} setShowCancel={setShowCancel} cancelled={subscriptionCancelled} setRealUser={setRealUser} />}
         </div>}
       </div>
       {/* ═══ CANCEL SUBSCRIPTION MODAL ═══ */}
-      {showCancel && !cancelled && (
+      {showCancel && !subscriptionCancelled && (
         <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.6)", zIndex:500, display:"flex", alignItems:"center", justifyContent:"center" }} onClick={function(){setShowCancel(false)}}>
           <div onClick={function(e){e.stopPropagation()}} style={{ background:"#131315", borderRadius:16, padding:32, maxWidth:440, width:"90%", border:"1px solid rgba(248,113,113,0.2)" }}>
             <div style={{ marginBottom:16, lineHeight:0 }}><Ico name="shield" size={36} color="#f87171" /></div>
