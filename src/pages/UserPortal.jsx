@@ -6,6 +6,7 @@ import { useIsMobile, Ico, Badge, StatCard, FadeIn, Skeleton, DashSkeleton, Prog
 import { Btn, Logo } from "../components/Layout";
 import { PRICE, L1_RATE, L2_RATE, INIT_COURSES, USER } from "../constants";
 import SettingsTab from "../components/SettingsTab";
+import UpdatesTab from "../components/UpdatesTab";
 
 function subscriptionHasAccess(sub) {
   if (!sub) return false;
@@ -30,7 +31,7 @@ function UserPortal(props) {
   var _tab = useState(function(){
     var parts = window.location.pathname.split("/");
     var sub = parts[2];
-    var valid = ["overview","referrals","earnings","payouts","courses","settings","support"];
+    var valid = ["overview","referrals","earnings","payouts","courses","updates","settings","support"];
     return (sub && valid.includes(sub)) ? sub : "overview";
   });
   var tab = _tab[0]; var setTab = _tab[1];
@@ -402,6 +403,7 @@ function UserPortal(props) {
     { id:"earnings", icon:"dollar", label:"Earnings" },
     { id:"payouts", icon:"bank", label:"Payouts" },
     { id:"courses", icon:"book", label:"Courses" },
+    { id:"updates", icon:"bell", label:"Updates" },
     { id:"support", icon:"chat", label:"Support" },
     { id:"settings", icon:"gear", label:"Settings" },
   ];
@@ -1201,6 +1203,7 @@ function UserPortal(props) {
           )}
         </div>}
 
+        {tab === "updates" && <UpdatesTab mob={mob} />}
         {tab === "settings" && <SettingsTab u={u} mob={mob} setShowCancel={setShowCancel} cancelled={subscriptionCancelled} setRealUser={setRealUser} />}
         </div>}
       </div>
