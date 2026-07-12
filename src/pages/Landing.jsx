@@ -80,50 +80,64 @@ function GradientText(props) {
   );
 }
 
-// WebGL ambient shader — slow amber-on-navy glow
+// Full-page WebGL shader — fixed position, amber-on-navy ambient glow
 function ShaderBackground() {
   var canvasRef = useRef(null);
   useEffect(function() {
     var canvas = canvasRef.current;
     if (!canvas) return;
+
+    function syncSize() {
+      var w = canvas.clientWidth || window.innerWidth;
+      var h = canvas.clientHeight || window.innerHeight;
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+    }
+    if (typeof ResizeObserver !== "undefined") { new ResizeObserver(syncSize).observe(canvas); }
+    syncSize();
+
     var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
     if (!gl) return;
 
-    function sync() {
-      var parent = canvas.parentElement;
-      var w = (parent ? parent.clientWidth : window.innerWidth) || window.innerWidth;
-      var h = (parent ? parent.clientHeight : window.innerHeight) || window.innerHeight;
-      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
-    }
-
-    var vs = "attribute vec2 a_position; varying vec2 v_uv; void main(){v_uv=a_position*0.5+0.5;gl_Position=vec4(a_position,0,1);}";
-    var fs = [
-      "precision highp float;",
-      "varying vec2 v_uv;",
-      "uniform float u_time;",
-      "void main(){",
-      "  vec2 p=v_uv*2.0;",
-      "  float n=0.0;",
-      "  for(float i=1.0;i<4.0;i++){",
-      "    p.x+=0.2*sin(1.5*p.y+u_time*0.15);",
-      "    p.y+=0.2*sin(1.5*p.x+u_time*0.1);",
-      "    n+=0.5/i*abs(sin(p.x+p.y+u_time*0.1));",
-      "  }",
-      "  vec3 base=vec3(0.02,0.05,0.12);",
-      "  vec3 accent=vec3(0.96,0.62,0.04);",
-      "  gl_FragColor=vec4(mix(base,accent,n*0.07),1.0);",
+    var vs = [
+      "attribute vec2 a_position;",
+      "varying vec2 v_texCoord;",
+      "void main() {",
+      "  v_texCoord = a_position * 0.5 + 0.5;",
+      "  gl_Position = vec4(a_position, 0.0, 1.0);",
       "}"
     ].join("\n");
 
-    function mkShader(type, src) {
+    var fs = [
+      "precision highp float;",
+      "varying vec2 v_texCoord;",
+      "uniform float u_time;",
+      "uniform vec2 u_resolution;",
+      "uniform vec2 u_mouse;",
+      "void main() {",
+      "  vec2 uv = v_texCoord;",
+      "  float noise = 0.0;",
+      "  vec2 p = uv * 2.0;",
+      "  for(float i=1.0; i<4.0; i++) {",
+      "    p.x += 0.2 * sin(1.5 * p.y + u_time * 0.15);",
+      "    p.y += 0.2 * sin(1.5 * p.x + u_time * 0.1);",
+      "    noise += 0.5 / i * abs(sin(p.x + p.y + u_time * 0.1));",
+      "  }",
+      "  vec3 base = vec3(0.04, 0.07, 0.15);",
+      "  vec3 accent = vec3(0.96, 0.62, 0.04);",
+      "  vec3 finalColor = mix(base, accent, noise * 0.08);",
+      "  gl_FragColor = vec4(finalColor, 1.0);",
+      "}"
+    ].join("\n");
+
+    function cs(type, src) {
       var s = gl.createShader(type);
       gl.shaderSource(s, src);
       gl.compileShader(s);
       return s;
     }
     var prog = gl.createProgram();
-    gl.attachShader(prog, mkShader(gl.VERTEX_SHADER, vs));
-    gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, fs));
+    gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+    gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
     gl.linkProgram(prog);
     gl.useProgram(prog);
 
@@ -133,34 +147,122 @@ function ShaderBackground() {
     var pos = gl.getAttribLocation(prog, "a_position");
     gl.enableVertexAttribArray(pos);
     gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+
     var uTime = gl.getUniformLocation(prog, "u_time");
+    var uRes  = gl.getUniformLocation(prog, "u_resolution");
+    var uMouse = gl.getUniformLocation(prog, "u_mouse");
 
-    if (typeof ResizeObserver !== "undefined") {
-      new ResizeObserver(sync).observe(canvas.parentElement || canvas);
+    var mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+    function onMouseMove(e) {
+      var rect = canvas.getBoundingClientRect();
+      if (rect.width && rect.height) {
+        mouse.x = ((e.clientX - rect.left) / rect.width) * canvas.width;
+        mouse.y = (1.0 - (e.clientY - rect.top) / rect.height) * canvas.height;
+      }
     }
-    window.addEventListener("resize", sync);
+    window.addEventListener("mousemove", onMouseMove);
 
-    var raf;
     function render(t) {
-      sync();
+      if (typeof ResizeObserver === "undefined") syncSize();
       gl.viewport(0, 0, canvas.width, canvas.height);
-      if (uTime) gl.uniform1f(uTime, t * 0.001);
+      if (uTime)  gl.uniform1f(uTime, t * 0.001);
+      if (uRes)   gl.uniform2f(uRes, canvas.width, canvas.height);
+      if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      raf = requestAnimationFrame(render);
+      requestAnimationFrame(render);
     }
-    // Delay first frame so the parent has laid out and has real dimensions
-    setTimeout(function() { raf = requestAnimationFrame(render); }, 50);
+    render(0);
 
-    return function() {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("resize", sync);
-    };
+    return function() { window.removeEventListener("mousemove", onMouseMove); };
   }, []);
+
   return (
     <canvas
       ref={canvasRef}
-      style={{ position:"absolute", top:0, left:0, right:0, bottom:0, width:"100%", height:"100%", opacity:0.5, display:"block" }}
+      style={{ position:"fixed", top:0, left:0, width:"100%", height:"100%", opacity:0.4, display:"block", zIndex:0, pointerEvents:"none" }}
     />
+  );
+}
+
+// Three.js spiraling helix of gold spheres — hero decoration
+function ThreeHero() {
+  var containerRef = useRef(null);
+  useEffect(function() {
+    var container = containerRef.current;
+    if (!container || typeof THREE === "undefined") return;
+
+    var width  = container.clientWidth  || window.innerWidth;
+    var height = container.clientHeight || window.innerHeight;
+
+    var scene    = new THREE.Scene();
+    var camera   = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
+
+    var group = new THREE.Group();
+    scene.add(group);
+
+    var sphereGeom = new THREE.SphereGeometry(0.08, 16, 16);
+    var sphereMat  = new THREE.MeshPhongMaterial({ color: 0xf59e0b, emissive: 0xf59e0b, emissiveIntensity: 0.5 });
+
+    for (var i = 0; i < 40; i++) {
+      var angle = i * 0.5;
+      var y = (i - 20) * 0.2;
+      var x = Math.cos(angle) * 2;
+      var z = Math.sin(angle) * 2;
+      var sphere = new THREE.Mesh(sphereGeom, sphereMat);
+      sphere.position.set(x, y, z);
+      group.add(sphere);
+      if (i < 39) {
+        var na = (i + 1) * 0.5;
+        var ny = (i + 1 - 20) * 0.2;
+        var nx = Math.cos(na) * 2;
+        var nz = Math.sin(na) * 2;
+        var lineGeom = new THREE.BufferGeometry().setFromPoints([
+          new THREE.Vector3(x, y, z),
+          new THREE.Vector3(nx, ny, nz)
+        ]);
+        var lineMat = new THREE.LineBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.2 });
+        group.add(new THREE.Line(lineGeom, lineMat));
+      }
+    }
+
+    var light = new THREE.PointLight(0xffffff, 1, 100);
+    light.position.set(10, 10, 10);
+    scene.add(light);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+    camera.position.z = 8;
+
+    var raf;
+    function animate() {
+      raf = requestAnimationFrame(animate);
+      group.rotation.y += 0.005;
+      group.rotation.x += 0.002;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    function onResize() {
+      var w = container.clientWidth  || window.innerWidth;
+      var h = container.clientHeight || window.innerHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+    window.addEventListener("resize", onResize);
+
+    return function() {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+      renderer.dispose();
+      if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
+    };
+  }, []);
+
+  return (
+    <div ref={containerRef} style={{ position:"absolute", top:0, left:0, width:"100%", height:"100%", opacity:0.6, pointerEvents:"none" }} />
   );
 }
 
@@ -288,11 +390,12 @@ function Landing(props) {
 
   return (
     <div style={{ background:BG, color:TEXT, fontFamily:FONT, overflowX:"hidden", position:"relative" }}>
+      <ShaderBackground />
       <Nav go={go} />
 
       {/* ── HERO ── */}
       <section style={{ minHeight:"100vh", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding: mob ? "120px 24px 80px" : "180px 48px 120px", textAlign:"center", position:"relative", overflow:"hidden" }}>
-        <ShaderBackground />
+        <ThreeHero />
         {/* radial vignette */}
         <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 80% 60% at 50% 40%, transparent 0%, "+BG+" 100%)", pointerEvents:"none", zIndex:1 }} />
         <div style={{ position:"relative", zIndex:2, maxWidth:860 }}>
