@@ -88,38 +88,80 @@ function ShaderBackground() {
     if (!canvas) return;
     var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
     if (!gl) return;
+
     function sync() {
-      var w = canvas.clientWidth || 1280;
-      var h = canvas.clientHeight || 720;
+      var parent = canvas.parentElement;
+      var w = (parent ? parent.clientWidth : window.innerWidth) || window.innerWidth;
+      var h = (parent ? parent.clientHeight : window.innerHeight) || window.innerHeight;
       if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
     }
-    if (typeof ResizeObserver !== "undefined") { new ResizeObserver(sync).observe(canvas); }
-    sync();
+
     var vs = "attribute vec2 a_position; varying vec2 v_uv; void main(){v_uv=a_position*0.5+0.5;gl_Position=vec4(a_position,0,1);}";
-    var fs = "precision highp float; varying vec2 v_uv; uniform float u_time;\nvoid main(){\n  vec2 p=v_uv*2.0;\n  float n=0.0;\n  for(float i=1.0;i<4.0;i++){\n    p.x+=0.2*sin(1.5*p.y+u_time*0.15);\n    p.y+=0.2*sin(1.5*p.x+u_time*0.1);\n    n+=0.5/i*abs(sin(p.x+p.y+u_time*0.1));\n  }\n  vec3 base=vec3(0.02,0.05,0.12);\n  vec3 accent=vec3(0.96,0.62,0.04);\n  gl_FragColor=vec4(mix(base,accent,n*0.07),1.0);\n}";
-    function mkShader(type, src) { var s=gl.createShader(type); gl.shaderSource(s,src); gl.compileShader(s); return s; }
+    var fs = [
+      "precision highp float;",
+      "varying vec2 v_uv;",
+      "uniform float u_time;",
+      "void main(){",
+      "  vec2 p=v_uv*2.0;",
+      "  float n=0.0;",
+      "  for(float i=1.0;i<4.0;i++){",
+      "    p.x+=0.2*sin(1.5*p.y+u_time*0.15);",
+      "    p.y+=0.2*sin(1.5*p.x+u_time*0.1);",
+      "    n+=0.5/i*abs(sin(p.x+p.y+u_time*0.1));",
+      "  }",
+      "  vec3 base=vec3(0.02,0.05,0.12);",
+      "  vec3 accent=vec3(0.96,0.62,0.04);",
+      "  gl_FragColor=vec4(mix(base,accent,n*0.07),1.0);",
+      "}"
+    ].join("\n");
+
+    function mkShader(type, src) {
+      var s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      return s;
+    }
     var prog = gl.createProgram();
     gl.attachShader(prog, mkShader(gl.VERTEX_SHADER, vs));
     gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, fs));
-    gl.linkProgram(prog); gl.useProgram(prog);
+    gl.linkProgram(prog);
+    gl.useProgram(prog);
+
     var buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
-    var pos = gl.getAttribLocation(prog,"a_position");
-    gl.enableVertexAttribArray(pos); gl.vertexAttribPointer(pos,2,gl.FLOAT,false,0,0);
-    var uTime = gl.getUniformLocation(prog,"u_time");
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+    var pos = gl.getAttribLocation(prog, "a_position");
+    gl.enableVertexAttribArray(pos);
+    gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+    var uTime = gl.getUniformLocation(prog, "u_time");
+
+    if (typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(sync).observe(canvas.parentElement || canvas);
+    }
+    window.addEventListener("resize", sync);
+
     var raf;
     function render(t) {
       sync();
-      gl.viewport(0,0,canvas.width,canvas.height);
-      if(uTime) gl.uniform1f(uTime,t*0.001);
-      gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      if (uTime) gl.uniform1f(uTime, t * 0.001);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       raf = requestAnimationFrame(render);
     }
-    raf = requestAnimationFrame(render);
-    return function(){ cancelAnimationFrame(raf); };
+    // Delay first frame so the parent has laid out and has real dimensions
+    setTimeout(function() { raf = requestAnimationFrame(render); }, 50);
+
+    return function() {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", sync);
+    };
   }, []);
-  return <canvas ref={canvasRef} style={{ position:"absolute", inset:0, width:"100%", height:"100%", opacity:0.45, display:"block" }} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{ position:"absolute", top:0, left:0, right:0, bottom:0, width:"100%", height:"100%", opacity:0.5, display:"block" }}
+    />
+  );
 }
 
 // ─── Nav ─────────────────────────────────────────────────────────────────────
