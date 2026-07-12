@@ -205,7 +205,7 @@ function ThreeHero() {
     scene.add(group);
 
     var sphereGeom = new THREE.SphereGeometry(0.08, 16, 16);
-    var sphereMat  = new THREE.MeshPhongMaterial({ color: 0xf59e0b, emissive: 0xf59e0b, emissiveIntensity: 0.5 });
+    var sphereMat  = new THREE.MeshPhongMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 0.5 });
 
     for (var i = 0; i < 40; i++) {
       var angle = i * 0.5;
@@ -224,7 +224,7 @@ function ThreeHero() {
           new THREE.Vector3(x, y, z),
           new THREE.Vector3(nx, ny, nz)
         ]);
-        var lineMat = new THREE.LineBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.2 });
+        var lineMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.2 });
         group.add(new THREE.Line(lineGeom, lineMat));
       }
     }
