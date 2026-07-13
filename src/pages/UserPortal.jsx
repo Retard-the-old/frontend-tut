@@ -841,7 +841,7 @@ function UserPortal(props) {
                   <button onClick={async function(){
                     var amt = u.earn.pending;
                     if (amt < 50) { setWithdrawError("Minimum withdrawal is AED 50"); return; }
-                    if (!u.iban) { setWithdrawError("Please add your IBAN in Settings before requesting a payout"); return; }
+                    if (!u.iban || !u.ibanName) { setWithdrawError("Please add your IBAN and account holder name in Settings before requesting a payout"); return; }
                     setWithdrawLoading(true); setWithdrawError("");
                     try {
                       var payout = await payoutsApi.request();
