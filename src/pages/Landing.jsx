@@ -3,15 +3,15 @@ import { useIsMobile, DashboardDesktop, DashboardMobile, FadeIn } from "../compo
 import { PRICE, L1_RATE, L2_RATE, INIT_COURSES } from "../constants";
 
 // ─── Design tokens ───────────────────────────────────────────────────────────
-var BG       = "#020617";
-var SURFACE  = "#0b1326";
-var CARD     = "rgba(255,255,255,0.03)";
-var BORDER   = "rgba(255,255,255,0.1)";
-var GOLD     = "#ffc174";
-var GOLD2    = "#f59e0b";
-var TEXT     = "#dae2fd";
-var MUTED    = "#a09080";
-var DIM      = "#475569";
+var BG       = "#000000";
+var SURFACE  = "#0a0f0d";
+var CARD     = "rgba(0,228,193,0.04)";
+var BORDER   = "rgba(0,228,193,0.15)";
+var GOLD     = "#00e4c1";
+var GOLD2    = "#15BE61";
+var TEXT     = "#bdf9fc";
+var MUTED    = "#6ec9c4";
+var DIM      = "#3a7a74";
 var FONT     = "'Hanken Grotesk', sans-serif";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -122,8 +122,8 @@ function ShaderBackground() {
       "    p.y += 0.2 * sin(1.5 * p.x + u_time * 0.1);",
       "    noise += 0.5 / i * abs(sin(p.x + p.y + u_time * 0.1));",
       "  }",
-      "  vec3 base = vec3(0.04, 0.07, 0.15);",
-      "  vec3 accent = vec3(0.96, 0.62, 0.04);",
+      "  vec3 base = vec3(0.0, 0.04, 0.03);",
+      "  vec3 accent = vec3(0.0, 0.89, 0.76);",
       "  vec3 finalColor = mix(base, accent, noise * 0.08);",
       "  gl_FragColor = vec4(finalColor, 1.0);",
       "}"
