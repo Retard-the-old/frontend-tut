@@ -4,14 +4,14 @@ import { PRICE, L1_RATE, L2_RATE, INIT_COURSES } from "../constants";
 
 // ─── Design tokens ───────────────────────────────────────────────────────────
 var BG       = "#000000";
-var SURFACE  = "#0a0f0d";
-var CARD     = "rgba(0,228,193,0.04)";
-var BORDER   = "rgba(0,228,193,0.15)";
+var SURFACE  = "#0d0d0d";
+var CARD     = "rgba(255,255,255,0.03)";
+var BORDER   = "rgba(255,255,255,0.08)";
 var GOLD     = "#00e4c1";
 var GOLD2    = "#15BE61";
-var TEXT     = "#bdf9fc";
-var MUTED    = "#6ec9c4";
-var DIM      = "#3a7a74";
+var TEXT     = "#ffffff";
+var MUTED    = "#94a3b8";
+var DIM      = "#64748b";
 var FONT     = "'Hanken Grotesk', sans-serif";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────

@@ -30,23 +30,23 @@ function FaqPage(props) {
   ];
 
   return (
-    <div style={{ background:"#000000", color:"#bdf9fc", position:"relative" }}>
+    <div style={{ background:"#000000", color:"#ffffff", position:"relative" }}>
       <NoiseOverlay />
       <SiteNav go={go} active="faq" />
       <section style={{ paddingTop:mob?120:160, padding:mob?"120px 20px 60px":"160px 48px 100px", textAlign:"center", position:"relative", overflow:"hidden" }}>
         <BgIllustration name="geometric" position="left" y="45%" scale={1} opacity={0.035} />
         <FadeIn><div style={{ maxWidth:600, margin:"0 auto", position:"relative", zIndex:1 }}>
           <SLabel icon="question">FAQ</SLabel>
-          <h1 style={{ fontSize:mob?32:48, fontWeight:600, color:"#bdf9fc", margin:"0 0 14px", lineHeight:1.1, letterSpacing:mob?"-1px":"-1.5px" }}>Frequently Asked <span style={{ fontStyle:"italic", fontFamily:"Georgia, serif", fontWeight:200, color:"rgb(0,228,193)" }}>Questions</span></h1>
-          <p style={{ fontSize:15, color:"#6ec9c4" }}>Find quick answers to the most common questions</p>
+          <h1 style={{ fontSize:mob?32:48, fontWeight:600, color:"#ffffff", margin:"0 0 14px", lineHeight:1.1, letterSpacing:mob?"-1px":"-1.5px" }}>Frequently Asked <span style={{ fontStyle:"italic", fontFamily:"Georgia, serif", fontWeight:200, color:"rgb(0,228,193)" }}>Questions</span></h1>
+          <p style={{ fontSize:15, color:"#94a3b8" }}>Find quick answers to the most common questions</p>
         </div></FadeIn>
       </section>
       <section style={{ padding:mob?"0 16px 60px":"0 48px 120px" }}>
         <div style={{ maxWidth:900, margin:"0 auto", display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1.6fr", gap:24, alignItems:"start" }}>
           <FadeIn><div style={mob?{order:2}:{}}><SpotlightCard padding={32}>
             <div style={{ width:48, height:48, borderRadius:14, background:"linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))", border:"1px solid rgba(255,255,255,0.08)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:20, boxShadow:"0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)", lineHeight:0 }}><Ico name="question" size={22} color="rgb(0,228,193)" /></div>
-            <h3 style={{ fontSize:18, fontWeight:600, color:"#bdf9fc", margin:"0 0 8px" }}>Still Have Questions?</h3>
-            <p style={{ fontSize:14, color:"#6ec9c4", lineHeight:1.7, marginBottom:20 }}>Feel free to get in touch with us today!</p>
+            <h3 style={{ fontSize:18, fontWeight:600, color:"#ffffff", margin:"0 0 8px" }}>Still Have Questions?</h3>
+            <p style={{ fontSize:14, color:"#94a3b8", lineHeight:1.7, marginBottom:20 }}>Feel free to get in touch with us today!</p>
             <Btn onClick={function(){go("contact")}} outline style={{ fontSize:13, width:"100%" }}>Ask A Question</Btn>
           </SpotlightCard></div></FadeIn>
           <div style={mob?{order:1}:{}}>
@@ -55,11 +55,11 @@ function FaqPage(props) {
               return (
                 <FadeIn key={fi} delay={fi*0.06}><div onClick={function(){setOpen(isOpen?null:fi)}} style={{ borderRadius:14, padding:"18px 22px", border:"1px solid rgba(255,255,255,"+(isOpen?"0.1":"0.06")+")", marginBottom:8, cursor:"pointer", background:isOpen?"rgba(255,255,255,0.03)":"transparent", transition:"background 0.3s, border-color 0.3s" }}>
                   <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-                    <span style={{ fontSize:15, fontWeight:500, color:"#bdf9fc" }}>{f.q}</span>
-                    <span style={{ fontSize:18, color:"#3a7a74", transform:isOpen?"rotate(180deg)":"none", transition:"transform 0.3s", flexShrink:0, marginLeft:16, lineHeight:1, display:"flex", alignItems:"center", justifyContent:"center", width:24, height:24 }}>{"\u2303"}</span>
+                    <span style={{ fontSize:15, fontWeight:500, color:"#ffffff" }}>{f.q}</span>
+                    <span style={{ fontSize:18, color:"#64748b", transform:isOpen?"rotate(180deg)":"none", transition:"transform 0.3s", flexShrink:0, marginLeft:16, lineHeight:1, display:"flex", alignItems:"center", justifyContent:"center", width:24, height:24 }}>{"\u2303"}</span>
                   </div>
                   <div style={{ maxHeight:isOpen?200:0, overflow:"hidden", transition:"max-height 0.4s ease-out, opacity 0.3s", opacity:isOpen?1:0 }}>
-                    <p style={{ fontSize:14, color:"#6ec9c4", lineHeight:1.8, margin:"16px 0 0", paddingTop:16, borderTop:"1px solid rgba(255,255,255,0.04)" }}>{f.a}</p>
+                    <p style={{ fontSize:14, color:"#94a3b8", lineHeight:1.8, margin:"16px 0 0", paddingTop:16, borderTop:"1px solid rgba(255,255,255,0.04)" }}>{f.a}</p>
                   </div>
                 </div></FadeIn>
               );

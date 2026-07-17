@@ -59,7 +59,7 @@ function ForgotPasswordPage(props) {
 
   return (
     <div style={{ minHeight:"100vh", display:"flex", flexDirection:mob?"column":"row", background:"#000000" }}>
-      <div style={{ flex:mob?"none":"0 0 50%", background:"#080c0b", display:"flex", flexDirection:"column", justifyContent:"center", padding:mob?"32px 24px":"64px 56px" }}>
+      <div style={{ flex:mob?"none":"0 0 50%", background:"#0d0d0d", display:"flex", flexDirection:"column", justifyContent:"center", padding:mob?"32px 24px":"64px 56px" }}>
         <Logo light onClick={function(){go("landing")}} />
         <h2 style={{ fontSize:mob?28:36, fontWeight:800, color:"#fff", margin:mob?"24px 0 10px":"48px 0 16px", lineHeight:1.15 }}>Reset your password</h2>
         <p style={{ fontSize:mob?14:15, color:"rgb(0,228,193)", lineHeight:1.7, maxWidth:380 }}>{"Don\u2019t worry, it happens to everyone. We\u2019ll send you a link to get back in."}</p>
@@ -69,11 +69,11 @@ function ForgotPasswordPage(props) {
 
           {!sent ? (
             <div>
-              <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg, rgba(0,228,193,0.12), rgba(0,228,193,0.04))", border:"1px solid rgba(0,228,193,0.15)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:24 }}>
+              <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg, rgba(0,228,193,0.12), rgba(255,255,255,0.03))", border:"1px solid rgba(255,255,255,0.08)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:24 }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="rgb(0,228,193)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M22 6l-10 7L2 6" stroke="rgb(0,228,193)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </div>
-              <h3 style={{ fontSize:24, fontWeight:700, color:"#bdf9fc", margin:"0 0 8px" }}>Forgot your password?</h3>
-              <p style={{ fontSize:14, color:"#6ec9c4", marginBottom:32, lineHeight:1.7 }}>{"Enter the email address linked to your account and we\u2019ll send you a password reset link."}</p>
+              <h3 style={{ fontSize:24, fontWeight:700, color:"#ffffff", margin:"0 0 8px" }}>Forgot your password?</h3>
+              <p style={{ fontSize:14, color:"#94a3b8", marginBottom:32, lineHeight:1.7 }}>{"Enter the email address linked to your account and we\u2019ll send you a password reset link."}</p>
 
               {error && <div style={{ padding:"14px 18px", borderRadius:12, background:"linear-gradient(135deg, rgba(220,38,38,0.08), rgba(220,38,38,0.04))", border:"1px solid rgba(248,113,113,0.15)", marginBottom:20, display:"flex", alignItems:"center", gap:12 }}>
                 <div style={{ width:32, height:32, borderRadius:8, background:"rgba(248,113,113,0.1)", border:"1px solid rgba(248,113,113,0.12)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
@@ -83,57 +83,57 @@ function ForgotPasswordPage(props) {
               </div>}
 
               <div style={{ marginBottom:24 }}>
-                <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#6ec9c4", marginBottom:6 }}>Email Address</label>
-                <input type="email" value={email} onChange={function(e){setEmail(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleSubmit()}} placeholder="you@example.com" style={{ width:"100%", padding:"12px 16px", borderRadius:10, border:"1px solid "+(error ? "rgba(248,113,113,0.3)" : "rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#000000", color:"#bdf9fc", transition:"border-color 0.3s" }} />
+                <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#94a3b8", marginBottom:6 }}>Email Address</label>
+                <input type="email" value={email} onChange={function(e){setEmail(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleSubmit()}} placeholder="you@example.com" style={{ width:"100%", padding:"12px 16px", borderRadius:10, border:"1px solid "+(error ? "rgba(248,113,113,0.3)" : "rgba(255,255,255,0.1)"), fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#000000", color:"#ffffff", transition:"border-color 0.3s" }} />
               </div>
 
               <Btn onClick={handleSubmit} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:16, opacity:loading?0.6:1 }}>{loading ? "Sending..." : "Send Reset Link"}</Btn>
 
-              <div style={{ textAlign:"center", fontSize:13, color:"#6ec9c4" }}>
+              <div style={{ textAlign:"center", fontSize:13, color:"#94a3b8" }}>
                 {"Remember your password? "}<span onClick={function(){go("login")}} style={{ color:"rgb(0,228,193)", fontWeight:600, cursor:"pointer" }}>Back to login</span>
               </div>
             </div>
           ) : (
             <div>
-              <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg, rgba(0,228,193,0.12), rgba(0,228,193,0.04))", border:"1px solid rgba(0,228,193,0.15)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:24 }}>
+              <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg, rgba(0,228,193,0.12), rgba(255,255,255,0.03))", border:"1px solid rgba(255,255,255,0.08)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:24 }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="rgb(0,228,193)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="10" stroke="rgb(0,228,193)" strokeWidth="1.5"/></svg>
               </div>
-              <h3 style={{ fontSize:24, fontWeight:700, color:"#bdf9fc", margin:"0 0 8px" }}>Check your inbox</h3>
-              <p style={{ fontSize:14, color:"#6ec9c4", marginBottom:24, lineHeight:1.7 }}>{"We\u2019ve sent a password reset link to:"}</p>
+              <h3 style={{ fontSize:24, fontWeight:700, color:"#ffffff", margin:"0 0 8px" }}>Check your inbox</h3>
+              <p style={{ fontSize:14, color:"#94a3b8", marginBottom:24, lineHeight:1.7 }}>{"We\u2019ve sent a password reset link to:"}</p>
 
               <div style={{ background:"rgba(0,228,193,0.06)", border:"1px solid rgba(0,228,193,0.12)", borderRadius:12, padding:"14px 18px", marginBottom:24, display:"flex", alignItems:"center", gap:12 }}>
-                <div style={{ width:32, height:32, borderRadius:8, background:"rgba(0,228,193,0.1)", border:"1px solid rgba(0,228,193,0.15)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                <div style={{ width:32, height:32, borderRadius:8, background:"rgba(0,228,193,0.1)", border:"1px solid rgba(255,255,255,0.08)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="rgb(0,228,193)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M22 6l-10 7L2 6" stroke="rgb(0,228,193)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
                 <span style={{ fontSize:14, fontWeight:600, color:"rgb(0,228,193)" }}>{email}</span>
               </div>
 
               <div style={{ background:"rgba(255,255,255,0.03)", borderRadius:12, padding:20, border:"1px solid rgba(255,255,255,0.06)", marginBottom:24 }}>
-                <div style={{ fontSize:13, fontWeight:600, color:"#bdf9fc", marginBottom:10 }}>{"Didn\u2019t receive it?"}</div>
+                <div style={{ fontSize:13, fontWeight:600, color:"#ffffff", marginBottom:10 }}>{"Didn\u2019t receive it?"}</div>
                 <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
                   <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-                    <div style={{ width:4, height:4, borderRadius:"50%", background:"#3a7a74", flexShrink:0 }} />
-                    <span style={{ fontSize:12, color:"#6ec9c4" }}>Check your spam or junk folder</span>
+                    <div style={{ width:4, height:4, borderRadius:"50%", background:"#64748b", flexShrink:0 }} />
+                    <span style={{ fontSize:12, color:"#94a3b8" }}>Check your spam or junk folder</span>
                   </div>
                   <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-                    <div style={{ width:4, height:4, borderRadius:"50%", background:"#3a7a74", flexShrink:0 }} />
-                    <span style={{ fontSize:12, color:"#6ec9c4" }}>Make sure the email address is correct</span>
+                    <div style={{ width:4, height:4, borderRadius:"50%", background:"#64748b", flexShrink:0 }} />
+                    <span style={{ fontSize:12, color:"#94a3b8" }}>Make sure the email address is correct</span>
                   </div>
                   <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-                    <div style={{ width:4, height:4, borderRadius:"50%", background:"#3a7a74", flexShrink:0 }} />
-                    <span style={{ fontSize:12, color:"#6ec9c4" }}>The link expires in 30 minutes</span>
+                    <div style={{ width:4, height:4, borderRadius:"50%", background:"#64748b", flexShrink:0 }} />
+                    <span style={{ fontSize:12, color:"#94a3b8" }}>The link expires in 30 minutes</span>
                   </div>
                 </div>
               </div>
 
-              <button onClick={handleResend} disabled={countdown > 0 || loading} style={{ width:"100%", padding:"13px", borderRadius:12, border:"1px solid "+(countdown > 0 ? "rgba(255,255,255,0.06)" : "rgba(0,228,193,0.2)"), background:countdown > 0 ? "transparent" : "rgba(0,228,193,0.06)", color:countdown > 0 ? "#3a7a74" : "rgb(0,228,193)", fontSize:14, fontWeight:600, cursor:countdown > 0 ? "default" : "pointer", marginBottom:16, fontFamily:"'Plus Jakarta Sans',sans-serif", transition:"all 0.3s" }}>
+              <button onClick={handleResend} disabled={countdown > 0 || loading} style={{ width:"100%", padding:"13px", borderRadius:12, border:"1px solid "+(countdown > 0 ? "rgba(255,255,255,0.06)" : "rgba(0,228,193,0.2)"), background:countdown > 0 ? "transparent" : "rgba(0,228,193,0.06)", color:countdown > 0 ? "#64748b" : "rgb(0,228,193)", fontSize:14, fontWeight:600, cursor:countdown > 0 ? "default" : "pointer", marginBottom:16, fontFamily:"'Plus Jakarta Sans',sans-serif", transition:"all 0.3s" }}>
                 {loading ? "Resending..." : countdown > 0 ? "Resend available in " + countdown + "s" : "Resend Reset Link"}
               </button>
 
               <div style={{ display:"flex", gap:12, justifyContent:"center" }}>
                 <span onClick={function(){go("login")}} style={{ fontSize:13, color:"rgb(0,228,193)", cursor:"pointer", fontWeight:600 }}>Back to login</span>
                 <span style={{ color:"#27272a" }}>{"\u00B7"}</span>
-                <span onClick={function(){go("support")}} style={{ fontSize:13, color:"#6ec9c4", cursor:"pointer" }}>Contact support</span>
+                <span onClick={function(){go("support")}} style={{ fontSize:13, color:"#94a3b8", cursor:"pointer" }}>Contact support</span>
               </div>
             </div>
           )}

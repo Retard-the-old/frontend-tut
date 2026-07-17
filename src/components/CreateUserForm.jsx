@@ -10,7 +10,7 @@ function CreateUserForm(props) {
   var _role = useState("user"); var role = _role[0]; var setRole = _role[1];
   var _loading = useState(false); var loading = _loading[0]; var setLoading = _loading[1];
   var _err = useState(""); var err = _err[0]; var setErr = _err[1];
-  var inputStyle = { width:"100%", padding:"9px 12px", borderRadius:8, border:"1px solid rgba(255,255,255,0.08)", background:"#000000", color:"#bdf9fc", fontSize:13, outline:"none", boxSizing:"border-box", fontFamily:"inherit" };
+  var inputStyle = { width:"100%", padding:"9px 12px", borderRadius:8, border:"1px solid rgba(255,255,255,0.08)", background:"#000000", color:"#ffffff", fontSize:13, outline:"none", boxSizing:"border-box", fontFamily:"inherit" };
 
   async function handleCreate() {
     if (!name.trim() || !email.trim() || !pass.trim()) { setErr("All fields are required"); return; }
@@ -28,24 +28,24 @@ function CreateUserForm(props) {
   }
 
   return (
-    <div style={{ background:"#0a0f0d", borderRadius:14, padding:20, border:"1px solid rgba(0,228,193,0.2)", marginBottom:16 }}>
-      <div style={{ fontSize:14, fontWeight:700, color:"#bdf9fc", marginBottom:16 }}>Create New User</div>
+    <div style={{ background:"#0d0d0d", borderRadius:14, padding:20, border:"1px solid rgba(0,228,193,0.2)", marginBottom:16 }}>
+      <div style={{ fontSize:14, fontWeight:700, color:"#ffffff", marginBottom:16 }}>Create New User</div>
       {err && <div style={{ padding:"8px 12px", borderRadius:6, background:"rgba(248,113,113,0.08)", border:"1px solid rgba(248,113,113,0.2)", color:"#f87171", fontSize:12, marginBottom:12 }}>{err}</div>}
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:10 }}>
         <div>
-          <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>FULL NAME</label>
+          <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#64748b", marginBottom:4 }}>FULL NAME</label>
           <input value={name} onChange={function(e){setName(e.target.value);setErr("")}} placeholder="John Smith" style={inputStyle} />
         </div>
         <div>
-          <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>EMAIL</label>
+          <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#64748b", marginBottom:4 }}>EMAIL</label>
           <input type="email" value={email} onChange={function(e){setEmail(e.target.value);setErr("")}} placeholder="john@example.com" style={inputStyle} />
         </div>
         <div>
-          <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>PASSWORD</label>
+          <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#64748b", marginBottom:4 }}>PASSWORD</label>
           <PasswordInput value={pass} onChange={function(e){setPass(e.target.value);setErr("")}} placeholder="Min 8 characters" />
         </div>
         <div>
-          <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>ROLE</label>
+          <label style={{ display:"block", fontSize:10, fontWeight:600, color:"#64748b", marginBottom:4 }}>ROLE</label>
           <select value={role} onChange={function(e){setRole(e.target.value)}} style={Object.assign({},inputStyle,{cursor:"pointer"})}>
             <option value="user">User</option>
             <option value="admin">Admin</option>
@@ -54,7 +54,7 @@ function CreateUserForm(props) {
         </div>
       </div>
       <div style={{ display:"flex", gap:8, justifyContent:"flex-end" }}>
-        <button onClick={props.onClose} style={{ padding:"8px 16px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#3a7a74", fontSize:12, cursor:"pointer" }}>Cancel</button>
+        <button onClick={props.onClose} style={{ padding:"8px 16px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"transparent", color:"#64748b", fontSize:12, cursor:"pointer" }}>Cancel</button>
         <button onClick={handleCreate} disabled={loading} style={{ padding:"8px 20px", borderRadius:8, border:"none", background:"rgb(0,228,193)", color:"#000000", fontSize:12, fontWeight:700, cursor:"pointer", opacity:loading?0.6:1 }}>{loading?"Creating...":"Create User"}</button>
       </div>
     </div>

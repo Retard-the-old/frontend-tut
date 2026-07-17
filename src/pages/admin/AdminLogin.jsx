@@ -37,23 +37,23 @@ function AdminLogin(props) {
 
   return (
     <div style={{ minHeight:"100vh", background:"#000000", display:"flex", alignItems:"center", justifyContent:"center" }}>
-      <div style={{ maxWidth:400, width:"90%", background:"#080c0b", borderRadius:20, padding:40, border:"1px solid rgba(255,255,255,0.06)" }}>
+      <div style={{ maxWidth:400, width:"90%", background:"#0d0d0d", borderRadius:20, padding:40, border:"1px solid rgba(255,255,255,0.06)" }}>
         <div style={{ textAlign:"center", marginBottom:32 }}>
           <Logo light />
-          <div style={{ fontSize:11, fontWeight:700, color:"#6ec9c4", letterSpacing:2, marginTop:8 }}>ADMIN ACCESS</div>
+          <div style={{ fontSize:11, fontWeight:700, color:"#94a3b8", letterSpacing:2, marginTop:8 }}>ADMIN ACCESS</div>
         </div>
         {error && <div style={{ padding:"10px 14px", borderRadius:8, background:"#7f1d1d", color:"#fca5a5", fontSize:13, marginBottom:16 }}>{error}</div>}
         <div style={{ marginBottom:18 }}>
-          <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#3a7a74", marginBottom:5 }}>Admin Email</label>
-          <input type="email" value={email} onChange={function(e){setEmail(e.target.value);setError("")}} placeholder="admin@tutorii.com" style={{ width:"100%", padding:"12px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.06)", background:"#000000", color:"#bdf9fc", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif" }} />
+          <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#64748b", marginBottom:5 }}>Admin Email</label>
+          <input type="email" value={email} onChange={function(e){setEmail(e.target.value);setError("")}} placeholder="admin@tutorii.com" style={{ width:"100%", padding:"12px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.06)", background:"#000000", color:"#ffffff", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif" }} />
         </div>
         <div style={{ marginBottom:28 }}>
-          <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#3a7a74", marginBottom:5 }}>Password</label>
+          <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#64748b", marginBottom:5 }}>Password</label>
           <PasswordInput value={pass} onChange={function(e){setPass(e.target.value);setError("")}} placeholder="********" style={{ padding:"12px 44px 12px 14px", border:"1px solid rgba(255,255,255,0.06)" }} />
         </div>
         <button onClick={handleLogin} disabled={loading} style={{ width:"100%", padding:"13px", borderRadius:12, border:"none", background:"rgb(0,228,193)", color:"#000000", fontSize:15, fontWeight:600, cursor:"pointer", marginBottom:12, opacity:loading?0.6:1 }}>{loading ? "Logging in..." : "Log In to Admin"}</button>
         <div style={{ textAlign:"center", marginTop:12 }}>
-          <span onClick={function(){go("landing")}} style={{ fontSize:12, color:"#6ec9c4", cursor:"pointer" }}>Back to site</span>
+          <span onClick={function(){go("landing")}} style={{ fontSize:12, color:"#94a3b8", cursor:"pointer" }}>Back to site</span>
         </div>
       </div>
     </div>

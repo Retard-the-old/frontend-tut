@@ -135,9 +135,9 @@ function TutoriiApp() {
 
       {authLoading && (page === "login" || page === "subscribe") && (
         <div style={{ position:"fixed", bottom:24, left:"50%", transform:"translateX(-50%)", zIndex:9999, animation:"fadeUp 0.3s ease-out both" }}>
-          <div style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 18px", borderRadius:12, background:"#080c0b", border:"1px solid rgba(0,228,193,0.2)", boxShadow:"0 8px 32px rgba(0,0,0,0.4)" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 18px", borderRadius:12, background:"#0d0d0d", border:"1px solid rgba(0,228,193,0.2)", boxShadow:"0 8px 32px rgba(0,0,0,0.4)" }}>
             <div style={{ width:14, height:14, borderRadius:"50%", border:"2px solid rgba(0,228,193,0.3)", borderTopColor:"rgb(0,228,193)", animation:"spin 0.8s linear infinite" }} />
-            <span style={{ fontSize:12, color:"#bdf9fc", fontFamily:"'Plus Jakarta Sans',sans-serif" }}>Restoring session...</span>
+            <span style={{ fontSize:12, color:"#ffffff", fontFamily:"'Plus Jakarta Sans',sans-serif" }}>Restoring session...</span>
           </div>
         </div>
       )}

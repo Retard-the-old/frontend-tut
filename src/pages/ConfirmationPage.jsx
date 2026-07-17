@@ -419,7 +419,7 @@ const styles = {
     borderRadius: 8,
     border: "1px solid rgba(247,244,236,0.1)",
     padding: 18,
-    background: "#080c0b",
+    background: "#0d0d0d",
     display: "flex",
     flexDirection: "column",
     gap: 8,

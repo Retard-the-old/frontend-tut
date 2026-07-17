@@ -31,8 +31,8 @@ function CreateAdminForm(props) {
       {caResult && <div style={{ padding:"10px 14px", borderRadius:8, background:caResult.ok?"rgba(16,185,129,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(caResult.ok?"rgba(16,185,129,0.2)":"rgba(248,113,113,0.2)"), color:caResult.ok?"#10b981":"#f87171", fontSize:13, fontWeight:600, marginBottom:14 }}>{caResult.msg}</div>}
       <div style={{ display:"grid", gap:12, maxWidth:420 }}>
         <div>
-          <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#6ec9c4", marginBottom:5 }}>EMAIL OF USER TO PROMOTE</label>
-          <input type="email" value={cae} onChange={function(e){setCae(e.target.value);setCaResult(null)}} placeholder="user@example.com" style={{ width:"100%", padding:"11px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#000000", color:"#bdf9fc", fontSize:13, outline:"none", boxSizing:"border-box" }} />
+          <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#94a3b8", marginBottom:5 }}>EMAIL OF USER TO PROMOTE</label>
+          <input type="email" value={cae} onChange={function(e){setCae(e.target.value);setCaResult(null)}} placeholder="user@example.com" style={{ width:"100%", padding:"11px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", background:"#000000", color:"#ffffff", fontSize:13, outline:"none", boxSizing:"border-box" }} />
         </div>
         <button onClick={handleCreateAdmin} disabled={caLoading} style={{ padding:"11px 24px", borderRadius:8, border:"none", background:"rgb(0,228,193)", color:"#000000", fontSize:13, fontWeight:700, cursor:"pointer", opacity:caLoading?0.6:1 }}>{caLoading ? "Promoting..." : "Promote to Admin"}</button>
       </div>
