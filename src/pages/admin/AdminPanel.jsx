@@ -30,6 +30,9 @@ function AdminPanel(props) {
   var _cd = useState(null); var confirmDelete = _cd[0]; var setConfirmDelete = _cd[1];
   var _mm = useState(null); var manageMedia = _mm[0]; var setManageMedia = _mm[1];
   var _confirmPay = useState(false); var confirmPayout = _confirmPay[0]; var setConfirmPayout = _confirmPay[1];
+  var _payoutToProcess = useState(null); var payoutToProcess = _payoutToProcess[0]; var setPayoutToProcess = _payoutToProcess[1];
+  var _payoutProcessing = useState(false); var payoutProcessing = _payoutProcessing[0]; var setPayoutProcessing = _payoutProcessing[1];
+  var _payoutProcessError = useState(""); var payoutProcessError = _payoutProcessError[0]; var setPayoutProcessError = _payoutProcessError[1];
   var _verifyResult = useState(null); var verifyResult = _verifyResult[0]; var setVerifyResult = _verifyResult[1];
   var _upl = useState(null); var uploading = _upl[0]; var setUploading = _upl[1];
   var _selUser = useState(null); var selectedUser = _selUser[0]; var setSelectedUser = _selUser[1];
@@ -123,6 +126,29 @@ function AdminPanel(props) {
       if (Array.isArray(updated)) setPayouts(updated);
     } catch(_) {}
     setSel([]);
+  }
+
+  async function processSinglePayout() {
+    if (!payoutToProcess || payoutProcessing) return;
+    setPayoutProcessing(true);
+    setPayoutProcessError("");
+    try {
+      var result = await adminApi.processPayout(payoutToProcess.id);
+      setPayouts(function(prev){
+        return prev.map(function(p){
+          return p.id === payoutToProcess.id
+            ? Object.assign({}, p, {status:"processing", mamopay_transfer_id:result.transfer_id})
+            : p;
+        });
+      });
+      setSel(function(prev){return prev.filter(function(id){return id !== payoutToProcess.id})});
+      setPayoutToProcess(null);
+      flash("Payout submitted to MamoPay");
+    } catch(err) {
+      setPayoutProcessError(err.message || "MamoPay could not process this payout");
+    } finally {
+      setPayoutProcessing(false);
+    }
   }
 
   async function addModule() {
@@ -1061,7 +1087,7 @@ function AdminPanel(props) {
                   <td style={{ padding:"12px", fontSize:12, color:"#6ec9c4", verticalAlign:"middle" }}>{p.date}</td>
                   <td style={{ padding:"12px", verticalAlign:"middle" }}>
                     <div style={{ display:"flex", gap:4 }}>
-                      {isProcessablePayout(p) && <button onClick={async function(e){e.stopPropagation(); if(!window.confirm("Process this payout of AED "+payoutAmount(p).toFixed(2)+" via MamoPay?")) return; try { var r = await adminApi.processPayout(p.id); setPayouts(function(prev){return prev.map(function(x){return x.id===p.id?Object.assign({},x,{status:"processing",mamopay_transfer_id:r.transfer_id}):x})}); setSel(function(v){return v.filter(function(x){return x!==p.id})}); flash("Payout submitted to MamoPay"); } catch(err){ flash("Process failed: "+(err.message||"MamoPay error")); }}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(0,228,193,0.3)", background:"rgba(0,228,193,0.1)", fontSize:10, fontWeight:700, color:"rgb(0,228,193)", cursor:"pointer", whiteSpace:"nowrap" }}>Process</button>}
+                      {isProcessablePayout(p) && <button onClick={function(e){e.stopPropagation();setPayoutProcessError("");setPayoutToProcess(p)}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(200,180,140,0.3)", background:"rgba(200,180,140,0.1)", fontSize:10, fontWeight:700, color:"rgb(200,180,140)", cursor:"pointer", whiteSpace:"nowrap" }}>Process</button>}
                       {(p.status === "failed" || (p.status === "completed" && !p.mamopay_transfer_id)) && <button onClick={async function(e){e.stopPropagation(); if (!window.confirm("Reset this payout? Commissions will return to pending so the user can request again.")) return; try { await adminApi.resetPayout(p.id); var updated = await adminApi.payouts(); if (Array.isArray(updated)) setPayouts(updated); flash("Payout reset. Amount returned to user's pending balance."); } catch(err) { flash("Reset failed: "+(err.message||"unknown error")); }}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(239,68,68,0.2)", background:"rgba(239,68,68,0.06)", fontSize:10, fontWeight:600, color:"#f87171", cursor:"pointer", whiteSpace:"nowrap" }}>Reset</button>}
                       {p.mamopay_transfer_id && <button onClick={async function(e){e.stopPropagation(); try { var r = await adminApi.verifyPayout(p.id); setVerifyResult(r); if (r && r.local_status) { setPayouts(function(prev){ return prev.map(function(x){ return x.id===p.id ? Object.assign({},x,{status:r.local_status}) : x; }); }); } } catch(err){ flash("Verify failed: "+(err.message||"No MamoPay ID on record")); }}} style={{ padding:"5px 10px", borderRadius:6, border:"1px solid rgba(139,92,246,0.2)", background:"rgba(139,92,246,0.06)", fontSize:10, fontWeight:600, color:"#a78bfa", cursor:"pointer", whiteSpace:"nowrap" }}>Verify</button>}
                       {p.status === "completed" && <span style={{ fontSize:10, color:"#3a7a74" }}>{"\u2014"}</span>}
@@ -1191,6 +1217,40 @@ function AdminPanel(props) {
           </div>
         </div>}
 
+        {payoutToProcess && (
+          <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.68)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:200, padding:16 }} onClick={function(){if(!payoutProcessing)setPayoutToProcess(null)}}>
+            <div onClick={function(e){e.stopPropagation()}} role="dialog" aria-modal="true" aria-labelledby="process-payout-title" style={{ background:"#131315", borderRadius:16, padding:mob?20:28, maxWidth:460, width:"100%", border:"1px solid rgba(200,180,140,0.2)", boxShadow:"0 24px 80px rgba(0,0,0,0.5)" }}>
+              <div style={{ display:"flex", alignItems:"flex-start", gap:12, marginBottom:18 }}>
+                <div style={{ width:36, height:36, borderRadius:10, background:"rgba(200,180,140,0.1)", border:"1px solid rgba(200,180,140,0.18)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}><Ico name="bank" size={17} color="rgb(200,180,140)" /></div>
+                <div>
+                  <h3 id="process-payout-title" style={{ fontSize:18, fontWeight:700, color:"#d4d4d8", margin:"0 0 4px" }}>Process payout?</h3>
+                  <p style={{ fontSize:12, color:"#71717a", lineHeight:1.5, margin:0 }}>This submits a bank transfer through MamoPay for admin settlement.</p>
+                </div>
+              </div>
+              <div style={{ background:"rgba(255,255,255,0.03)", borderRadius:12, padding:14, marginBottom:14, border:"1px solid rgba(255,255,255,0.06)" }}>
+                <div style={{ display:"flex", justifyContent:"space-between", gap:16, paddingBottom:10, marginBottom:10, borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
+                  <span style={{ fontSize:12, color:"#71717a" }}>Recipient</span>
+                  <span style={{ fontSize:13, fontWeight:600, color:"#d4d4d8", textAlign:"right" }}>{payoutToProcess.user}</span>
+                </div>
+                <div style={{ display:"flex", justifyContent:"space-between", gap:16, paddingBottom:10, marginBottom:10, borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
+                  <span style={{ fontSize:12, color:"#71717a" }}>IBAN</span>
+                  <code style={{ fontSize:11, color:"#a1a1aa", textAlign:"right", wordBreak:"break-all" }}>{payoutToProcess.iban || "—"}</code>
+                </div>
+                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"baseline", gap:16 }}>
+                  <span style={{ fontSize:12, color:"#71717a" }}>Amount</span>
+                  <span style={{ fontSize:22, fontWeight:700, color:"rgb(200,180,140)" }}>{"AED "+payoutAmount(payoutToProcess).toFixed(2)}</span>
+                </div>
+              </div>
+              {payoutProcessError && <div style={{ fontSize:12, color:"#f87171", marginBottom:14, padding:"10px 12px", borderRadius:8, background:"rgba(248,113,113,0.08)", border:"1px solid rgba(248,113,113,0.16)" }}>{payoutProcessError}</div>}
+              <div style={{ fontSize:11, color:"#a1a1aa", lineHeight:1.5, padding:"10px 12px", borderRadius:8, background:"rgba(200,180,140,0.06)", border:"1px solid rgba(200,180,140,0.12)", marginBottom:18 }}>Confirm the recipient and amount carefully. The payout stays <strong style={{ color:"#d4d4d8" }}>Processing</strong> until MamoPay confirms settlement.</div>
+              <div style={{ display:"flex", flexDirection:mob?"column-reverse":"row", gap:10 }}>
+                <button disabled={payoutProcessing} onClick={function(){setPayoutToProcess(null)}} style={{ flex:1, padding:"11px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", background:"transparent", color:"#d4d4d8", fontSize:13, fontWeight:600, cursor:payoutProcessing?"not-allowed":"pointer", opacity:payoutProcessing?0.5:1 }}>Cancel</button>
+                <button disabled={payoutProcessing} onClick={processSinglePayout} style={{ flex:1, padding:"11px", borderRadius:10, border:"none", background:"rgb(200,180,140)", color:"#0a0a0c", fontSize:13, fontWeight:700, cursor:payoutProcessing?"not-allowed":"pointer", opacity:payoutProcessing?0.65:1 }}>{payoutProcessing ? "Submitting…" : "Submit to MamoPay"}</button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {confirmPayout && (
           <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.6)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:200 }} onClick={function(){setConfirmPayout(false)}}>
             <div onClick={function(e){e.stopPropagation()}} style={{ background:"#0a0f0d", borderRadius:16, padding:32, maxWidth:440, width:"90%", border:"1px solid rgba(255,255,255,0.06)" }}>
@@ -1230,10 +1290,13 @@ function AdminPanel(props) {
                 ["Reason", verifyResult.reason || "—"],
                 ["Created", verifyResult.created_at || "—"],
                 ["Local Status", verifyResult.local_status],
-              ].map(function(row){ return (
+              ].map(function(row){
+                var statusText = String(row[1] || "").toLowerCase();
+                var statusColor = statusText==="completed"||statusText==="processed"||statusText==="paid" ? "#10b981" : statusText==="processing"||statusText==="pending" ? "#f59e0b" : "#f87171";
+                return (
                 <div key={row[0]} style={{ display:"flex", justifyContent:"space-between", padding:"8px 0", borderBottom:"1px solid rgba(255,255,255,0.04)", fontSize:13 }}>
-                  <span style={{ color:"#6ec9c4" }}>{row[0]}</span>
-                  <span style={{ color: row[0]==="MamoPay Status" ? (row[1]==="completed"||row[1]==="Completed"?"#10b981":row[1]==="Processing"?"#00e4c1":"#f87171") : "#bdf9fc", fontWeight:500, maxWidth:260, textAlign:"right", wordBreak:"break-all" }}>{row[1]}</span>
+                  <span style={{ color:"#71717a" }}>{row[0]}</span>
+                  <span style={{ color: row[0]==="MamoPay Status" ? statusColor : "#d4d4d8", fontWeight:500, maxWidth:260, textAlign:"right", wordBreak:"break-all" }}>{row[1]}</span>
                 </div>
               )})}
               <button onClick={function(){setVerifyResult(null)}} style={{ marginTop:20, width:"100%", padding:"11px", borderRadius:10, border:"none", background:"rgba(255,255,255,0.06)", color:"#bdf9fc", fontSize:13, fontWeight:600, cursor:"pointer" }}>Close</button>

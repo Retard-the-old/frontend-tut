@@ -44,6 +44,7 @@ function SettingsTab(props) {
 
   async function saveIban() {
     if (!iban.trim()) { setIbanMsg({ok:false, msg:"Please enter your IBAN"}); return; }
+    if (!ibanName.trim()) { setIbanMsg({ok:false, msg:"Please enter the account holder name"}); return; }
     setIbanSaving(true); setIbanMsg(null);
     try {
       var updated = await usersApi.update({ payout_iban: iban.trim(), payout_name: ibanName.trim() });
