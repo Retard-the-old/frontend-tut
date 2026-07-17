@@ -77,32 +77,32 @@ function SettingsTab(props) {
     }
   }
 
-  var inputStyle = { width:"100%", padding:"11px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#0a0a0c", color:"#d4d4d8" };
+  var inputStyle = { width:"100%", padding:"11px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", fontSize:14, outline:"none", boxSizing:"border-box", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"#000000", color:"#bdf9fc" };
 
   return (
     <div>
-      <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:"0 0 20px", color:"#d4d4d8" }}>Account Settings</h2>
+      <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:"0 0 20px", color:"#bdf9fc" }}>Account Settings</h2>
 
       {/* Profile */}
-      <div style={{ background:"#131315", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:16, boxSizing:"border-box" }}>
-        <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 16px", color:"#d4d4d8" }}>Profile Information</h3>
+      <div style={{ background:"#0a0f0d", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:16, boxSizing:"border-box" }}>
+        <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 16px", color:"#bdf9fc" }}>Profile Information</h3>
         {profileMsg && <div style={{ padding:"10px 14px", borderRadius:8, background:profileMsg.ok?"rgba(16,185,129,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(profileMsg.ok?"rgba(16,185,129,0.2)":"rgba(248,113,113,0.2)"), color:profileMsg.ok?"#10b981":"#f87171", fontSize:13, fontWeight:600, marginBottom:14 }}>{profileMsg.msg}</div>}
         <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr", gap:mob?12:16 }}>
           <div>
-            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>Full Name</label>
+            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>Full Name</label>
             <input value={name} onChange={function(e){setName(e.target.value);setProfileMsg(null)}} style={inputStyle} />
           </div>
           <div>
-            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>Email Address</label>
+            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>Email Address</label>
             <input value={u.email} disabled style={Object.assign({},inputStyle,{opacity:0.5,cursor:"not-allowed"})} />
           </div>
           <div>
-            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>Referral Code</label>
-            <div style={{ padding:"11px 14px", borderRadius:10, background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.06)", fontSize:14, fontWeight:600, fontFamily:"monospace", color:"#d4d4d8" }}>{u.code}</div>
+            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>Referral Code</label>
+            <div style={{ padding:"11px 14px", borderRadius:10, background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.06)", fontSize:14, fontWeight:600, fontFamily:"monospace", color:"#bdf9fc" }}>{u.code}</div>
           </div>
           <div>
-            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>Member Since</label>
-            <div style={{ padding:"11px 14px", borderRadius:10, background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.06)", fontSize:14, color:"#d4d4d8" }}>{u.joined || "—"}</div>
+            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>Member Since</label>
+            <div style={{ padding:"11px 14px", borderRadius:10, background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.06)", fontSize:14, color:"#bdf9fc" }}>{u.joined || "—"}</div>
           </div>
         </div>
         <div style={{ marginTop:16, display:"flex", justifyContent:"flex-end" }}>
@@ -111,17 +111,17 @@ function SettingsTab(props) {
       </div>
 
       {/* Payout Details */}
-      <div style={{ background:"#131315", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:16, boxSizing:"border-box" }}>
-        <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 6px", color:"#d4d4d8" }}>Payout Details</h3>
-        <p style={{ fontSize:12, color:"#52525b", marginBottom:16 }}>Your earnings are paid every Tuesday via MamoPay to your registered IBAN. Minimum payout: AED 50.</p>
+      <div style={{ background:"#0a0f0d", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:16, boxSizing:"border-box" }}>
+        <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 6px", color:"#bdf9fc" }}>Payout Details</h3>
+        <p style={{ fontSize:12, color:"#3a7a74", marginBottom:16 }}>Your earnings are paid every Tuesday via MamoPay to your registered IBAN. Minimum payout: AED 50.</p>
         {ibanMsg && <div style={{ padding:"10px 14px", borderRadius:8, background:ibanMsg.ok?"rgba(16,185,129,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(ibanMsg.ok?"rgba(16,185,129,0.2)":"rgba(248,113,113,0.2)"), color:ibanMsg.ok?"#10b981":"#f87171", fontSize:13, fontWeight:600, marginBottom:14 }}>{ibanMsg.msg}</div>}
         <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr", gap:mob?12:16 }}>
           <div>
-            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>IBAN</label>
+            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>IBAN</label>
             <input value={iban} onChange={function(e){setIban(e.target.value);setIbanMsg(null)}} placeholder="AE070331234567890123456" style={Object.assign({},inputStyle,{fontFamily:"monospace",fontSize:13})} />
           </div>
           <div>
-            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>Account Holder Name</label>
+            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>Account Holder Name</label>
             <input value={ibanName} onChange={function(e){setIbanName(e.target.value);setIbanMsg(null)}} placeholder="Name as on bank account" style={inputStyle} />
           </div>
         </div>
@@ -131,40 +131,40 @@ function SettingsTab(props) {
       </div>
 
       {/* Account info */}
-      <div style={{ background:"#131315", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:16, boxSizing:"border-box" }}>
-        <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 12px", color:"#d4d4d8" }}>Account Details</h3>
+      <div style={{ background:"#0a0f0d", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:16, boxSizing:"border-box" }}>
+        <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 12px", color:"#bdf9fc" }}>Account Details</h3>
         <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr 1fr", gap:mob?10:16 }}>
           <div style={{ padding:14, background:"rgba(255,255,255,0.03)", borderRadius:10, textAlign:"center" }}>
-            <div style={{ fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>MEMBER SINCE</div>
-            <div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{u.joined || "—"}</div>
+            <div style={{ fontSize:10, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>MEMBER SINCE</div>
+            <div style={{ fontSize:13, fontWeight:600, color:"#bdf9fc" }}>{u.joined || "—"}</div>
           </div>
           <div style={{ padding:14, background:"rgba(255,255,255,0.03)", borderRadius:10, textAlign:"center" }}>
-            <div style={{ fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>REFERRED BY</div>
-            <div style={{ fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{u.referredBy || "Direct"}</div>
+            <div style={{ fontSize:10, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>REFERRED BY</div>
+            <div style={{ fontSize:13, fontWeight:600, color:"#bdf9fc" }}>{u.referredBy || "Direct"}</div>
           </div>
           <div style={{ padding:14, background:"rgba(255,255,255,0.03)", borderRadius:10, textAlign:"center" }}>
-            <div style={{ fontSize:10, fontWeight:600, color:"#52525b", marginBottom:4 }}>SUBSCRIPTION</div>
+            <div style={{ fontSize:10, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>SUBSCRIPTION</div>
             <div style={{ fontSize:13, fontWeight:600, color: u.status==="active"?"#10b981":"#f87171" }}>{u.billingStatus==="cancelled"?"Cancelled - access active":(u.status==="active"?"Active":"Inactive")}</div>
           </div>
         </div>
       </div>
 
       {/* Change Password */}
-      <div style={{ background:"#131315", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:16, boxSizing:"border-box" }}>
-        <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 6px", color:"#d4d4d8" }}>Change Password</h3>
-        <p style={{ fontSize:12, color:"#52525b", marginBottom:16 }}>Set a new password for your account. This device stays signed in; other sessions will need to log in again.</p>
+      <div style={{ background:"#0a0f0d", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(255,255,255,0.06)", marginBottom:16, boxSizing:"border-box" }}>
+        <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 6px", color:"#bdf9fc" }}>Change Password</h3>
+        <p style={{ fontSize:12, color:"#3a7a74", marginBottom:16 }}>Set a new password for your account. This device stays signed in; other sessions will need to log in again.</p>
         {pwMsg && <div style={{ padding:"10px 14px", borderRadius:8, background:pwMsg.ok?"rgba(16,185,129,0.08)":"rgba(248,113,113,0.08)", border:"1px solid "+(pwMsg.ok?"rgba(16,185,129,0.2)":"rgba(248,113,113,0.2)"), color:pwMsg.ok?"#10b981":"#f87171", fontSize:13, fontWeight:600, marginBottom:14 }}>{pwMsg.msg}</div>}
         <div style={{ display:"grid", gridTemplateColumns:mob?"1fr":"1fr 1fr 1fr", gap:mob?12:16 }}>
           <div>
-            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>Current Password</label>
+            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>Current Password</label>
             <PasswordInput value={currentPw} onChange={function(e){setCurrentPw(e.target.value);setPwMsg(null)}} placeholder="Current password" />
           </div>
           <div>
-            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>New Password</label>
+            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>New Password</label>
             <PasswordInput value={newPw} onChange={function(e){setNewPw(e.target.value);setPwMsg(null)}} placeholder="Min. 8 characters" />
           </div>
           <div>
-            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#52525b", marginBottom:4 }}>Confirm New Password</label>
+            <label style={{ display:"block", fontSize:11, fontWeight:600, color:"#3a7a74", marginBottom:4 }}>Confirm New Password</label>
             <PasswordInput value={confirmPw} onChange={function(e){setConfirmPw(e.target.value);setPwMsg(null)}} onKeyDown={function(e){if(e.key==="Enter") changePassword()}} placeholder="Repeat new password" />
           </div>
         </div>
@@ -174,11 +174,11 @@ function SettingsTab(props) {
       </div>
 
       {/* Danger Zone */}
-      <div style={{ background:"#131315", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(248,113,113,0.2)", boxSizing:"border-box" }}>
+      <div style={{ background:"#0a0f0d", borderRadius:14, padding:mob?16:22, border:"1px solid rgba(248,113,113,0.2)", boxSizing:"border-box" }}>
         <h3 style={{ fontSize:14, fontWeight:700, margin:"0 0 8px", color:"#f87171" }}>Danger Zone</h3>
-        <p style={{ fontSize:12, color:"#71717a", marginBottom:16 }}>These actions are permanent and cannot be undone.</p>
+        <p style={{ fontSize:12, color:"#6ec9c4", marginBottom:16 }}>These actions are permanent and cannot be undone.</p>
         <div style={{ display:"flex", flexDirection:mob?"column":"row", gap:12 }}>
-          <button onClick={function(){setShowCancel(true)}} style={{ padding:"10px 20px", borderRadius:8, border:"1px solid rgba(248,113,113,0.2)", background:"#131315", fontSize:12, fontWeight:600, color:"#f87171", cursor:"pointer" }}>{cancelled ? "Subscription Cancelled" : "Cancel Subscription"}</button>
+          <button onClick={function(){setShowCancel(true)}} style={{ padding:"10px 20px", borderRadius:8, border:"1px solid rgba(248,113,113,0.2)", background:"#0a0f0d", fontSize:12, fontWeight:600, color:"#f87171", cursor:"pointer" }}>{cancelled ? "Subscription Cancelled" : "Cancel Subscription"}</button>
         </div>
       </div>
     </div>

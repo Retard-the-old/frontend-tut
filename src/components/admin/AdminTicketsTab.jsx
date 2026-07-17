@@ -23,29 +23,29 @@ function AdminTicketsTab(props) {
     <div style={{ maxWidth:"100%", overflow:"hidden" }}>
       <div style={{ display:"flex", flexDirection:mob?"column":"row", justifyContent:"space-between", alignItems:mob?"flex-start":"center", gap:mob?10:0, marginBottom:20 }}>
         <div>
-          <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:0, color:"#d4d4d8" }}>Support Tickets</h2>
-          <p style={{ fontSize:13, color:"#71717a", marginTop:4 }}>{openCount+" open, "+ipCount+" in progress"}</p>
+          <h2 style={{ fontSize:mob?18:22, fontWeight:700, margin:0, color:"#bdf9fc" }}>Support Tickets</h2>
+          <p style={{ fontSize:13, color:"#6ec9c4", marginTop:4 }}>{openCount+" open, "+ipCount+" in progress"}</p>
         </div>
       </div>
       {DEMO_TICKETS.length === 0 ? (
-        <div style={{ padding:"48px 24px", textAlign:"center", background:"#111113", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)" }}>
-          <div style={{ fontSize:14, color:"#52525b" }}>No support tickets yet</div>
-          <div style={{ fontSize:12, color:"#3f3f46", marginTop:8 }}>Tickets submitted by users will appear here</div>
+        <div style={{ padding:"48px 24px", textAlign:"center", background:"#080c0b", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)" }}>
+          <div style={{ fontSize:14, color:"#3a7a74" }}>No support tickets yet</div>
+          <div style={{ fontSize:12, color:"#3a7a74", marginTop:8 }}>Tickets submitted by users will appear here</div>
         </div>
       ) : (
-        <div style={{ background:"#111113", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden" }}>
+        <div style={{ background:"#080c0b", borderRadius:14, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden" }}>
           <table style={{ width:"100%", borderCollapse:"collapse" }}>
             <thead><tr style={{ borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
-              {["Ref","User","Subject","Status","Priority","Updated"].map(function(h){return <th key={h} style={{ padding:"10px 12px", fontSize:11, fontWeight:700, color:"#52525b", textAlign:"left", letterSpacing:1 }}>{h}</th>})}
+              {["Ref","User","Subject","Status","Priority","Updated"].map(function(h){return <th key={h} style={{ padding:"10px 12px", fontSize:11, fontWeight:700, color:"#3a7a74", textAlign:"left", letterSpacing:1 }}>{h}</th>})}
             </tr></thead>
             <tbody>{filtered.map(function(t){ return (
               <tr key={t.id} onClick={function(){setTSelected(tSelected && tSelected.id===t.id ? null : t)}} style={{ borderBottom:"1px solid rgba(255,255,255,0.04)", cursor:"pointer" }}>
-                <td style={{ padding:"10px 12px", fontSize:12, color:"#52525b", fontFamily:"monospace" }}>{t.ref}</td>
-                <td style={{ padding:"10px 12px", fontSize:13, fontWeight:600, color:"#d4d4d8" }}>{t.user}</td>
-                <td style={{ padding:"10px 12px", fontSize:13, color:"#a1a1aa", maxWidth:200 }}>{t.subject}</td>
+                <td style={{ padding:"10px 12px", fontSize:12, color:"#3a7a74", fontFamily:"monospace" }}>{t.ref}</td>
+                <td style={{ padding:"10px 12px", fontSize:13, fontWeight:600, color:"#bdf9fc" }}>{t.user}</td>
+                <td style={{ padding:"10px 12px", fontSize:13, color:"#bdf9fc", maxWidth:200 }}>{t.subject}</td>
                 <td style={{ padding:"10px 12px" }}><Badge s={t.status}/></td>
                 <td style={{ padding:"10px 12px" }}><Badge s={t.priority}/></td>
-                <td style={{ padding:"10px 12px", fontSize:12, color:"#52525b" }}>{t.updated}</td>
+                <td style={{ padding:"10px 12px", fontSize:12, color:"#3a7a74" }}>{t.updated}</td>
               </tr>
             )})}</tbody>
           </table>

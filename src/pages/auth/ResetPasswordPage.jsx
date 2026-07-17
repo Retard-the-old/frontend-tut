@@ -75,53 +75,53 @@ function ResetPasswordPage(props) {
   if (/[0-9]/.test(pass)) strength++;
   if (/[^A-Za-z0-9]/.test(pass)) strength++;
   var strengthLabel = ["", "Weak", "Fair", "Good", "Strong"][strength] || "";
-  var strengthColor = ["", "#ef4444", "#f59e0b", "#22c55e", "#10b981"][strength] || "";
+  var strengthColor = ["", "#ef4444", "#00e4c1", "#22c55e", "#10b981"][strength] || "";
 
   return (
-    <div style={{ minHeight:"100vh", display:"flex", flexDirection:mob?"column":"row", background:"#0a0a0c" }}>
-      <div style={{ flex:mob?"none":"0 0 50%", background:"#111113", display:"flex", flexDirection:"column", justifyContent:"center", padding:mob?"32px 24px":"64px 56px" }}>
+    <div style={{ minHeight:"100vh", display:"flex", flexDirection:mob?"column":"row", background:"#000000" }}>
+      <div style={{ flex:mob?"none":"0 0 50%", background:"#080c0b", display:"flex", flexDirection:"column", justifyContent:"center", padding:mob?"32px 24px":"64px 56px" }}>
         <Logo light onClick={function(){go("landing")}} />
         <h2 style={{ fontSize:mob?28:36, fontWeight:800, color:"#fff", margin:mob?"24px 0 10px":"48px 0 16px", lineHeight:1.15 }}>Choose a new password</h2>
-        <p style={{ fontSize:mob?14:15, color:"rgb(200,180,140)", lineHeight:1.7, maxWidth:380 }}>{"Pick something secure that you\u2019ll remember. You\u2019ll be able to log in immediately after."}</p>
+        <p style={{ fontSize:mob?14:15, color:"rgb(0,228,193)", lineHeight:1.7, maxWidth:380 }}>{"Pick something secure that you\u2019ll remember. You\u2019ll be able to log in immediately after."}</p>
       </div>
       <div style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", padding:mob?"24px 20px":48 }}>
         <div style={{ maxWidth:400, width:"100%" }}>
 
           {validating ? (
             <div style={{ textAlign:"center", padding:"60px 0" }}>
-              <div style={{ width:40, height:40, borderRadius:10, background:"rgba(200,180,140,0.08)", border:"1px solid rgba(200,180,140,0.12)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 16px", animation:"pulse 1.5s ease-in-out infinite" }}>
-                <Ico name="shield" size={18} color="rgb(200,180,140)" />
+              <div style={{ width:40, height:40, borderRadius:10, background:"rgba(0,228,193,0.08)", border:"1px solid rgba(0,228,193,0.12)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 16px", animation:"pulse 1.5s ease-in-out infinite" }}>
+                <Ico name="shield" size={18} color="rgb(0,228,193)" />
               </div>
-              <p style={{ fontSize:14, color:"#71717a" }}>Validating your reset link...</p>
+              <p style={{ fontSize:14, color:"#6ec9c4" }}>Validating your reset link...</p>
             </div>
           ) : !tokenValid ? (
             <div style={{ textAlign:"center" }}>
               <div style={{ width:56, height:56, borderRadius:16, background:"rgba(248,113,113,0.08)", border:"1px solid rgba(248,113,113,0.15)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 24px" }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#f87171" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </div>
-              <h3 style={{ fontSize:22, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>Invalid or expired link</h3>
-              <p style={{ fontSize:14, color:"#71717a", marginBottom:28, lineHeight:1.7 }}>This password reset link is no longer valid. It may have expired or already been used.</p>
+              <h3 style={{ fontSize:22, fontWeight:700, color:"#bdf9fc", margin:"0 0 8px" }}>Invalid or expired link</h3>
+              <p style={{ fontSize:14, color:"#6ec9c4", marginBottom:28, lineHeight:1.7 }}>This password reset link is no longer valid. It may have expired or already been used.</p>
               <Btn onClick={function(){go("forgotPassword")}} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:12 }}>Request a New Link</Btn>
               <div style={{ textAlign:"center" }}>
-                <span onClick={function(){go("login")}} style={{ fontSize:13, color:"#71717a", cursor:"pointer" }}>Back to login</span>
+                <span onClick={function(){go("login")}} style={{ fontSize:13, color:"#6ec9c4", cursor:"pointer" }}>Back to login</span>
               </div>
             </div>
           ) : done ? (
             <div style={{ textAlign:"center" }}>
-              <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg, rgba(200,180,140,0.12), rgba(200,180,140,0.04))", border:"1px solid rgba(200,180,140,0.15)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 24px" }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="rgb(200,180,140)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="10" stroke="rgb(200,180,140)" strokeWidth="1.5"/></svg>
+              <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg, rgba(0,228,193,0.12), rgba(0,228,193,0.04))", border:"1px solid rgba(0,228,193,0.15)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 24px" }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="rgb(0,228,193)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="10" stroke="rgb(0,228,193)" strokeWidth="1.5"/></svg>
               </div>
-              <h3 style={{ fontSize:22, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>Password reset complete</h3>
-              <p style={{ fontSize:14, color:"#71717a", marginBottom:28, lineHeight:1.7 }}>Your password has been updated successfully. You can now log in with your new password.</p>
+              <h3 style={{ fontSize:22, fontWeight:700, color:"#bdf9fc", margin:"0 0 8px" }}>Password reset complete</h3>
+              <p style={{ fontSize:14, color:"#6ec9c4", marginBottom:28, lineHeight:1.7 }}>Your password has been updated successfully. You can now log in with your new password.</p>
               <Btn onClick={function(){go("login")}} full style={{ padding:"13px", fontSize:15, borderRadius:12 }}>Log In</Btn>
             </div>
           ) : (
             <div>
-              <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg, rgba(200,180,140,0.12), rgba(200,180,140,0.04))", border:"1px solid rgba(200,180,140,0.15)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:24 }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="rgb(200,180,140)" strokeWidth="1.5"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="rgb(200,180,140)" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg, rgba(0,228,193,0.12), rgba(0,228,193,0.04))", border:"1px solid rgba(0,228,193,0.15)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:24 }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="rgb(0,228,193)" strokeWidth="1.5"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="rgb(0,228,193)" strokeWidth="1.5" strokeLinecap="round"/></svg>
               </div>
-              <h3 style={{ fontSize:24, fontWeight:700, color:"#d4d4d8", margin:"0 0 8px" }}>Set a new password</h3>
-              {tokenEmail && <p style={{ fontSize:13, color:"#52525b", marginBottom:24 }}>{"for " + tokenEmail}</p>}
+              <h3 style={{ fontSize:24, fontWeight:700, color:"#bdf9fc", margin:"0 0 8px" }}>Set a new password</h3>
+              {tokenEmail && <p style={{ fontSize:13, color:"#3a7a74", marginBottom:24 }}>{"for " + tokenEmail}</p>}
 
               {error && <div style={{ padding:"14px 18px", borderRadius:12, background:"linear-gradient(135deg, rgba(220,38,38,0.08), rgba(220,38,38,0.04))", border:"1px solid rgba(248,113,113,0.15)", marginBottom:20, display:"flex", alignItems:"center", gap:12 }}>
                 <div style={{ width:32, height:32, borderRadius:8, background:"rgba(248,113,113,0.1)", border:"1px solid rgba(248,113,113,0.12)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
@@ -131,7 +131,7 @@ function ResetPasswordPage(props) {
               </div>}
 
               <div style={{ marginBottom:20 }}>
-                <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>New Password</label>
+                <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#6ec9c4", marginBottom:6 }}>New Password</label>
                 <div style={{ position:"relative" }}>
                   <PasswordInput value={pass} onChange={function(e){setPass(e.target.value);setError("")}} placeholder="Minimum 8 characters" style={{ padding:"12px 44px 12px 16px", border:"1px solid "+(error ? "rgba(248,113,113,0.3)" : "rgba(255,255,255,0.1)"), transition:"border-color 0.3s" }} />
                 </div>
@@ -140,20 +140,20 @@ function ResetPasswordPage(props) {
                   <span style={{ fontSize:10, color:strengthColor, fontWeight:600, marginLeft:4 }}>{strengthLabel}</span>
                 </div>}
                 <div style={{ marginTop:8, display:"flex", flexDirection:"column", gap:4 }}>
-                  {[["8+ characters", pass.length >= 8],["One uppercase letter",/[A-Z]/.test(pass)],["One number",/[0-9]/.test(pass)]].map(function(r){return <div key={r[0]} style={{ display:"flex", alignItems:"center", gap:6, fontSize:11, color:r[1] ? "rgb(200,180,140)" : "#3f3f46", transition:"color 0.3s" }}><span>{r[1] ? "\u2713" : "\u2022"}</span>{r[0]}</div>})}
+                  {[["8+ characters", pass.length >= 8],["One uppercase letter",/[A-Z]/.test(pass)],["One number",/[0-9]/.test(pass)]].map(function(r){return <div key={r[0]} style={{ display:"flex", alignItems:"center", gap:6, fontSize:11, color:r[1] ? "rgb(0,228,193)" : "#3a7a74", transition:"color 0.3s" }}><span>{r[1] ? "\u2713" : "\u2022"}</span>{r[0]}</div>})}
                 </div>
               </div>
 
               <div style={{ marginBottom:28 }}>
-                <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#71717a", marginBottom:6 }}>Confirm Password</label>
-                <PasswordInput value={confirm} onChange={function(e){setConfirm(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleSubmit()}} placeholder="Re-enter your password" style={{ padding:"12px 44px 12px 16px", border:"1px solid "+(error && error.includes("match") ? "rgba(248,113,113,0.3)" : confirm && confirm === pass ? "rgba(200,180,140,0.3)" : "rgba(255,255,255,0.1)"), transition:"border-color 0.3s" }} />
-                {confirm && confirm === pass && <div style={{ fontSize:11, color:"rgb(200,180,140)", marginTop:4, display:"flex", alignItems:"center", gap:4 }}>{"\u2713"} Passwords match</div>}
+                <label style={{ display:"block", fontSize:12, fontWeight:600, color:"#6ec9c4", marginBottom:6 }}>Confirm Password</label>
+                <PasswordInput value={confirm} onChange={function(e){setConfirm(e.target.value);setError("")}} onKeyDown={function(e){if(e.key==="Enter") handleSubmit()}} placeholder="Re-enter your password" style={{ padding:"12px 44px 12px 16px", border:"1px solid "+(error && error.includes("match") ? "rgba(248,113,113,0.3)" : confirm && confirm === pass ? "rgba(0,228,193,0.3)" : "rgba(255,255,255,0.1)"), transition:"border-color 0.3s" }} />
+                {confirm && confirm === pass && <div style={{ fontSize:11, color:"rgb(0,228,193)", marginTop:4, display:"flex", alignItems:"center", gap:4 }}>{"\u2713"} Passwords match</div>}
               </div>
 
               <Btn onClick={handleSubmit} full style={{ padding:"13px", fontSize:15, borderRadius:12, marginBottom:16, opacity:loading?0.6:1 }}>{loading ? "Updating..." : "Reset Password"}</Btn>
 
               <div style={{ textAlign:"center" }}>
-                <span onClick={function(){go("login")}} style={{ fontSize:13, color:"#71717a", cursor:"pointer" }}>Back to login</span>
+                <span onClick={function(){go("login")}} style={{ fontSize:13, color:"#6ec9c4", cursor:"pointer" }}>Back to login</span>
               </div>
             </div>
           )}

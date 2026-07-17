@@ -16,7 +16,7 @@ function useIsMobile(breakpoint) {
 // ─── SHARED UI ───
 function Badge(props) {
   var s = props.s;
-  var colors = { active:["rgba(200,180,140,0.1)","rgb(200,180,140)"], completed:["rgba(200,180,140,0.1)","rgb(200,180,140)"], processing:["rgba(251,191,36,0.1)","#fbbf24"], pending:["rgba(251,191,36,0.1)","#fbbf24"], queued:["rgba(167,139,250,0.1)","#a78bfa"], requested:["rgba(59,130,246,0.1)","#60a5fa"], cancelled:["rgba(248,113,113,0.1)","#f87171"], inactive:["rgba(255,255,255,0.04)","#71717a"], failed:["rgba(248,113,113,0.1)","#f87171"] };
+  var colors = { active:["rgba(0,228,193,0.1)","rgb(0,228,193)"], completed:["rgba(0,228,193,0.1)","rgb(0,228,193)"], processing:["rgba(0,228,193,0.1)","#00e4c1"], pending:["rgba(0,228,193,0.1)","#00e4c1"], queued:["rgba(167,139,250,0.1)","#a78bfa"], requested:["rgba(59,130,246,0.1)","#60a5fa"], cancelled:["rgba(248,113,113,0.1)","#f87171"], inactive:["rgba(255,255,255,0.04)","#6ec9c4"], failed:["rgba(248,113,113,0.1)","#f87171"] };
   var v = colors[s] || colors.pending;
   return <span style={{ padding:"3px 10px", borderRadius:20, fontSize:10, fontWeight:700, letterSpacing:0.3, textTransform:"uppercase", background:v[0], color:v[1] }}>{s}</span>;
 }
@@ -29,11 +29,11 @@ function StatCard(props) {
   var sub = props.sub;
   return (
     <div style={{ background:"linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)", borderRadius:14, padding:"16px 18px", border:"1px solid rgba(255,255,255,0.06)", display:"flex", alignItems:"flex-start", gap:14, height:"100%", minHeight:76, overflow:"hidden", minWidth:0 }}>
-      <div style={{ width:38, height:38, borderRadius:10, background:"rgba(200,180,140,0.08)", border:"1px solid rgba(200,180,140,0.12)", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0, flexShrink:0, marginTop:2 }}><Ico name={icon} size={16} color="rgb(200,180,140)" /></div>
+      <div style={{ width:38, height:38, borderRadius:10, background:"rgba(0,228,193,0.08)", border:"1px solid rgba(0,228,193,0.12)", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:0, flexShrink:0, marginTop:2 }}><Ico name={icon} size={16} color="rgb(0,228,193)" /></div>
       <div style={{ display:"flex", flexDirection:"column", minHeight:44 }}>
-        <div style={{ fontSize:9, fontWeight:700, textTransform:"uppercase", letterSpacing:0.8, color:"#52525b", lineHeight:1.2, height:12, overflow:"hidden" }}>{label}</div>
-        <div style={{ fontSize:mob?16:20, fontWeight:500, color:"#d4d4d8", lineHeight:1.2, marginTop:4 }}>{value}</div>
-        {sub ? <div style={{ fontSize:10, color:"#52525b", marginTop:2 }}>{sub}</div> : null}
+        <div style={{ fontSize:9, fontWeight:700, textTransform:"uppercase", letterSpacing:0.8, color:"#3a7a74", lineHeight:1.2, height:12, overflow:"hidden" }}>{label}</div>
+        <div style={{ fontSize:mob?16:20, fontWeight:500, color:"#bdf9fc", lineHeight:1.2, marginTop:4 }}>{value}</div>
+        {sub ? <div style={{ fontSize:10, color:"#3a7a74", marginTop:2 }}>{sub}</div> : null}
       </div>
     </div>
   );
@@ -45,7 +45,7 @@ function StatCard(props) {
 // ═══════════════════════════════════════════════
 function Ico(props) {
   var s = props.size || 20;
-  var c = props.color || "rgb(200,180,140)";
+  var c = props.color || "rgb(0,228,193)";
   var paths = {
     shield: "M12 2l8 4v6c0 5.25-3.4 10.1-8 12-4.6-1.9-8-6.75-8-12V6l8-4zm0 2.18L6 7.09v4.91c0 4.18 2.72 8.08 6 9.73 3.28-1.65 6-5.55 6-9.73V7.09L12 4.18z",
     chart: "M3 3v18h18v-2H5V3H3zm14 4l-4 4-3-3-4 4v2.5l4-4 3 3 4-4V7z",
@@ -77,7 +77,7 @@ function Ico(props) {
   };
   var d = paths[props.name] || paths.sparkle;
   return (
-    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display:"block", filter:"drop-shadow(0 2px 4px rgba(255,255,255,0.06)) drop-shadow(0 0 8px rgba(200,180,140,0.18))" }}>
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display:"block", filter:"drop-shadow(0 2px 4px rgba(255,255,255,0.06)) drop-shadow(0 0 8px rgba(0,228,193,0.18))" }}>
       <path d={d} fill={c} fillOpacity="0.85" />
     </svg>
   );
@@ -152,7 +152,7 @@ function GlowLine(props) {
     <div style={{ position:"absolute", top:y, left:0, right:0, height:1, zIndex:5, pointerEvents:"none" }}>
       <div style={{ maxWidth:props.width || 1100, margin:"0 auto", position:"relative", height:1 }}>
         <div style={{ position:"absolute", inset:0, background:"rgba(255,255,255,0.06)" }} />
-        <div style={{ position:"absolute", left:"50%", transform:"translateX(-50%)", width:"60%", maxWidth:700, height:2, background:"linear-gradient(90deg, transparent 0%, rgba(200,180,140,0.15) 25%, rgba(200,180,140,0.4) 50%, rgba(200,180,140,0.15) 75%, transparent 100%)", borderRadius:1, top:0 }} />
+        <div style={{ position:"absolute", left:"50%", transform:"translateX(-50%)", width:"60%", maxWidth:700, height:2, background:"linear-gradient(90deg, transparent 0%, rgba(0,228,193,0.15) 25%, rgba(0,228,193,0.4) 50%, rgba(0,228,193,0.15) 75%, transparent 100%)", borderRadius:1, top:0 }} />
       </div>
     </div>
   );
@@ -195,7 +195,7 @@ function CursorGlow() {
   }, [mob]);
   if (mob) return null;
   return (
-    <div style={{ position: "fixed", left: pos.x - 150, top: pos.y - 150, width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(200,180,140,0.04), transparent 70%)", pointerEvents: "none", zIndex: 9999, transition: "left 0.15s ease-out, top 0.15s ease-out" }} />
+    <div style={{ position: "fixed", left: pos.x - 150, top: pos.y - 150, width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(0,228,193,0.04), transparent 70%)", pointerEvents: "none", zIndex: 9999, transition: "left 0.15s ease-out, top 0.15s ease-out" }} />
   );
 }
 
@@ -232,9 +232,9 @@ function SpotlightCard(props) {
   var p = props.padding !== undefined ? props.padding : 32;
   return (
     <div style={Object.assign({}, { background: "linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 100%)", borderRadius: 20, padding: 1, position: "relative", height: "100%", width: "100%", minWidth: 0, boxSizing: "border-box" }, props.outerStyle || {})}>
-      <div ref={ref} onMouseMove={handleMouse} onMouseLeave={handleLeave} style={Object.assign({}, { background: "linear-gradient(180deg, #131315 0%, #111113 100%)", borderRadius: 19, padding: p, height: "100%", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", transition: "transform 0.3s ease", transform: glow.active ? "perspective(800px) rotateX(" + ((glow.y - 50) * -0.04) + "deg) rotateY(" + ((glow.x - 50) * 0.04) + "deg)" : "perspective(800px) rotateX(0) rotateY(0)" }, props.style || {})}>
+      <div ref={ref} onMouseMove={handleMouse} onMouseLeave={handleLeave} style={Object.assign({}, { background: "linear-gradient(180deg, #0a0f0d 0%, #080c0b 100%)", borderRadius: 19, padding: p, height: "100%", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", transition: "transform 0.3s ease", transform: glow.active ? "perspective(800px) rotateX(" + ((glow.y - 50) * -0.04) + "deg) rotateY(" + ((glow.x - 50) * 0.04) + "deg)" : "perspective(800px) rotateX(0) rotateY(0)" }, props.style || {})}>
         <div style={{ position: "absolute", top: 0, left: "15%", right: "15%", height: 1, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)", pointerEvents: "none" }} />
-        {glow.active && <div style={{ position: "absolute", left: glow.x + "%", top: glow.y + "%", width: 250, height: 250, borderRadius: "50%", background: "radial-gradient(circle, rgba(200,180,140,0.06), transparent 70%)", transform: "translate(-50%,-50%)", pointerEvents: "none", transition: "left 0.1s, top 0.1s" }} />}
+        {glow.active && <div style={{ position: "absolute", left: glow.x + "%", top: glow.y + "%", width: 250, height: 250, borderRadius: "50%", background: "radial-gradient(circle, rgba(0,228,193,0.06), transparent 70%)", transform: "translate(-50%,-50%)", pointerEvents: "none", transition: "left 0.1s, top 0.1s" }} />}
         <div style={{ position: "relative", zIndex: 1, flex: 1, display: "flex", flexDirection: "column", width: "100%" }}>{props.children}</div>
       </div>
     </div>
@@ -248,12 +248,12 @@ function TrustMarquee() {
   var items = ["MamoPay", "Visa", "Mastercard", "Apple Pay", "Google Pay", "MamoPay", "Visa", "Mastercard", "Apple Pay", "Google Pay"];
   return (
     <div style={{ overflow: "hidden", padding: "28px 0", borderTop: "1px solid rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(255,255,255,0.04)", position: "relative" }}>
-      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 80, background: "linear-gradient(90deg, #0a0a0c, transparent)", zIndex: 2, pointerEvents: "none" }} />
-      <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: 80, background: "linear-gradient(-90deg, #0a0a0c, transparent)", zIndex: 2, pointerEvents: "none" }} />
+      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 80, background: "linear-gradient(90deg, #000000, transparent)", zIndex: 2, pointerEvents: "none" }} />
+      <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: 80, background: "linear-gradient(-90deg, #000000, transparent)", zIndex: 2, pointerEvents: "none" }} />
       <div style={{ display: "flex", gap: 48, animation: "marquee 30s linear infinite", width: "max-content" }}>
         {items.map(function(item, i) {
-          return <span key={i} style={{ fontSize: 13, fontWeight: 500, color: "#3f3f46", letterSpacing: "1px", textTransform: "uppercase", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#3f3f46", display: "inline-block" }} />
+          return <span key={i} style={{ fontSize: 13, fontWeight: 500, color: "#3a7a74", letterSpacing: "1px", textTransform: "uppercase", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#3a7a74", display: "inline-block" }} />
             {item}
           </span>;
         })}
@@ -283,7 +283,7 @@ function StepConnector(props) {
   return (
     <div style={{ position: "absolute", left: 27, top: 56, bottom: 80, width: 2, zIndex: 0 }}>
       <div style={{ width: "100%", height: "100%", background: "repeating-linear-gradient(180deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 6px, transparent 6px, transparent 12px)" }} />
-      <div style={{ position: "absolute", top: 0, left: -2, width: 6, height: 6, borderRadius: "50%", background: "rgba(200,180,140,0.3)", animation: "travelDot 4s ease-in-out infinite" }} />
+      <div style={{ position: "absolute", top: 0, left: -2, width: 6, height: 6, borderRadius: "50%", background: "rgba(0,228,193,0.3)", animation: "travelDot 4s ease-in-out infinite" }} />
     </div>
   );
 }
@@ -293,7 +293,7 @@ function StepConnector(props) {
 // ═══════════════════════════════════════════════
 function ShimmerText(props) {
   return (
-    <span style={Object.assign({}, { backgroundImage: "linear-gradient(90deg, rgb(200,180,140), rgba(240,220,180,0.9), rgb(200,180,140))", backgroundSize: "200% auto", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", animation: "shimmer 4s linear infinite" }, props.style || {})}>
+    <span style={Object.assign({}, { backgroundImage: "linear-gradient(90deg, rgb(0,228,193), rgba(189,249,252,0.9), rgb(0,228,193))", backgroundSize: "200% auto", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", animation: "shimmer 4s linear infinite" }, props.style || {})}>
       {props.children}
     </span>
   );
@@ -309,7 +309,7 @@ function ProgressRing(props) {
   return (
     <svg width="36" height="36" viewBox="0 0 36 36" style={{ flexShrink: 0 }}>
       <circle cx="18" cy="18" r={r} stroke="rgba(255,255,255,0.06)" strokeWidth="2.5" fill="none" />
-      <circle cx="18" cy="18" r={r} stroke="rgba(200,180,140,0.3)" strokeWidth="2.5" fill="none" strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" transform="rotate(-90 18 18)" style={{ transition: "stroke-dashoffset 1s ease-out" }} />
+      <circle cx="18" cy="18" r={r} stroke="rgba(0,228,193,0.3)" strokeWidth="2.5" fill="none" strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" transform="rotate(-90 18 18)" style={{ transition: "stroke-dashoffset 1s ease-out" }} />
       <text x="18" y="20" textAnchor="middle" fill="rgba(255,255,255,0.25)" fontSize="8" fontFamily="sans-serif">{pct + "%"}</text>
     </svg>
   );
@@ -321,7 +321,7 @@ function ProgressRing(props) {
 function GlowRow(props) {
   var _h = useState(false); var hov = _h[0]; var setHov = _h[1];
   return (
-    <div onMouseEnter={function(){setHov(true)}} onMouseLeave={function(){setHov(false)}} style={Object.assign({}, { position:"relative", transition:"background 0.3s", background: hov ? "rgba(200,180,140,0.03)" : "transparent" }, props.style || {})}>
+    <div onMouseEnter={function(){setHov(true)}} onMouseLeave={function(){setHov(false)}} style={Object.assign({}, { position:"relative", transition:"background 0.3s", background: hov ? "rgba(0,228,193,0.03)" : "transparent" }, props.style || {})}>
       {props.children}
     </div>
   );
@@ -427,10 +427,10 @@ function DashSkeleton() {
         <Skeleton w={160} h={32} r={8} />
       </div>
       <div style={{ display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:12, marginBottom:20 }}>
-        {[1,2,3,4].map(function(i){return <div key={i} style={{ background:"#131315", borderRadius:14, padding:mob?14:22, border:"1px solid rgba(255,255,255,0.06)", boxSizing:"border-box" }}><Skeleton w={34} h={34} r={9} /><Skeleton w="60%" h={10} r={4} /><Skeleton w="40%" h={20} r={4} /></div>})}
+        {[1,2,3,4].map(function(i){return <div key={i} style={{ background:"#0a0f0d", borderRadius:14, padding:mob?14:22, border:"1px solid rgba(255,255,255,0.06)", boxSizing:"border-box" }}><Skeleton w={34} h={34} r={9} /><Skeleton w="60%" h={10} r={4} /><Skeleton w="40%" h={20} r={4} /></div>})}
       </div>
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14, marginBottom:14 }}>
-        {[1,2].map(function(i){return <div key={i} style={{ background:"#131315", borderRadius:14, padding:24, border:"1px solid rgba(255,255,255,0.06)", height:200 }}><Skeleton w="50%" h={14} r={4} /><div style={{ marginTop:12 }}><Skeleton h={140} r={8} /></div></div>})}
+        {[1,2].map(function(i){return <div key={i} style={{ background:"#0a0f0d", borderRadius:14, padding:24, border:"1px solid rgba(255,255,255,0.06)", height:200 }}><Skeleton w="50%" h={14} r={4} /><div style={{ marginTop:12 }}><Skeleton h={140} r={8} /></div></div>})}
       </div>
     </div>
   );
@@ -448,7 +448,7 @@ function PasswordInput(props) {
     width: "100%", padding: "11px 44px 11px 14px", borderRadius: 10,
     border: "1px solid rgba(255,255,255,0.1)", fontSize: 14, outline: "none",
     boxSizing: "border-box", fontFamily: "'Plus Jakarta Sans',sans-serif",
-    background: "#0a0a0c", color: "#d4d4d8",
+    background: "#000000", color: "#bdf9fc",
   }, style);
 
   return (
@@ -473,8 +473,8 @@ function PasswordInput(props) {
         title={show ? "Hide password" : "Show password"}
       >
         {show
-          ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" stroke="#a1a1aa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          : <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#a1a1aa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="3" stroke="#a1a1aa" strokeWidth="1.8"/></svg>
+          ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" stroke="#bdf9fc" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          : <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#bdf9fc" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="3" stroke="#bdf9fc" strokeWidth="1.8"/></svg>
         }
       </button>
     </div>
